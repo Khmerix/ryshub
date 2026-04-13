@@ -463,8 +463,10 @@
         <nav class="hidden md:flex items-center gap-8">
             <a href="#" class="nav-link" onclick="showToast('Already on Home'); return false;">Home</a>
             <a href="#" class="nav-link" onclick="openToeflLogin(); return false;">TOEFL iBT</a>
+            <a href="#" class="nav-link" onclick="openBook1Modal(); return false;">World Class Book 1</a>
             <a href="#" class="nav-link" onclick="openBook2bModal(); return false;">World Class 2B</a>
             <a href="apps/toefl.html" target="_blank" class="nav-link">TOEFL <i class="fas fa-external-link-alt text-xs ml-1 opacity-60"></i></a>
+            <a href="apps/book1.html" target="_blank" class="nav-link">Book 1 <i class="fas fa-external-link-alt text-xs ml-1 opacity-60"></i></a>
             <a href="apps/book2b.html" target="_blank" class="nav-link">Book 2B <i class="fas fa-external-link-alt text-xs ml-1 opacity-60"></i></a>
         </nav>
         
@@ -541,6 +543,9 @@
         <button class="btn-primary text-base px-7 py-3" onclick="openToeflLogin()">
             <i class="fas fa-play mr-2"></i> Start TOEFL Test
         </button>
+        <button class="btn-outline text-base px-7 py-3" onclick="openBook1Modal()">
+            <i class="fas fa-book mr-2"></i> Open Book 1
+        </button>
         <button class="btn-outline text-base px-7 py-3" onclick="openBook2bModal()">
             <i class="fas fa-book-open mr-2"></i> Open Book 2B
         </button>
@@ -562,6 +567,19 @@
         <button class="card-btn"><i class="fas fa-play"></i> Start Test</button>
     </div>
     
+    <!-- Book 1 -->
+    <div class="tool-card" onclick="openBook1Modal()">
+        <div class="tool-icon bg-gradient-to-br from-sky-600 to-sky-800 text-white">📖</div>
+        <div class="tool-badge text-sky-300">Teacher's Edition</div>
+        <h3>World Class Book 1</h3>
+        <p>Complete Book 1 with units, vocab, grammar, reading & homework materials.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-book text-sky-400"></i> Full Book</span>
+            <span><i class="fas fa-pencil-alt text-sky-400"></i> HW Portal</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);box-shadow:0 4px 0 #075985,0 8px 24px rgba(2,132,199,.35);"><i class="fas fa-book"></i> Open Book 1</button>
+    </div>
+
     <!-- Book 2B -->
     <div class="tool-card" onclick="openBook2bModal()">
         <div class="tool-icon bg-gradient-to-br from-rose-700 to-rose-900 text-white">📚</div>
@@ -667,6 +685,21 @@
         <button onclick="closeToeflModal()"><i class="fas fa-times"></i> Close</button>
     </div>
     <iframe id="toefl-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- BOOK 1 FULLSCREEN MODAL -->
+<div id="book1-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #0369a1, #0c4a6e);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;">📖</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">World Class Book 1 — Teacher's Edition</div>
+                <div style="font-size:.7rem;color:rgba(56,189,248,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Complete Book 1</div>
+            </div>
+        </div>
+        <button onclick="closeBook1Modal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="book1-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
 <!-- BOOK 2B FULLSCREEN MODAL -->
@@ -822,6 +855,16 @@ function closeToeflModal() {
     document.getElementById('toefl-modal').classList.remove('open');
 }
 
+function openBook1Modal() {
+    showToast('Loading Book 1... one moment ⏳');
+    var frame = document.getElementById('book1-frame');
+    frame.src = 'apps/book1.html';
+    document.getElementById('book1-modal').classList.add('open');
+}
+function closeBook1Modal() {
+    document.getElementById('book1-modal').classList.remove('open');
+}
+
 function openBook2bModal() {
     showToast('Loading Book 2B... one moment ⏳');
     var frame = document.getElementById('book2b-frame');
@@ -843,6 +886,7 @@ function showToast(msg) {
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') { 
         closeToeflModal(); 
+        closeBook1Modal();
         closeBook2bModal(); 
         closeToeflLogin();
         const menu = document.getElementById('slideMenu');
