@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEFL iBT Complete Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --dark-bg: #0f172a;
+            --darker-bg: #020617;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+        * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
+        body {
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header-bar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(37,99,235,.3);
+        }
+        .tab-bar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 16px 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: .9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all .2s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--text-primary); background: rgba(255,255,255,.03); }
+        .tab-btn.active {
+            color: var(--primary-light);
+            border-bottom-color: var(--primary-light);
+            background: rgba(37,99,235,.08);
+        }
+        .tab-btn.completed { color: var(--success); }
+        .content-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: var(--dark-bg);
+            display: none;
+        }
+        .content-frame.active { display: block; }
+        .timer-box {
+            background: rgba(0,0,0,.25);
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .timer-box.warning { color: var(--warning); border-color: var(--warning); }
+        .timer-box.danger { color: var(--error); border-color: var(--error); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .6; } }
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .student-info input {
+            background: rgba(0,0,0,.25);
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: .85rem;
+            width: 140px;
+        }
+        .student-info input::placeholder { color: rgba(255,255,255,.5); }
+        .student-info input:focus { outline: none; border-color: var(--primary-light); }
+        .section-info {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 16px 20px;
+            display: none;
+        }
+        .section-info.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:white;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">🎓</div>
+            <div>
+                <div style="font-weight:800;font-size:1.05rem;">TOEFL iBT Complete Test</div>
+                <div style="font-size:.7rem;opacity:.85;text-transform:uppercase;letter-spacing:1px;">Teacher Ry · Aii Language Center</div>
+            </div>
+        </div>
+        <div class="student-info">
+            <input id="student-name" type="text" placeholder="Student Name" readonly>
+            <input id="student-id" type="text" placeholder="Student ID" readonly>
+            <div class="timer-box" id="timerBox">
+                <i class="fas fa-clock"></i>
+                <span id="timerDisplay">--:--:--</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-bar">
+        <button class="tab-btn active" data-section="reading" onclick="switchTab('reading')">
+            <i class="fas fa-book-open"></i> Reading
+        </button>
+        <button class="tab-btn" data-section="listening" onclick="switchTab('listening')">
+            <i class="fas fa-headphones"></i> Listening
+        </button>
+        <button class="tab-btn" data-section="speaking" onclick="switchTab('speaking')">
+            <i class="fas fa-microphone"></i> Speaking
+        </button>
+        <button class="tab-btn" data-section="writing" onclick="switchTab('writing')">
+            <i class="fas fa-pen"></i> Writing
+        </button>
+    </div>
+
+    <!-- Section instructions -->
+    <div class="section-info active" id="info-reading">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;color:var(--primary-light);font-weight:700;">
+            <i class="fas fa-book-open"></i> Reading Section
+        </div>
+        <p style="color:var(--text-secondary);font-size:.9rem;line-height:1.6;margin:0;">
+            Read the passages and answer the questions. You have approximately 54-72 minutes for this section.
+        </p>
+    </div>
+    <div class="section-info" id="info-listening">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;color:var(--primary-light);font-weight:700;">
+            <i class="fas fa-headphones"></i> Listening Section
+        </div>
+        <p style="color:var(--text-secondary);font-size:.9rem;line-height:1.6;margin:0;">
+            Listen to lectures and conversations, then answer the questions. You have approximately 41-57 minutes for this section.
+        </p>
+    </div>
+    <div class="section-info" id="info-speaking">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;color:var(--primary-light);font-weight:700;">
+            <i class="fas fa-microphone"></i> Speaking Section
+        </div>
+        <p style="color:var(--text-secondary);font-size:.9rem;line-height:1.6;margin:0;">
+            Respond to prompts using your microphone. You have approximately 17 minutes for this section.
+        </p>
+    </div>
+    <div class="section-info" id="info-writing">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;color:var(--primary-light);font-weight:700;">
+            <i class="fas fa-pen"></i> Writing Section
+        </div>
+        <p style="color:var(--text-secondary);font-size:.9rem;line-height:1.6;margin:0;">
+            Write essays in response to reading and listening tasks. You have approximately 50 minutes for this section.
+        </p>
+    </div>
+
+    <iframe id="frame-reading" class="content-frame active" src="toefl_reading.html"></iframe>
+    <iframe id="frame-listening" class="content-frame" src="toefllistening.html"></iframe>
+    <iframe id="frame-speaking" class="content-frame" src="toeflspeaking.html"></iframe>
+    <iframe id="frame-writing" class="content-frame" src="toeflwriting.html"></iframe>
+
+    <script>
+        // Tab switching
+        function switchTab(section) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.tab-btn[data-section="' + section + '"]').classList.add('active');
+            document.querySelectorAll('.content-frame').forEach(f => f.classList.remove('active'));
+            document.getElementById('frame-' + section).classList.add('active');
+            document.querySelectorAll('.section-info').forEach(i => i.classList.remove('active'));
+            document.getElementById('info-' + section).classList.add('active');
+        }
+
+        // Timer: 2 hours total test time
+        var totalSeconds = 2 * 60 * 60; // 2 hours
+        var timerInterval = setInterval(function() {
+            if (totalSeconds <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById('timerDisplay').textContent = "00:00:00";
+                return;
+            }
+            totalSeconds--;
+            var h = Math.floor(totalSeconds / 3600);
+            var m = Math.floor((totalSeconds % 3600) / 60);
+            var s = totalSeconds % 60;
+            var display = (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+            document.getElementById('timerDisplay').textContent = display;
+
+            var box = document.getElementById('timerBox');
+            box.classList.remove('warning', 'danger');
+            if (totalSeconds < 300) box.classList.add('danger');
+            else if (totalSeconds < 900) box.classList.add('warning');
+        }, 1000);
+
+        // Listen for messages from parent (ryshub hub injects values directly, but just in case)
+        window.addEventListener('message', function(e) {
+            if (e.data && e.data.studentName) document.getElementById('student-name').value = e.data.studentName;
+            if (e.data && e.data.studentId) document.getElementById('student-id').value = e.data.studentId;
+        });
+    </script>
+</body>
+</html>
