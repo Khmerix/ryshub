@@ -89,6 +89,8 @@
             text-decoration: none;
             transition: all 0.15s ease;
             cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .nav-3d:hover {
             color: var(--white);
@@ -101,6 +103,19 @@
             transform: translateY(2px);
             box-shadow: 0 2px 0 rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.2);
         }
+        .nav-scroll {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            max-width: 520px;
+            padding: 4px;
+            mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+        }
+        .nav-scroll::-webkit-scrollbar { display: none; }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
@@ -488,7 +503,7 @@
             <span class="text-white font-bold text-lg tracking-tight">Ryshub</span>
         </div>
         
-        <nav class="hidden md:flex items-center gap-3">
+        <nav class="hidden md:flex nav-scroll">
             <a href="#" class="nav-3d" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
             <a href="#" class="nav-3d" onclick="openToeflLogin(); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
             <a href="#" class="nav-3d" onclick="openBook1Modal(); return false;"><i class="fas fa-book text-xs"></i> Book 1</a>
