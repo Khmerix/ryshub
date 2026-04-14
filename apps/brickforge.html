@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickForge Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root { --glass-bg: rgba(15,15,20,0.95); --glass-border: rgba(255,255,255,0.1); --accent: #00d4ff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; background: #0a0a0a; }
+        .glass-panel { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(12px); border-radius: 12px; }
+        .glass-btn { background: rgba(255,255,255,0.08); border: 1px solid var(--glass-border); color: white; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .glass-btn:hover { background: rgba(255,255,255,0.15); border-color: var(--accent); }
+        .glass-btn.active { border-color: var(--accent); background: rgba(0,212,255,0.2); color: var(--accent); box-shadow: 0 0 15px rgba(0,212,255,0.3); }
+        .icon-btn { width: 36px; height: 36px; padding: 0; justify-content: center; }
+        .category-header { font-size: 9px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin: 6px 4px 4px 4px; }
+        .block-btn { width: 64px; height: 64px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin: 3px; border: 2px solid transparent; background: rgba(255,255,255,0.05); transition: all 0.2s; flex-shrink: 0; }
+        .block-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+        .block-btn.selected { border-color: var(--accent); background: rgba(0,212,255,0.2); box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+        .block-btn .icon { font-size: 22px; color: white; margin-bottom: 3px; }
+        .block-btn .label { font-size: 8px; font-weight: 600; text-transform: uppercase; color: #8899aa; }
+        #canvas-container { width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; z-index: 0; }
+        .ui-layer { position: relative; z-index: 10; pointer-events: none; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; }
+        .ui-interactive { pointer-events: auto; }
+        .scroll-row { display: flex; gap: 6px; padding: 6px; overflow-x: auto; scrollbar-width: thin; }
+        .tab-btn { padding: 6px 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid transparent; color: #8899aa; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .tab-btn.active { background: rgba(0,212,255,0.2); border-color: var(--accent); color: var(--accent); }
+        .panel-section { display: none; }
+        .panel-section.active { display: block; }
+        .color-btn { width: 28px; height: 28px; border-radius: 6px; border: 2px solid transparent; cursor: pointer; transition: all 0.15s; }
+        .color-btn:hover { transform: scale(1.1); }
+        .color-btn.active { border-color: white; box-shadow: 0 0 10px rgba(0,212,255,0.5); }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: var(--glass-bg); border: 1px solid var(--accent); color: white; padding: 12px 20px; border-radius: 8px; font-size: 13px; animation: toast-in 0.3s ease; }
+        @keyframes toast-in { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+<div id="canvas-container"></div>
+
+<div class="ui-layer">
+    <!-- Top Bar -->
+    <div class="flex justify-between items-start ui-interactive">
+        <div class="glass-panel p-3 flex items-center gap-3">
+            <span class="text-lg font-bold text-white"><i class="fas fa-cubes text-cyan-400"></i> BrickForge</span>
+            <div class="flex gap-1 bg-black/30 rounded-lg p-1">
+                <button onclick="setTool('build')" class="glass-btn active" id="tool-build"><i class="fas fa-hammer"></i> Build</button>
+                <button onclick="setTool('erase')" class="glass-btn" id="tool-erase"><i class="fas fa-eraser"></i> Erase</button>
+            </div>
+            <div class="w-px h-8 bg-white/10"></div>
+            <button onclick="undo()" class="glass-btn icon-btn"><i class="fas fa-undo"></i></button>
+            <button onclick="clearAll()" class="glass-btn icon-btn"><i class="fas fa-trash"></i></button>
+            <div class="flex flex-col items-end ml-2">
+                <span class="text-[10px] text-gray-400">BLOCKS</span>
+                <span class="text-xl font-bold text-cyan-400" id="block-count">0</span>
+            </div>
+        </div>
+        <div class="glass-panel p-2 flex flex-col gap-2">
+            <button onclick="resetCamera()" class="glass-btn icon-btn"><i class="fas fa-home"></i></button>
+            <button onclick="toggleGrid()" class="glass-btn icon-btn active" id="grid-btn"><i class="fas fa-border-all"></i></button>
+            <button onclick="rotateGhost()" class="glass-btn icon-btn"><i class="fas fa-sync-alt"></i></button>
+        </div>
+    </div>
+    
+    <!-- Bottom Panel -->
+    <div class="glass-panel p-3 ui-interactive w-full max-w-5xl mx-auto mb-2">
+        <!-- Tabs -->
+        <div class="flex gap-1 mb-3">
+            <button class="tab-btn active" onclick="switchTab('blocks')">Blocks</button>
+            <button class="tab-btn" onclick="switchTab('architecture')">Architecture</button>
+            <button class="tab-btn" onclick="switchTab('nature')">Nature</button>
+            <button class="tab-btn" onclick="switchTab('materials')">Materials</button>
+            <button class="tab-btn" onclick="switchTab('platform')">Platform</button>
+        </div>
+        
+        <!-- Size & Color -->
+        <div class="flex items-center gap-3 mb-3 pb-3 border-b border-white/10">
+            <div class="flex gap-1">
+                <button onclick="setSize(0.5)" class="glass-btn text-xs px-2" id="size-05">0.5</button>
+                <button onclick="setSize(1)" class="glass-btn text-xs px-2 active" id="size-1">1</button>
+                <button onclick="setSize(2)" class="glass-btn text-xs px-2" id="size-2">2</button>
+                <button onclick="setSize(4)" class="glass-btn text-xs px-2" id="size-4">4</button>
+            </div>
+            <div class="w-px h-6 bg-white/10"></div>
+            <div class="flex gap-1 flex-wrap" id="colors">
+                <div class="color-btn bg-red-500 active" onclick="setColor('#ef4444', this)"></div>
+                <div class="color-btn bg-orange-500" onclick="setColor('#f97316', this)"></div>
+                <div class="color-btn bg-yellow-500" onclick="setColor('#eab308', this)"></div>
+                <div class="color-btn bg-green-500" onclick="setColor('#22c55e', this)"></div>
+                <div class="color-btn bg-cyan-500" onclick="setColor('#06b6d4', this)"></div>
+                <div class="color-btn bg-blue-500" onclick="setColor('#3b82f6', this)"></div>
+                <div class="color-btn bg-purple-500" onclick="setColor('#a855f7', this)"></div>
+                <div class="color-btn bg-pink-500" onclick="setColor('#ec4899', this)"></div>
+                <div class="color-btn bg-white" onclick="setColor('#ffffff', this)"></div>
+                <div class="color-btn bg-gray-600" onclick="setColor('#4b5563', this)"></div>
+                <div class="color-btn bg-amber-700" onclick="setColor('#b45309', this)"></div>
+                <div class="color-btn bg-stone-500" onclick="setColor('#78716c', this)"></div>
+            </div>
+        </div>
+        
+        <!-- BLOCKS TAB -->
+        <div class="panel-section active" id="panel-blocks">
+            <div class="scroll-row flex-wrap">
+                <div>
+                    <div class="category-header">Basic Shapes</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn selected" onclick="pickBlock('cube', this)"><div class="icon"><i class="fas fa-cube"></i></div><div class="label">Cube</div></div>
+                        <div class="block-btn" onclick="pickBlock('slope', this)"><div class="icon"><i class="fas fa-mountain"></i></div><div class="label">Slope</div></div>
+                        <div class="block-btn" onclick="pickBlock('wedge', this)"><div class="icon"><i class="fas fa-play"></i></div><div class="label">Wedge</div></div>
+                        <div class="block-btn" onclick="pickBlock('cylinder', this)"><div class="icon"><i class="fas fa-database"></i></div><div class="label">Cylinder</div></div>
+                        <div class="block-btn" onclick="pickBlock('sphere', this)"><div class="icon"><i class="fas fa-circle"></i></div><div class="label">Sphere</div></div>
+                        <div class="block-btn" onclick="pickBlock('corner', this)"><div class="icon"><i class="fas fa-draw-polygon"></i></div><div class="label">Corner</div></div>
+                        <div class="block-btn" onclick="pickBlock('arch', this)"><div class="icon"><i class="fas fa-archway"></i></div><div class="label">Arch</div></div>
+                        <div class="block-btn" onclick="pickBlock('tube', this)"><div class="icon"><i class="fas fa-grip-lines-vertical"></i></div><div class="label">Tube</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Plates & Slabs</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('plate', this)"><div class="icon"><i class="fas fa-minus"></i></div><div class="label">Plate</div></div>
+                        <div class="block-btn" onclick="pickBlock('slab', this)"><div class="icon"><i class="fas fa-grip-lines"></i></div><div class="label">Slab</div></div>
+                        <div class="block-btn" onclick="pickBlock('tile', this)"><div class="icon"><i class="fas fa-th"></i></div><div class="label">Tile</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ARCHITECTURE TAB -->
+        <div class="panel-section" id="panel-architecture">
+            <div class="scroll-row flex-wrap">
+                <div>
+                    <div class="category-header">Walls & Floors</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('brick', this)"><div class="icon"><i class="fas fa-th"></i></div><div class="label">Brick</div></div>
+                        <div class="block-btn" onclick="pickBlock('wall', this)"><div class="icon"><i class="fas fa-square"></i></div><div class="label">Wall</div></div>
+                        <div class="block-btn" onclick="pickBlock('floor', this)"><div class="icon"><i class="fas fa-border-all"></i></div><div class="label">Floor</div></div>
+                        <div class="block-btn" onclick="pickBlock('panel', this)"><div class="icon"><i class="fas fa-columns"></i></div><div class="label">Panel</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Openings</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('window', this)"><div class="icon"><i class="fas fa-window-maximize"></i></div><div class="label">Window</div></div>
+                        <div class="block-btn" onclick="pickBlock('door', this)"><div class="icon"><i class="fas fa-door-open"></i></div><div class="label">Door</div></div>
+                        <div class="block-btn" onclick="pickBlock('gate', this)"><div class="icon"><i class="fas fa-dungeon"></i></div><div class="label">Gate</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Details</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('fence', this)"><div class="icon"><i class="fas fa-border-style"></i></div><div class="label">Fence</div></div>
+                        <div class="block-btn" onclick="pickBlock('railing', this)"><div class="icon"><i class="fas fa-grip-lines"></i></div><div class="label">Railing</div></div>
+                        <div class="block-btn" onclick="pickBlock('ladder', this)"><div class="icon"><i class="fas fa-stream"></i></div><div class="label">Ladder</div></div>
+                        <div class="block-btn" onclick="pickBlock('beam', this)"><div class="icon"><i class="fas fa-minus"></i></div><div class="label">Beam</div></div>
+                        <div class="block-btn" onclick="pickBlock('pillar', this)"><div class="icon"><i class="fas fa-grip-lines-vertical"></i></div><div class="label">Pillar</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Roofs & Stairs</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('roof', this)"><div class="icon"><i class="fas fa-home"></i></div><div class="label">Roof</div></div>
+                        <div class="block-btn" onclick="pickBlock('stair', this)"><div class="icon"><i class="fas fa-stairs"></i></div><div class="label">Stairs</div></div>
+                        <div class="block-btn" onclick="pickBlock('ramp', this)"><div class="icon"><i class="fas fa-long-arrow-alt-up"></i></div><div class="label">Ramp</div></div>
+                        <div class="block-btn" onclick="pickBlock('platform', this)"><div class="icon"><i class="fas fa-expand"></i></div><div class="label">Platform</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NATURE TAB -->
+        <div class="panel-section" id="panel-nature">
+            <div class="scroll-row flex-wrap">
+                <div>
+                    <div class="category-header">Trees</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('tree', this)"><div class="icon" style="color:#228B22"><i class="fas fa-tree"></i></div><div class="label">Tree</div></div>
+                        <div class="block-btn" onclick="pickBlock('pine', this)"><div class="icon" style="color:#1a472a"><i class="fas fa-tree"></i></div><div class="label">Pine</div></div>
+                        <div class="block-btn" onclick="pickBlock('palm', this)"><div class="icon" style="color:#2d5016"><i class="fas fa-tree"></i></div><div class="label">Palm</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Plants</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('bush', this)"><div class="icon" style="color:#228B22"><i class="fas fa-circle"></i></div><div class="label">Bush</div></div>
+                        <div class="block-btn" onclick="pickBlock('shrub', this)"><div class="icon" style="color:#32CD32"><i class="fas fa-cloud"></i></div><div class="label">Shrub</div></div>
+                        <div class="block-btn" onclick="pickBlock('flower', this)"><div class="icon" style="color:#FF69B4"><i class="fas fa-seedling"></i></div><div class="label">Flower</div></div>
+                        <div class="block-btn" onclick="pickBlock('grass', this)"><div class="icon" style="color:#90EE90"><i class="fas fa-wind"></i></div><div class="label">Grass</div></div>
+                        <div class="block-btn" onclick="pickBlock('cactus', this)"><div class="icon" style="color:#2E8B57"><i class="fas fa-hand-point-up"></i></div><div class="label">Cactus</div></div>
+                        <div class="block-btn" onclick="pickBlock('mushroom', this)"><div class="icon" style="color:#DC143C"><i class="fas fa-umbrella"></i></div><div class="label">Mushroom</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Terrain</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('rock', this)"><div class="icon" style="color:#666"><i class="fas fa-mountain"></i></div><div class="label">Rock</div></div>
+                        <div class="block-btn" onclick="pickBlock('boulder', this)"><div class="icon" style="color:#555"><i class="fas fa-meteor"></i></div><div class="label">Boulder</div></div>
+                        <div class="block-btn" onclick="pickBlock('pebble', this)"><div class="icon" style="color:#777"><i class="fas fa-dot-circle"></i></div><div class="label">Pebble</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Water & Effects</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('water', this)"><div class="icon" style="color:#0066cc"><i class="fas fa-water"></i></div><div class="label">Water</div></div>
+                        <div class="block-btn" onclick="pickBlock('lava', this)"><div class="icon" style="color:#ff4400"><i class="fas fa-fire"></i></div><div class="label">Lava</div></div>
+                        <div class="block-btn" onclick="pickBlock('ice', this)"><div class="icon" style="color:#a5f2f3"><i class="fas fa-snowflake"></i></div><div class="label">Ice</div></div>
+                        <div class="block-btn" onclick="pickBlock('snow', this)"><div class="icon" style="color:#fff"><i class="fas fa-snow"></i></div><div class="label">Snow</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MATERIALS TAB -->
+        <div class="panel-section" id="panel-materials">
+            <div class="scroll-row flex-wrap">
+                <div>
+                    <div class="category-header">Wood & Stone</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('wood', this)"><div class="icon" style="color:#8B4513"><i class="fas fa-tree"></i></div><div class="label">Wood</div></div>
+                        <div class="block-btn" onclick="pickBlock('plank', this)"><div class="icon" style="color:#DEB887"><i class="fas fa-grip-lines"></i></div><div class="label">Plank</div></div>
+                        <div class="block-btn" onclick="pickBlock('log', this)"><div class="icon" style="color:#5d4037"><i class="fas fa-minus"></i></div><div class="label">Log</div></div>
+                        <div class="block-btn" onclick="pickBlock('stone', this)"><div class="icon" style="color:#808080"><i class="fas fa-cube"></i></div><div class="label">Stone</div></div>
+                        <div class="block-btn" onclick="pickBlock('cobblestone', this)"><div class="icon" style="color:#696969"><i class="fas fa-th"></i></div><div class="label">Cobble</div></div>
+                        <div class="block-btn" onclick="pickBlock('marble', this)"><div class="icon" style="color:#f0f0f0"><i class="fas fa-gem"></i></div><div class="label">Marble</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Construction</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('concrete', this)"><div class="icon" style="color:#999"><i class="fas fa-square"></i></div><div class="label">Concrete</div></div>
+                        <div class="block-btn" onclick="pickBlock('sand', this)"><div class="icon" style="color:#F4A460"><i class="fas fa-cloud"></i></div><div class="label">Sand</div></div>
+                        <div class="block-btn" onclick="pickBlock('dirt', this)"><div class="icon" style="color:#8B4513"><i class="fas fa-mound"></i></div><div class="label">Dirt</div></div>
+                        <div class="block-btn" onclick="pickBlock('clay', this)"><div class="icon" style="color:#B66A50"><i class="fas fa-shapes"></i></div><div class="label">Clay</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Metals</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('metal', this)"><div class="icon" style="color:#718096"><i class="fas fa-cog"></i></div><div class="label">Metal</div></div>
+                        <div class="block-btn" onclick="pickBlock('steel', this)"><div class="icon" style="color:#4a5568"><i class="fas fa-industry"></i></div><div class="label">Steel</div></div>
+                        <div class="block-btn" onclick="pickBlock('iron', this)"><div class="icon" style="color:#5a5a5a"><i class="fas fa-weight-hanging"></i></div><div class="label">Iron</div></div>
+                        <div class="block-btn" onclick="pickBlock('gold', this)"><div class="icon" style="color:#FFD700"><i class="fas fa-coins"></i></div><div class="label">Gold</div></div>
+                        <div class="block-btn" onclick="pickBlock('copper', this)"><div class="icon" style="color:#B87333"><i class="fas fa-circle"></i></div><div class="label">Copper</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Special</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="pickBlock('glass', this)"><div class="icon" style="color:#87CEEB"><i class="fas fa-glass-whiskey"></i></div><div class="label">Glass</div></div>
+                        <div class="block-btn" onclick="pickBlock('neon', this)"><div class="icon" style="color:#ff00ff"><i class="fas fa-bolt"></i></div><div class="label">Neon</div></div>
+                        <div class="block-btn" onclick="pickBlock('glow', this)"><div class="icon" style="color:#ffff00"><i class="fas fa-lightbulb"></i></div><div class="label">Glow</div></div>
+                        <div class="block-btn" onclick="pickBlock('fabric', this)"><div class="icon" style="color:#e53e3e"><i class="fas fa-flag"></i></div><div class="label">Fabric</div></div>
+                        <div class="block-btn" onclick="pickBlock('leaves', this)"><div class="icon" style="color:#228B22"><i class="fas fa-leaf"></i></div><div class="label">Leaves</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PLATFORM TAB -->
+        <div class="panel-section" id="panel-platform">
+            <div class="scroll-row flex-wrap">
+                <div>
+                    <div class="category-header">Terrain Type</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="setPlatform('flat')"><div class="icon"><i class="fas fa-square"></i></div><div class="label">Flat</div></div>
+                        <div class="block-btn" onclick="setPlatform('hills')"><div class="icon"><i class="fas fa-mountain"></i></div><div class="label">Hills</div></div>
+                        <div class="block-btn" onclick="setPlatform('valley')"><div class="icon"><i class="fas fa-dungeon"></i></div><div class="label">Valley</div></div>
+                        <div class="block-btn" onclick="setPlatform('island')"><div class="icon"><i class="fas fa-globe"></i></div><div class="label">Island</div></div>
+                        <div class="block-btn" onclick="setPlatform('mesa')"><div class="icon"><i class="fas fa-layer-group"></i></div><div class="label">Mesa</div></div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="category-header">Ground Material</div>
+                    <div class="flex flex-wrap">
+                        <div class="block-btn" onclick="setGround('grass')"><div class="icon" style="color:#4a7c59"><i class="fas fa-square"></i></div><div class="label">Grass</div></div>
+                        <div class="block-btn" onclick="setGround('dirt')"><div class="icon" style="color:#8B4513"><i class="fas fa-square"></i></div><div class="label">Dirt</div></div>
+                        <div class="block-btn" onclick="setGround('sand')"><div class="icon" style="color:#F4A460"><i class="fas fa-square"></i></div><div class="label">Sand</div></div>
+                        <div class="block-btn" onclick="setGround('snow')"><div class="icon" style="color:#fff"><i class="fas fa-square"></i></div><div class="label">Snow</div></div>
+                        <div class="block-btn" onclick="setGround('stone')"><div class="icon" style="color:#666"><i class="fas fa-square"></i></div><div class="label">Stone</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// State
+let currentTool = 'build', currentBlock = 'cube', currentSize = 1, currentColor = '#ef4444', ghostRotation = 0;
+let blockCount = 0;
+let scene, camera, renderer, ground, grid, ghost;
+let raycaster, mouse, placedBlocks = [], showGrid = true;
+let camDist = 35, camTheta = 0.785, camPhi = 1.047, camTarget = {x:0,y:0,z:0};
+let isRot = false, isPan = false, lastX, lastY;
+
+// Init
+function init() {
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87CEEB);
+    scene.fog = new THREE.Fog(0x87CEEB, 40, 150);
+    
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+    updateCam();
+    
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+    
+    // Lights
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+    sun.position.set(50, 100, 50);
+    sun.castShadow = true;
+    sun.shadow.mapSize.width = sun.shadow.mapSize.height = 2048;
+    scene.add(sun);
+    
+    // Ground
+    createGround('flat', 'grass');
+    
+    // Grid
+    grid = new THREE.GridHelper(60, 60, 0xffffff, 0x666666);
+    grid.position.y = 0.01;
+    grid.material.opacity = 0.2;
+    grid.material.transparent = true;
+    scene.add(grid);
+    
+    // Ghost
+    createGhost();
+    
+    // Raycaster
+    raycaster = new THREE.Raycaster();
+    mouse = new THREE.Vector2();
+    
+    // Events
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth/window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    
+    const canvas = renderer.domElement;
+    canvas.addEventListener('mousemove', e => {
+        mouse.x = (e.clientX/window.innerWidth)*2 - 1;
+        mouse.y = -(e.clientY/window.innerHeight)*2 + 1;
+        
+        if (isRot) {
+            camTheta -= (e.clientX - lastX) * 0.01;
+            camPhi -= (e.clientY - lastY) * 0.01;
+            camPhi = Math.max(0.1, Math.min(Math.PI/2 - 0.1, camPhi));
+            updateCam();
+        } else if (isPan) {
+            camTarget.x -= (e.clientX - lastX) * 0.05;
+            camTarget.z -= (e.clientY - lastY) * 0.05;
+            updateCam();
+        } else if (currentTool === 'build') {
+            raycaster.setFromCamera(mouse, camera);
+            const hits = raycaster.intersectObjects([ground, ...placedBlocks], true);
+            if (hits.length > 0) {
+                const p = hits[0].point.clone();
+                const n = hits[0].face.normal.clone();
+                if (hits[0].object !== ground) n.transformDirection(hits[0].object.matrixWorld).normalize();
+                const half = currentSize/2;
+                p.add(n.multiplyScalar(half));
+                p.x = Math.round(p.x);
+                p.z = Math.round(p.z);
+                p.y = Math.max(half, Math.round(p.y/half)*half);
+                ghost.position.copy(p);
+                ghost.visible = true;
+            } else ghost.visible = false;
+        }
+        lastX = e.clientX; lastY = e.clientY;
+    });
+    
+    canvas.addEventListener('mousedown', e => {
+        if (e.target.closest('.ui-interactive')) return;
+        if (e.button === 0 && currentTool === 'build' && ghost.visible) build();
+        else if (e.button === 1) isRot = true;
+        else if (e.button === 2) isPan = true;
+    });
+    
+    canvas.addEventListener('mouseup', () => { isRot = false; isPan = false; });
+    canvas.addEventListener('wheel', e => { e.preventDefault(); camDist += e.deltaY*0.05; camDist = Math.max(5, Math.min(100, camDist)); updateCam(); }, {passive: false});
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
+    
+    animate();
+    toast('BrickForge Ready!');
+}
+
+function updateCam() {
+    camera.position.x = camTarget.x + camDist * Math.sin(camPhi) * Math.cos(camTheta);
+    camera.position.y = camTarget.y + camDist * Math.cos(camPhi);
+    camera.position.z = camTarget.z + camDist * Math.sin(camPhi) * Math.sin(camTheta);
+    camera.lookAt(camTarget.x, camTarget.y, camTarget.z);
+}
+
+function createGround(type, mat) {
+    if (ground) scene.remove(ground);
+    const colors = {grass: 0x4a7c59, dirt: 0x8B4513, sand: 0xF4A460, snow: 0xFFFAFA, stone: 0x808080};
+    let geo;
+    if (type === 'hills') {
+        geo = new THREE.PlaneGeometry(80, 80, 32, 32);
+        const pos = geo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+            const x = pos.getX(i), y = pos.getY(i);
+            pos.setZ(i, Math.sin(x*0.08)*Math.cos(y*0.08)*2);
+        }
+        geo.computeVertexNormals();
+    } else geo = new THREE.PlaneGeometry(80, 80);
+    ground = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color: colors[mat]||colors.grass, roughness: 0.9}));
+    ground.rotation.x = -Math.PI/2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+}
+
+function createGhost() {
+    if (ghost) scene.remove(ghost);
+    ghost = new THREE.Mesh(
+        new THREE.BoxGeometry(1,1,1),
+        new THREE.MeshBasicMaterial({color: 0x00d4ff, transparent: true, opacity: 0.3, wireframe: true})
+    );
+    ghost.visible = false;
+    scene.add(ghost);
+    updateGhostGeo();
+}
+
+function updateGhostGeo() {
+    if (!ghost) return;
+    ghost.geometry.dispose();
+    let geo;
+    switch(currentBlock) {
+        case 'slope': geo = new THREE.ConeGeometry(currentSize*0.7, currentSize, 4); break;
+        case 'cylinder': case 'pillar': geo = new THREE.CylinderGeometry(currentSize*0.35, currentSize*0.35, currentSize*(currentBlock==='pillar'?2:1), 16); break;
+        case 'sphere': case 'bush': geo = new THREE.SphereGeometry(currentSize*0.4, 16, 12); break;
+        case 'arch': geo = new THREE.TorusGeometry(currentSize*0.5, currentSize*0.15, 8, 16, Math.PI); break;
+        case 'wall': geo = new THREE.BoxGeometry(currentSize, currentSize*1.5, currentSize*0.3); break;
+        case 'window': geo = new THREE.BoxGeometry(currentSize, currentSize, currentSize*0.2); break;
+        case 'door': geo = new THREE.BoxGeometry(currentSize*0.8, currentSize*1.8, currentSize*0.15); break;
+        case 'tree': geo = new THREE.CylinderGeometry(currentSize*0.15, currentSize*0.25, currentSize, 8); break;
+        case 'rock': geo = new THREE.DodecahedronGeometry(currentSize*0.4, 0); break;
+        case 'plate': case 'slab': case 'tile': geo = new THREE.BoxGeometry(currentSize, currentSize*0.2, currentSize); break;
+        default: geo = new THREE.BoxGeometry(currentSize, currentSize, currentSize);
+    }
+    ghost.geometry = geo;
+    ghost.rotation.y = ghostRotation;
+}
+
+function build() {
+    let mesh, geo, mat;
+    const c = new THREE.Color(currentColor);
+    
+    // Create a group helper function
+    const makeGroup = () => new THREE.Group();
+    
+    switch(currentBlock) {
+        // Nature - Trees
+        case 'tree':
+        case 'pine':
+        case 'palm':
+            mesh = makeGroup();
+            const trunkG = new THREE.CylinderGeometry(currentSize*0.15, currentSize*0.25, currentSize, 8);
+            const trunkM = new THREE.Mesh(trunkG, new THREE.MeshStandardMaterial({color: 0x5d4037}));
+            trunkM.position.y = currentSize*0.5;
+            const leavesG = new THREE.SphereGeometry(currentSize*0.6, 8, 8);
+            const leavesM = new THREE.Mesh(leavesG, new THREE.MeshStandardMaterial({color: currentBlock==='pine'?0x1a472a:0x2d5016}));
+            leavesM.position.y = currentSize*1.2;
+            mesh.add(trunkM, leavesM);
+            break;
+        case 'rock':
+        case 'boulder':
+            geo = new THREE.DodecahedronGeometry(currentSize*0.4, 0);
+            mat = new THREE.MeshStandardMaterial({color: 0x666666, flatShading: true});
+            mesh = new THREE.Mesh(geo, mat);
+            if (currentBlock === 'boulder') mesh.scale.setScalar(1.5);
+            break;
+        case 'bush':
+        case 'shrub':
+            geo = new THREE.SphereGeometry(currentSize*0.4, 12, 10);
+            mat = new THREE.MeshStandardMaterial({color: 0x228B22});
+            mesh = new THREE.Mesh(geo, mat);
+            break;
+        case 'flower':
+            mesh = makeGroup();
+            const sGeo = new THREE.CylinderGeometry(currentSize*0.02, currentSize*0.02, currentSize*0.4, 6);
+            const sMat = new THREE.MeshStandardMaterial({color: 0x228B22});
+            const sMesh = new THREE.Mesh(sGeo, sMat);
+            sMesh.position.y = currentSize*0.2;
+            const pGeo = new THREE.SphereGeometry(currentSize*0.15, 8, 8);
+            const pMat = new THREE.MeshStandardMaterial({color: c});
+            const pMesh = new THREE.Mesh(pGeo, pMat);
+            pMesh.position.y = currentSize*0.4;
+            const cGeo = new THREE.SphereGeometry(currentSize*0.06, 8, 8);
+            const cMat = new THREE.MeshStandardMaterial({color: 0xFFD700});
+            const cMesh = new THREE.Mesh(cGeo, cMat);
+            cMesh.position.y = currentSize*0.4;
+            mesh.add(sMesh, pMesh, cMesh);
+            break;
+        case 'cactus':
+            mesh = makeGroup();
+            const mainStem = new THREE.Mesh(
+                new THREE.CylinderGeometry(currentSize*0.2, currentSize*0.2, currentSize, 8),
+                new THREE.MeshStandardMaterial({color: 0x2E8B57})
+            );
+            mainStem.position.y = currentSize*0.5;
+            mesh.add(mainStem);
+            for (let i = 0; i < 2; i++) {
+                const armG = new THREE.CylinderGeometry(currentSize*0.1, currentSize*0.1, currentSize*0.5, 6);
+                const armM = new THREE.Mesh(armG, new THREE.MeshStandardMaterial({color: 0x2E8B57}));
+                armM.position.set((i===0?1:-1)*currentSize*0.3, currentSize*0.6, 0);
+                armM.rotation.z = (i===0?-1:1)*Math.PI/4;
+                mesh.add(armM);
+            }
+            break;
+        case 'mushroom':
+            mesh = makeGroup();
+            const mushStem = new THREE.Mesh(
+                new THREE.CylinderGeometry(currentSize*0.08, currentSize*0.1, currentSize*0.5, 8),
+                new THREE.MeshStandardMaterial({color: 0xDDD})
+            );
+            mushStem.position.y = currentSize*0.25;
+            const mushCap = new THREE.Mesh(
+                new THREE.SphereGeometry(currentSize*0.3, 12, 8, 0, Math.PI*2, 0, Math.PI/2),
+                new THREE.MeshStandardMaterial({color: 0xDC143C})
+            );
+            mushCap.position.y = currentSize*0.5;
+            mesh.add(mushStem, mushCap);
+            break;
+        
+        // Shapes
+        case 'slope': geo = new THREE.ConeGeometry(currentSize*0.7, currentSize, 4); break;
+        case 'wedge': geo = new THREE.CylinderGeometry(0, currentSize*0.7, currentSize, 3); break;
+        case 'cylinder': geo = new THREE.CylinderGeometry(currentSize*0.35, currentSize*0.35, currentSize, 16); break;
+        case 'sphere': geo = new THREE.SphereGeometry(currentSize*0.4, 16, 12); break;
+        case 'arch': geo = new THREE.TorusGeometry(currentSize*0.5, currentSize*0.15, 8, 16, Math.PI); break;
+        case 'corner': geo = new THREE.BoxGeometry(currentSize*0.5, currentSize, currentSize*0.5); break;
+        case 'tube': geo = new THREE.CylinderGeometry(currentSize*0.2, currentSize*0.2, currentSize, 12, 1, true); break;
+        
+        // Architecture
+        case 'wall': geo = new THREE.BoxGeometry(currentSize, currentSize*1.5, currentSize*0.3); break;
+        case 'window': geo = new THREE.BoxGeometry(currentSize, currentSize, currentSize*0.2); mat = new THREE.MeshPhysicalMaterial({color: 0x87CEEB, transparent: true, opacity: 0.4, roughness: 0.1}); break;
+        case 'door': geo = new THREE.BoxGeometry(currentSize*0.8, currentSize*1.8, currentSize*0.15); mat = new THREE.MeshStandardMaterial({color: 0x8B4513}); break;
+        case 'fence': case 'railing': case 'ladder':
+            const fgroup2 = new THREE.Group();
+            for (let i = 0; i < 3; i++) {
+                const post = new THREE.Mesh(new THREE.BoxGeometry(currentSize*0.05, currentSize, currentSize*0.05), new THREE.MeshStandardMaterial({color: 0x8B4513}));
+                post.position.set((i-1)*currentSize*0.4, currentSize*0.5, 0);
+                fgroup2.add(post);
+            }
+            for (let i = 0; i < 3; i++) {
+                const rail = new THREE.Mesh(new THREE.BoxGeometry(currentSize*0.9, currentSize*0.03, currentSize*0.02), new THREE.MeshStandardMaterial({color: 0xA0522D}));
+                rail.position.y = currentSize*(0.2 + i*0.3);
+                fgroup2.add(rail);
+            }
+            mesh = fgroup2;
+            break;
+        case 'beam': geo = new THREE.BoxGeometry(currentSize*0.2, currentSize*0.2, currentSize); break;
+        case 'pillar': geo = new THREE.CylinderGeometry(currentSize*0.25, currentSize*0.3, currentSize*2, 12); break;
+        case 'brick': geo = new THREE.BoxGeometry(currentSize*0.9, currentSize*0.5, currentSize*0.5); break;
+        case 'panel': case 'plate': case 'slab': case 'tile': geo = new THREE.BoxGeometry(currentSize, currentSize*0.2, currentSize); break;
+        case 'floor': geo = new THREE.BoxGeometry(currentSize, currentSize*0.1, currentSize); break;
+        case 'gate':
+            const ggroup = new THREE.Group();
+            const frame = new THREE.Mesh(new THREE.BoxGeometry(currentSize*2, currentSize*1.5, currentSize*0.1), new THREE.MeshStandardMaterial({color: 0x4a5568}));
+            ggroup.add(frame);
+            for (let i = 0; i < 5; i++) {
+                const bar = new THREE.Mesh(new THREE.BoxGeometry(currentSize*0.05, currentSize*1.3, currentSize*0.05), new THREE.MeshStandardMaterial({color: 0x2d3748}));
+                bar.position.x = (i-2)*currentSize*0.4;
+                ggroup.add(bar);
+            }
+            mesh = ggroup;
+            break;
+        
+        // Materials
+        case 'wood': case 'plank': case 'log': mat = new THREE.MeshStandardMaterial({color: 0x8B4513, roughness: 0.9}); break;
+        case 'stone': case 'cobblestone': mat = new THREE.MeshStandardMaterial({color: 0x808080, roughness: 0.9}); break;
+        case 'marble': mat = new THREE.MeshStandardMaterial({color: 0xF5F5F5, roughness: 0.3}); break;
+        case 'concrete': mat = new THREE.MeshStandardMaterial({color: 0x999999, roughness: 0.9}); break;
+        case 'sand': case 'dirt': case 'clay': mat = new THREE.MeshStandardMaterial({color: currentBlock==='sand'?0xF4A460:currentBlock==='dirt'?0x8B4513:0xB66A50, roughness: 1}); break;
+        case 'metal': case 'steel': case 'iron': mat = new THREE.MeshStandardMaterial({color: currentBlock==='metal'?0x718096:0x4a5568, metalness: 0.8, roughness: 0.2}); break;
+        case 'gold': mat = new THREE.MeshStandardMaterial({color: 0xFFD700, metalness: 1, roughness: 0.1}); break;
+        case 'copper': mat = new THREE.MeshStandardMaterial({color: 0xB87333, metalness: 0.7, roughness: 0.3}); break;
+        case 'glass': mat = new THREE.MeshPhysicalMaterial({color: 0x87CEEB, transparent: true, opacity: 0.3, roughness: 0.05}); break;
+        case 'neon': mat = new THREE.MeshStandardMaterial({color: 0xff00ff, emissive: 0xff00ff, emissiveIntensity: 0.5}); break;
+        case 'glow': mat = new THREE.MeshStandardMaterial({color: 0xffff00, emissive: 0xffff00, emissiveIntensity: 1}); break;
+        case 'water': mat = new THREE.MeshStandardMaterial({color: 0x0066cc, transparent: true, opacity: 0.6}); break;
+        case 'lava': mat = new THREE.MeshStandardMaterial({color: 0xff4400, emissive: 0xff2200, emissiveIntensity: 0.8}); break;
+        case 'ice': mat = new THREE.MeshStandardMaterial({color: 0xa5f2f3, transparent: true, opacity: 0.5}); break;
+        case 'snow': mat = new THREE.MeshStandardMaterial({color: 0xFFFAFA, roughness: 0.9}); break;
+        case 'fabric': mat = new THREE.MeshStandardMaterial({color: c, roughness: 1}); break;
+        case 'leaves': mat = new THREE.MeshStandardMaterial({color: 0x228B22, roughness: 0.8}); break;
+        
+        default: geo = new THREE.BoxGeometry(currentSize, currentSize, currentSize);
+    }
+    
+    if (!mesh && geo) {
+        if (!mat) mat = new THREE.MeshStandardMaterial({color: c});
+        mesh = new THREE.Mesh(geo, mat);
+    }
+    
+    if (mesh) {
+        mesh.position.copy(ghost.position);
+        mesh.rotation.y = ghostRotation;
+        mesh.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; }});
+        scene.add(mesh);
+        placedBlocks.push(mesh);
+        document.getElementById('block-count').textContent = ++blockCount;
+        toast(currentBlock + ' placed');
+    }
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+// UI Functions
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel-section').forEach(p => p.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+}
+
+function setTool(t) {
+    currentTool = t;
+    document.querySelectorAll('#tool-build, #tool-erase').forEach(b => b.classList.remove('active'));
+    document.getElementById('tool-' + t).classList.add('active');
+    toast('Tool: ' + t);
+}
+
+function pickBlock(type, el) {
+    currentBlock = type;
+    document.querySelectorAll('.block-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    updateGhostGeo();
+}
+
+function setSize(s) {
+    currentSize = s;
+    document.querySelectorAll('[id^="size-"]').forEach(b => b.classList.remove('active'));
+    document.getElementById('size-' + (s.toString().replace('.',''))).classList.add('active');
+    updateGhostGeo();
+}
+
+function setColor(c, el) {
+    currentColor = c;
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+}
+
+function setPlatform(type) {
+    const mat = ground.material.color.getHex() === 0x4a7c59 ? 'grass' : ground.material.color.getHex() === 0x8B4513 ? 'dirt' : 'grass';
+    createGround(type, mat);
+    toast('Platform: ' + type);
+}
+
+function setGround(mat) {
+    const colors = {grass: 0x4a7c59, dirt: 0x8B4513, sand: 0xF4A460, snow: 0xFFFAFA, stone: 0x808080};
+    ground.material.color.setHex(colors[mat]);
+    toast('Ground: ' + mat);
+}
+
+function toggleGrid() {
+    showGrid = !showGrid;
+    grid.visible = showGrid;
+    document.getElementById('grid-btn').classList.toggle('active');
+}
+
+function rotateGhost() {
+    ghostRotation += Math.PI/2;
+    if (ghost) ghost.rotation.y = ghostRotation;
+}
+
+function resetCamera() {
+    camTarget = {x:0,y:0,z:0}; camDist = 35; camTheta = 0.785; camPhi = 1.047;
+    updateCam();
+}
+
+function undo() {
+    if (placedBlocks.length) {
+        scene.remove(placedBlocks.pop());
+        document.getElementById('block-count').textContent = --blockCount;
+    }
+}
+
+function clearAll() {
+    placedBlocks.forEach(b => scene.remove(b));
+    placedBlocks = []; blockCount = 0;
+    document.getElementById('block-count').textContent = 0;
+    toast('Cleared');
+}
+
+function toast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerHTML = '<i class="fas fa-check-circle text-cyan-400 mr-2"></i>' + msg;
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(() => t.remove(), 2000);
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+    const k = e.key.toLowerCase();
+    if (k === 'b') setTool('build');
+    else if (k === 'e') setTool('erase');
+    else if (k === 'r') rotateGhost();
+    else if (k === 'z' && e.ctrlKey) undo();
+});
+
+// Start
+init();
+</script>
+</body>
+</html>

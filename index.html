@@ -73,7 +73,35 @@
         .nav-link:hover {
             color: var(--white);
         }
-        
+
+        .nav-3d {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--gray-300);
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2);
+            text-decoration: none;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .nav-3d:hover {
+            color: var(--white);
+            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+            border-color: rgba(255,255,255,0.18);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .nav-3d:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.2);
+        }
+
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
             color: white;
@@ -460,14 +488,16 @@
             <span class="text-white font-bold text-lg tracking-tight">Ryshub</span>
         </div>
         
-        <nav class="hidden md:flex items-center gap-8">
-            <a href="#" class="nav-link" onclick="showToast('Already on Home'); return false;">Home</a>
-            <a href="#" class="nav-link" onclick="openToeflLogin(); return false;">TOEFL iBT</a>
-            <a href="#" class="nav-link" onclick="openBook1Modal(); return false;">World Class Book 1</a>
-            <a href="#" class="nav-link" onclick="openBook2bModal(); return false;">World Class 2B</a>
-            <a href="apps/toefl.html" target="_blank" class="nav-link">TOEFL <i class="fas fa-external-link-alt text-xs ml-1 opacity-60"></i></a>
-            <a href="apps/book1.html" target="_blank" class="nav-link">Book 1 <i class="fas fa-external-link-alt text-xs ml-1 opacity-60"></i></a>
-            <a href="apps/book2b.html" target="_blank" class="nav-link">Book 2B <i class="fas fa-external-link-alt text-xs ml-1 opacity-60"></i></a>
+        <nav class="hidden md:flex items-center gap-3">
+            <a href="#" class="nav-3d" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
+            <a href="#" class="nav-3d" onclick="openToeflLogin(); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
+            <a href="#" class="nav-3d" onclick="openBook1Modal(); return false;"><i class="fas fa-book text-xs"></i> Book 1</a>
+            <a href="#" class="nav-3d" onclick="openBook2bModal(); return false;"><i class="fas fa-book-open text-xs"></i> Book 2B</a>
+            <a href="#" class="nav-3d" onclick="openBrickForgeModal(); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
+            <a href="apps/toefl.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> TOEFL</a>
+            <a href="apps/book1.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> Book 1</a>
+            <a href="apps/book2b.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> Book 2B</a>
+            <a href="apps/brickforge.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> Brick Forge</a>
         </nav>
         
         <div class="flex items-center gap-3">
@@ -496,14 +526,26 @@
         <a href="#" class="menu-item" onclick="openToeflLogin(); toggleMenu(); return false;">
             <i class="fas fa-graduation-cap"></i><span>TOEFL iBT</span>
         </a>
+        <a href="#" class="menu-item" onclick="openBook1Modal(); toggleMenu(); return false;">
+            <i class="fas fa-book"></i><span>World Class Book 1</span>
+        </a>
         <a href="#" class="menu-item" onclick="openBook2bModal(); toggleMenu(); return false;">
-            <i class="fas fa-book"></i><span>World Class 2B</span>
+            <i class="fas fa-book-open"></i><span>World Class 2B</span>
+        </a>
+        <a href="#" class="menu-item" onclick="openBrickForgeModal(); toggleMenu(); return false;">
+            <i class="fas fa-cube"></i><span>Brick Forge</span>
         </a>
         <a href="apps/toefl.html" target="_blank" class="menu-item">
             <i class="fas fa-external-link-alt"></i><span>TOEFL (Full Page)</span>
         </a>
+        <a href="apps/book1.html" target="_blank" class="menu-item">
+            <i class="fas fa-external-link-alt"></i><span>Book 1 (Full Page)</span>
+        </a>
         <a href="apps/book2b.html" target="_blank" class="menu-item">
             <i class="fas fa-external-link-alt"></i><span>Book 2B (Full Page)</span>
+        </a>
+        <a href="apps/brickforge.html" target="_blank" class="menu-item">
+            <i class="fas fa-external-link-alt"></i><span>Brick Forge (Full Page)</span>
         </a>
         <a href="#" class="menu-item" onclick="showToast('EduGrade coming soon!'); return false;">
             <i class="fas fa-brain"></i><span>EduGrade Pro</span>
@@ -717,6 +759,21 @@
     <iframe id="book2b-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
+<!-- BRICK FORGE FULLSCREEN MODAL -->
+<div id="brickforge-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #0891b2, #0e7490);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#22d3ee,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:1rem;">🧱</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">Brick Forge Pro</div>
+                <div style="font-size:.7rem;color:rgba(34,211,238,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">3D Voxel Builder</div>
+            </div>
+        </div>
+        <button onclick="closeBrickForgeModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="brickforge-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
 <!-- Toast -->
 <div id="hub-toast" style="position:fixed;bottom:2rem;right:2rem;background:rgba(15,23,42,.95);border:1px solid rgba(37,99,235,.4);border-radius:14px;padding:14px 20px;color:white;font-size:.9rem;display:flex;align-items:center;gap:10px;box-shadow:0 8px 0 rgba(37,99,235,.15),0 20px 40px rgba(0,0,0,.4);z-index:99999;transform:translateY(120px);opacity:0;transition:transform .4s cubic-bezier(.175,.885,.32,1.275),opacity .4s ease;backdrop-filter:blur(16px);">
     <i class="fas fa-check-circle" style="color:#10b981;font-size:1.1rem;"></i>
@@ -873,6 +930,16 @@ function openBook2bModal() {
 }
 function closeBook2bModal() {
     document.getElementById('book2b-modal').classList.remove('open');
+}
+
+function openBrickForgeModal() {
+    showToast('Loading Brick Forge... one moment ⏳');
+    var frame = document.getElementById('brickforge-frame');
+    frame.src = 'apps/brickforge.html';
+    document.getElementById('brickforge-modal').classList.add('open');
+}
+function closeBrickForgeModal() {
+    document.getElementById('brickforge-modal').classList.remove('open');
 }
 
 function showToast(msg) {
