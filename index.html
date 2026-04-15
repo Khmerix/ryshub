@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +23,7 @@
                 linear-gradient(160deg, #f8fafc 0%, #f1f5f9 30%, #e2e8f0 50%, #f1f5f9 70%, #f8fafc 100%);
             position: relative;
             overflow-x: hidden;
-            min-height: 100vh;
+            min-block-size: 100vh;
         }
         
         /* Animated gradient orbs - layer 1 */
@@ -32,10 +31,10 @@
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            inset-block-end: 0;
             background: 
                 radial-gradient(ellipse 80% 50% at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
                 radial-gradient(ellipse 60% 40% at 90% 10%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
@@ -71,10 +70,10 @@
         body::after {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            inset-block-end: 0;
             background: 
                 /* Subtle grid pattern */
                 linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px),
@@ -96,47 +95,47 @@
         }
         
         .shape-1 {
-            width: 400px;
-            height: 400px;
+            inline-size: 400px;
+            block-size: 400px;
             background: linear-gradient(135deg, #60a5fa, #3b82f6);
-            top: -5%;
-            left: -5%;
+            inset-block-start: -5%;
+            inset-inline-start: -5%;
             animation-delay: 0s;
         }
         
         .shape-2 {
-            width: 350px;
-            height: 350px;
+            inline-size: 350px;
+            block-size: 350px;
             background: linear-gradient(135deg, #c084fc, #a855f7);
-            top: 50%;
-            right: -10%;
+            inset-block-start: 50%;
+            inset-inline-end: -10%;
             animation-delay: -7s;
         }
         
         .shape-3 {
-            width: 300px;
-            height: 300px;
+            inline-size: 300px;
+            block-size: 300px;
             background: linear-gradient(135deg, #34d399, #10b981);
-            bottom: 10%;
-            left: 10%;
+            inset-block-end: 10%;
+            inset-inline-start: 10%;
             animation-delay: -14s;
         }
         
         .shape-4 {
-            width: 250px;
-            height: 250px;
+            inline-size: 250px;
+            block-size: 250px;
             background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            top: 20%;
-            right: 30%;
+            inset-block-start: 20%;
+            inset-inline-end: 30%;
             animation-delay: -10s;
         }
         
         .shape-5 {
-            width: 200px;
-            height: 200px;
+            inline-size: 200px;
+            block-size: 200px;
             background: linear-gradient(135deg, #818cf8, #6366f1);
-            bottom: 30%;
-            right: 20%;
+            inset-block-end: 30%;
+            inset-inline-end: 20%;
             animation-delay: -5s;
         }
         
@@ -155,44 +154,44 @@
         /* Decorative corner elements */
         .corner-decoration {
             position: fixed;
-            width: 300px;
-            height: 300px;
+            inline-size: 300px;
+            block-size: 300px;
             pointer-events: none;
             z-index: 0;
             opacity: 0.4;
         }
         
         .corner-decoration.top-left {
-            top: -100px;
-            left: -100px;
+            inset-block-start: -100px;
+            inset-inline-start: -100px;
             background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
         }
         
         .corner-decoration.top-right {
-            top: -100px;
-            right: -100px;
+            inset-block-start: -100px;
+            inset-inline-end: -100px;
             background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
         }
         
         .corner-decoration.bottom-left {
-            bottom: -100px;
-            left: -100px;
+            inset-block-end: -100px;
+            inset-inline-start: -100px;
             background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
         }
         
         .corner-decoration.bottom-right {
-            bottom: -100px;
-            right: -100px;
+            inset-block-end: -100px;
+            inset-inline-end: -100px;
             background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
         }
         
         /* Wave decoration at bottom */
         .wave-decoration {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 200px;
+            inset-block-end: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            block-size: 200px;
             background: linear-gradient(to top, rgba(241, 245, 249, 0.8), transparent);
             pointer-events: none;
             z-index: 0;
@@ -235,8 +234,8 @@
                 0 0 0 1px rgba(255, 255, 255, 0.8),
                 0 0 100px rgba(59, 130, 246, 0.1);
             backdrop-filter: blur(20px);
-            max-width: 420px;
-            width: 100%;
+            max-inline-size: 420px;
+            inline-size: 100%;
             padding: 40px;
             position: relative;
             z-index: 10;
@@ -245,10 +244,10 @@
         .login-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            block-size: 4px;
             background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981, #f59e0b);
             border-radius: 24px 24px 0 0;
         }
@@ -260,7 +259,7 @@
             padding: 14px 18px;
             color: #1e293b;
             font-size: 1rem;
-            width: 100%;
+            inline-size: 100%;
             transition: all 0.3s;
         }
         
@@ -303,10 +302,10 @@
             font-family: 'Font Awesome 6 Free';
             font-weight: 900;
             position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 32px;
-            height: 32px;
+            inset-block-start: 16px;
+            inset-inline-end: 16px;
+            inline-size: 32px;
+            block-size: 32px;
             background: var(--success);
             border-radius: 50%;
             display: flex;
@@ -317,8 +316,8 @@
         }
         
         .section-icon {
-            width: 80px;
-            height: 80px;
+            inline-size: 80px;
+            block-size: 80px;
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -334,19 +333,19 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 60vh;
+            min-block-size: 60vh;
             text-align: center;
         }
         
         .ready-icon {
-            width: 120px;
-            height: 120px;
+            inline-size: 120px;
+            block-size: 120px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            margin-bottom: 32px;
+            margin-block-end: 32px;
             animation: pulse-glow 2s infinite;
         }
         
@@ -368,8 +367,8 @@
         /* Back button for sections */
         .back-btn {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            inset-block-start: 20px;
+            inset-inline-start: 20px;
             z-index: 100;
             background: rgba(30, 41, 59, 0.9);
             border: 1px solid rgba(51, 65, 85, 0.5);
@@ -401,12 +400,12 @@
             display: flex;
             align-items: flex-end;
             gap: 3px;
-            height: 40px;
+            block-size: 40px;
             justify-content: center;
         }
 
         .audio-bar {
-            width: 4px;
+            inline-size: 4px;
             background: linear-gradient(180deg, var(--section-accent) 0%, var(--section-primary) 100%);
             border-radius: 2px;
             animation: pulse-bar 1s ease-in-out infinite;
@@ -423,8 +422,8 @@
             background: linear-gradient(145deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
             border: none;
             border-radius: 50%;
-            width: 80px;
-            height: 80px;
+            inline-size: 80px;
+            block-size: 80px;
             color: white;
             font-size: 2rem;
             cursor: pointer;
@@ -450,11 +449,11 @@
             align-items: center;
             justify-content: center;
             gap: 4px;
-            height: 60px;
+            block-size: 60px;
         }
 
         .waveform-bar {
-            width: 6px;
+            inline-size: 6px;
             background: linear-gradient(180deg, var(--section-accent) 0%, var(--section-primary) 100%);
             border-radius: 3px;
             animation: wave 1s ease-in-out infinite;
@@ -495,30 +494,30 @@
         .fill-input {
             background: transparent;
             border: none;
-            border-bottom: 2px solid var(--section-primary);
+            border-block-end: 2px solid var(--section-primary);
             color: var(--text-primary);
             font-weight: 600;
             text-align: center;
             padding: 4px 8px;
-            min-width: 80px;
+            min-inline-size: 80px;
             transition: all 0.3s;
             font-size: 1.1em;
         }
 
         .fill-input:focus {
             outline: none;
-            border-bottom-color: var(--section-accent);
+            border-block-end-color: var(--section-accent);
             box-shadow: 0 4px 12px var(--section-glow);
         }
 
         .fill-input.correct {
-            border-bottom-color: var(--success);
+            border-block-end-color: var(--success);
             color: var(--success);
             text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
         }
 
         .fill-input.incorrect {
-            border-bottom-color: var(--error);
+            border-block-end-color: var(--error);
             color: var(--error);
         }
         
@@ -554,7 +553,7 @@
         }
         
         .sentence-builder {
-            min-height: 60px;
+            min-block-size: 60px;
             padding: 16px;
             background: rgba(15, 23, 42, 0.5);
             border: 2px dashed rgba(100, 116, 139, 0.5);
@@ -629,10 +628,10 @@
         /* Security Warning Overlay */
         .security-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            inset-block-end: 0;
             background: rgba(0, 0, 0, 0.95);
             z-index: 9999;
             display: flex;
@@ -645,8 +644,8 @@
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 0.99) 100%);
             border: 2px solid #ef4444;
             border-radius: 24px;
-            max-width: 500px;
-            width: 100%;
+            max-inline-size: 500px;
+            inline-size: 100%;
             padding: 40px;
             text-align: center;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 60px rgba(239, 68, 68, 0.3);
@@ -659,8 +658,8 @@
         }
         
         .security-icon {
-            width: 80px;
-            height: 80px;
+            inline-size: 80px;
+            block-size: 80px;
             background: linear-gradient(145deg, #ef4444, #b91c1c);
             border-radius: 50%;
             display: flex;
@@ -685,8 +684,8 @@
         }
         
         .strike-dot {
-            width: 24px;
-            height: 24px;
+            inline-size: 24px;
+            block-size: 24px;
             border-radius: 50%;
             background: rgba(51, 65, 85, 0.5);
             border: 2px solid rgba(100, 116, 139, 0.5);
@@ -704,8 +703,8 @@
             border: 2px solid rgba(245, 158, 11, 0.4);
             border-radius: 20px;
             padding: 32px;
-            max-width: 600px;
-            margin-bottom: 24px;
+            max-inline-size: 600px;
+            margin-block-end: 24px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
         
@@ -716,14 +715,14 @@
             padding: 16px;
             background: rgba(241, 245, 249, 0.8);
             border-radius: 12px;
-            margin-bottom: 12px;
-            border-left: 3px solid #f59e0b;
+            margin-block-end: 12px;
+            border-inline-start: 3px solid #f59e0b;
         }
         
         .security-rule i {
             color: #f59e0b;
             font-size: 1.25rem;
-            margin-top: 2px;
+            margin-block-start: 2px;
         }
         
         .security-acknowledged {
@@ -745,9 +744,9 @@
 <div class="light-ray ray-2"></div>
 
 <!-- Background Orbs - now lighter -->
-<div class="orb orb-1" style="position:fixed;border-radius:50%;filter:blur(80px);opacity:0.2;pointer-events:none;z-index:0;width:500px;height:500px;background:radial-gradient(circle, rgba(37,99,235,0.3) 0%, transparent 70%);top:-10%;left:-10%;animation:floatOrb 20s ease-in-out infinite;"></div>
-<div class="orb orb-2" style="position:fixed;border-radius:50%;filter:blur(80px);opacity:0.15;pointer-events:none;z-index:0;width:400px;height:400px;background:radial-gradient(circle, rgba(6,182,212,0.25) 0%, transparent 70%);top:40%;right:-5%;animation:floatOrb 20s ease-in-out infinite;animation-delay:-7s;"></div>
-<div class="orb orb-3" style="position:fixed;border-radius:50%;filter:blur(80px);opacity:0.12;pointer-events:none;z-index:0;width:350px;height:350px;background:radial-gradient(circle, rgba(71,85,105,0.2) 0%, transparent 70%);bottom:10%;left:20%;animation:floatOrb 20s ease-in-out infinite;animation-delay:-14s;"></div>
+<div class="orb orb-1" style="position:fixed;border-radius:50%;filter:blur(80px);opacity:0.2;pointer-events:none;z-index:0;inline-size:500px;block-size:500px;background:radial-gradient(circle, rgba(37,99,235,0.3) 0%, transparent 70%);inset-block-start:-10%;inset-inline-start:-10%;animation:floatOrb 20s ease-in-out infinite;"></div>
+<div class="orb orb-2" style="position:fixed;border-radius:50%;filter:blur(80px);opacity:0.15;pointer-events:none;z-index:0;inline-size:400px;block-size:400px;background:radial-gradient(circle, rgba(6,182,212,0.25) 0%, transparent 70%);inset-block-start:40%;inset-inline-end:-5%;animation:floatOrb 20s ease-in-out infinite;animation-delay:-7s;"></div>
+<div class="orb orb-3" style="position:fixed;border-radius:50%;filter:blur(80px);opacity:0.12;pointer-events:none;z-index:0;inline-size:350px;block-size:350px;background:radial-gradient(circle, rgba(71,85,105,0.2) 0%, transparent 70%);inset-block-end:10%;inset-inline-start:20%;animation:floatOrb 20s ease-in-out infinite;animation-delay:-14s;"></div>
 <style>@keyframes floatOrb { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -40px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.95); } }</style>
 
 <!-- Floating Shapes -->
@@ -783,7 +782,7 @@
             <span class="text-slate-800 font-bold text-sm tracking-tight">Ryshub</span>
         </div>
         
-        <nav class="hidden md:flex nav-scroll" style="max-width: 640px; mask-image: none; -webkit-mask-image: none;">
+        <nav class="hidden md:flex nav-scroll" style="max-inline-size: 640px; mask-image: none; -webkit-mask-image: none;">
             <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
             <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openToeflModal();}); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
             <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openBook1Modal();}); return false;"><i class="fas fa-book text-xs"></i> Book 2-1</a>
@@ -804,7 +803,7 @@
         <i class="fas fa-chevron-right"></i>
     </div>
     <div class="menu-header">
-        <h3><i class="fas fa-layer-group" style="color: var(--primary-blue); margin-right: 10px;"></i>Sections</h3>
+        <h3><i class="fas fa-layer-group" style="color: var(--primary-blue); margin-inline-end: 10px;"></i>Sections</h3>
         <p>Navigate content</p>
     </div>
     <nav class="menu-nav">
@@ -836,7 +835,9 @@
     <div class="menu-footer">
         <div style="display: flex; flex-direction: column; gap: 4px;">
             <div style="font-size: 0.75rem; color: var(--slate-500); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Contact</div>
-            <a href="mailto:mam.ry@aii.edu.kh" style="font-size: 0.8rem; color: var(--slate-700); text-decoration: none; word-break: break-all;">mam.ry@aii.edu.kh</a>
+            <div style="font-size: 0.8rem; color: var(--slate-700); word-break: break-all;">Created by ESL Teacher Ry Mam</div>
+            <a href="mailto:mam.ry@aii.edu.kh" style="font-size: 0.8rem; color: var(--slate-700); text-decoration: none; word-break: break-all;">📧 Email: mam.ry@aii.edu.kh</a>
+            <a href="tel:+85512617940" style="font-size: 0.8rem; color: var(--slate-700); text-decoration: none; word-break: break-all;">📱 Phone: (855) 012 617 940</a>
         </div>
     </div>
 </div>
@@ -1018,7 +1019,7 @@
             <div class="game-badge">Strategy</div>
             <h4>Last Colony</h4>
             <p>Earth is running out of time. Your mission: build a habitable colony on Mars and secure humanity's future.</p>
-            <div class="meta-row" style="margin-bottom:14px;">
+            <div class="meta-row" style="margin-block-end:14px;">
                 <span><i class="fas fa-globe text-slate-500"></i> Mars 2041</span>
                 <span class="meta-dots" style="color:#64748b;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
             </div>
@@ -1031,7 +1032,7 @@
             <div class="game-badge">Vocabulary</div>
             <h4>Word Scramble</h4>
             <p>Unscramble World Class 2 vocabulary words against the clock. Fast thinking builds lasting memory.</p>
-            <div class="meta-row" style="margin-bottom:14px;">
+            <div class="meta-row" style="margin-block-end:14px;">
                 <span><i class="fas fa-clock text-blue-400"></i> Timed</span>
                 <span class="meta-dots" style="color:#3b82f6;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i><i class="meta-dot"></i></span>
             </div>
@@ -1044,7 +1045,7 @@
             <div class="game-badge">Speed</div>
             <h4>Typing Race</h4>
             <p>Race against time by typing TOEFL-style sentences as fast and accurately as you can.</p>
-            <div class="meta-row" style="margin-bottom:14px;">
+            <div class="meta-row" style="margin-block-end:14px;">
                 <span><i class="fas fa-keyboard text-cyan-400"></i> WPM Challenge</span>
                 <span class="meta-dots" style="color:#06b6d4;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
             </div>
@@ -1057,7 +1058,7 @@
             <div class="game-badge">Memory</div>
             <h4>Memory Match</h4>
             <p>Flip cards to match English words with their meanings. A classic brain trainer for vocabulary retention.</p>
-            <div class="meta-row" style="margin-bottom:14px;">
+            <div class="meta-row" style="margin-block-end:14px;">
                 <span><i class="fas fa-layer-group text-blue-400"></i> Pairs</span>
                 <span class="meta-dots" style="color:#3b82f6;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i><i class="meta-dot"></i></span>
             </div>
@@ -1122,7 +1123,7 @@
 <div id="toefl-modal" class="fs-modal">
     <div class="fs-modal-bar">
         <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-graduation-cap" style="color:white;"></i></div>
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-graduation-cap" style="color:white;"></i></div>
             <div>
                 <div style="font-weight:800;color:var(--slate-800);font-size:.95rem;">TOEFL iBT Complete Test</div>
                 <div style="font-size:.7rem;color:var(--slate-500);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Teacher Ry · ESL Learning Hub</div>
@@ -1135,9 +1136,9 @@
 
 <!-- BOOK 1 FULLSCREEN MODAL -->
 <div id="book1-modal" class="fs-modal">
-    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #f1f5f9, #ffffff); border-bottom: 1px solid #e2e8f0;">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #f1f5f9, #ffffff); border-block-end: 1px solid #e2e8f0;">
         <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-book" style="color:white;"></i></div>
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-book" style="color:white;"></i></div>
             <div>
                 <div style="font-weight:800;color:var(--slate-800);font-size:.95rem;">World Class 2-1 — Teacher's Edition</div>
                 <div style="font-size:.7rem;color:#64748b;letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Complete Book 2-1</div>
@@ -1150,9 +1151,9 @@
 
 <!-- BOOK 2-2 FULLSCREEN MODAL -->
 <div id="book2b-modal" class="fs-modal">
-    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #f1f5f9, #ffffff); border-bottom: 1px solid #e2e8f0;">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #f1f5f9, #ffffff); border-block-end: 1px solid #e2e8f0;">
         <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-book-open" style="color:white;"></i></div>
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-book-open" style="color:white;"></i></div>
             <div>
                 <div style="font-weight:800;color:var(--slate-800);font-size:.95rem;">World Class 2-2 — Teacher's Edition</div>
                 <div style="font-size:.7rem;color:#0284c7;letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Units 7–12 · Level 11</div>
@@ -1193,14 +1194,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-1" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-1">Click the microphone to start recording</p>
                 </div>
@@ -1227,14 +1228,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-2" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-2">Click the microphone to start recording</p>
                 </div>
@@ -1261,14 +1262,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-3" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-3">Click the microphone to start recording</p>
                 </div>
@@ -1295,14 +1296,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-4" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-4">Click the microphone to start recording</p>
                 </div>
@@ -1329,14 +1330,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-5" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-5">Click the microphone to start recording</p>
                 </div>
@@ -1363,14 +1364,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-6" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-6">Click the microphone to start recording</p>
                 </div>
@@ -1397,14 +1398,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-7" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-7">Click the microphone to start recording</p>
                 </div>
@@ -1444,14 +1445,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-8" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-8">Click the microphone to start recording (45 seconds)</p>
                 </div>
@@ -1478,14 +1479,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-9" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-9">Click the microphone to start recording (45 seconds)</p>
                 </div>
@@ -1512,14 +1513,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-10" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-10">Click the microphone to start recording (45 seconds)</p>
                 </div>
@@ -1546,14 +1547,14 @@
                     </div>
                     
                     <div class="waveform" id="waveform-11" style="opacity: 0.3;">
-                        <div class="waveform-bar" style="height: 30%;"></div>
-                        <div class="waveform-bar" style="height: 50%;"></div>
-                        <div class="waveform-bar" style="height: 70%;"></div>
-                        <div class="waveform-bar" style="height: 90%;"></div>
-                        <div class="waveform-bar" style="height: 100%;"></div>
-                        <div class="waveform-bar" style="height: 80%;"></div>
-                        <div class="waveform-bar" style="height: 60%;"></div>
-                        <div class="waveform-bar" style="height: 40%;"></div>
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
                     </div>
                     <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-11">Click the microphone to start recording (45 seconds)</p>
                 </div>
@@ -1583,8 +1584,8 @@
 
 
     <!-- ==================== WRITING SECTION ==================== -->
-    <div id="writing-section" class="section-view light-theme-bg" style="min-height: 100vh;">
-        <body class="section-writing" style="background: none; min-height: auto;">
+    <div id="writing-section" class="section-view light-theme-bg" style="min-block-size: 100vh;">
+        <body class="section-writing" style="background: none; min-block-size: auto;">
         <button class="back-btn" onclick="backToDashboard()">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </button>
@@ -1626,7 +1627,7 @@
         <div id="writing-test" style="display: none; padding: 100px 20px 40px;">
             <div class="max-w-5xl mx-auto">
                 <!-- Header -->
-                <header class="toefl-header" style="display: block !important; position: fixed; top: 0; left: 0; right: 0; z-index: 50;">
+                <header class="toefl-header" style="display: block !important; position: fixed; inset-block-start: 0; inset-inline-start: 0; inset-inline-end: 0; z-index: 50;">
                     <div class="toefl-header-content">
                         <div class="toefl-brand">
                             <div class="toefl-logo">
@@ -2741,8 +2742,6 @@
             document.getElementById('dashboard-screen').style.display = 'block';
             document.getElementById('dashboard-screen').classList.add('active');
         }
-    }, 35);
-})();
 
 /* ===== Mouse Spotlight ===== */
 (function(){
