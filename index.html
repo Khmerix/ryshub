@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2262,33 +2263,6 @@ document.addEventListener('keydown', function(e) {
             card.style.transform = '';
         });
     });
-})();
-
-/* ===== Parallax Flash Strips ===== */
-(function(){
-    const topRow = document.getElementById('flashRowTop');
-    const bottomRow = document.getElementById('flashRowBottom');
-    if (!topRow || !bottomRow) return;
-    
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            requestAnimationFrame(() => {
-                const scrollY = window.scrollY;
-                const section = document.getElementById('flashStrips');
-                if (!section) { ticking = false; return; }
-                const rect = section.getBoundingClientRect();
-                const viewportHeight = window.innerHeight;
-                if (rect.top < viewportHeight && rect.bottom > 0) {
-                    const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
-                    topRow.style.transform = `translateX(${-progress * 120}px)`;
-                    bottomRow.style.transform = `translateX(${-120 + progress * 120}px)`;
-                }
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
 })();
 
 /* ===== Random Ticker Updates ===== */

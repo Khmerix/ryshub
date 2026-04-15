@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Last Colony — Mars 2041</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -438,7 +438,7 @@ canvas{display:block}
       <p>The last ship from Earth landed at 03:42 local Mars time. Colony readiness: 100%.</p>
       <p style="color:#fde68a;font-style:italic;margin-top:8px" id="vEpilogue"></p>
     </div>
-    <div id="vStats" style="font-size:12px;color:#334155;text-align:left;padding:14px;font-family:'Share Tech Mono',monospace;line-height:1.8;border-top:1px solid rgba(255,255,255,.05);margin-bottom:20px"></div>
+    <div id="vStats" style="font-size:12px;color:#334155;text-align:left;padding:14px;font-family:'Share Tech Mono',monospace;line-height:1.8;border-top:1px solid rgba(255,255,255,.05);margin-bottom:20px;white-space:pre-wrap"></div>
     <button onclick="location.reload()" class="btn3d btn-gold" style="padding:12px 30px;font-size:13px">NEW EXPEDITION</button>
   </div>
 </div>
@@ -451,7 +451,7 @@ canvas{display:block}
     <div class="orb" style="font-size:26px;font-weight:900;color:var(--clr-red)" id="goTitle">HUMANITY LOST</div>
     <div style="font-size:13px;color:#94a3b8;margin:8px 0 4px;font-weight:700" id="goReason"></div>
     <div style="font-size:11px;color:#334155;font-style:italic;margin-bottom:20px;font-family:'Share Tech Mono',monospace;line-height:1.6" id="goFlavor"></div>
-    <div id="goStats" style="font-size:11px;color:#334155;text-align:left;border-top:1px solid rgba(255,255,255,.05);padding-top:12px;margin-bottom:20px;font-family:'Share Tech Mono',monospace;line-height:1.7"></div>
+    <div id="goStats" style="font-size:11px;color:#334155;text-align:left;border-top:1px solid rgba(255,255,255,.05);padding-top:12px;margin-bottom:20px;font-family:'Share Tech Mono',monospace;line-height:1.7;white-space:pre-wrap"></div>
     <button onclick="location.reload()" class="btn3d btn-red" style="padding:11px 28px;font-size:12px">TRY AGAIN</button>
   </div>
 </div>
@@ -2019,7 +2019,7 @@ class MarsGame {
     this.gameOver=true;SND.victory()
     const gd=this.decisions.filter(d=>d.good===true).length,bd=this.decisions.filter(d=>d.good===false).length
     document.getElementById('vEpilogue').textContent=gd>bd?`${this.playerName} made ${gd} decisions that preserved both lives and humanity\'s values. The colony remembers them.`:`${gd} good decisions and ${bd} hard ones. History will judge all of them.`
-    document.getElementById('vStats').innerHTML=`Commander: ${this.playerName} — ${this.char.name}\nYear: ${this.year} · Sol: ${Math.floor(this.sol)}\nPopulation: ${this.population.toLocaleString()}\nStructures: ${this.buildings.length}\nGood decisions: ${gd} / Hard decisions: ${bd}`
+    document.getElementById('vStats').textContent=`Commander: ${this.playerName} — ${this.char.name}\nYear: ${this.year} · Sol: ${Math.floor(this.sol)}\nPopulation: ${this.population.toLocaleString()}\nStructures: ${this.buildings.length}\nGood decisions: ${gd} / Hard decisions: ${bd}`
     document.getElementById('victoryModal').classList.remove('hidden')
   }
   _endGame(reason){
