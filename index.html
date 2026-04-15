@@ -1503,16 +1503,16 @@
         
         <nav class="hidden md:flex nav-scroll">
             <a href="#" class="nav-3d" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
-            <a href="#" class="nav-3d" onclick="openToeflModal(); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
-            <a href="#" class="nav-3d" onclick="openBook1Modal(); return false;"><i class="fas fa-book text-xs"></i> World Class 2-1</a>
-            <a href="#" class="nav-3d" onclick="openBook2bModal(); return false;"><i class="fas fa-book-open text-xs"></i> World Class 2-2</a>
-            <a href="#" class="nav-3d" onclick="openBrickForgeModal(); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
+            <a href="#" class="nav-3d" onclick="requireTeacher(function(){openToeflModal();}); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
+            <a href="#" class="nav-3d" onclick="requireTeacher(function(){openBook1Modal();}); return false;"><i class="fas fa-book text-xs"></i> World Class 2-1</a>
+            <a href="#" class="nav-3d" onclick="requireTeacher(function(){openBook2bModal();}); return false;"><i class="fas fa-book-open text-xs"></i> World Class 2-2</a>
+            <a href="#" class="nav-3d" onclick="requireStudentOrTeacher(function(){openBrickForgeModal();}); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
             <a href="#games" class="nav-3d" onclick="event.preventDefault(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});"><i class="fas fa-gamepad text-xs"></i> Arcade</a>
         </nav>
         
         <div class="flex items-center gap-3">
-            <button class="btn-outline hidden sm:block" onclick="window.location.href='apps/login.html'">Log In</button>
-            <button class="btn-primary" onclick="window.location.href='apps/login.html?mode=register'">Register</button>
+            <button class="btn-outline hidden sm:block" onclick="window.location.href='apps/student-login.html'">Student Login</button>
+            <button class="btn-primary" onclick="window.location.href='apps/login.html'">Teacher Login</button>
             <button class="md:hidden w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white" onclick="toggleMenu()">
                 <i class="fas fa-bars"></i>
             </button>
@@ -1533,16 +1533,16 @@
         <a href="#" class="menu-item active" onclick="showToast('Already on Home'); toggleMenu(); return false;">
             <i class="fas fa-home"></i><span>Home</span>
         </a>
-        <a href="#" class="menu-item" onclick="openToeflModal(); toggleMenu(); return false;">
+        <a href="#" class="menu-item" onclick="requireTeacher(function(){openToeflModal(); toggleMenu();}); return false;">
             <i class="fas fa-graduation-cap"></i><span>TOEFL iBT</span>
         </a>
-        <a href="#" class="menu-item" onclick="openBook1Modal(); toggleMenu(); return false;">
+        <a href="#" class="menu-item" onclick="requireTeacher(function(){openBook1Modal(); toggleMenu();}); return false;">
             <i class="fas fa-book"></i><span>World Class 2-1</span>
         </a>
-        <a href="#" class="menu-item" onclick="openBook2bModal(); toggleMenu(); return false;">
+        <a href="#" class="menu-item" onclick="requireTeacher(function(){openBook2bModal(); toggleMenu();}); return false;">
             <i class="fas fa-book-open"></i><span>World Class 2-2</span>
         </a>
-        <a href="#" class="menu-item" onclick="openBrickForgeModal(); toggleMenu(); return false;">
+        <a href="#" class="menu-item" onclick="requireStudentOrTeacher(function(){openBrickForgeModal(); toggleMenu();}); return false;">
             <i class="fas fa-cube"></i><span>Brick Forge</span>
         </a>
         <a href="#games" class="menu-item" onclick="event.preventDefault(); toggleMenu(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});">
@@ -1570,7 +1570,7 @@
         <img src="assets/images/page-banner.png" alt="Creative Minds Banner" loading="lazy">
     </div>
     <div class="hero-content">
-        <div class="whats-new" onclick="openBrickForgeModal()">
+        <div class="whats-new" onclick="requireStudentOrTeacher(function(){openBrickForgeModal();})">
             <i class="fas fa-bolt"></i> New: Brick Forge 3D builder now live
         </div>
         <div class="hero-badge">
@@ -1586,13 +1586,13 @@
         </p>
         <div class="hero-btn-row">
             <div class="hero-btns">
-                <button class="glow-btn text-base px-8 py-3.5" onclick="openToeflModal()">
+                <button class="glow-btn text-base px-8 py-3.5" onclick="requireTeacher(function(){openToeflModal();})">
                     <i class="fas fa-play mr-2"></i> Start TOEFL Test
                 </button>
-                <button class="glow-btn-outline text-base px-8 py-3.5" onclick="openBook1Modal()">
+                <button class="glow-btn-outline text-base px-8 py-3.5" onclick="requireTeacher(function(){openBook1Modal();})">
                     <i class="fas fa-book mr-2"></i> World Class 2-1
                 </button>
-                <button class="glow-btn-outline text-base px-8 py-3.5" onclick="openBook2bModal()">
+                <button class="glow-btn-outline text-base px-8 py-3.5" onclick="requireTeacher(function(){openBook2bModal();})">
                     <i class="fas fa-book-open mr-2"></i> World Class 2-2
                 </button>
             </div>
@@ -1622,7 +1622,7 @@
 <!-- Cards -->
 <div class="cards-grid">
     <!-- TOEFL -->
-    <div class="tool-card" data-glow="blue" onclick="openToeflModal()" style="animation-delay:0.05s;">
+    <div class="tool-card" data-glow="blue" onclick="requireTeacher(function(){openToeflModal();})" style="animation-delay:0.05s;">
         <div class="shine"></div>
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white"><i class="fas fa-graduation-cap"></i></div>
@@ -1637,7 +1637,7 @@
     </div>
     
     <!-- World Class 2-1 -->
-    <div class="tool-card" data-glow="sky" onclick="openBook1Modal()" style="animation-delay:0.15s;">
+    <div class="tool-card" data-glow="sky" onclick="requireTeacher(function(){openBook1Modal();})" style="animation-delay:0.15s;">
         <div class="shine"></div>
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-sky-600 to-sky-800 text-white"><i class="fas fa-book"></i></div>
@@ -1652,7 +1652,7 @@
     </div>
 
     <!-- World Class 2-2 -->
-    <div class="tool-card" data-glow="rose" onclick="openBook2bModal()" style="animation-delay:0.25s;">
+    <div class="tool-card" data-glow="rose" onclick="requireTeacher(function(){openBook2bModal();})" style="animation-delay:0.25s;">
         <div class="shine"></div>
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-rose-700 to-rose-900 text-white"><i class="fas fa-book-open"></i></div>
@@ -1705,7 +1705,7 @@
         <p class="section-subtitle">Quick brain breaks — no install needed</p>
     </div>
     <div class="games-grid">
-        <div class="game-card" onclick="openColonyModal()" style="animation-delay:0.05s;">
+        <div class="game-card" onclick="requireStudentOrTeacher(function(){openColonyModal();})" style="animation-delay:0.05s;">
             <div class="shine"></div>
             <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
             <div class="game-thumb bg-gradient-to-br from-rose-600 to-rose-800"><i class="fas fa-rocket"></i></div>
@@ -1716,7 +1716,7 @@
                 <span><i class="fas fa-globe text-rose-400"></i> Mars 2041</span>
                 <span class="meta-dots" style="color:#fb7185;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
             </div>
-            <button class="game-btn" onclick="event.stopPropagation(); openColonyModal();"><i class="fas fa-play"></i> Play Now</button>
+            <button class="game-btn" onclick="event.stopPropagation(); requireStudentOrTeacher(function(){openColonyModal();});"><i class="fas fa-play"></i> Play Now</button>
         </div>
         <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.15s;">
             <div class="shine"></div>
@@ -2006,6 +2006,24 @@ window.addEventListener('scroll', () => {
 
 /* ===== Original App Logic ===== */
 var toastTimer;
+
+function requireTeacher(callback) {
+    if (sessionStorage.getItem('teacherLoggedIn') === 'true') {
+        callback();
+    } else {
+        showToast('Teacher login required');
+        setTimeout(function(){ window.location.href = 'apps/login.html'; }, 800);
+    }
+}
+
+function requireStudentOrTeacher(callback) {
+    if (sessionStorage.getItem('studentLoggedIn') === 'true' || sessionStorage.getItem('teacherLoggedIn') === 'true') {
+        callback();
+    } else {
+        showToast('Please log in to play');
+        setTimeout(function(){ window.location.href = 'apps/student-login.html'; }, 800);
+    }
+}
 
 function setNavActive(key) {
     const map = {
