@@ -8,9 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" integrity="sha384-ViccRjS0k/lvYsrtaKXk+ES61/4PAZlFI/mPHmLC1YWzK0AIbXbI5ZXDzcm3F8gH" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js" integrity="sha384-f6/UpzjTjIXASlp20cArQsaRh1EvHVJd5kegy/gYR9W2D0a32TnEqUEiW4Zm/5O0" crossorigin="anonymous"></script>
     <style>
         :root {
             --glass-bg: rgba(10,10,15,0.88);
@@ -2784,7 +2784,16 @@ function toast(msg, type) {
     }
     const t = document.createElement('div');
     t.className = 'toast type-' + toastType;
-    t.innerHTML = `<i class="fas ${icon} toast-icon"></i><span class="toast-text">${msg}</span><div class="toast-progress"></div>`;
+    const i = document.createElement('i');
+    i.className = 'fas ' + icon + ' toast-icon';
+    const s = document.createElement('span');
+    s.className = 'toast-text';
+    s.textContent = msg;
+    const p = document.createElement('div');
+    p.className = 'toast-progress';
+    t.appendChild(i);
+    t.appendChild(s);
+    t.appendChild(p);
     document.getElementById('toast-container').appendChild(t);
     setTimeout(() => {
         t.style.transition = 'all 0.4s cubic-bezier(0.4,0,0.2,1)';
@@ -3060,7 +3069,7 @@ function loadTemplate(key) {
 // ==================== MULTIPLAYER ====================
 const mpState = {
     db: null, roomId: null,
-    userId: 'user_' + Math.random().toString(36).substr(2, 9),
+    userId: 'user_' + Array.from(crypto.getRandomValues(new Uint8Array(9)), b => b.toString(36)).join(''),
     userName: '', userColor: '#CC0000', role: 'student',
     blockCount: 0, isRoomLocked: false, remoteBlocks: {}
 };
@@ -3257,7 +3266,12 @@ function updateAssignmentUI(data) {
     document.getElementById('mp-due-date').textContent = data.dueDate ? new Date(data.dueDate).toLocaleDateString() : 'No deadline';
     const reqList = document.getElementById('mp-requirements');
     if (data.requirements && Array.isArray(data.requirements)) {
-        reqList.innerHTML = data.requirements.map(r => `<li>${r}</li>`).join('');
+        reqList.innerHTML = '';
+        data.requirements.forEach(r => {
+            const li = document.createElement('li');
+            li.textContent = r;
+            reqList.appendChild(li);
+        });
     }
 }
 

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEFL Design System - Color Preview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="toefl-styles.css">
+    <style>
+        .preview-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px dashed rgba(255,255,255,0.1);
+        }
+        .preview-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body style="padding: 2rem; background: var(--darker-bg);">
+
+    <h1 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: white;">
+        <i class="fas fa-palette" style="color: var(--accent-cyan);"></i>
+        TOEFL Design System
+        <span style="display: block; font-size: 1rem; color: var(--text-secondary); margin-top: 0.5rem;">
+            Section Color Previews
+        </span>
+    </h1>
+
+    <!-- READING SECTION -->
+    <div class="preview-section section-reading">
+        <div class="preview-title">
+            <span class="color-dot" style="background: #2563eb;"></span>
+            Reading Section (Blue Theme)
+        </div>
+        
+        <div class="component-grid">
+            <!-- Button -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Primary Button</p>
+                <button class="btn-3d">
+                    <i class="fas fa-check mr-2"></i>Submit Answer
+                </button>
+            </div>
+            
+            <!-- Progress -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Progress Bar</p>
+                <div class="progress-container h-3">
+                    <div class="progress-fill" style="width: 65%"></div>
+                </div>
+            </div>
+            
+            <!-- Badges -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Badges</p>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="badge badge-blue">Reading</span>
+                    <span class="badge badge-green">Daily Life</span>
+                    <span class="badge badge-purple">Academic</span>
+                </div>
+            </div>
+            
+            <!-- Question Number -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Question Number</p>
+                <div class="q-number">5</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LISTENING SECTION -->
+    <div class="preview-section section-listening">
+        <div class="preview-title">
+            <span class="color-dot" style="background: #10b981;"></span>
+            Listening Section (Emerald Theme)
+        </div>
+        
+        <div class="component-grid">
+            <!-- Button -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Primary Button</p>
+                <button class="btn-3d">
+                    <i class="fas fa-play mr-2"></i>Play Audio
+                </button>
+            </div>
+            
+            <!-- Progress -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Progress Bar</p>
+                <div class="progress-container h-3">
+                    <div class="progress-fill" style="width: 40%"></div>
+                </div>
+            </div>
+            
+            <!-- Badges -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Badges</p>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="badge badge-blue">Response</span>
+                    <span class="badge badge-green">Conversation</span>
+                    <span class="badge badge-orange">Announcement</span>
+                </div>
+            </div>
+            
+            <!-- Question Number -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Question Number</p>
+                <div class="q-number">12</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SPEAKING SECTION -->
+    <div class="preview-section section-speaking">
+        <div class="preview-title">
+            <span class="color-dot" style="background: #f97316;"></span>
+            Speaking Section (Orange Theme)
+        </div>
+        
+        <div class="component-grid">
+            <!-- Button -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Record Button</p>
+                <button class="btn-3d btn-record">
+                    <i class="fas fa-microphone mr-2"></i>Record
+                </button>
+            </div>
+            
+            <!-- Progress -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Progress Bar</p>
+                <div class="progress-container h-3">
+                    <div class="progress-fill" style="width: 80%"></div>
+                </div>
+            </div>
+            
+            <!-- Status Badges -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Status Badges</p>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="status-badge status-pending">Pending</span>
+                    <span class="status-badge status-recording">Recording</span>
+                    <span class="status-badge status-completed">Uploaded</span>
+                </div>
+            </div>
+            
+            <!-- Question Number -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Question Number</p>
+                <div class="q-number">8</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WRITING SECTION -->
+    <div class="preview-section section-writing">
+        <div class="preview-title">
+            <span class="color-dot" style="background: #a855f7;"></span>
+            Writing Section (Purple Theme)
+        </div>
+        
+        <div class="component-grid">
+            <!-- Button -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Primary Button</p>
+                <button class="btn-3d">
+                    <i class="fas fa-save mr-2"></i>Save Response
+                </button>
+            </div>
+            
+            <!-- Progress -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Progress Bar</p>
+                <div class="progress-container h-3">
+                    <div class="progress-fill" style="width: 25%"></div>
+                </div>
+            </div>
+            
+            <!-- Word Boxes -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Sentence Building</p>
+                <div>
+                    <span class="word-box">The</span>
+                    <span class="word-box">quick</span>
+                    <span class="word-box">brown</span>
+                </div>
+            </div>
+            
+            <!-- Question Number -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Question Number</p>
+                <div class="q-number">3</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHARED COMPONENTS -->
+    <div class="preview-section">
+        <div class="preview-title">
+            <i class="fas fa-layer-group" style="color: var(--text-secondary);"></i>
+            Shared Components (All Sections)
+        </div>
+        
+        <div class="component-grid">
+            <!-- Timer -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Timer Display</p>
+                <div class="timer-display">12:34</div>
+            </div>
+            
+            <!-- Timer Box -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Task Timer</p>
+                <div class="timer-box">
+                    <i class="fas fa-clock"></i>
+                    <span>07:00</span>
+                </div>
+            </div>
+            
+            <!-- Glass Frame -->
+            <div class="glass-frame p-4">
+                <p class="text-slate-400 text-sm mb-3">Glass Card</p>
+                <p class="text-white">Content inside glass-morphism card</p>
+            </div>
+            
+            <!-- Glass with Border -->
+            <div class="glass-frame glass-frame-section p-4">
+                <p class="text-slate-400 text-sm mb-3">Glass with Section Border</p>
+                <p class="text-white">Card with colored left border</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- COLOR REFERENCE -->
+    <div class="preview-section">
+        <div class="preview-title">
+            <i class="fas fa-swatchbook" style="color: var(--text-secondary);"></i>
+            Color Reference
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div class="glass-frame p-4">
+                <h4 style="color: white; margin-bottom: 1rem;">Reading (Blue)</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #2563eb;"></span>
+                        <span class="text-slate-300">Primary</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #1e40af;"></span>
+                        <span class="text-slate-300">Dark</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #3b82f6;"></span>
+                        <span class="text-slate-300">Light</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #06b6d4;"></span>
+                        <span class="text-slate-300">Accent</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-frame p-4">
+                <h4 style="color: white; margin-bottom: 1rem;">Listening (Emerald)</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #10b981;"></span>
+                        <span class="text-slate-300">Primary</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #047857;"></span>
+                        <span class="text-slate-300">Dark</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #34d399;"></span>
+                        <span class="text-slate-300">Light</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #2dd4bf;"></span>
+                        <span class="text-slate-300">Accent</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-frame p-4">
+                <h4 style="color: white; margin-bottom: 1rem;">Speaking (Orange)</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #f97316;"></span>
+                        <span class="text-slate-300">Primary</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #c2410c;"></span>
+                        <span class="text-slate-300">Dark</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #fb923c;"></span>
+                        <span class="text-slate-300">Light</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #fbbf24;"></span>
+                        <span class="text-slate-300">Accent</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-frame p-4">
+                <h4 style="color: white; margin-bottom: 1rem;">Writing (Purple)</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #a855f7;"></span>
+                        <span class="text-slate-300">Primary</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #7e22ce;"></span>
+                        <span class="text-slate-300">Dark</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #c084fc;"></span>
+                        <span class="text-slate-300">Light</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="color-dot" style="background: #e879f9;"></span>
+                        <span class="text-slate-300">Accent</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem; color: var(--text-muted);">
+        <p>Open this file in a browser to see live color previews</p>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+            <i class="fas fa-info-circle"></i> 
+            Each section shows how components look with their color theme
+        </p>
+    </div>
+
+</body>
+</html>
