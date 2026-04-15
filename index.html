@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+<HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1726,7 +1726,7 @@
             <i class="fas fa-bolt"></i> New: Brick Forge 3D builder now live
         </div>
         <div class="hero-badge">
-            <span class="w-2 h-2 rounded-full bg-slate-500 shadow-[0_0_8px_rgba(100,116,139,0.5)] animate-pulse"></span>
+            <span class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(37,99,235,0.5)] animate-pulse"></span>
             Live Platform 2026
         </div>
         <h1 class="hero-title">
@@ -1755,6 +1755,13 @@
             <div class="feature-pill"><i class="fas fa-robot"></i> AI Grader</div>
             <div class="feature-pill"><i class="fas fa-cubes"></i> 3D Builder</div>
         </div>
+    </div>
+    <div class="hero-visual">
+        <div class="hv-orb"></div>
+        <div class="hv-ring"></div>
+        <div class="hv-float float-1"><i class="fas fa-graduation-cap"></i> TOEFL</div>
+        <div class="hv-float float-2"><i class="fas fa-rocket"></i> Colony</div>
+        <div class="hv-float float-3"><i class="fas fa-cube"></i> BrickForge</div>
     </div>
     <div class="scroll-indicator">
         <span>Scroll</span>
@@ -2196,6 +2203,30 @@ document.addEventListener('keydown', function(e) {
         if (menu.classList.contains('open')) toggleMenu();
     }
 });
+
+/* ===== Text Scramble Effect on Hero Title ===== */
+(function(){
+    const title = document.querySelector('.hero-title span');
+    if (!title) return;
+    const original = title.textContent;
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+    let iterations = 0;
+    const maxIterations = original.length * 8;
+    title.classList.add('decoding');
+    const interval = setInterval(() => {
+        title.textContent = original.split('').map((char, i) => {
+            if (i < iterations / 8) return original[i];
+            return chars[Math.floor(Math.random() * chars.length)];
+        }).join('');
+        iterations += 1;
+        if (iterations >= maxIterations) {
+            clearInterval(interval);
+            title.textContent = original;
+            title.classList.remove('decoding');
+            title.classList.add('decode-done');
+        }
+    }, 35);
+})();
 
 /* ===== Mouse Spotlight ===== */
 (function(){
