@@ -70,6 +70,130 @@
             33% { transform: translate(30px, -40px) scale(1.1); }
             66% { transform: translate(-20px, 20px) scale(0.95); }
         }
+
+        /* Floating Geometric Shapes */
+        .float-shape {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.15;
+            animation: floatShape 25s ease-in-out infinite;
+        }
+        .shape-hex {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, rgba(37,99,235,0.4), transparent);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            top: 20%; left: 8%;
+            animation-delay: 0s;
+        }
+        .shape-tri {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, rgba(251,191,36,0.4), transparent);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            top: 60%; right: 12%;
+            animation-delay: -8s;
+        }
+        .shape-diamond {
+            width: 50px; height: 50px;
+            background: linear-gradient(135deg, rgba(0,240,255,0.3), transparent);
+            transform: rotate(45deg);
+            bottom: 25%; left: 15%;
+            animation-delay: -16s;
+        }
+        @keyframes floatShape {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -30px) rotate(90deg); }
+            50% { transform: translate(-10px, 20px) rotate(180deg); }
+            75% { transform: translate(15px, 10px) rotate(270deg); }
+        }
+
+        /* Mouse Spotlight */
+        .mouse-spotlight {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(37,99,235,0.06), transparent 40%);
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        /* 3D Tilt & Shine on Cards */
+        .tool-card, .game-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .shine {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.08) 55%, transparent 60%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .tool-card:hover .shine, .game-card:hover .shine {
+            transform: translateX(100%);
+        }
+
+        /* Live Ticker */
+        .live-ticker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: rgba(11,15,25,0.9);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(10px);
+            z-index: 80;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+        .ticker-track {
+            display: flex;
+            gap: 40px;
+            white-space: nowrap;
+            animation: tickerScroll 30s linear infinite;
+        }
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+        .ticker-item i { color: #10b981; font-size: 0.5rem; animation: pulse 1.5s infinite; }
+        .ticker-item strong { color: var(--gray-200); font-weight: 600; }
+        @keyframes tickerScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Custom Cursor Glow */
+        .cursor-glow {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0,212,255,0.35);
+            filter: blur(8px);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+        .cursor-glow.hover {
+            width: 40px;
+            height: 40px;
+            background: rgba(251,191,36,0.45);
+        }
+        @media (pointer: coarse) {
+            .cursor-glow { display: none; }
+        }
         
         /* Neuron Canvas */
         #neuron-canvas {
@@ -1354,6 +1478,17 @@
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
 
+<!-- Floating Shapes -->
+<div class="float-shape shape-hex"></div>
+<div class="float-shape shape-tri"></div>
+<div class="float-shape shape-diamond"></div>
+
+<!-- Mouse Spotlight -->
+<div class="mouse-spotlight" id="spotlight"></div>
+
+<!-- Custom Cursor Glow -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
 <canvas id="neuron-canvas"></canvas>
 
 <!-- Header -->
@@ -1488,6 +1623,7 @@
 <div class="cards-grid">
     <!-- TOEFL -->
     <div class="tool-card" data-glow="blue" onclick="openToeflLogin()" style="animation-delay:0.05s;">
+        <div class="shine"></div>
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white"><i class="fas fa-graduation-cap"></i></div>
         <div class="tool-badge text-blue-300">Mock Test</div>
@@ -1502,6 +1638,7 @@
     
     <!-- World Class 2-1 -->
     <div class="tool-card" data-glow="sky" onclick="openBook1Modal()" style="animation-delay:0.15s;">
+        <div class="shine"></div>
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-sky-600 to-sky-800 text-white"><i class="fas fa-book"></i></div>
         <div class="tool-badge text-sky-300">Teacher's Edition</div>
@@ -1516,6 +1653,7 @@
 
     <!-- World Class 2-2 -->
     <div class="tool-card" data-glow="rose" onclick="openBook2bModal()" style="animation-delay:0.25s;">
+        <div class="shine"></div>
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-rose-700 to-rose-900 text-white"><i class="fas fa-book-open"></i></div>
         <div class="tool-badge text-amber-300">Teacher's Edition</div>
@@ -1530,6 +1668,7 @@
     
     <!-- EduGrade -->
     <div class="tool-card" data-glow="emerald" onclick="showToast('EduGrade Pro coming soon!')" style="animation-delay:0.35s;">
+        <div class="shine"></div>
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-emerald-400 to-emerald-600 text-white"><i class="fas fa-brain"></i></div>
         <div class="tool-badge text-emerald-300">AI-Powered</div>
@@ -1544,6 +1683,7 @@
     
     <!-- Word Practice -->
     <div class="tool-card" data-glow="purple" onclick="showToast('Word Practice coming soon!')" style="animation-delay:0.45s;">
+        <div class="shine"></div>
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-purple-400 to-purple-600 text-white"><i class="fas fa-pencil-alt"></i></div>
         <div class="tool-badge text-purple-300">Vocabulary</div>
@@ -1566,6 +1706,7 @@
     </div>
     <div class="games-grid">
         <div class="game-card" onclick="openColonyModal()" style="animation-delay:0.05s;">
+            <div class="shine"></div>
             <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
             <div class="game-thumb bg-gradient-to-br from-rose-600 to-rose-800"><i class="fas fa-rocket"></i></div>
             <div class="game-badge text-rose-300">Strategy</div>
@@ -1578,6 +1719,7 @@
             <button class="game-btn" onclick="event.stopPropagation(); openColonyModal();"><i class="fas fa-play"></i> Play Now</button>
         </div>
         <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.15s;">
+            <div class="shine"></div>
             <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
             <div class="game-thumb bg-gradient-to-br from-cyan-500 to-cyan-700"><i class="fas fa-puzzle-piece"></i></div>
             <div class="game-badge text-cyan-300">Vocabulary</div>
@@ -1590,6 +1732,7 @@
             <button class="game-btn" style="background:linear-gradient(135deg,#0891b2,#0e7490);box-shadow:0 4px 0 #155e75,0 6px 18px rgba(8,145,178,.25);" onclick="event.stopPropagation(); showToast('More games coming soon!');"><i class="fas fa-lock"></i> Coming Soon</button>
         </div>
         <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.25s;">
+            <div class="shine"></div>
             <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
             <div class="game-thumb bg-gradient-to-br from-amber-500 to-amber-700"><i class="fas fa-bolt"></i></div>
             <div class="game-badge text-amber-300">Speed</div>
@@ -1602,6 +1745,7 @@
             <button class="game-btn" style="background:linear-gradient(135deg,#d97706,#b45309);box-shadow:0 4px 0 #92400e,0 6px 18px rgba(217,119,6,.25);" onclick="event.stopPropagation(); showToast('More games coming soon!');"><i class="fas fa-lock"></i> Coming Soon</button>
         </div>
         <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.35s;">
+            <div class="shine"></div>
             <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
             <div class="game-thumb bg-gradient-to-br from-emerald-500 to-emerald-700"><i class="fas fa-brain"></i></div>
             <div class="game-badge text-emerald-300">Memory</div>
@@ -1621,6 +1765,28 @@
     <div class="stat-card">
         <div class="stat-number">200+</div>
         <div class="stat-label">Students using these tools this semester</div>
+    </div>
+</div>
+
+<!-- Live Ticker -->
+<div class="live-ticker">
+    <div class="ticker-track" id="tickerTrack">
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sokha</strong> started a TOEFL test</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Dara</strong> opened World Class 2-1</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Chanda</strong> scored 92% on Listening</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Bopha</strong> launched Brick Forge</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Visal</strong> completed Unit 8 quiz</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sreyneang</strong> started Word Scramble</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Kosal</strong> opened World Class 2-2</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Maly</strong> started a TOEFL test</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sokha</strong> started a TOEFL test</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Dara</strong> opened World Class 2-1</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Chanda</strong> scored 92% on Listening</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Bopha</strong> launched Brick Forge</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Visal</strong> completed Unit 8 quiz</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sreyneang</strong> started Word Scramble</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Kosal</strong> opened World Class 2-2</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Maly</strong> started a TOEFL test</span>
     </div>
 </div>
 
@@ -1994,6 +2160,91 @@ document.addEventListener('keydown', function(e) {
 document.getElementById('toefl-login-overlay').addEventListener('click', function(e) {
     if (e.target === this) closeToeflLogin();
 });
+
+/* ===== Text Scramble Effect on Hero Title ===== */
+(function(){
+    const title = document.querySelector('.hero-title span');
+    if (!title) return;
+    const original = title.textContent;
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let iterations = 0;
+    const interval = setInterval(() => {
+        title.textContent = original.split('').map((char, i) => {
+            if (i < iterations) return original[i];
+            return chars[Math.floor(Math.random() * chars.length)];
+        }).join('');
+        if (iterations >= original.length) clearInterval(interval);
+        iterations += 1/2;
+    }, 40);
+})();
+
+/* ===== Mouse Spotlight ===== */
+(function(){
+    const spotlight = document.getElementById('spotlight');
+    if (!spotlight) return;
+    document.addEventListener('mousemove', e => {
+        spotlight.style.setProperty('--mx', e.clientX + 'px');
+        spotlight.style.setProperty('--my', e.clientY + 'px');
+    });
+})();
+
+/* ===== 3D Tilt on Cards ===== */
+(function(){
+    const cards = document.querySelectorAll('.tool-card, .game-card');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const cx = rect.width / 2;
+            const cy = rect.height / 2;
+            const rx = (y - cy) / cy * -8;
+            const ry = (x - cx) / cx * 8;
+            card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-10px) scale(1.01)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+})();
+
+/* ===== Custom Cursor Glow ===== */
+(function(){
+    const cursor = document.getElementById('cursorGlow');
+    if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
+    let mx = 0, my = 0, cx = 0, cy = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    const interactive = document.querySelectorAll('a, button, .tool-card, .game-card, .nav-3d, .menu-item');
+    interactive.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+    function animate(){
+        cx += (mx - cx) * 0.15;
+        cy += (my - cy) * 0.15;
+        cursor.style.left = cx + 'px';
+        cursor.style.top = cy + 'px';
+        requestAnimationFrame(animate);
+    }
+    animate();
+})();
+
+/* ===== Random Ticker Updates ===== */
+(function(){
+    const names = ['Sokha','Dara','Chanda','Bopha','Visal','Sreyneang','Kosal','Maly','Nita','Rithy','Pisey','Vannak'];
+    const actions = ['started a TOEFL test','opened World Class 2-1','scored 92% on Listening','launched Brick Forge','completed Unit 8 quiz','started Word Scramble','opened World Class 2-2','joined a TOEFL session'];
+    const ticker = document.getElementById('tickerTrack');
+    if (!ticker) return;
+    setInterval(() => {
+        const items = ticker.querySelectorAll('.ticker-item');
+        if (items.length > 0) {
+            const randomItem = items[Math.floor(Math.random() * (items.length / 2))];
+            const name = names[Math.floor(Math.random() * names.length)];
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            randomItem.innerHTML = `<i class="fas fa-circle"></i> <strong>${name}</strong> ${action}`;
+        }
+    }, 3500);
+})();
 </script>
 </body>
 </html>
