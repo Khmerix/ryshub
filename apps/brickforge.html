@@ -42,8 +42,8 @@
         body::before {
             content: '';
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            inset-block-start: 0; inset-inline-start: 0;
+            inline-size: 100%; block-size: 100%;
             background-image:
                 linear-gradient(var(--grid-line-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-line-color) 1px, transparent 1px);
@@ -105,7 +105,7 @@
             background: linear-gradient(135deg, var(--accent), #7c44ff);
             color: #000; font-family: 'Orbitron', monospace; font-weight: 800;
             font-size: 13px; letter-spacing: 0.15em; padding: 4px 12px;
-            border-radius: 20px; margin-left: 12px; vertical-align: middle;
+            border-radius: 20px; margin-inline-start: 12px; vertical-align: middle;
             animation: pro-shimmer 2s ease-in-out infinite; position: relative; z-index: 2;
         }
         @keyframes pro-shimmer {
@@ -115,28 +115,28 @@
 
         .splash-subtitle {
             font-family: 'Inter', sans-serif; font-size: 14px; letter-spacing: 0.4em;
-            color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 14px;
+            color: rgba(255,255,255,0.5); text-transform: uppercase; margin-block-start: 14px;
             position: relative; z-index: 2;
         }
 
         .splash-progress-wrap {
-            position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%);
-            width: min(400px, 80vw); z-index: 2;
+            position: absolute; inset-block-end: 10%; inset-inline-start: 50%; transform: translateX(-50%);
+            inline-size: min(400px, 80vw); z-index: 2;
         }
         .splash-progress-label {
             font-family: 'Orbitron', monospace; font-size: 10px; color: rgba(0,212,255,0.7);
-            letter-spacing: 0.3em; text-align: center; margin-bottom: 8px; text-transform: uppercase;
+            letter-spacing: 0.3em; text-align: center; margin-block-end: 8px; text-transform: uppercase;
         }
-        .splash-progress-bar { height: 3px; background: rgba(0,212,255,0.15); border-radius: 2px; overflow: hidden; }
+        .splash-progress-bar { block-size: 3px; background: rgba(0,212,255,0.15); border-radius: 2px; overflow: hidden; }
         .splash-progress-fill {
-            height: 100%;
+            block-size: 100%;
             background: linear-gradient(90deg, var(--accent), #7c44ff, var(--accent));
             background-size: 200% 100%; border-radius: 2px;
             animation: progress-grow 1.8s ease-out forwards, progress-shimmer 0.8s linear infinite;
-            width: 0%;
+            inline-size: 0%;
         }
         @keyframes progress-grow {
-            0% { width: 0%; } 20% { width: 25%; } 50% { width: 60%; } 80% { width: 85%; } 100% { width: 100%; }
+            0% { inline-size: 0%; } 20% { inline-size: 25%; } 50% { inline-size: 60%; } 80% { inline-size: 85%; } 100% { inline-size: 100%; }
         }
         @keyframes progress-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
@@ -177,7 +177,7 @@
             color: var(--accent); box-shadow: 0 0 20px var(--accent-glow), inset 0 0 12px rgba(0,212,255,0.08);
             text-shadow: 0 0 10px var(--accent);
         }
-        .icon-btn { width: 38px; height: 38px; padding: 0; justify-content: center; border-radius: 50%; }
+        .icon-btn { inline-size: 38px; block-size: 38px; padding: 0; justify-content: center; border-radius: 50%; }
 
         .bf-logo {
             font-family: 'Orbitron', monospace; font-weight: 800; font-size: 16px; letter-spacing: 0.05em;
@@ -239,7 +239,7 @@
 
         /* SNAP TOGGLE */
         .snap-toggle {
-            position: relative; width: 46px; height: 24px; background: rgba(255,255,255,0.08);
+            position: relative; inline-size: 46px; block-size: 24px; background: rgba(255,255,255,0.08);
             border-radius: 12px; cursor: pointer; transition: all 0.3s;
             border: 1px solid rgba(255,255,255,0.15); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
             flex-shrink: 0;
@@ -249,12 +249,12 @@
             border-color: var(--accent); box-shadow: 0 0 12px rgba(0,212,255,0.35), inset 0 2px 4px rgba(0,0,0,0.2);
         }
         .snap-toggle::after {
-            content: ''; position: absolute; width: 20px; height: 20px;
+            content: ''; position: absolute; inline-size: 20px; block-size: 20px;
             background: linear-gradient(145deg, #ffffff, #e0e0e0); border-radius: 50%;
-            top: 2px; left: 2px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            inset-block-start: 2px; inset-inline-start: 2px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
-        .snap-toggle.active::after { left: 24px; box-shadow: 0 0 10px rgba(0,212,255,0.5); }
+        .snap-toggle.active::after { inset-inline-start: 24px; box-shadow: 0 0 10px rgba(0,212,255,0.5); }
 
         /* SYMMETRY TOGGLE */
         .sym-btn {
@@ -273,7 +273,7 @@
         /* BOTTOM TOOLBAR */
         #bottom-toolbar {
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
-            border-top: 1px solid rgba(0,212,255,0.15);
+            border-block-start: 1px solid rgba(0,212,255,0.15);
         }
         .toolbar-retracted { transform: translateY(calc(100% - 22px)); opacity: 0.15; filter: blur(2px); }
         .toolbar-retracted:hover { opacity: 0.95; filter: blur(0); }
@@ -281,8 +281,8 @@
         /* FAVORITES BAR */
         #favorites-bar {
             display: flex; align-items: center; gap: 6px; padding: 6px 10px;
-            background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.06);
-            min-height: 58px;
+            background: rgba(0,0,0,0.3); border-block-end: 1px solid rgba(255,255,255,0.06);
+            min-block-size: 58px;
         }
         .fav-hint {
             font-size: 9px; font-family: 'Inter', sans-serif;
@@ -290,7 +290,7 @@
             text-transform: uppercase; padding: 4px 8px;
         }
         .fav-btn {
-            width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+            inline-size: 44px; block-size: 44px; border-radius: 10px; flex-shrink: 0;
             background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; position: relative; transition: all 0.2s;
@@ -298,8 +298,8 @@
         }
         .fav-btn:hover { border-color: var(--accent); background: rgba(0,212,255,0.1); transform: translateY(-2px); }
         .fav-btn .fav-remove {
-            position: absolute; top: -5px; right: -5px;
-            width: 14px; height: 14px; border-radius: 50%;
+            position: absolute; inset-block-start: -5px; inset-inline-end: -5px;
+            inline-size: 14px; block-size: 14px; border-radius: 50%;
             background: #ef4444; color: white; font-size: 8px;
             display: none; align-items: center; justify-content: center;
             cursor: pointer; z-index: 1; border: 1px solid rgba(0,0,0,0.3);
@@ -312,17 +312,17 @@
             background: linear-gradient(135deg, rgba(12,12,24,0.97), rgba(8,8,18,0.95));
             border: 1px solid rgba(0,212,255,0.3); border-radius: 12px;
             backdrop-filter: blur(20px); box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-            min-width: 160px; overflow: hidden;
+            min-inline-size: 160px; overflow: hidden;
         }
         .ctx-item {
             display: flex; align-items: center; gap: 10px;
             padding: 10px 16px; font-size: 12px; font-family: 'Inter', sans-serif;
             font-weight: 600; color: rgba(255,255,255,0.85); cursor: pointer;
-            transition: all 0.15s; border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.15s; border-block-end: 1px solid rgba(255,255,255,0.05);
         }
-        .ctx-item:last-child { border-bottom: none; }
+        .ctx-item:last-child { border-block-end: none; }
         .ctx-item:hover { background: rgba(0,212,255,0.12); color: var(--accent); }
-        .ctx-item i { width: 14px; text-align: center; opacity: 0.7; }
+        .ctx-item i { inline-size: 14px; text-align: center; opacity: 0.7; }
 
         /* TEMPLATES MODAL */
         #templates-modal {
@@ -341,7 +341,7 @@
             border-color: var(--accent);
         }
         .template-card-preview {
-            height: 80px; position: relative; overflow: hidden;
+            block-size: 80px; position: relative; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
             font-size: 32px;
         }
@@ -350,7 +350,7 @@
             font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700;
             color: white; text-transform: uppercase; letter-spacing: 0.1em;
         }
-        .template-card-desc { font-size: 9px; color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif; margin-top: 3px; }
+        .template-card-desc { font-size: 9px; color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif; margin-block-start: 3px; }
 
         /* TAB BAR */
         .tab-bar {
@@ -365,8 +365,8 @@
             white-space: nowrap;
         }
         .tab-btn::after {
-            content: ''; position: absolute; bottom: 3px; left: 50%;
-            transform: translateX(-50%) scaleX(0); width: 60%; height: 2px;
+            content: ''; position: absolute; inset-block-end: 3px; inset-inline-start: 50%;
+            transform: translateX(-50%) scaleX(0); inline-size: 60%; block-size: 2px;
             background: var(--accent); border-radius: 1px;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 0 8px var(--accent-glow);
@@ -386,12 +386,12 @@
             margin: 8px 6px 6px 6px; text-shadow: 0 0 8px rgba(0,212,255,0.4);
             padding: 3px 8px;
             background: linear-gradient(90deg, rgba(0,212,255,0.1), transparent);
-            border-left: 2px solid var(--accent); border-radius: 0 4px 4px 0;
+            border-inline-start: 2px solid var(--accent); border-radius: 0 4px 4px 0;
         }
 
         /* BLOCK BUTTONS */
         .block-btn {
-            width: 66px; height: 66px; border-radius: 14px;
+            inline-size: 66px; block-size: 66px; border-radius: 14px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; margin: 4px; border: 1.5px solid transparent;
             background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.03));
@@ -400,12 +400,12 @@
             position: relative; overflow: hidden;
         }
         .block-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%;
+            content: ''; position: absolute; inset-block-start: 0; inset-inline-start: -100%;
+            inline-size: 100%; block-size: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
             transition: left 0.45s;
         }
-        .block-btn:hover::before { left: 100%; }
+        .block-btn:hover::before { inset-inline-start: 100%; }
         .block-btn:hover {
             background: linear-gradient(145deg, rgba(0,212,255,0.2), rgba(0,212,255,0.08));
             border-color: rgba(0,212,255,0.55); transform: translateY(-4px) scale(1.06);
@@ -419,7 +419,7 @@
             transform: scale(1.08);
         }
         .block-btn .icon {
-            font-size: 22px; margin-bottom: 3px; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 22px; margin-block-end: 3px; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; align-items: center; justify-content: center;
         }
         .block-btn .icon i {
@@ -445,7 +445,7 @@
 
         /* COLOR BUTTONS */
         .color-btn {
-            width: 26px; height: 26px; border-radius: 50%;
+            inline-size: 26px; block-size: 26px; border-radius: 50%;
             border: 2px solid rgba(255,255,255,0.12); cursor: pointer;
             transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s ease, border-color 0.15s ease;
             box-shadow: 0 2px 8px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.3);
@@ -466,7 +466,7 @@
             display: flex; gap: 6px; padding: 8px; overflow-x: auto;
             scrollbar-width: thin; scrollbar-color: rgba(0,212,255,0.4) transparent;
         }
-        .scroll-row::-webkit-scrollbar { height: 4px; }
+        .scroll-row::-webkit-scrollbar { block-size: 4px; }
         .scroll-row::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 2px; }
         .scroll-row::-webkit-scrollbar-thumb { background: linear-gradient(90deg, rgba(0,212,255,0.5), rgba(124,68,255,0.5)); border-radius: 2px; }
 
@@ -482,11 +482,11 @@
             backdrop-filter: blur(24px) saturate(180%);
             box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
         }
-        .right-panel-divider { width: 24px; height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0; }
+        .right-panel-divider { inline-size: 24px; block-size: 1px; background: rgba(255,255,255,0.1); margin: 4px 0; }
 
         /* TIP BUTTONS */
         .tip-btn {
-            position: relative; width: 40px; height: 40px; border-radius: 50%;
+            position: relative; inline-size: 40px; block-size: 40px; border-radius: 50%;
             border: 1px solid rgba(255,255,255,0.1);
             background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
             color: rgba(255,255,255,0.7); font-size: 16px;
@@ -505,7 +505,7 @@
         }
         .tip-btn:active { transform: scale(0.9) !important; }
         .tip-btn::after {
-            content: attr(data-tip); position: absolute; right: calc(100% + 10px); top: 50%;
+            content: attr(data-tip); position: absolute; inset-inline-end: calc(100% + 10px); inset-block-start: 50%;
             transform: translateY(-50%) translateX(6px); background: rgba(0,0,0,0.85);
             color: white; font-size: 10px; font-family: 'Inter', sans-serif; font-weight: 600;
             white-space: nowrap; padding: 5px 10px; border-radius: 6px;
@@ -515,21 +515,21 @@
         .tip-btn:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
 
         /* TOAST */
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; }
+        .toast-container { position: fixed; inset-block-start: 20px; inset-inline-end: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; }
         .toast {
             position: relative; display: flex; align-items: center; gap: 10px;
             padding: 10px 16px; border-radius: 12px; font-size: 12px; font-weight: 600;
             font-family: 'Inter', sans-serif; backdrop-filter: blur(20px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5); min-width: 180px; max-width: 280px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5); min-inline-size: 180px; max-inline-size: 280px;
             overflow: hidden; animation: toast-slide-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             background: rgba(10,10,22,0.92); border: 1px solid rgba(255,255,255,0.12); color: white;
         }
-        .toast.type-success { border-left: 3px solid #22c55e; }
-        .toast.type-info    { border-left: 3px solid var(--accent); }
-        .toast.type-warning { border-left: 3px solid #f59e0b; }
-        .toast.type-error   { border-left: 3px solid #ef4444; }
-        .toast.type-purple  { border-left: 3px solid #a855f7; }
-        .toast.type-orange  { border-left: 3px solid #f97316; }
+        .toast.type-success { border-inline-start: 3px solid #22c55e; }
+        .toast.type-info    { border-inline-start: 3px solid var(--accent); }
+        .toast.type-warning { border-inline-start: 3px solid #f59e0b; }
+        .toast.type-error   { border-inline-start: 3px solid #ef4444; }
+        .toast.type-purple  { border-inline-start: 3px solid #a855f7; }
+        .toast.type-orange  { border-inline-start: 3px solid #f97316; }
         .toast-icon { font-size: 15px; flex-shrink: 0; }
         .toast.type-success .toast-icon { color: #22c55e; filter: drop-shadow(0 0 6px #22c55e); }
         .toast.type-info    .toast-icon { color: var(--accent); filter: drop-shadow(0 0 6px var(--accent)); }
@@ -539,7 +539,7 @@
         .toast.type-orange  .toast-icon { color: #f97316; filter: drop-shadow(0 0 6px #f97316); }
         .toast-text { flex: 1; }
         .toast-progress {
-            position: absolute; bottom: 0; left: 0; height: 2px;
+            position: absolute; inset-block-end: 0; inset-inline-start: 0; block-size: 2px;
             border-radius: 0 0 12px 12px; animation: toast-progress-shrink 1.8s linear forwards;
         }
         .toast.type-success .toast-progress { background: #22c55e; }
@@ -549,13 +549,13 @@
         .toast.type-purple  .toast-progress { background: #a855f7; }
         .toast.type-orange  .toast-progress { background: #f97316; }
         @keyframes toast-slide-in { from { transform: translateX(120%) scale(0.88); opacity: 0; } to { transform: translateX(0) scale(1); opacity: 1; } }
-        @keyframes toast-progress-shrink { from { width: 100%; } to { width: 0%; } }
+        @keyframes toast-progress-shrink { from { inline-size: 100%; } to { inline-size: 0%; } }
 
         /* JOIN DIALOG */
         .mp-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 10000; display: flex; align-items: center; justify-content: center; }
         .mp-hidden { display: none !important; }
         .join-dialog {
-            position: relative; width: 460px; max-width: 95vw; padding: 36px; border-radius: 24px;
+            position: relative; inline-size: 460px; max-inline-size: 95vw; padding: 36px; border-radius: 24px;
             background: linear-gradient(135deg, rgba(12,12,28,0.97), rgba(8,8,20,0.95));
             overflow: hidden; animation: dialog-appear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
@@ -568,20 +568,20 @@
         @keyframes border-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .mp-input {
             background: rgba(0,0,0,0.45); border: 1px solid rgba(0,212,255,0.25); color: white;
-            padding: 12px 16px; border-radius: 12px; width: 100%; font-family: 'Inter', sans-serif;
+            padding: 12px 16px; border-radius: 12px; inline-size: 100%; font-family: 'Inter', sans-serif;
             font-size: 14px; transition: all 0.25s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
         }
         .mp-input:focus { outline: none; border-color: rgba(0,212,255,0.7); box-shadow: 0 0 20px rgba(0,212,255,0.15), inset 0 2px 4px rgba(0,0,0,0.3); }
-        .mp-textarea { min-height: 80px; resize: vertical; font-family: inherit; }
+        .mp-textarea { min-block-size: 80px; resize: vertical; font-family: inherit; }
         .role-cards { display: flex; gap: 8px; }
         .role-card { flex: 1; padding: 12px 8px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); cursor: pointer; text-align: center; transition: all 0.2s; }
         .role-card:hover { border-color: rgba(0,212,255,0.4); background: rgba(0,212,255,0.05); }
         .role-card.selected { border-color: var(--accent); background: rgba(0,212,255,0.12); box-shadow: 0 0 16px rgba(0,212,255,0.2); }
-        .role-card-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+        .role-card-icon { font-size: 22px; margin-block-end: 6px; display: block; }
         .role-card-name { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'Inter', sans-serif; color: rgba(255,255,255,0.7); }
         .role-card.selected .role-card-name { color: var(--accent); }
         .enter-room-btn {
-            width: 100%; padding: 14px; border-radius: 14px; border: none;
+            inline-size: 100%; padding: 14px; border-radius: 14px; border: none;
             background: linear-gradient(135deg, var(--accent), #7c44ff); color: #000;
             font-family: 'Orbitron', monospace; font-weight: 700; font-size: 13px;
             letter-spacing: 0.1em; cursor: pointer; display: flex; align-items: center;
@@ -592,7 +592,7 @@
         .enter-room-btn:hover::after { opacity: 1; }
         .enter-room-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,255,0.5); }
         .enter-room-btn:active { transform: scale(0.97); }
-        .offline-btn { width: 100%; margin-top: 10px; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s; }
+        .offline-btn { inline-size: 100%; margin-block-start: 10px; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s; }
         .offline-btn:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.25); }
         .offline-btn:active { transform: scale(0.97); }
 
@@ -601,15 +601,15 @@
         .theme-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
         .theme-card.active-theme { border-color: white; box-shadow: 0 0 20px rgba(255,255,255,0.3); animation: theme-card-pulse 2s ease-in-out infinite; }
         @keyframes theme-card-pulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.2); } 50% { box-shadow: 0 0 30px rgba(255,255,255,0.4); } }
-        .theme-card-preview { height: 60px; position: relative; overflow: hidden; }
+        .theme-card-preview { block-size: 60px; position: relative; overflow: hidden; }
         .theme-card-info { padding: 8px 10px; background: rgba(0,0,0,0.4); }
         .theme-card-name { font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 0.1em; }
-        .theme-card-desc { font-size: 8px; color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif; margin-top: 2px; }
+        .theme-card-desc { font-size: 8px; color: rgba(255,255,255,0.5); font-family: 'Inter', sans-serif; margin-block-start: 2px; }
 
         /* SAVE MODAL */
-        .save-modal-inner { padding: 30px; min-width: 340px; max-width: 95vw; border-color: rgba(0,212,255,0.4); }
+        .save-modal-inner { padding: 30px; min-inline-size: 340px; max-inline-size: 95vw; border-color: rgba(0,212,255,0.4); }
         .save-modal-title { font-family: 'Orbitron', monospace; font-size: 16px; font-weight: 700; color: var(--accent); margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px; }
-        .modal-input { background: rgba(0,0,0,0.45); border: 1px solid rgba(0,212,255,0.25); color: white; padding: 12px 16px; border-radius: 12px; width: 100%; font-family: 'Inter', sans-serif; font-size: 14px; transition: all 0.25s; margin-bottom: 16px; }
+        .modal-input { background: rgba(0,0,0,0.45); border: 1px solid rgba(0,212,255,0.25); color: white; padding: 12px 16px; border-radius: 12px; inline-size: 100%; font-family: 'Inter', sans-serif; font-size: 14px; transition: all 0.25s; margin-block-end: 16px; }
         .modal-input:focus { outline: none; border-color: rgba(0,212,255,0.7); box-shadow: 0 0 18px rgba(0,212,255,0.15); }
         .modal-input::placeholder { color: rgba(255,255,255,0.3); }
 
@@ -617,21 +617,21 @@
         .mobile-controls { display: none; }
         @media (pointer: coarse) {
             .mobile-controls {
-                display: flex; position: fixed; bottom: 300px; right: 15px;
+                display: flex; position: fixed; inset-block-end: 300px; inset-inline-end: 15px;
                 flex-direction: column; gap: 10px; z-index: 100; pointer-events: auto;
                 padding: 10px; background: rgba(0,0,0,0.35); border-radius: 20px;
                 border: 1px solid rgba(0,212,255,0.2); backdrop-filter: blur(10px);
             }
         }
-        .mobile-btn { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(145deg, rgba(0,212,255,0.2), rgba(0,212,255,0.08)); border: 1.5px solid var(--accent); color: white; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,212,255,0.25), 0 0 20px rgba(0,212,255,0.08); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-btn { inline-size: 52px; block-size: 52px; border-radius: 50%; background: linear-gradient(145deg, rgba(0,212,255,0.2), rgba(0,212,255,0.08)); border: 1.5px solid var(--accent); color: white; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,212,255,0.25), 0 0 20px rgba(0,212,255,0.08); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .mobile-btn:active { background: linear-gradient(145deg, rgba(0,212,255,0.4), rgba(0,212,255,0.2)); transform: scale(0.9); box-shadow: 0 0 25px rgba(0,212,255,0.5); }
 
         /* MULTIPLAYER */
-        .mp-select { appearance: none; -webkit-appearance: none; background: rgba(0,0,0,0.45); border: 1px solid rgba(0,212,255,0.25); color: white; padding: 12px 40px 12px 16px; border-radius: 12px; width: 100%; font-size: 14px; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.25s; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300d4ff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; }
+        .mp-select { appearance: none; -webkit-appearance: none; background: rgba(0,0,0,0.45); border: 1px solid rgba(0,212,255,0.25); color: white; padding: 12px 40px 12px 16px; border-radius: 12px; inline-size: 100%; font-size: 14px; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.25s; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300d4ff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; }
         .mp-select:focus { outline: none; border-color: rgba(0,212,255,0.7); box-shadow: 0 0 18px rgba(0,212,255,0.15); }
-        .mp-student-item { display: flex; align-items: center; gap: 8px; padding: 6px; background: rgba(255,255,255,0.04); border-radius: 8px; margin-bottom: 4px; font-size: 11px; }
-        .mp-status-dot { width: 7px; height: 7px; border-radius: 50%; }
-        .mp-color-dot { width: 12px; height: 12px; border-radius: 3px; }
+        .mp-student-item { display: flex; align-items: center; gap: 8px; padding: 6px; background: rgba(255,255,255,0.04); border-radius: 8px; margin-block-end: 4px; font-size: 11px; }
+        .mp-status-dot { inline-size: 7px; block-size: 7px; border-radius: 50%; }
+        .mp-color-dot { inline-size: 12px; block-size: 12px; border-radius: 3px; }
 
         /* THEME TRANSITIONS */
         *, *::before, *::after { transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease, box-shadow 0.4s ease; }
@@ -639,10 +639,10 @@
         canvas { transition: none !important; }
 
         /* LAYOUT */
-        #canvas-container { width: 100vw; height: 100vh; position: fixed; top: 0; left: 0; z-index: 0; }
-        .ui-layer { position: relative; z-index: 10; pointer-events: none; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 10px; }
+        #canvas-container { inline-size: 100vw; block-size: 100vh; position: fixed; inset-block-start: 0; inset-inline-start: 0; z-index: 0; }
+        .ui-layer { position: relative; z-index: 10; pointer-events: none; block-size: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 10px; }
         .ui-interactive { pointer-events: auto; }
-        .field-label { font-size: 9px; font-family: 'Orbitron', monospace; color: var(--accent); text-transform: uppercase; letter-spacing: 0.2em; font-weight: 700; margin-bottom: 6px; display: block; opacity: 0.85; }
+        .field-label { font-size: 9px; font-family: 'Orbitron', monospace; color: var(--accent); text-transform: uppercase; letter-spacing: 0.2em; font-weight: 700; margin-block-end: 6px; display: block; opacity: 0.85; }
     </style>
     <base target="_blank">
 </head>
@@ -694,17 +694,17 @@
                 <span class="bf-logo" style="font-size:26px;">BrickForge</span>
                 <span class="pro-badge">PRO</span>
             </div>
-            <div style="font-family:'Inter',sans-serif; font-size:11px; letter-spacing:0.3em; color:rgba(255,255,255,0.35); text-transform:uppercase; margin-top:6px;">Join a Building Room</div>
+            <div style="font-family:'Inter',sans-serif; font-size:11px; letter-spacing:0.3em; color:rgba(255,255,255,0.35); text-transform:uppercase; margin-block-start:6px;">Join a Building Room</div>
         </div>
-        <div style="margin-bottom:16px;">
+        <div style="margin-block-end:16px;">
             <label class="field-label">Your Name</label>
             <input type="text" id="mp-name" class="mp-input" placeholder="Enter your name...">
         </div>
-        <div style="margin-bottom:16px;">
+        <div style="margin-block-end:16px;">
             <label class="field-label">Room Code</label>
             <input type="text" id="mp-room" class="mp-input" placeholder="ABC123" maxlength="6" style="text-transform:uppercase; font-family:'Orbitron',monospace; letter-spacing:0.15em; font-size:18px;">
         </div>
-        <div style="margin-bottom:22px;">
+        <div style="margin-block-end:22px;">
             <label class="field-label">Your Role</label>
             <div class="role-cards">
                 <div class="role-card selected" data-role="student" onclick="selectRole(this, 'student')"><span class="role-card-icon">🎓</span><span class="role-card-name">Student</span></div>
@@ -723,23 +723,23 @@
 </div>
 
 <!-- Teacher Control Panel -->
-<div id="mp-teacher-panel" class="mp-hidden" style="position:fixed; top:90px; right:15px; z-index:100; width:300px; pointer-events:auto;">
+<div id="mp-teacher-panel" class="mp-hidden" style="position:fixed; inset-block-start:90px; inset-inline-end:15px; z-index:100; inline-size:300px; pointer-events:auto;">
     <div class="glass-panel" style="padding:20px; border-color:rgba(0,212,255,0.4);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-block-end:15px;">
             <span class="category-header">Classroom Control</span>
             <span id="mp-room-display" style="background:rgba(0,212,255,0.15); color:var(--accent); padding:3px 10px; border-radius:6px; font-size:10px; font-weight:700; font-family:'Orbitron',monospace; letter-spacing:0.1em;">ROOM: --</span>
         </div>
-        <div style="display:flex; gap:6px; margin-bottom:15px;">
+        <div style="display:flex; gap:6px; margin-block-end:15px;">
             <button onclick="lockRoom()" class="glass-btn" style="flex:1; font-size:10px; justify-content:center;"><i class="fas fa-lock"></i> Lock</button>
             <button onclick="resetAllMultiplayer()" class="glass-btn" style="flex:1; font-size:10px; color:#ef4444; border-color:rgba(239,68,68,0.3); justify-content:center;"><i class="fas fa-trash"></i> Clear All</button>
         </div>
-        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:10px; margin-bottom:10px;">
-            <div class="category-header" style="margin-bottom:8px;">Students (<span id="mp-student-count">0</span>)</div>
-            <div id="mp-student-list" style="max-height:150px; overflow-y:auto; scrollbar-width:thin;">
+        <div style="border-block-start:1px solid rgba(255,255,255,0.08); padding-block-start:10px; margin-block-end:10px;">
+            <div class="category-header" style="margin-block-end:8px;">Students (<span id="mp-student-count">0</span>)</div>
+            <div id="mp-student-list" style="max-block-size:150px; overflow-y:auto; scrollbar-width:thin;">
                 <div style="color:rgba(255,255,255,0.3); text-align:center; padding:10px; font-size:11px;">No students joined</div>
             </div>
         </div>
-        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:10px; display:flex; flex-direction:column; gap:6px;">
+        <div style="border-block-start:1px solid rgba(255,255,255,0.08); padding-block-start:10px; display:flex; flex-direction:column; gap:6px;">
             <button onclick="openAssignmentModal()" class="glass-btn active" style="justify-content:center; font-size:11px;"><i class="fas fa-clipboard-list"></i> Set Assignment</button>
             <button onclick="downloadProgress()" class="glass-btn" style="justify-content:center; font-size:11px;"><i class="fas fa-download"></i> Export Progress</button>
         </div>
@@ -747,32 +747,32 @@
 </div>
 
 <!-- Assignment Panel -->
-<div id="mp-assignment-panel" style="position:fixed; left:-340px; top:50%; transform:translateY(-50%); width:320px; transition:left 0.3s cubic-bezier(0.4,0,0.2,1); z-index:99; pointer-events:auto;">
-    <div class="glass-panel" style="padding:25px; max-height:80vh; overflow-y:auto; border-left:none; border-radius:0 16px 16px 0;">
-        <button onclick="document.getElementById('mp-assignment-panel').style.left='-320px'" style="position:absolute; right:10px; top:10px; background:transparent; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:16px;"><i class="fas fa-times"></i></button>
-        <div class="category-header" style="margin-bottom:10px;">Current Assignment</div>
+<div id="mp-assignment-panel" style="position:fixed; inset-inline-start:-340px; inset-block-start:50%; transform:translateY(-50%); inline-size:320px; transition:left 0.3s cubic-bezier(0.4,0,0.2,1); z-index:99; pointer-events:auto;">
+    <div class="glass-panel" style="padding:25px; max-block-size:80vh; overflow-y:auto; border-inline-start:none; border-radius:0 16px 16px 0;">
+        <button onclick="document.getElementById('mp-assignment-panel').style.left='-320px'" style="position:absolute; inset-inline-end:10px; inset-block-start:10px; background:transparent; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:16px;"><i class="fas fa-times"></i></button>
+        <div class="category-header" style="margin-block-end:10px;">Current Assignment</div>
         <h3 id="mp-assignment-title" style="color:white; margin:0 0 10px 0; font-size:18px; font-family:'Orbitron',monospace;">No Active Assignment</h3>
-        <p id="mp-assignment-desc" style="color:rgba(255,255,255,0.6); font-size:13px; line-height:1.5; margin-bottom:15px;">Waiting for teacher to set assignment...</p>
-        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:15px; margin-bottom:15px;">
-            <div class="category-header" style="margin-bottom:8px;">Requirements</div>
-            <ul id="mp-requirements" style="color:rgba(255,255,255,0.7); font-size:12px; line-height:1.7; margin:0; padding-left:18px;"><li>No requirements set</li></ul>
+        <p id="mp-assignment-desc" style="color:rgba(255,255,255,0.6); font-size:13px; line-height:1.5; margin-block-end:15px;">Waiting for teacher to set assignment...</p>
+        <div style="border-block-start:1px solid rgba(255,255,255,0.08); padding-block-start:15px; margin-block-end:15px;">
+            <div class="category-header" style="margin-block-end:8px;">Requirements</div>
+            <ul id="mp-requirements" style="color:rgba(255,255,255,0.7); font-size:12px; line-height:1.7; margin:0; padding-inline-start:18px;"><li>No requirements set</li></ul>
         </div>
-        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:15px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:11px;"><span style="color:rgba(255,255,255,0.4);">Due Date</span><span id="mp-due-date" style="color:white; font-weight:600;">--</span></div>
+        <div style="border-block-start:1px solid rgba(255,255,255,0.08); padding-block-start:15px;">
+            <div style="display:flex; justify-content:space-between; margin-block-end:8px; font-size:11px;"><span style="color:rgba(255,255,255,0.4);">Due Date</span><span id="mp-due-date" style="color:white; font-weight:600;">--</span></div>
             <div style="display:flex; justify-content:space-between; font-size:11px;"><span style="color:rgba(255,255,255,0.4);">Your Progress</span><span id="mp-my-progress" style="color:var(--accent); font-weight:700; font-family:'Orbitron',monospace; font-size:10px;">0 blocks</span></div>
         </div>
     </div>
-    <button onclick="document.getElementById('mp-assignment-panel').style.left='0px'" class="glass-btn" style="position:absolute; right:-40px; top:50%; transform:translateY(-50%); width:40px; height:80px; border-radius:0 10px 10px 0; border-left:none; padding:0; justify-content:center;"><i class="fas fa-chevron-right"></i></button>
+    <button onclick="document.getElementById('mp-assignment-panel').style.left='0px'" class="glass-btn" style="position:absolute; inset-inline-end:-40px; inset-block-start:50%; transform:translateY(-50%); inline-size:40px; block-size:80px; border-radius:0 10px 10px 0; border-inline-start:none; padding:0; justify-content:center;"><i class="fas fa-chevron-right"></i></button>
 </div>
 
 <!-- Assignment Modal -->
 <div id="mp-assignment-modal" class="mp-hidden" style="position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:10001; align-items:center; justify-content:center;">
-    <div class="glass-panel" style="width:500px; max-height:90vh; overflow-y:auto; padding:28px; border-color:rgba(0,212,255,0.3);">
+    <div class="glass-panel" style="inline-size:500px; max-block-size:90vh; overflow-y:auto; padding:28px; border-color:rgba(0,212,255,0.3);">
         <h3 style="color:var(--accent); margin:0 0 20px 0; font-family:'Orbitron',monospace; font-size:16px;">Create Assignment</h3>
-        <div style="margin-bottom:15px;"><label class="field-label">Project Title</label><input type="text" id="mp-assign-title" class="mp-input" placeholder="e.g., Build a Sustainable Home"></div>
-        <div style="margin-bottom:15px;"><label class="field-label">Description</label><textarea id="mp-assign-desc" class="mp-input mp-textarea" placeholder="Describe the project goals..."></textarea></div>
-        <div style="margin-bottom:15px;"><label class="field-label">Requirements (one per line)</label><textarea id="mp-assign-req" class="mp-input mp-textarea" placeholder="Minimum 50 blocks&#10;Include nature elements&#10;Use 3+ materials"></textarea></div>
-        <div style="margin-bottom:22px;"><label class="field-label">Due Date</label><input type="datetime-local" id="mp-assign-due" class="mp-input" style="color-scheme:dark;"></div>
+        <div style="margin-block-end:15px;"><label class="field-label">Project Title</label><input type="text" id="mp-assign-title" class="mp-input" placeholder="e.g., Build a Sustainable Home"></div>
+        <div style="margin-block-end:15px;"><label class="field-label">Description</label><textarea id="mp-assign-desc" class="mp-input mp-textarea" placeholder="Describe the project goals..."></textarea></div>
+        <div style="margin-block-end:15px;"><label class="field-label">Requirements (one per line)</label><textarea id="mp-assign-req" class="mp-input mp-textarea" placeholder="Minimum 50 blocks&#10;Include nature elements&#10;Use 3+ materials"></textarea></div>
+        <div style="margin-block-end:22px;"><label class="field-label">Due Date</label><input type="datetime-local" id="mp-assign-due" class="mp-input" style="color-scheme:dark;"></div>
         <div style="display:flex; gap:10px; justify-content:flex-end;">
             <button onclick="document.getElementById('mp-assignment-modal').style.display='none'" class="glass-btn">Cancel</button>
             <button onclick="saveAssignment()" class="glass-btn active">Post Assignment</button>
@@ -784,24 +784,24 @@
 <div class="ui-layer">
     <!-- TOP BAR -->
     <div class="flex justify-between items-start ui-interactive" style="gap:10px;">
-        <!-- Left: Logo + tools + counters -->
+        <!-- inset-inline-start: Logo + tools + counters -->
         <div class="glass-panel" style="padding:10px 14px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
             <div style="display:flex; align-items:center; gap:7px; flex-shrink:0;">
                 <i class="fas fa-cubes" style="color:var(--accent); font-size:18px; filter:drop-shadow(0 0 10px var(--accent));"></i>
                 <span class="bf-logo" style="font-size:17px;">BrickForge</span>
                 <span class="pro-badge">PRO</span>
             </div>
-            <div style="width:1px; height:30px; background:rgba(255,255,255,0.1);"></div>
+            <div style="inline-size:1px; block-size:30px; background:rgba(255,255,255,0.1);"></div>
             <!-- Tool Pill -->
             <div class="tool-pill ui-interactive">
                 <button onclick="setTool('build')" class="tool-pill-btn active" id="tool-build"><i class="fas fa-hammer" style="font-size:13px;"></i> Build</button>
                 <button onclick="setTool('erase')" class="tool-pill-btn" id="tool-erase"><i class="fas fa-eraser" style="font-size:13px;"></i> Erase</button>
             </div>
-            <div style="width:1px; height:28px; background:rgba(255,255,255,0.1);"></div>
+            <div style="inline-size:1px; block-size:28px; background:rgba(255,255,255,0.1);"></div>
             <!-- Undo + Clear -->
             <button onclick="undo()" class="glass-btn icon-btn" title="Undo (Ctrl+Z)" style="border-radius:50%;"><i class="fas fa-undo" style="font-size:13px;"></i></button>
             <button onclick="clearAll()" class="glass-btn icon-btn" title="Clear All" style="border-radius:50%; border-color:rgba(239,68,68,0.35);"><i class="fas fa-trash" style="color:#ef4444; font-size:13px;"></i></button>
-            <div style="width:1px; height:28px; background:rgba(255,255,255,0.1);"></div>
+            <div style="inline-size:1px; block-size:28px; background:rgba(255,255,255,0.1);"></div>
             <!-- Snap Toggle -->
             <div class="flex items-center gap-2" title="Toggle Grid Snapping" style="flex-shrink:0;">
                 <span style="font-size:9px; font-family:'Orbitron',monospace; color:rgba(255,255,255,0.45); letter-spacing:0.15em; text-transform:uppercase;">SNAP</span>
@@ -817,13 +817,13 @@
                 <span class="block-counter-label">Blocks</span>
                 <span class="block-counter-num" id="block-count">0</span>
             </div>
-            <div style="width:1px; height:28px; background:rgba(255,255,255,0.1);"></div>
+            <div style="inline-size:1px; block-size:28px; background:rgba(255,255,255,0.1);"></div>
             <!-- Rotate Keys -->
             <div style="flex-direction:column; align-items:center; display:flex; flex-shrink:0;">
-                <span style="font-size:8px; font-family:'Orbitron',monospace; color:rgba(255,255,255,0.35); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:4px;">Rotate</span>
+                <span style="font-size:8px; font-family:'Orbitron',monospace; color:rgba(255,255,255,0.35); letter-spacing:0.15em; text-transform:uppercase; margin-block-end:4px;">Rotate</span>
                 <div style="display:flex; gap:3px;"><span class="key-badge">←</span><span class="key-badge">→</span><span class="key-badge">↑</span><span class="key-badge">↓</span></div>
             </div>
-            <div style="width:1px; height:28px; background:rgba(255,255,255,0.1);"></div>
+            <div style="inline-size:1px; block-size:28px; background:rgba(255,255,255,0.1);"></div>
             <!-- Templates Button -->
             <button onclick="openTemplatesModal()" class="glass-btn" style="font-size:10px; padding:7px 12px; border-color:rgba(168,85,247,0.4); color:#a855f7;">
                 <i class="fas fa-layer-group" style="font-size:11px;"></i> Templates
@@ -848,7 +848,7 @@
     </div>
 
     <!-- BOTTOM TOOLBAR -->
-    <div id="bottom-toolbar" class="glass-panel ui-interactive" style="padding:0; position:relative; max-height:38vh; overflow-y:auto; margin:0 0 4px 0;">
+    <div id="bottom-toolbar" class="glass-panel ui-interactive" style="padding:0; position:relative; max-block-size:38vh; overflow-y:auto; margin:0 0 4px 0;">
 
         <!-- FAVORITES BAR -->
         <div id="favorites-bar">
@@ -858,7 +858,7 @@
 
         <div style="padding:12px 14px;">
             <!-- Tab Bar -->
-            <div class="tab-bar" style="margin-bottom:10px; display:inline-flex;">
+            <div class="tab-bar" style="margin-block-end:10px; display:inline-flex;">
                 <button class="tab-btn active" onclick="switchTab('blocks', event)">Blocks</button>
                 <button class="tab-btn" onclick="switchTab('architecture', event)">Architecture</button>
                 <button class="tab-btn" onclick="switchTab('nature', event)">Nature</button>
@@ -868,15 +868,15 @@
             </div>
 
             <!-- Controls Row -->
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.07);">
+            <div style="display:flex; align-items:center; gap:10px; margin-block-end:10px; padding-block-end:10px; border-block-end:1px solid rgba(255,255,255,0.07);">
                 <div class="size-control">
                     <button onclick="setSize(0.5)" class="size-btn" id="size-05">0.5</button>
                     <button onclick="setSize(1)"   class="size-btn active" id="size-1">1</button>
                     <button onclick="setSize(2)"   class="size-btn" id="size-2">2</button>
                     <button onclick="setSize(4)"   class="size-btn" id="size-4">4</button>
                 </div>
-                <div style="width:1px; height:24px; background:rgba(255,255,255,0.08);"></div>
-                <div id="colors" style="display:flex; gap:5px; flex-wrap:wrap; max-width:480px; padding:8px 10px; background:rgba(0,0,0,0.3); border-radius:12px; border:1px solid rgba(255,255,255,0.07);">
+                <div style="inline-size:1px; block-size:24px; background:rgba(255,255,255,0.08);"></div>
+                <div id="colors" style="display:flex; gap:5px; flex-wrap:wrap; max-inline-size:480px; padding:8px 10px; background:rgba(0,0,0,0.3); border-radius:12px; border:1px solid rgba(255,255,255,0.07);">
                     <div class="color-btn active" style="background:#CC0000;" onclick="setColor('#CC0000', this)" title="Red"></div>
                     <div class="color-btn" style="background:#DD5500;" onclick="setColor('#DD5500', this)" title="Orange"></div>
                     <div class="color-btn" style="background:#CC8800;" onclick="setColor('#CC8800', this)" title="Amber"></div>
@@ -1139,15 +1139,15 @@
     <div class="glass-panel save-modal-inner">
         <h3 class="save-modal-title"><i class="fas fa-save"></i> Save / Load Project</h3>
         <input id="save-name-input" type="text" placeholder="Project name (e.g. myhouse)" class="modal-input" value="default">
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-block-end:12px;">
             <button onclick="doSave()" class="glass-btn active" style="flex:1; justify-content:center;"><i class="fas fa-save"></i> Save</button>
             <button onclick="doLoad()" class="glass-btn" style="flex:1; justify-content:center;"><i class="fas fa-folder-open"></i> Load</button>
         </div>
-        <div style="display:flex; gap:8px; margin-bottom:16px;">
+        <div style="display:flex; gap:8px; margin-block-end:16px;">
             <button onclick="exportJSON()" class="glass-btn" style="flex:1; justify-content:center; font-size:11px;"><i class="fas fa-file-export"></i> Export .json</button>
             <button onclick="importJSON()" class="glass-btn" style="flex:1; justify-content:center; font-size:11px;"><i class="fas fa-file-import"></i> Import .json</button>
         </div>
-        <div style="text-align:right;">
+        <div style="text-align:end;">
             <button onclick="closeSaveModal()" class="glass-btn" style="border-color:rgba(239,68,68,0.35);"><i class="fas fa-times"></i> Close</button>
         </div>
     </div>
@@ -1155,12 +1155,12 @@
 
 <!-- THEME PICKER MODAL -->
 <div id="theme-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:20000; align-items:center; justify-content:center;">
-    <div class="glass-panel" style="padding:28px; min-width:420px; max-width:95vw; border-color:var(--glass-border);">
+    <div class="glass-panel" style="padding:28px; min-inline-size:420px; max-inline-size:95vw; border-color:var(--glass-border);">
         <h3 style="color:var(--accent); margin:0 0 20px 0; font-size:16px; font-family:'Orbitron',monospace; font-weight:700; display:flex; align-items:center; gap:10px;">
             <i class="fas fa-palette"></i> Choose Theme
         </h3>
-        <div id="theme-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px;"></div>
-        <div style="text-align:right;">
+        <div id="theme-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-block-end:20px;"></div>
+        <div style="text-align:end;">
             <button onclick="closeThemePicker()" class="glass-btn" style="border-color:rgba(239,68,68,0.35);"><i class="fas fa-times"></i> Close</button>
         </div>
     </div>
@@ -1168,12 +1168,12 @@
 
 <!-- TEMPLATES MODAL -->
 <div id="templates-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:20000; align-items:center; justify-content:center;">
-    <div class="glass-panel" style="padding:28px; min-width:560px; max-width:95vw;">
+    <div class="glass-panel" style="padding:28px; min-inline-size:560px; max-inline-size:95vw;">
         <h3 style="color:var(--accent); margin:0 0 20px 0; font-size:16px; font-family:'Orbitron',monospace; font-weight:700; display:flex; align-items:center; gap:10px;">
             <i class="fas fa-layer-group"></i> Starter Templates
         </h3>
-        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;" id="template-grid"></div>
-        <div style="text-align:right;">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-block-end:20px;" id="template-grid"></div>
+        <div style="text-align:end;">
             <button onclick="closeTemplatesModal()" class="glass-btn" style="border-color:rgba(239,68,68,0.35);"><i class="fas fa-times"></i> Close</button>
         </div>
     </div>
@@ -1197,7 +1197,7 @@ const safeStorage = {
         const p = document.createElement('div');
         p.className = 'splash-particle';
         const size = 2 + Math.random() * 6;
-        p.style.cssText = `width:${size}px; height:${size}px; left:${Math.random()*100}%; animation-duration:${3+Math.random()*5}s; animation-delay:${Math.random()*3}s; background:${Math.random()>0.5?'#00d4ff':'#7c44ff'}; opacity:0;`;
+        p.style.cssText = `inline-size:${size}px; block-size:${size}px; inset-inline-start:${Math.random()*100}%; animation-duration:${3+Math.random()*5}s; animation-delay:${Math.random()*3}s; background:${Math.random()>0.5?'#00d4ff':'#7c44ff'}; opacity:0;`;
         container.appendChild(p);
     }
     setTimeout(() => {
@@ -1343,13 +1343,13 @@ function createCloudTexture() {
 function updateSkyForScene(sceneName) {
     if (!skyMesh) return;
     const skyColors = {
-        nature:   { top:0x2a6cb5, mid:0x87CEEB, bot:0xd4aa77 },
-        city:     { top:0x3a5a78, mid:0x7a8899, bot:0x9a8877 },
-        desert:   { top:0xcc8833, mid:0xddaa55, bot:0xddbb66 },
-        snow:     { top:0x5577aa, mid:0xbbd4ee, bot:0xddeeff },
-        volcanic: { top:0x110300, mid:0x1a0500, bot:0x330800 },
-        space:    { top:0x000005, mid:0x000010, bot:0x000015 },
-        fantasy:  { top:0x0d0022, mid:0x1a0044, bot:0x220055 }
+        nature:   { inset-block-start:0x2a6cb5, mid:0x87CEEB, bot:0xd4aa77 },
+        city:     { inset-block-start:0x3a5a78, mid:0x7a8899, bot:0x9a8877 },
+        desert:   { inset-block-start:0xcc8833, mid:0xddaa55, bot:0xddbb66 },
+        snow:     { inset-block-start:0x5577aa, mid:0xbbd4ee, bot:0xddeeff },
+        volcanic: { inset-block-start:0x110300, mid:0x1a0500, bot:0x330800 },
+        space:    { inset-block-start:0x000005, mid:0x000010, bot:0x000015 },
+        fantasy:  { inset-block-start:0x0d0022, mid:0x1a0044, bot:0x220055 }
     };
     const s = skyColors[sceneName] || skyColors.nature;
     skyMesh.material.uniforms.topColor.value.setHex(s.top);
@@ -3060,7 +3060,7 @@ function loadTemplate(key) {
 // ==================== MULTIPLAYER ====================
 const mpState = {
     db: null, roomId: null,
-    userId: 'user_' + window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36).slice(0, 9),
+    userId: 'user_' + Math.random().toString(36).substr(2, 9),
     userName: '', userColor: '#CC0000', role: 'student',
     blockCount: 0, isRoomLocked: false, remoteBlocks: {}
 };
@@ -3374,7 +3374,7 @@ function buildThemeGrid() {
         dot.style.cssText = `position:absolute; inset:0; background-image:radial-gradient(${t.accent}40 1px, transparent 1px); background-size:12px 12px; opacity:0.6;`;
         preview.appendChild(dot);
         const circle = document.createElement('div');
-        circle.style.cssText = `position:absolute; width:28px; height:28px; border-radius:50%; background:${t.accent}; box-shadow:0 0 16px ${t.accentGlow}; top:50%; left:50%; transform:translate(-50%,-50%);`;
+        circle.style.cssText = `position:absolute; inline-size:28px; block-size:28px; border-radius:50%; background:${t.accent}; box-shadow:0 0 16px ${t.accentGlow}; inset-block-start:50%; inset-inline-start:50%; transform:translate(-50%,-50%);`;
         preview.appendChild(circle);
         const info = document.createElement('div');
         info.className = 'theme-card-info';
@@ -3436,7 +3436,7 @@ buildTemplateGrid();
       var html=new XMLSerializer().serializeToString(clone);
       var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
         +'<foreignObject width="100%" height="100%">'
-        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
+        +'<div xmlns="http://www.w3.org/1999/xhtml" style="inline-size:'+w+'px;block-size:'+h+'px;overflow:hidden">'
         +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
         +html+'</div></div></foreignObject></svg>';
       var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
