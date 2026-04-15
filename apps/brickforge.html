@@ -3060,7 +3060,7 @@ function loadTemplate(key) {
 // ==================== MULTIPLAYER ====================
 const mpState = {
     db: null, roomId: null,
-    userId: 'user_' + Math.random().toString(36).substr(2, 9),
+    userId: 'user_' + window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36).slice(0, 9),
     userName: '', userColor: '#CC0000', role: 'student',
     blockCount: 0, isRoomLocked: false, remoteBlocks: {}
 };
