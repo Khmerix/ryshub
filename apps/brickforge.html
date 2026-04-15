@@ -295,29 +295,41 @@ let currentTool = 'build', currentBlock = 'cube', currentSize = 1, currentColor 
 let blockCount = 0;
 let scene, camera, renderer, ground, grid, ghost;
 let raycaster, mouse, placedBlocks = [], showGrid = true;
-let camDist = 35, camTheta = 0.785, camPhi = 1.047, camTarget = {x:0,y:0,z:0};
+let camDist = 35, camTheta = 0.785, camPhi = 1.047, camTarget = {x:0,y:3,z:0};
+let targetCam = {x:0, y:3, z:0, dist:35, theta:0.785, phi:1.047};
 let isRot = false, isPan = false, lastX, lastY;
 
 // Init
 function init() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87CEEB);
-    scene.fog = new THREE.Fog(0x87CEEB, 40, 150);
+    scene.fog = new THREE.Fog(0x87CEEB, 60, 250);
     
     camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
     updateCam();
     
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.getElementById('canvas-container').appendChild(renderer.domElement);
     
     // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-    const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
+    scene.add(hemi);
+    
+    const sun = new THREE.DirectionalLight(0xffffff, 0.9);
     sun.position.set(50, 100, 50);
     sun.castShadow = true;
     sun.shadow.mapSize.width = sun.shadow.mapSize.height = 2048;
+    sun.shadow.camera.left = -60;
+    sun.shadow.camera.right = 60;
+    sun.shadow.camera.top = 60;
+    sun.shadow.camera.bottom = -60;
+    sun.shadow.camera.near = 0.5;
+    sun.shadow.camera.far = 300;
+    sun.shadow.bias = -0.0005;
     scene.add(sun);
     
     // Ground
@@ -350,26 +362,33 @@ function init() {
         mouse.y = -(e.clientY/window.innerHeight)*2 + 1;
         
         if (isRot) {
-            camTheta -= (e.clientX - lastX) * 0.01;
-            camPhi -= (e.clientY - lastY) * 0.01;
-            camPhi = Math.max(0.1, Math.min(Math.PI/2 - 0.1, camPhi));
-            updateCam();
+            targetCam.theta -= (e.clientX - lastX) * 0.01;
+            targetCam.phi -= (e.clientY - lastY) * 0.01;
+            targetCam.phi = Math.max(0.15, Math.min(Math.PI/2 - 0.05, targetCam.phi));
         } else if (isPan) {
-            camTarget.x -= (e.clientX - lastX) * 0.05;
-            camTarget.z -= (e.clientY - lastY) * 0.05;
-            updateCam();
+            const panSpeed = 0.02 * (targetCam.dist / 30);
+            const dx = e.clientX - lastX;
+            const dy = e.clientY - lastY;
+            targetCam.x -= (dx * Math.cos(camTheta) - dy * Math.sin(camTheta)) * panSpeed;
+            targetCam.z -= (dx * Math.sin(camTheta) + dy * Math.cos(camTheta)) * panSpeed;
         } else if (currentTool === 'build') {
             raycaster.setFromCamera(mouse, camera);
             const hits = raycaster.intersectObjects([ground, ...placedBlocks], true);
             if (hits.length > 0) {
-                const p = hits[0].point.clone();
-                const n = hits[0].face.normal.clone();
-                if (hits[0].object !== ground) n.transformDirection(hits[0].object.matrixWorld).normalize();
-                const half = currentSize/2;
-                p.add(n.multiplyScalar(half));
+                const hit = hits[0];
+                const p = hit.point.clone();
+                const bounds = getBlockBounds(currentBlock, currentSize);
+                
+                if (hit.object === ground || hit.object.parent === ground) {
+                    p.y += bounds.bottomOffset;
+                } else {
+                    const n = hit.face.normal.clone();
+                    n.transformDirection(hit.object.matrixWorld).normalize();
+                    p.add(n.multiplyScalar(bounds.bottomOffset));
+                }
+                
                 p.x = Math.round(p.x);
                 p.z = Math.round(p.z);
-                p.y = Math.max(half, Math.round(p.y/half)*half);
                 ghost.position.copy(p);
                 ghost.visible = true;
             } else ghost.visible = false;
@@ -379,13 +398,23 @@ function init() {
     
     canvas.addEventListener('mousedown', e => {
         if (e.target.closest('.ui-interactive')) return;
-        if (e.button === 0 && currentTool === 'build' && ghost.visible) build();
-        else if (e.button === 1) isRot = true;
-        else if (e.button === 2) isPan = true;
+        lastX = e.clientX; lastY = e.clientY;
+        if (e.button === 0) {
+            if (currentTool === 'build' && ghost.visible) build();
+            else if (currentTool === 'erase') erase();
+        } else if (e.button === 1) {
+            isRot = true;
+        } else if (e.button === 2) {
+            isPan = true;
+        }
     });
     
     canvas.addEventListener('mouseup', () => { isRot = false; isPan = false; });
-    canvas.addEventListener('wheel', e => { e.preventDefault(); camDist += e.deltaY*0.05; camDist = Math.max(5, Math.min(100, camDist)); updateCam(); }, {passive: false});
+    canvas.addEventListener('wheel', e => { 
+        e.preventDefault(); 
+        targetCam.dist += e.deltaY * 0.05; 
+        targetCam.dist = Math.max(5, Math.min(120, targetCam.dist)); 
+    }, {passive: false});
     canvas.addEventListener('contextmenu', e => e.preventDefault());
     
     animate();
@@ -393,6 +422,14 @@ function init() {
 }
 
 function updateCam() {
+    const lerp = (a, b, t) => a + (b - a) * t;
+    camTarget.x = lerp(camTarget.x, targetCam.x, 0.12);
+    camTarget.y = lerp(camTarget.y, targetCam.y, 0.12);
+    camTarget.z = lerp(camTarget.z, targetCam.z, 0.12);
+    camDist = lerp(camDist, targetCam.dist, 0.12);
+    camTheta = lerp(camTheta, targetCam.theta, 0.12);
+    camPhi = lerp(camPhi, targetCam.phi, 0.12);
+    
     camera.position.x = camTarget.x + camDist * Math.sin(camPhi) * Math.cos(camTheta);
     camera.position.y = camTarget.y + camDist * Math.cos(camPhi);
     camera.position.z = camTarget.z + camDist * Math.sin(camPhi) * Math.sin(camTheta);
@@ -404,11 +441,39 @@ function createGround(type, mat) {
     const colors = {grass: 0x4a7c59, dirt: 0x8B4513, sand: 0xF4A460, snow: 0xFFFAFA, stone: 0x808080};
     let geo;
     if (type === 'hills') {
-        geo = new THREE.PlaneGeometry(80, 80, 32, 32);
+        geo = new THREE.PlaneGeometry(80, 80, 48, 48);
         const pos = geo.attributes.position;
         for (let i = 0; i < pos.count; i++) {
             const x = pos.getX(i), y = pos.getY(i);
             pos.setZ(i, Math.sin(x*0.08)*Math.cos(y*0.08)*2);
+        }
+        geo.computeVertexNormals();
+    } else if (type === 'valley') {
+        geo = new THREE.PlaneGeometry(80, 80, 48, 48);
+        const pos = geo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+            const x = pos.getX(i), y = pos.getY(i);
+            const d = Math.sqrt(x*x + y*y);
+            pos.setZ(i, Math.max(-3, -d*0.08));
+        }
+        geo.computeVertexNormals();
+    } else if (type === 'island') {
+        geo = new THREE.PlaneGeometry(80, 80, 48, 48);
+        const pos = geo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+            const x = pos.getX(i), y = pos.getY(i);
+            const d = Math.sqrt(x*x + y*y);
+            pos.setZ(i, Math.max(-5, 3 - d*0.12));
+        }
+        geo.computeVertexNormals();
+    } else if (type === 'mesa') {
+        geo = new THREE.PlaneGeometry(80, 80, 48, 48);
+        const pos = geo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+            const x = pos.getX(i), y = pos.getY(i);
+            const d = Math.sqrt(x*x + y*y);
+            const h = Math.max(0, 4 - d*0.08);
+            pos.setZ(i, h > 3 ? 4 : 0);
         }
         geo.computeVertexNormals();
     } else geo = new THREE.PlaneGeometry(80, 80);
@@ -422,29 +487,73 @@ function createGhost() {
     if (ghost) scene.remove(ghost);
     ghost = new THREE.Mesh(
         new THREE.BoxGeometry(1,1,1),
-        new THREE.MeshBasicMaterial({color: 0x00d4ff, transparent: true, opacity: 0.3, wireframe: true})
+        new THREE.MeshBasicMaterial({color: 0x00d4ff, transparent: true, opacity: 0.35, wireframe: true})
     );
     ghost.visible = false;
     scene.add(ghost);
     updateGhostGeo();
 }
 
+function getBlockBounds(type, size) {
+    switch(type) {
+        // Groups with origin at bottom
+        case 'tree': case 'pine': case 'palm':
+        case 'flower': case 'cactus': case 'mushroom':
+        case 'fence': case 'railing': case 'ladder':
+            return { halfY: size*0.5, bottomOffset: 0 };
+        // Tall / centered
+        case 'wall': return { halfY: size*0.75, bottomOffset: size*0.75 };
+        case 'door': return { halfY: size*0.9, bottomOffset: size*0.9 };
+        case 'window': return { halfY: size*0.5, bottomOffset: size*0.5 };
+        case 'pillar': return { halfY: size, bottomOffset: size };
+        case 'gate': return { halfY: size*0.75, bottomOffset: size*0.75 };
+        case 'beam': return { halfY: size*0.1, bottomOffset: size*0.1 };
+        case 'plate': case 'slab': case 'tile': case 'floor': case 'panel':
+            return { halfY: size*0.1, bottomOffset: size*0.1 };
+        case 'brick': return { halfY: size*0.25, bottomOffset: size*0.25 };
+        case 'arch': return { halfY: size*0.15, bottomOffset: size*0.15 };
+        case 'slope': return { halfY: size*0.5, bottomOffset: size*0.5 };
+        case 'cylinder': return { halfY: size*0.5, bottomOffset: size*0.5 };
+        case 'sphere': return { halfY: size*0.4, bottomOffset: size*0.4 };
+        case 'wedge': return { halfY: size*0.5, bottomOffset: size*0.5 };
+        case 'rock': return { halfY: size*0.4, bottomOffset: size*0.4 };
+        case 'boulder': return { halfY: size*0.6, bottomOffset: size*0.6 };
+        case 'bush': case 'shrub': return { halfY: size*0.4, bottomOffset: size*0.4 };
+        case 'stair': return { halfY: size*0.25, bottomOffset: size*0.25 };
+        case 'ramp': return { halfY: size*0.1, bottomOffset: size*0.1 };
+        case 'roof': return { halfY: size*0.5, bottomOffset: size*0.5 };
+        case 'platform': return { halfY: size*0.1, bottomOffset: size*0.1 };
+        default: return { halfY: size*0.5, bottomOffset: size*0.5 };
+    }
+}
+
 function updateGhostGeo() {
     if (!ghost) return;
     ghost.geometry.dispose();
     let geo;
+    const s = currentSize;
     switch(currentBlock) {
-        case 'slope': geo = new THREE.ConeGeometry(currentSize*0.7, currentSize, 4); break;
-        case 'cylinder': case 'pillar': geo = new THREE.CylinderGeometry(currentSize*0.35, currentSize*0.35, currentSize*(currentBlock==='pillar'?2:1), 16); break;
-        case 'sphere': case 'bush': geo = new THREE.SphereGeometry(currentSize*0.4, 16, 12); break;
-        case 'arch': geo = new THREE.TorusGeometry(currentSize*0.5, currentSize*0.15, 8, 16, Math.PI); break;
-        case 'wall': geo = new THREE.BoxGeometry(currentSize, currentSize*1.5, currentSize*0.3); break;
-        case 'window': geo = new THREE.BoxGeometry(currentSize, currentSize, currentSize*0.2); break;
-        case 'door': geo = new THREE.BoxGeometry(currentSize*0.8, currentSize*1.8, currentSize*0.15); break;
-        case 'tree': geo = new THREE.CylinderGeometry(currentSize*0.15, currentSize*0.25, currentSize, 8); break;
-        case 'rock': geo = new THREE.DodecahedronGeometry(currentSize*0.4, 0); break;
-        case 'plate': case 'slab': case 'tile': geo = new THREE.BoxGeometry(currentSize, currentSize*0.2, currentSize); break;
-        default: geo = new THREE.BoxGeometry(currentSize, currentSize, currentSize);
+        case 'slope': geo = new THREE.ConeGeometry(s*0.7, s, 4); break;
+        case 'cylinder': geo = new THREE.CylinderGeometry(s*0.35, s*0.35, s, 16); break;
+        case 'sphere': case 'bush': case 'shrub': geo = new THREE.SphereGeometry(s*0.4, 16, 12); break;
+        case 'arch': geo = new THREE.TorusGeometry(s*0.5, s*0.15, 8, 16, Math.PI); break;
+        case 'wall': geo = new THREE.BoxGeometry(s, s*1.5, s*0.3); break;
+        case 'window': geo = new THREE.BoxGeometry(s, s, s*0.2); break;
+        case 'door': geo = new THREE.BoxGeometry(s*0.8, s*1.8, s*0.15); break;
+        case 'pillar': geo = new THREE.CylinderGeometry(s*0.25, s*0.3, s*2, 12); break;
+        case 'tree': geo = new THREE.CylinderGeometry(s*0.15, s*0.25, s, 8); break;
+        case 'rock': geo = new THREE.DodecahedronGeometry(s*0.4, 0); break;
+        case 'boulder': geo = new THREE.DodecahedronGeometry(s*0.6, 0); break;
+        case 'plate': case 'slab': case 'tile': case 'panel': geo = new THREE.BoxGeometry(s, s*0.2, s); break;
+        case 'floor': case 'platform': case 'ramp': geo = new THREE.BoxGeometry(s, s*0.1, s); break;
+        case 'brick': geo = new THREE.BoxGeometry(s*0.9, s*0.5, s*0.5); break;
+        case 'beam': geo = new THREE.BoxGeometry(s*0.2, s*0.2, s); break;
+        case 'stair': geo = new THREE.BoxGeometry(s, s*0.5, s); break;
+        case 'roof': geo = new THREE.ConeGeometry(s*0.8, s, 4); break;
+        case 'corner': geo = new THREE.BoxGeometry(s*0.5, s, s*0.5); break;
+        case 'tube': geo = new THREE.CylinderGeometry(s*0.2, s*0.2, s, 12, 1, true); break;
+        case 'wedge': geo = new THREE.CylinderGeometry(0, s*0.7, s, 3); break;
+        default: geo = new THREE.BoxGeometry(s, s, s);
     }
     ghost.geometry = geo;
     ghost.rotation.y = ghostRotation;
@@ -453,65 +562,61 @@ function updateGhostGeo() {
 function build() {
     let mesh, geo, mat;
     const c = new THREE.Color(currentColor);
-    
-    // Create a group helper function
+    const s = currentSize;
     const makeGroup = () => new THREE.Group();
     
     switch(currentBlock) {
-        // Nature - Trees
-        case 'tree':
-        case 'pine':
-        case 'palm':
+        case 'tree': case 'pine': case 'palm':
             mesh = makeGroup();
-            const trunkG = new THREE.CylinderGeometry(currentSize*0.15, currentSize*0.25, currentSize, 8);
+            const trunkG = new THREE.CylinderGeometry(s*0.15, s*0.25, s, 8);
             const trunkM = new THREE.Mesh(trunkG, new THREE.MeshStandardMaterial({color: 0x5d4037}));
-            trunkM.position.y = currentSize*0.5;
-            const leavesG = new THREE.SphereGeometry(currentSize*0.6, 8, 8);
-            const leavesM = new THREE.Mesh(leavesG, new THREE.MeshStandardMaterial({color: currentBlock==='pine'?0x1a472a:0x2d5016}));
-            leavesM.position.y = currentSize*1.2;
+            trunkM.position.y = s*0.5;
+            const leavesG = new THREE.SphereGeometry(s*0.6, 8, 8);
+            const leavesC = currentBlock==='pine'?0x1a472a:currentBlock==='palm'?0x2d5016:0x228B22;
+            const leavesM = new THREE.Mesh(leavesG, new THREE.MeshStandardMaterial({color: leavesC}));
+            leavesM.position.y = s*1.2;
             mesh.add(trunkM, leavesM);
             break;
         case 'rock':
-        case 'boulder':
-            geo = new THREE.DodecahedronGeometry(currentSize*0.4, 0);
+            geo = new THREE.DodecahedronGeometry(s*0.4, 0);
             mat = new THREE.MeshStandardMaterial({color: 0x666666, flatShading: true});
             mesh = new THREE.Mesh(geo, mat);
-            if (currentBlock === 'boulder') mesh.scale.setScalar(1.5);
             break;
-        case 'bush':
-        case 'shrub':
-            geo = new THREE.SphereGeometry(currentSize*0.4, 12, 10);
+        case 'boulder':
+            geo = new THREE.DodecahedronGeometry(s*0.6, 0);
+            mat = new THREE.MeshStandardMaterial({color: 0x555555, flatShading: true});
+            mesh = new THREE.Mesh(geo, mat);
+            break;
+        case 'bush': case 'shrub':
+            geo = new THREE.SphereGeometry(s*0.4, 12, 10);
             mat = new THREE.MeshStandardMaterial({color: 0x228B22});
             mesh = new THREE.Mesh(geo, mat);
             break;
         case 'flower':
             mesh = makeGroup();
-            const sGeo = new THREE.CylinderGeometry(currentSize*0.02, currentSize*0.02, currentSize*0.4, 6);
-            const sMat = new THREE.MeshStandardMaterial({color: 0x228B22});
-            const sMesh = new THREE.Mesh(sGeo, sMat);
-            sMesh.position.y = currentSize*0.2;
-            const pGeo = new THREE.SphereGeometry(currentSize*0.15, 8, 8);
-            const pMat = new THREE.MeshStandardMaterial({color: c});
-            const pMesh = new THREE.Mesh(pGeo, pMat);
-            pMesh.position.y = currentSize*0.4;
-            const cGeo = new THREE.SphereGeometry(currentSize*0.06, 8, 8);
-            const cMat = new THREE.MeshStandardMaterial({color: 0xFFD700});
-            const cMesh = new THREE.Mesh(cGeo, cMat);
-            cMesh.position.y = currentSize*0.4;
-            mesh.add(sMesh, pMesh, cMesh);
+            const stemG = new THREE.CylinderGeometry(s*0.02, s*0.02, s*0.4, 6);
+            const stemM = new THREE.Mesh(stemG, new THREE.MeshStandardMaterial({color: 0x228B22}));
+            stemM.position.y = s*0.2;
+            const petalG = new THREE.SphereGeometry(s*0.15, 8, 8);
+            const petalM = new THREE.Mesh(petalG, new THREE.MeshStandardMaterial({color: c}));
+            petalM.position.y = s*0.4;
+            const centerG = new THREE.SphereGeometry(s*0.06, 8, 8);
+            const centerM = new THREE.Mesh(centerG, new THREE.MeshStandardMaterial({color: 0xFFD700}));
+            centerM.position.y = s*0.4;
+            mesh.add(stemM, petalM, centerM);
             break;
         case 'cactus':
             mesh = makeGroup();
             const mainStem = new THREE.Mesh(
-                new THREE.CylinderGeometry(currentSize*0.2, currentSize*0.2, currentSize, 8),
+                new THREE.CylinderGeometry(s*0.2, s*0.2, s, 8),
                 new THREE.MeshStandardMaterial({color: 0x2E8B57})
             );
-            mainStem.position.y = currentSize*0.5;
+            mainStem.position.y = s*0.5;
             mesh.add(mainStem);
             for (let i = 0; i < 2; i++) {
-                const armG = new THREE.CylinderGeometry(currentSize*0.1, currentSize*0.1, currentSize*0.5, 6);
+                const armG = new THREE.CylinderGeometry(s*0.1, s*0.1, s*0.5, 6);
                 const armM = new THREE.Mesh(armG, new THREE.MeshStandardMaterial({color: 0x2E8B57}));
-                armM.position.set((i===0?1:-1)*currentSize*0.3, currentSize*0.6, 0);
+                armM.position.set((i===0?1:-1)*s*0.3, s*0.6, 0);
                 armM.rotation.z = (i===0?-1:1)*Math.PI/4;
                 mesh.add(armM);
             }
@@ -519,63 +624,62 @@ function build() {
         case 'mushroom':
             mesh = makeGroup();
             const mushStem = new THREE.Mesh(
-                new THREE.CylinderGeometry(currentSize*0.08, currentSize*0.1, currentSize*0.5, 8),
+                new THREE.CylinderGeometry(s*0.08, s*0.1, s*0.5, 8),
                 new THREE.MeshStandardMaterial({color: 0xDDD})
             );
-            mushStem.position.y = currentSize*0.25;
+            mushStem.position.y = s*0.25;
             const mushCap = new THREE.Mesh(
-                new THREE.SphereGeometry(currentSize*0.3, 12, 8, 0, Math.PI*2, 0, Math.PI/2),
+                new THREE.SphereGeometry(s*0.3, 12, 8, 0, Math.PI*2, 0, Math.PI/2),
                 new THREE.MeshStandardMaterial({color: 0xDC143C})
             );
-            mushCap.position.y = currentSize*0.5;
+            mushCap.position.y = s*0.5;
             mesh.add(mushStem, mushCap);
             break;
         
-        // Shapes
-        case 'slope': geo = new THREE.ConeGeometry(currentSize*0.7, currentSize, 4); break;
-        case 'wedge': geo = new THREE.CylinderGeometry(0, currentSize*0.7, currentSize, 3); break;
-        case 'cylinder': geo = new THREE.CylinderGeometry(currentSize*0.35, currentSize*0.35, currentSize, 16); break;
-        case 'sphere': geo = new THREE.SphereGeometry(currentSize*0.4, 16, 12); break;
-        case 'arch': geo = new THREE.TorusGeometry(currentSize*0.5, currentSize*0.15, 8, 16, Math.PI); break;
-        case 'corner': geo = new THREE.BoxGeometry(currentSize*0.5, currentSize, currentSize*0.5); break;
-        case 'tube': geo = new THREE.CylinderGeometry(currentSize*0.2, currentSize*0.2, currentSize, 12, 1, true); break;
+        case 'slope': geo = new THREE.ConeGeometry(s*0.7, s, 4); break;
+        case 'wedge': geo = new THREE.CylinderGeometry(0, s*0.7, s, 3); break;
+        case 'cylinder': geo = new THREE.CylinderGeometry(s*0.35, s*0.35, s, 16); break;
+        case 'sphere': geo = new THREE.SphereGeometry(s*0.4, 16, 12); break;
+        case 'arch': geo = new THREE.TorusGeometry(s*0.5, s*0.15, 8, 16, Math.PI); break;
+        case 'corner': geo = new THREE.BoxGeometry(s*0.5, s, s*0.5); break;
+        case 'tube': geo = new THREE.CylinderGeometry(s*0.2, s*0.2, s, 12, 1, true); break;
         
-        // Architecture
-        case 'wall': geo = new THREE.BoxGeometry(currentSize, currentSize*1.5, currentSize*0.3); break;
-        case 'window': geo = new THREE.BoxGeometry(currentSize, currentSize, currentSize*0.2); mat = new THREE.MeshPhysicalMaterial({color: 0x87CEEB, transparent: true, opacity: 0.4, roughness: 0.1}); break;
-        case 'door': geo = new THREE.BoxGeometry(currentSize*0.8, currentSize*1.8, currentSize*0.15); mat = new THREE.MeshStandardMaterial({color: 0x8B4513}); break;
+        case 'wall': geo = new THREE.BoxGeometry(s, s*1.5, s*0.3); break;
+        case 'window': geo = new THREE.BoxGeometry(s, s, s*0.2); mat = new THREE.MeshPhysicalMaterial({color: 0x87CEEB, transparent: true, opacity: 0.4, roughness: 0.1}); break;
+        case 'door': geo = new THREE.BoxGeometry(s*0.8, s*1.8, s*0.15); mat = new THREE.MeshStandardMaterial({color: 0x8B4513}); break;
         case 'fence': case 'railing': case 'ladder':
-            const fgroup2 = new THREE.Group();
+            const fgroup = new THREE.Group();
             for (let i = 0; i < 3; i++) {
-                const post = new THREE.Mesh(new THREE.BoxGeometry(currentSize*0.05, currentSize, currentSize*0.05), new THREE.MeshStandardMaterial({color: 0x8B4513}));
-                post.position.set((i-1)*currentSize*0.4, currentSize*0.5, 0);
-                fgroup2.add(post);
+                const post = new THREE.Mesh(new THREE.BoxGeometry(s*0.05, s, s*0.05), new THREE.MeshStandardMaterial({color: 0x8B4513}));
+                post.position.set((i-1)*s*0.4, s*0.5, 0);
+                fgroup.add(post);
             }
             for (let i = 0; i < 3; i++) {
-                const rail = new THREE.Mesh(new THREE.BoxGeometry(currentSize*0.9, currentSize*0.03, currentSize*0.02), new THREE.MeshStandardMaterial({color: 0xA0522D}));
-                rail.position.y = currentSize*(0.2 + i*0.3);
-                fgroup2.add(rail);
+                const rail = new THREE.Mesh(new THREE.BoxGeometry(s*0.9, s*0.03, s*0.02), new THREE.MeshStandardMaterial({color: 0xA0522D}));
+                rail.position.y = s*(0.2 + i*0.3);
+                fgroup.add(rail);
             }
-            mesh = fgroup2;
+            mesh = fgroup;
             break;
-        case 'beam': geo = new THREE.BoxGeometry(currentSize*0.2, currentSize*0.2, currentSize); break;
-        case 'pillar': geo = new THREE.CylinderGeometry(currentSize*0.25, currentSize*0.3, currentSize*2, 12); break;
-        case 'brick': geo = new THREE.BoxGeometry(currentSize*0.9, currentSize*0.5, currentSize*0.5); break;
-        case 'panel': case 'plate': case 'slab': case 'tile': geo = new THREE.BoxGeometry(currentSize, currentSize*0.2, currentSize); break;
-        case 'floor': geo = new THREE.BoxGeometry(currentSize, currentSize*0.1, currentSize); break;
+        case 'beam': geo = new THREE.BoxGeometry(s*0.2, s*0.2, s); break;
+        case 'pillar': geo = new THREE.CylinderGeometry(s*0.25, s*0.3, s*2, 12); break;
+        case 'brick': geo = new THREE.BoxGeometry(s*0.9, s*0.5, s*0.5); break;
+        case 'panel': case 'plate': case 'slab': case 'tile': geo = new THREE.BoxGeometry(s, s*0.2, s); break;
+        case 'floor': case 'platform': case 'ramp': geo = new THREE.BoxGeometry(s, s*0.1, s); break;
         case 'gate':
             const ggroup = new THREE.Group();
-            const frame = new THREE.Mesh(new THREE.BoxGeometry(currentSize*2, currentSize*1.5, currentSize*0.1), new THREE.MeshStandardMaterial({color: 0x4a5568}));
+            const frame = new THREE.Mesh(new THREE.BoxGeometry(s*2, s*1.5, s*0.1), new THREE.MeshStandardMaterial({color: 0x4a5568}));
             ggroup.add(frame);
             for (let i = 0; i < 5; i++) {
-                const bar = new THREE.Mesh(new THREE.BoxGeometry(currentSize*0.05, currentSize*1.3, currentSize*0.05), new THREE.MeshStandardMaterial({color: 0x2d3748}));
-                bar.position.x = (i-2)*currentSize*0.4;
+                const bar = new THREE.Mesh(new THREE.BoxGeometry(s*0.05, s*1.3, s*0.05), new THREE.MeshStandardMaterial({color: 0x2d3748}));
+                bar.position.x = (i-2)*s*0.4;
                 ggroup.add(bar);
             }
             mesh = ggroup;
             break;
+        case 'stair': geo = new THREE.BoxGeometry(s, s*0.5, s); break;
+        case 'roof': geo = new THREE.ConeGeometry(s*0.8, s, 4); break;
         
-        // Materials
         case 'wood': case 'plank': case 'log': mat = new THREE.MeshStandardMaterial({color: 0x8B4513, roughness: 0.9}); break;
         case 'stone': case 'cobblestone': mat = new THREE.MeshStandardMaterial({color: 0x808080, roughness: 0.9}); break;
         case 'marble': mat = new THREE.MeshStandardMaterial({color: 0xF5F5F5, roughness: 0.3}); break;
@@ -594,7 +698,7 @@ function build() {
         case 'fabric': mat = new THREE.MeshStandardMaterial({color: c, roughness: 1}); break;
         case 'leaves': mat = new THREE.MeshStandardMaterial({color: 0x228B22, roughness: 0.8}); break;
         
-        default: geo = new THREE.BoxGeometry(currentSize, currentSize, currentSize);
+        default: geo = new THREE.BoxGeometry(s, s, s);
     }
     
     if (!mesh && geo) {
@@ -613,8 +717,27 @@ function build() {
     }
 }
 
+function erase() {
+    raycaster.setFromCamera(mouse, camera);
+    const hits = raycaster.intersectObjects(placedBlocks, true);
+    if (hits.length > 0) {
+        let obj = hits[0].object;
+        while (obj.parent && obj.parent !== scene) {
+            obj = obj.parent;
+        }
+        const idx = placedBlocks.indexOf(obj);
+        if (idx !== -1) {
+            scene.remove(obj);
+            placedBlocks.splice(idx, 1);
+            document.getElementById('block-count').textContent = --blockCount;
+            toast('Erased');
+        }
+    }
+}
+
 function animate() {
     requestAnimationFrame(animate);
+    updateCam();
     renderer.render(scene, camera);
 }
 
@@ -630,6 +753,7 @@ function setTool(t) {
     currentTool = t;
     document.querySelectorAll('#tool-build, #tool-erase').forEach(b => b.classList.remove('active'));
     document.getElementById('tool-' + t).classList.add('active');
+    ghost.visible = (t === 'build');
     toast('Tool: ' + t);
 }
 
@@ -677,8 +801,7 @@ function rotateGhost() {
 }
 
 function resetCamera() {
-    camTarget = {x:0,y:0,z:0}; camDist = 35; camTheta = 0.785; camPhi = 1.047;
-    updateCam();
+    targetCam = {x:0, y:3, z:0, dist:35, theta:0.785, phi:1.047};
 }
 
 function undo() {
