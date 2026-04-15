@@ -693,7 +693,105 @@
             color: var(--gray-400);
             font-weight: 500;
         }
-        
+
+        /* Games Section */
+        .games-section {
+            max-width: 1150px;
+            margin: 0 auto 60px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+        .section-heading {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            background: linear-gradient(135deg, #f472b6, #db2777);
+            border: 1px solid rgba(244,114,182,0.5);
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(219,39,119,0.25);
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: white;
+            margin: 0 0 6px;
+        }
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--gray-400);
+            margin: 0;
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 22px;
+        }
+        .game-card {
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardFadeUp 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(244,114,182,0.45);
+            box-shadow: 0 25px 60px rgba(219,39,119,0.22), 0 0 40px rgba(219,39,119,0.12);
+        }
+        .game-thumb {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 1.6rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .game-card:hover .game-thumb {
+            transform: scale(1.1) rotate(-3deg);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        .game-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 0 6px;
+        }
+        .game-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #f472b6;
+            background: rgba(244,114,182,0.1);
+            border: 1px solid rgba(244,114,182,0.2);
+        }
+
         .tool-card {
             background: rgba(17, 24, 39, 0.75);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1161,6 +1259,7 @@
             <a href="#" class="nav-3d" onclick="openBook1Modal(); return false;"><i class="fas fa-book text-xs"></i> World Class 2-1</a>
             <a href="#" class="nav-3d" onclick="openBook2bModal(); return false;"><i class="fas fa-book-open text-xs"></i> World Class 2-2</a>
             <a href="#" class="nav-3d" onclick="openBrickForgeModal(); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
+            <a href="#games" class="nav-3d" onclick="event.preventDefault(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});"><i class="fas fa-gamepad text-xs"></i> Arcade</a>
         </nav>
         
         <div class="flex items-center gap-3">
@@ -1197,6 +1296,9 @@
         </a>
         <a href="#" class="menu-item" onclick="openBrickForgeModal(); toggleMenu(); return false;">
             <i class="fas fa-cube"></i><span>Brick Forge</span>
+        </a>
+        <a href="#games" class="menu-item" onclick="event.preventDefault(); toggleMenu(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});">
+            <i class="fas fa-gamepad"></i><span>Arcade</span>
         </a>
         <a href="#" class="menu-item" onclick="showToast('EduGrade coming soon!'); return false;">
             <i class="fas fa-brain"></i><span>EduGrade Pro</span>
@@ -1335,6 +1437,37 @@
     </div>
 </div>
 
+<!-- Games Section -->
+<div class="games-section">
+    <div class="section-heading">
+        <div class="section-tag"><i class="fas fa-gamepad"></i> Arcade</div>
+        <h2 class="section-title">Browser Games</h2>
+        <p class="section-subtitle">Quick brain breaks — no install needed</p>
+    </div>
+    <div class="games-grid">
+        <div class="game-card" onclick="openColonyModal()" style="animation-delay:0.05s;">
+            <div class="game-thumb bg-gradient-to-br from-rose-600 to-rose-800"><i class="fas fa-rocket"></i></div>
+            <h4>Last Colony</h4>
+            <span class="game-tag">Strategy</span>
+        </div>
+        <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.15s;">
+            <div class="game-thumb bg-gradient-to-br from-cyan-500 to-cyan-700"><i class="fas fa-puzzle-piece"></i></div>
+            <h4>Word Scramble</h4>
+            <span class="game-tag">Vocabulary</span>
+        </div>
+        <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.25s;">
+            <div class="game-thumb bg-gradient-to-br from-amber-500 to-amber-700"><i class="fas fa-bolt"></i></div>
+            <h4>Typing Race</h4>
+            <span class="game-tag">Speed</span>
+        </div>
+        <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.35s;">
+            <div class="game-thumb bg-gradient-to-br from-emerald-500 to-emerald-700"><i class="fas fa-brain"></i></div>
+            <h4>Memory Match</h4>
+            <span class="game-tag">Memory</span>
+        </div>
+    </div>
+</div>
+
 <!-- Stat Strip -->
 <div class="stat-strip">
     <div class="stat-card">
@@ -1453,6 +1586,21 @@
         <button onclick="closeBrickForgeModal()"><i class="fas fa-times"></i> Close</button>
     </div>
     <iframe id="brickforge-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- COLONY GAME FULLSCREEN MODAL -->
+<div id="colony-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #be123c, #881337);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#fb7185,#be123c);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-rocket" style="color:white;"></i></div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">Last Colony — Mars 2041</div>
+                <div style="font-size:.7rem;color:rgba(251,113,133,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Browser Strategy Game</div>
+            </div>
+        </div>
+        <button onclick="closeColonyModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="colony-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
 <!-- Toast -->
@@ -1576,7 +1724,8 @@ function setNavActive(key) {
         'toefl': ['TOEFL', 'TOEFL iBT'],
         'book1': ['World Class 2-1'],
         'book2': ['World Class 2-2'],
-        'brickforge': ['Brick Forge']
+        'brickforge': ['Brick Forge'],
+        'colony': ['Last Colony']
     };
     const labels = map[key] || [];
     document.querySelectorAll('.nav-3d, .menu-item').forEach(el => {
@@ -1662,6 +1811,18 @@ function closeBrickForgeModal() {
     clearNavActive();
 }
 
+function openColonyModal() {
+    showToast('Loading Last Colony... one moment');
+    var frame = document.getElementById('colony-frame');
+    frame.src = 'apps/games/colony/index.html';
+    document.getElementById('colony-modal').classList.add('open');
+    setNavActive('colony');
+}
+function closeColonyModal() {
+    document.getElementById('colony-modal').classList.remove('open');
+    clearNavActive();
+}
+
 function showToast(msg) {
     var t = document.getElementById('hub-toast');
     document.getElementById('hub-toast-msg').textContent = msg;
@@ -1675,6 +1836,8 @@ document.addEventListener('keydown', function(e) {
         closeToeflModal(); 
         closeBook1Modal();
         closeBook2bModal(); 
+        closeBrickForgeModal();
+        closeColonyModal();
         closeToeflLogin();
         const menu = document.getElementById('slideMenu');
         if (menu.classList.contains('open')) toggleMenu();
