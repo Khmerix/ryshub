@@ -149,6 +149,33 @@
         .info-box strong {
             color: #722f37;
         }
+        
+        .toggle-form {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .toggle-form a {
+            color: #722f37;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            font-size: 14px;
+        }
+        .success-message.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -176,8 +203,34 @@
             <button type="submit" class="login-btn">Login to Teacher Portal</button>
         </form>
         
+        <form id="registerForm" style="display:none;">
+            <div class="form-group">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Choose a username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Create a password" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="regConfirm">Confirm Password</label>
+                <input type="password" id="regConfirm" placeholder="Re-enter password" required>
+            </div>
+            
+            <button type="submit" class="login-btn">Create Account</button>
+        </form>
+        
+        <p class="toggle-form" id="toggleText">Don't have an account? <a onclick="toggleMode(event); return false;">Register</a></p>
+        <p class="toggle-form" id="toggleTextRegister" style="display:none;"><a onclick="toggleMode(event); return false;">Back to Login</a></p>
+        
         <div id="errorMessage" class="error-message">
             Invalid username or password. Please try again.
+        </div>
+        
+        <div id="successMessage" class="success-message">
+            Account created successfully! Please log in.
         </div>
         
         <div class="secure-badge">
@@ -192,18 +245,34 @@
     </div>
     
     <script>
-        // Teacher credentials (hashed for basic security)
-        // Default: username: teacher / password: WorldClass2024!
-        const TEACHERS = {
-            'teacher': 'a3d1b5e8c7f9e2d4b6a8c0e1f3d5b7a9', // MD5 hash of WorldClass2024!
-            'admin': 'b4c8d2e1f5a9c3e7b1d6f0a4e8c2b5d7'   // MD5 hash of Admin2024!
+        // Legacy hardcoded credentials for backward compatibility
+        const validUsers = {
+            'teacher': 'WorldClass2024!',
+            'admin': 'Admin2024!'
         };
         
-        // Simple MD5 hash function
-        function md5(string) {
-            // This is a simplified version - in production use a proper crypto library
-            // For now, we'll use a simple string comparison for ease of use
-            return btoa(string).split('').reverse().join('');
+        function getRegisteredUsers() {
+            try {
+                const data = localStorage.getItem('ryshub_users');
+                return data ? JSON.parse(data) : {};
+            } catch(e) {
+                return {};
+            }
+        }
+        
+        function saveRegisteredUsers(users) {
+            localStorage.setItem('ryshub_users', JSON.stringify(users));
+        }
+        
+        function toggleMode(e) {
+            e.preventDefault();
+            const isLogin = document.getElementById('loginForm').style.display !== 'none';
+            document.getElementById('loginForm').style.display = isLogin ? 'none' : 'block';
+            document.getElementById('registerForm').style.display = isLogin ? 'block' : 'none';
+            document.getElementById('toggleText').style.display = isLogin ? 'none' : 'block';
+            document.getElementById('toggleTextRegister').style.display = isLogin ? 'block' : 'none';
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
         }
         
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -212,21 +281,16 @@
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMessage');
+            const registered = getRegisteredUsers();
             
-            // Check credentials (plain text comparison for simplicity)
-            const validUsers = {
-                'teacher': 'WorldClass2024!',
-                'admin': 'Admin2024!'
-            };
+            const isValid = (validUsers[username] && validUsers[username] === password) ||
+                            (registered[username] && registered[username] === password);
             
-            if (validUsers[username] && validUsers[username] === password) {
-                // Store login session
+            if (isValid) {
                 sessionStorage.setItem('teacherLoggedIn', 'true');
                 sessionStorage.setItem('teacherUsername', username);
                 sessionStorage.setItem('loginTime', new Date().toISOString());
-                
-                // Redirect to main content
-                window.location.href = 'index.html';
+                window.location.href = '../index.html';
             } else {
                 errorDiv.classList.add('show');
                 document.getElementById('password').value = '';
@@ -234,13 +298,59 @@
             }
         });
         
-        // Clear error on input
-        document.getElementById('username').addEventListener('input', function() {
-            document.getElementById('errorMessage').classList.remove('show');
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('regUsername').value.trim().toLowerCase();
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirm').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            if (!username || !password) {
+                errorDiv.textContent = 'Please enter a username and password.';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            if (password !== confirm) {
+                errorDiv.textContent = 'Passwords do not match. Please try again.';
+                errorDiv.classList.add('show');
+                document.getElementById('regConfirm').value = '';
+                document.getElementById('regConfirm').focus();
+                return;
+            }
+            
+            const registered = getRegisteredUsers();
+            if (registered[username] || validUsers[username]) {
+                errorDiv.textContent = 'Username already exists. Please choose another.';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            registered[username] = password;
+            saveRegisteredUsers(registered);
+            
+            errorDiv.classList.remove('show');
+            successDiv.classList.add('show');
+            document.getElementById('registerForm').reset();
+            setTimeout(function() {
+                toggleMode({ preventDefault: function(){} });
+            }, 1500);
         });
-        document.getElementById('password').addEventListener('input', function() {
-            document.getElementById('errorMessage').classList.remove('show');
+        
+        // Clear messages on input
+        ['username','password','regUsername','regPassword','regConfirm'].forEach(function(id) {
+            document.getElementById(id).addEventListener('input', function() {
+                document.getElementById('errorMessage').classList.remove('show');
+                document.getElementById('successMessage').classList.remove('show');
+            });
         });
+        
+        // Handle ?mode=register
+        if (window.location.search.includes('mode=register')) {
+            toggleMode({ preventDefault: function(){} });
+        }
     </script>
 </body>
 </html>

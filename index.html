@@ -1503,7 +1503,7 @@
         
         <nav class="hidden md:flex nav-scroll">
             <a href="#" class="nav-3d" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
-            <a href="#" class="nav-3d" onclick="openToeflLogin(); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
+            <a href="#" class="nav-3d" onclick="openToeflModal(); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
             <a href="#" class="nav-3d" onclick="openBook1Modal(); return false;"><i class="fas fa-book text-xs"></i> World Class 2-1</a>
             <a href="#" class="nav-3d" onclick="openBook2bModal(); return false;"><i class="fas fa-book-open text-xs"></i> World Class 2-2</a>
             <a href="#" class="nav-3d" onclick="openBrickForgeModal(); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
@@ -1511,8 +1511,8 @@
         </nav>
         
         <div class="flex items-center gap-3">
-            <button class="btn-outline hidden sm:block" onclick="showToast('Login coming soon!')">Log In</button>
-            <button class="btn-primary" onclick="showToast('Registration coming soon!')">Register</button>
+            <button class="btn-outline hidden sm:block" onclick="window.location.href='apps/login.html'">Log In</button>
+            <button class="btn-primary" onclick="window.location.href='apps/login.html?mode=register'">Register</button>
             <button class="md:hidden w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white" onclick="toggleMenu()">
                 <i class="fas fa-bars"></i>
             </button>
@@ -1533,7 +1533,7 @@
         <a href="#" class="menu-item active" onclick="showToast('Already on Home'); toggleMenu(); return false;">
             <i class="fas fa-home"></i><span>Home</span>
         </a>
-        <a href="#" class="menu-item" onclick="openToeflLogin(); toggleMenu(); return false;">
+        <a href="#" class="menu-item" onclick="openToeflModal(); toggleMenu(); return false;">
             <i class="fas fa-graduation-cap"></i><span>TOEFL iBT</span>
         </a>
         <a href="#" class="menu-item" onclick="openBook1Modal(); toggleMenu(); return false;">
@@ -1586,7 +1586,7 @@
         </p>
         <div class="hero-btn-row">
             <div class="hero-btns">
-                <button class="glow-btn text-base px-8 py-3.5" onclick="openToeflLogin()">
+                <button class="glow-btn text-base px-8 py-3.5" onclick="openToeflModal()">
                     <i class="fas fa-play mr-2"></i> Start TOEFL Test
                 </button>
                 <button class="glow-btn-outline text-base px-8 py-3.5" onclick="openBook1Modal()">
@@ -1622,7 +1622,7 @@
 <!-- Cards -->
 <div class="cards-grid">
     <!-- TOEFL -->
-    <div class="tool-card" data-glow="blue" onclick="openToeflLogin()" style="animation-delay:0.05s;">
+    <div class="tool-card" data-glow="blue" onclick="openToeflModal()" style="animation-delay:0.05s;">
         <div class="shine"></div>
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white"><i class="fas fa-graduation-cap"></i></div>
@@ -1816,31 +1816,6 @@
 </footer>
 
 <!-- Modals (preserved) -->
-<!-- TOEFL LOGIN MODAL -->
-<div id="toefl-login-overlay" class="login-modal-overlay">
-    <div class="login-card">
-        <button onclick="closeToeflLogin()" style="position:absolute;top:16px;right:16px;background:var(--gray-700);border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;color:var(--gray-300);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;" onmouseover="this.style.background='var(--primary-blue)'; this.style.color='white'" onmouseout="this.style.background='var(--gray-700)'; this.style.color='var(--gray-300)'"><i class="fas fa-times"></i></button>
-        <div style="text-align:center;margin-bottom:28px;">
-            <div style="width:70px;height:70px;margin:0 auto 14px;border-radius:18px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(37,99,235,.4);">
-                <i class="fas fa-graduation-cap" style="font-size:1.8rem;color:white;"></i>
-            </div>
-            <h2 style="font-size:1.7rem;font-weight:800;color:var(--white);margin:0 0 4px;">TOEFL iBT</h2>
-            <p style="color:var(--gray-400);font-size:.9rem;margin:0;">Complete Test Platform · 2026</p>
-        </div>
-        <div style="margin-bottom:16px;">
-            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-bottom:8px;">Student Name</label>
-            <input id="toefl-name" type="text" class="login-input" placeholder="Enter your full name">
-        </div>
-        <div style="margin-bottom:24px;">
-            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-bottom:8px;">Student ID</label>
-            <input id="toefl-id" type="text" class="login-input" placeholder="Enter your ID">
-        </div>
-        <button onclick="launchToefl()" style="width:100%;padding:15px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-dark));color:white;border:none;border-radius:13px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 var(--primary-dark),0 8px 24px rgba(37,99,235,.4);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-            <i class="fas fa-sign-in-alt"></i> &nbsp;Start Test
-        </button>
-    </div>
-</div>
-
 <!-- TOEFL FULLSCREEN MODAL -->
 <div id="toefl-modal" class="fs-modal">
     <div class="fs-modal-bar">
@@ -2058,30 +2033,11 @@ function toggleMenu() {
     overlay.classList.toggle('open');
 }
 
-function openToeflLogin() {
-    document.getElementById('toefl-login-overlay').classList.add('open');
-    setNavActive('toefl');
-    setTimeout(function(){ document.getElementById('toefl-name').focus(); }, 200);
-}
-function closeToeflLogin() {
-    document.getElementById('toefl-login-overlay').classList.remove('open');
-    clearNavActive();
-}
-function launchToefl() {
-    var name = document.getElementById('toefl-name').value.trim();
-    var id = document.getElementById('toefl-id').value.trim();
-    if (!name || !id) { showToast('Please enter your name and ID'); return; }
-    closeToeflLogin();
+function openToeflModal() {
     var frame = document.getElementById('toefl-frame');
     frame.src = 'apps/toefl.html';
     document.getElementById('toefl-modal').classList.add('open');
     setNavActive('toefl');
-    frame.onload = function() {
-        try {
-            frame.contentDocument.getElementById('student-name').value = name;
-            frame.contentDocument.getElementById('student-id').value = id;
-        } catch(e) {}
-    };
 }
 function closeToeflModal() {
     document.getElementById('toefl-modal').classList.remove('open');
@@ -2151,15 +2107,12 @@ document.addEventListener('keydown', function(e) {
         closeBook2bModal(); 
         closeBrickForgeModal();
         closeColonyModal();
-        closeToeflLogin();
         const menu = document.getElementById('slideMenu');
         if (menu.classList.contains('open')) toggleMenu();
     }
 });
 
-document.getElementById('toefl-login-overlay').addEventListener('click', function(e) {
-    if (e.target === this) closeToeflLogin();
-});
+
 
 /* ===== Text Scramble Effect on Hero Title ===== */
 (function(){

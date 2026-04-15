@@ -15,39 +15,6 @@
         .section-view { display: none; }
         .section-view.active { display: block; }
         
-        /* Login card specific */
-        .login-card {
-            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
-            border: 1px solid rgba(51, 65, 85, 0.5);
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            max-width: 420px;
-            width: 100%;
-            padding: 40px;
-        }
-        
-        .login-input {
-            background: rgba(15, 23, 42, 0.8);
-            border: 2px solid rgba(51, 65, 85, 0.5);
-            border-radius: 12px;
-            padding: 14px 18px;
-            color: #f8fafc;
-            font-size: 1rem;
-            width: 100%;
-            transition: all 0.3s;
-        }
-        
-        .login-input:focus {
-            outline: none;
-            border-color: var(--section-primary);
-            box-shadow: 0 0 20px var(--section-glow);
-        }
-        
-        .login-input::placeholder {
-            color: #64748b;
-        }
-        
         /* Section selection cards */
         .section-card {
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
@@ -402,41 +369,8 @@
     </style>
 </head>
 <body>
-    <!-- ==================== LOGIN SCREEN ==================== -->
-    <div id="login-screen" class="section-view active" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;">
-        <div class="login-card">
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 mx-auto mb-4 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6);">
-                    <i class="fas fa-graduation-cap text-3xl text-white"></i>
-                </div>
-                <h1 class="text-2xl font-bold text-white mb-2">TOEFL iBT</h1>
-                <p class="text-slate-400">Complete Test Platform</p>
-            </div>
-            
-            <form id="login-form" onsubmit="handleLogin(event)">
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-300 mb-2">Student Name</label>
-                    <input type="text" id="student-name" class="login-input" placeholder="Enter your full name" required>
-                </div>
-                
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-slate-300 mb-2">Student ID</label>
-                    <input type="text" id="student-id" class="login-input" placeholder="Enter your ID" required>
-                </div>
-                
-                <button type="submit" class="btn-3d w-full" style="padding: 16px;">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Start Test
-                </button>
-            </form>
-            
-            <div class="mt-6 text-center text-sm text-slate-500">
-                <p>New TOEFL iBT Format • January 2026</p>
-            </div>
-        </div>
-    </div>
-
     <!-- ==================== DASHBOARD ==================== -->
-    <div id="dashboard-screen" class="section-view" style="padding: 40px 20px;">
+    <div id="dashboard-screen" class="section-view active" style="padding: 40px 20px; display: block;">
         <div class="max-w-6xl mx-auto">
             <!-- Header -->
             <div class="glass-frame p-6 mb-8">
@@ -445,8 +379,8 @@
                         <h1 class="text-2xl font-bold text-white mb-1">Welcome, <span id="dashboard-name">Student</span>!</h1>
                         <p class="text-slate-400">Select a section to begin your TOEFL iBT test</p>
                     </div>
-                    <button onclick="logout()" class="btn-3d btn-3d-secondary">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    <button onclick="resetTest()" class="btn-3d btn-3d-secondary">
+                        <i class="fas fa-redo mr-2"></i>Reset Test
                     </button>
                 </div>
             </div>
@@ -2987,7 +2921,7 @@
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
         // ==================== GLOBAL STATE ====================
-        let studentName = '';
+        let studentName = 'Student';
         let studentId = '';
         let completedSections = { reading: false, listening: false, speaking: false, writing: false };
         let currentSection = '';
@@ -3016,26 +2950,11 @@
         let currentRecordingQuestion = null;
         let recordingTimeout = null;
         
-        // ==================== LOGIN & NAVIGATION ====================
-        function handleLogin(e) {
-            e.preventDefault();
-            studentName = document.getElementById('student-name').value.trim();
-            studentId = document.getElementById('student-id').value.trim();
-            
-            if (studentName && studentId) {
-                showView('dashboard-screen');
-                document.getElementById('dashboard-name').textContent = studentName;
-                updateDashboard();
-            }
-        }
-        
-        function logout() {
-            studentName = '';
-            studentId = '';
+        // ==================== NAVIGATION ====================
+        function resetTest() {
             completedSections = { reading: false, listening: false, speaking: false, writing: false };
-            document.getElementById('student-name').value = '';
-            document.getElementById('student-id').value = '';
-            showView('login-screen');
+            showView('dashboard-screen');
+            updateDashboard();
         }
         
         function showView(viewId) {
@@ -3046,7 +2965,7 @@
             const view = document.getElementById(viewId);
             if (view) {
                 view.classList.add('active');
-                view.style.display = viewId === 'login-screen' ? 'flex' : 'block';
+                view.style.display = 'block';
             }
         }
         
@@ -3078,6 +2997,8 @@
                 const card = document.getElementById('card-' + section);
                 if (completedSections[section]) {
                     card.classList.add('completed');
+                } else {
+                    card.classList.remove('completed');
                 }
             });
         }
@@ -3621,6 +3542,11 @@
                 backToDashboard();
             }
         }
+        
+        // Initialize dashboard on load
+        document.getElementById('dashboard-name').textContent = studentName;
+        showView('dashboard-screen');
+        updateDashboard();
     </script>
 </body>
 </html>
