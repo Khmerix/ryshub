@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEFL iBT - Design System Preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="toefl-styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+        .preview-card {
+            transition: all 0.3s ease;
+        }
+        .preview-card:hover {
+            transform: translateY(-5px);
+        }
+        .color-swatch {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Title -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-4">
+                <i class="fas fa-palette text-blue-400 mr-3"></i>
+                TOEFL iBT Design System
+            </h1>
+            <p class="text-slate-400 text-lg">Shared CSS Architecture - Section-Specific Color Themes</p>
+        </div>
+
+        <!-- Section Previews -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Reading -->
+            <a href="toeflreading-MIGRATED.html" class="preview-card glass-frame p-6 block text-center no-underline">
+                <div class="color-swatch mx-auto mb-4" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                    <i class="fas fa-book-open text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Reading</h3>
+                <p class="text-sm text-slate-400 mb-4">Blue Theme</p>
+                <span class="badge badge-blue">Migrated</span>
+            </a>
+
+            <!-- Listening -->
+            <a href="listening/toefllistening-MIGRATED.html" class="preview-card glass-frame p-6 block text-center no-underline">
+                <div class="color-swatch mx-auto mb-4" style="background: linear-gradient(135deg, #34d399, #10b981);">
+                    <i class="fas fa-headphones text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Listening</h3>
+                <p class="text-sm text-slate-400 mb-4">Emerald Theme</p>
+                <span class="badge badge-green">Migrated</span>
+            </a>
+
+            <!-- Speaking -->
+            <a href="Speaking/toeflspeaking-MIGRATED.html" class="preview-card glass-frame p-6 block text-center no-underline">
+                <div class="color-swatch mx-auto mb-4" style="background: linear-gradient(135deg, #fb923c, #f97316);">
+                    <i class="fas fa-microphone text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Speaking</h3>
+                <p class="text-sm text-slate-400 mb-4">Orange Theme</p>
+                <span class="badge badge-orange">Migrated</span>
+            </a>
+
+            <!-- Writing -->
+            <a href="toeflwriting-MIGRATED.html" class="preview-card glass-frame p-6 block text-center no-underline">
+                <div class="color-swatch mx-auto mb-4" style="background: linear-gradient(135deg, #c084fc, #a855f7);">
+                    <i class="fas fa-pen-fancy text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Writing</h3>
+                <p class="text-sm text-slate-400 mb-4">Purple Theme</p>
+                <span class="badge badge-purple">Migrated</span>
+            </a>
+        </div>
+
+        <!-- Component Showcase -->
+        <div class="glass-frame p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-layer-group text-blue-400 mr-2"></i>
+                Shared Components
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Buttons -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Buttons</h3>
+                    <div class="space-y-3">
+                        <button class="btn-3d w-full">
+                            <i class="fas fa-play mr-2"></i>Primary Button
+                        </button>
+                        <button class="btn-3d btn-3d-secondary w-full">
+                            <i class="fas fa-pause mr-2"></i>Secondary Button
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Badges -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Badges</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="badge badge-blue"><i class="fas fa-book mr-1"></i>Reading</span>
+                        <span class="badge badge-green"><i class="fas fa-headphones mr-1"></i>Listening</span>
+                        <span class="badge badge-orange"><i class="fas fa-microphone mr-1"></i>Speaking</span>
+                        <span class="badge badge-purple"><i class="fas fa-pen mr-1"></i>Writing</span>
+                        <span class="badge badge-cyan"><i class="fas fa-user-tie mr-1"></i>Talk</span>
+                    </div>
+                </div>
+
+                <!-- Timer -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Timer</h3>
+                    <div class="timer-display inline-block">35:00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bars -->
+        <div class="glass-frame p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-chart-line text-blue-400 mr-2"></i>
+                Progress Indicators
+            </h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-slate-400">Reading Progress</span>
+                        <span class="font-bold" style="color: #2563eb;">75%</span>
+                    </div>
+                    <div class="progress-container h-3">
+                        <div class="progress-fill" style="width: 75%; background: linear-gradient(90deg, #2563eb, #06b6d4);"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-slate-400">Listening Progress</span>
+                        <span class="font-bold" style="color: #10b981;">60%</span>
+                    </div>
+                    <div class="progress-container h-3">
+                        <div class="progress-fill" style="width: 60%; background: linear-gradient(90deg, #10b981, #2dd4bf);"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-slate-400">Speaking Progress</span>
+                        <span class="font-bold" style="color: #f97316;">45%</span>
+                    </div>
+                    <div class="progress-container h-3">
+                        <div class="progress-fill" style="width: 45%; background: linear-gradient(90deg, #f97316, #fbbf24);"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-slate-400">Writing Progress</span>
+                        <span class="font-bold" style="color: #a855f7;">30%</span>
+                    </div>
+                    <div class="progress-container h-3">
+                        <div class="progress-fill" style="width: 30%; background: linear-gradient(90deg, #a855f7, #e879f9);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Structure -->
+        <div class="glass-frame p-8">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-folder-tree text-blue-400 mr-2"></i>
+                File Structure
+            </h2>
+            <pre class="bg-slate-900/50 p-4 rounded-lg text-sm text-slate-300 overflow-x-auto">
+TOEFL iBT/
+├── toefl-styles.css              ← Shared design system (26KB)
+├── toefl-section-colors.css      ← Section-specific themes (4KB)
+├── DESIGN-SYSTEM-PREVIEW.html    ← This preview file
+│
+├── toeflreading-MIGRATED.html    ← Reading section (Blue theme)
+├── toeflwriting-MIGRATED.html    ← Writing section (Purple theme)
+│
+├── listening/
+│   └── toefllistening-MIGRATED.html  ← Listening section (Emerald theme)
+│
+└── Speaking/
+    └── toeflspeaking-MIGRATED.html    ← Speaking section (Orange theme)
+            </pre>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 text-slate-500 text-sm">
+            <p>TOEFL iBT Design System v1.0 | All sections migrated to shared CSS architecture</p>
+        </div>
+    </div>
+</body>
+</html>

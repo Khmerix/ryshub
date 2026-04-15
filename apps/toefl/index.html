@@ -15,6 +15,264 @@
         .section-view { display: none; }
         .section-view.active { display: block; }
         
+        /* Login page background - TOEFL Theme */
+        /* Enhanced Universal Light Theme Background */
+        .light-theme-bg,
+        body {
+            background: 
+                linear-gradient(160deg, #f8fafc 0%, #f1f5f9 30%, #e2e8f0 50%, #f1f5f9 70%, #f8fafc 100%);
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Animated gradient orbs - layer 1 */
+        .light-theme-bg::before,
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 90% 10%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 70% 60% at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 20% 70%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 40% 30% at 50% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+            animation: orbFloat 25s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes orbFloat {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1);
+                filter: blur(0px);
+            }
+            25% { 
+                transform: translate(20px, -30px) scale(1.05);
+                filter: blur(1px);
+            }
+            50% { 
+                transform: translate(-15px, 20px) scale(0.98);
+                filter: blur(0px);
+            }
+            75% { 
+                transform: translate(25px, 15px) scale(1.02);
+                filter: blur(1px);
+            }
+        }
+        
+        /* Mesh gradient overlay - layer 2 */
+        .light-theme-bg::after,
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                /* Subtle grid pattern */
+                linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Floating shapes with blur - more visible */
+        .floating-shape {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.25;
+            animation: shapeFloat 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            top: -5%;
+            left: -5%;
+            animation-delay: 0s;
+        }
+        
+        .shape-2 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            top: 50%;
+            right: -10%;
+            animation-delay: -7s;
+        }
+        
+        .shape-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #34d399, #10b981);
+            bottom: 10%;
+            left: 10%;
+            animation-delay: -14s;
+        }
+        
+        .shape-4 {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            top: 20%;
+            right: 30%;
+            animation-delay: -10s;
+        }
+        
+        .shape-5 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #818cf8, #6366f1);
+            bottom: 30%;
+            right: 20%;
+            animation-delay: -5s;
+        }
+        
+        @keyframes shapeFloat {
+            0%, 100% { 
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            33% { 
+                transform: translate(40px, -40px) rotate(120deg) scale(1.1);
+            }
+            66% { 
+                transform: translate(-30px, 30px) rotate(240deg) scale(0.95);
+            }
+        }
+        
+        /* Decorative corner elements */
+        .corner-decoration {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+        
+        .corner-decoration.top-left {
+            top: -100px;
+            left: -100px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+        }
+        
+        .corner-decoration.top-right {
+            top: -100px;
+            right: -100px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+        }
+        
+        .corner-decoration.bottom-left {
+            bottom: -100px;
+            left: -100px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
+        }
+        
+        .corner-decoration.bottom-right {
+            bottom: -100px;
+            right: -100px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
+        }
+        
+        /* Wave decoration at bottom */
+        .wave-decoration {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, rgba(241, 245, 249, 0.8), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Ensure content is above background */
+        .glass-frame, .login-card, .security-info-card, .security-warning-card {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-view {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Light theme glass frame override */
+        .light-theme-bg .glass-frame,
+        body .glass-frame {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
+            border: 1px solid rgba(203, 213, 225, 0.6);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+        
+        .light-theme-bg .glass-frame::before,
+        body .glass-frame::before {
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+        }
+        
+        /* Login card specific - Updated for light theme */
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(203, 213, 225, 0.5);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.8),
+                0 0 100px rgba(59, 130, 246, 0.1);
+            backdrop-filter: blur(20px);
+            max-width: 420px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981, #f59e0b);
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .login-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(203, 213, 225, 0.8);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: #1e293b;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+        
+        .login-input::placeholder {
+            color: #94a3b8;
+        }
+        
         /* Section selection cards */
         .section-card {
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
@@ -366,22 +624,287 @@
         .hidden {
             display: none !important;
         }
+        
+        /* Security Warning Overlay */
+        .security-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .security-warning-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 0.99) 100%);
+            border: 2px solid #ef4444;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 60px rgba(239, 68, 68, 0.3);
+            animation: securityPulse 2s infinite;
+        }
+        
+        @keyframes securityPulse {
+            0%, 100% { box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 60px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 80px rgba(239, 68, 68, 0.5); }
+        }
+        
+        .security-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(145deg, #ef4444, #b91c1c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 2.5rem;
+            animation: securityShake 0.5s ease-in-out;
+        }
+        
+        @keyframes securityShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        
+        .strike-counter {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+        
+        .strike-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(51, 65, 85, 0.5);
+            border: 2px solid rgba(100, 116, 139, 0.5);
+            transition: all 0.3s;
+        }
+        
+        .strike-dot.active {
+            background: #ef4444;
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+        }
+        
+        .security-info-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(245, 158, 11, 0.4);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 600px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .security-rule {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(241, 245, 249, 0.8);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 3px solid #f59e0b;
+        }
+        
+        .security-rule i {
+            color: #f59e0b;
+            font-size: 1.25rem;
+            margin-top: 2px;
+        }
+        
+        .security-acknowledged {
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1)) !important;
+            border-color: #10b981 !important;
+        }
     </style>
 </head>
 <body>
-    <script>if(sessionStorage.getItem('ryshub_role') !== 'teacher'){ window.location.href='login.html'; }</script>
+    <!-- ==================== SECURITY NOTICE (Shown after login) ==================== -->
+    <div id="security-notice" class="section-view light-theme-bg" style="display: none; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;">
+        <div style="max-width: 700px; width: 100%;">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                    <i class="fas fa-shield-alt text-3xl text-white"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-slate-800 mb-2">Test Security Notice</h1>
+                <p class="text-slate-600">Please read carefully before proceeding</p>
+            </div>
+            
+            <div class="security-info-card">
+                <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-exclamation-triangle text-amber-500"></i>
+                    Important Rules
+                </h3>
+                <p class="text-slate-700 mb-4">To maintain test integrity, the following actions are strictly prohibited during the test:</p>
+                
+                <div class="security-rule">
+                    <i class="fas fa-ban"></i>
+                    <div>
+                        <p class="text-slate-800 font-medium">No Screenshots</p>
+                        <p class="text-slate-600 text-sm">Taking screenshots or screen recordings is not allowed</p>
+                    </div>
+                </div>
+                
+                <div class="security-rule">
+                    <i class="fas fa-copy"></i>
+                    <div>
+                        <p class="text-slate-800 font-medium">No Copy & Paste</p>
+                        <p class="text-slate-600 text-sm">Copying and pasting text is disabled during the test</p>
+                    </div>
+                </div>
+                
+                <div class="security-rule">
+                    <i class="fas fa-window-restore"></i>
+                    <div>
+                        <p class="text-slate-800 font-medium">No Window Switching</p>
+                        <p class="text-slate-600 text-sm">Switching to other applications or browser tabs is prohibited</p>
+                    </div>
+                </div>
+                
+                <div class="security-rule">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <div>
+                        <p class="text-slate-800 font-medium">No Right-Click Menu</p>
+                        <p class="text-slate-600 text-sm">Context menu is disabled to prevent cheating</p>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 rounded-xl" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <p class="text-slate-800 font-semibold flex items-center gap-2">
+                        <i class="fas fa-exclamation-circle text-red-500"></i>
+                        3-Strike Warning System
+                    </p>
+                    <p class="text-slate-600 text-sm mt-2">Any violation of these rules will result in a warning. After <strong class="text-red-500">3 warnings</strong>, your test will be automatically terminated and all progress will be lost.</p>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button onclick="acknowledgeSecurity()" class="btn-3d" style="padding: 16px 48px; font-size: 1.1rem;">
+                    <i class="fas fa-check-circle mr-2"></i>I Understand & Agree
+                </button>
+                <p class="text-slate-600 text-sm mt-4">By clicking above, you agree to follow all test security protocols</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SECURITY WARNING OVERLAY ==================== -->
+    <div id="security-warning" class="security-overlay hidden">
+        <div class="security-warning-card">
+            <div class="security-icon">
+                <i class="fas fa-exclamation-triangle text-white"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">Security Violation Detected!</h2>
+            <p id="violation-message" class="text-slate-300 mb-4">You have violated test security rules.</p>
+            
+            <div class="strike-counter">
+                <div class="strike-dot" id="strike-1"></div>
+                <div class="strike-dot" id="strike-2"></div>
+                <div class="strike-dot" id="strike-3"></div>
+            </div>
+            
+            <p class="text-white font-semibold mb-2">Warning <span id="current-strike">1</span> of 3</p>
+            <p class="text-slate-400 text-sm mb-6">After 3 warnings, your test will be terminated automatically.</p>
+            
+            <button onclick="dismissSecurityWarning()" class="btn-3d" style="padding: 12px 32px;">
+                <i class="fas fa-check mr-2"></i>I Understand
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== TEST TERMINATED OVERLAY ==================== -->
+    <div id="test-terminated" class="security-overlay hidden">
+        <div class="security-warning-card" style="border-color: #7f1d1d; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 60px rgba(127, 29, 29, 0.5);">
+            <div class="security-icon" style="background: linear-gradient(145deg, #7f1d1d, #991b1b);">
+                <i class="fas fa-times-circle text-white"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">Test Terminated</h2>
+            <p class="text-slate-300 mb-4">Your test has been terminated due to multiple security violations.</p>
+            
+            <div class="p-4 rounded-xl mb-6" style="background: rgba(127, 29, 29, 0.3); border: 1px solid rgba(127, 29, 29, 0.5);">
+                <p class="text-red-400 font-semibold"><i class="fas fa-ban mr-2"></i>3 Violations Detected</p>
+                <p class="text-slate-400 text-sm mt-2">All progress has been lost. Please contact your administrator.</p>
+            </div>
+            
+            <button onclick="logout()" class="btn-3d" style="padding: 12px 32px; background: linear-gradient(145deg, #7f1d1d, #991b1b);">
+                <i class="fas fa-sign-out-alt mr-2"></i>Return to Login
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== LOGIN SCREEN ==================== -->
+    <div id="login-screen" class="section-view active login-page-bg" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;">
+        <!-- Floating decorative shapes -->
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+        <div class="floating-shape shape-5"></div>
+        
+        <!-- Corner decorations -->
+        <div class="corner-decoration top-left"></div>
+        <div class="corner-decoration top-right"></div>
+        <div class="corner-decoration bottom-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+        
+        <!-- Wave decoration -->
+        <div class="wave-decoration"></div>
+        
+        <div class="login-card">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);">
+                    <i class="fas fa-graduation-cap text-3xl text-white"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-slate-800 mb-2">TOEFL iBT</h1>
+                <p class="text-slate-500">Complete Test Platform</p>
+            </div>
+            
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Student Name</label>
+                    <input type="text" id="student-name" class="login-input" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">Student ID</label>
+                    <input type="text" id="student-id" class="login-input" placeholder="Enter your ID" required>
+                </div>
+                
+                <button type="submit" class="btn-3d w-full" style="padding: 16px;">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Start Test
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center text-sm" style="color: #64748b;">
+                <p>New TOEFL iBT Format • January 2026</p>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== DASHBOARD ==================== -->
-    <div id="dashboard-screen" class="section-view active" style="padding: 40px 20px; display: block;">
+    <div id="dashboard-screen" class="section-view light-theme-bg" style="padding: 40px 20px; min-height: 100vh;">
         <div class="max-w-6xl mx-auto">
             <!-- Header -->
             <div class="glass-frame p-6 mb-8">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-2xl font-bold text-white mb-1">Welcome, <span id="dashboard-name">Student</span>!</h1>
-                        <p class="text-slate-400">Select a section to begin your TOEFL iBT test</p>
+                        <h1 class="text-2xl font-bold text-slate-800 mb-1">Welcome, <span id="dashboard-name">Student</span>!</h1>
+                        <p class="text-slate-600">Select a section to begin your TOEFL iBT test</p>
                     </div>
-                    <button onclick="resetTest()" class="btn-3d btn-3d-secondary">
-                        <i class="fas fa-redo mr-2"></i>Reset Test
+                    <button onclick="logout()" class="btn-3d btn-3d-secondary">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
                     </button>
                 </div>
             </div>
@@ -456,7 +979,7 @@
     </div>
 
     <!-- ==================== READING SECTION ==================== -->
-    <div id="reading-section" class="section-view" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); min-height: 100vh;">
+    <div id="reading-section" class="section-view light-theme-bg" style="min-height: 100vh;">
         <button class="back-btn" onclick="backToDashboard()">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </button>
@@ -1007,7 +1530,7 @@
 
 
     <!-- ==================== LISTENING SECTION ==================== -->
-    <div id="listening-section" class="section-view" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); min-height: 100vh;">
+    <div id="listening-section" class="section-view light-theme-bg" style="min-height: 100vh;">
         <body class="section-listening" style="background: none; min-height: auto;">
         <button class="back-btn" onclick="backToDashboard()">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
@@ -1964,7 +2487,7 @@
 
 
     <!-- ==================== SPEAKING SECTION ==================== -->
-    <div id="speaking-section" class="section-view" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); min-height: 100vh;">
+    <div id="speaking-section" class="section-view light-theme-bg" style="min-height: 100vh;">
         <body class="section-speaking" style="background: none; min-height: auto;">
         <button class="back-btn" onclick="backToDashboard()">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
@@ -2444,7 +2967,7 @@
 
 
     <!-- ==================== WRITING SECTION ==================== -->
-    <div id="writing-section" class="section-view" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); min-height: 100vh;">
+    <div id="writing-section" class="section-view light-theme-bg" style="min-height: 100vh;">
         <body class="section-writing" style="background: none; min-height: auto;">
         <button class="back-btn" onclick="backToDashboard()">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
@@ -2922,7 +3445,7 @@
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
         // ==================== GLOBAL STATE ====================
-        let studentName = 'Student';
+        let studentName = '';
         let studentId = '';
         let completedSections = { reading: false, listening: false, speaking: false, writing: false };
         let currentSection = '';
@@ -2951,11 +3474,26 @@
         let currentRecordingQuestion = null;
         let recordingTimeout = null;
         
-        // ==================== NAVIGATION ====================
-        function resetTest() {
+        // ==================== LOGIN & NAVIGATION ====================
+        function handleLogin(e) {
+            e.preventDefault();
+            studentName = document.getElementById('student-name').value.trim();
+            studentId = document.getElementById('student-id').value.trim();
+            
+            if (studentName && studentId) {
+                showView('dashboard-screen');
+                document.getElementById('dashboard-name').textContent = studentName;
+                updateDashboard();
+            }
+        }
+        
+        function logout() {
+            studentName = '';
+            studentId = '';
             completedSections = { reading: false, listening: false, speaking: false, writing: false };
-            showView('dashboard-screen');
-            updateDashboard();
+            document.getElementById('student-name').value = '';
+            document.getElementById('student-id').value = '';
+            showView('login-screen');
         }
         
         function showView(viewId) {
@@ -2966,7 +3504,7 @@
             const view = document.getElementById(viewId);
             if (view) {
                 view.classList.add('active');
-                view.style.display = 'block';
+                view.style.display = viewId === 'login-screen' ? 'flex' : 'block';
             }
         }
         
@@ -2998,8 +3536,6 @@
                 const card = document.getElementById('card-' + section);
                 if (completedSections[section]) {
                     card.classList.add('completed');
-                } else {
-                    card.classList.remove('completed');
                 }
             });
         }
@@ -3544,10 +4080,404 @@
             }
         }
         
-        // Initialize dashboard on load
-        document.getElementById('dashboard-name').textContent = studentName;
-        showView('dashboard-screen');
-        updateDashboard();
+        // ==================== SECURITY SYSTEM ====================
+        let securityViolations = 0;
+        let maxViolations = 3;
+        let testInProgress = false;
+        let securityActive = false;
+        let blurStartTime = null;
+        let recentUIInteraction = false;
+        let uiInteractionTimeout = null;
+        
+        // List of allowed element selectors that won't trigger security violations
+        const allowedUISelectors = [
+            'button', 'input', 'textarea', 'select', 'label',
+            '.play-btn', '.audio-player', '.record-btn', '.speak-btn',
+            '[id^="audio-"]', '[id^="speak-audio-"]', '[id^="record-btn-"]',
+            '.btn-3d', '.option-3d', '.word-box'
+        ];
+        
+        // Check if an element is part of the test UI (allowed to be clicked)
+        function isAllowedUIElement(element) {
+            if (!element) return false;
+            // Check if element or any of its parents match allowed selectors
+            for (const selector of allowedUISelectors) {
+                if (element.matches && element.matches(selector)) return true;
+                if (element.closest && element.closest(selector)) return true;
+            }
+            return false;
+        }
+        
+        // Mark that user just interacted with UI (prevents false blur violations)
+        function markUIInteraction() {
+            recentUIInteraction = true;
+            if (uiInteractionTimeout) clearTimeout(uiInteractionTimeout);
+            // Reset the flag after 1 second (enough for focus/blur to settle)
+            uiInteractionTimeout = setTimeout(() => {
+                recentUIInteraction = false;
+            }, 1000);
+        }
+        
+        // Acknowledge security notice and proceed to dashboard
+        function acknowledgeSecurity() {
+            document.getElementById('security-notice').style.display = 'none';
+            document.getElementById('security-notice').classList.remove('active');
+            document.getElementById('dashboard-screen').style.display = 'block';
+            document.getElementById('dashboard-screen').classList.add('active');
+        }
+        
+        // Start security monitoring when a test section begins
+        function startSecurityMonitoring() {
+            testInProgress = true;
+            securityActive = true;
+            recentUIInteraction = false;
+            
+            // Add click listener to track UI interactions (for blur/focus handling)
+            document.addEventListener('mousedown', handleUIMousedown, true);
+            
+            // Disable right-click context menu (but allow on UI elements)
+            document.addEventListener('contextmenu', preventContextMenu, true);
+            
+            // Disable copy/paste/cut
+            document.addEventListener('copy', preventCopyPaste, true);
+            document.addEventListener('paste', preventCopyPaste, true);
+            document.addEventListener('cut', preventCopyPaste, true);
+            
+            // Disable keyboard shortcuts
+            document.addEventListener('keydown', preventKeyboardShortcuts, true);
+            
+            // Monitor window focus/blur
+            window.addEventListener('blur', handleWindowBlur, true);
+            window.addEventListener('focus', handleWindowFocus, true);
+            
+            // Monitor visibility change (tab switching)
+            document.addEventListener('visibilitychange', handleVisibilityChange, true);
+            
+            // Prevent print screen (limited effectiveness)
+            document.addEventListener('keyup', preventPrintScreen, true);
+        }
+        
+        // Stop security monitoring
+        function stopSecurityMonitoring() {
+            testInProgress = false;
+            securityActive = false;
+            recentUIInteraction = false;
+            if (uiInteractionTimeout) clearTimeout(uiInteractionTimeout);
+            
+            document.removeEventListener('mousedown', handleUIMousedown, true);
+            document.removeEventListener('contextmenu', preventContextMenu, true);
+            document.removeEventListener('copy', preventCopyPaste, true);
+            document.removeEventListener('paste', preventCopyPaste, true);
+            document.removeEventListener('cut', preventCopyPaste, true);
+            document.removeEventListener('keydown', preventKeyboardShortcuts, true);
+            window.removeEventListener('blur', handleWindowBlur, true);
+            window.removeEventListener('focus', handleWindowFocus, true);
+            document.removeEventListener('visibilitychange', handleVisibilityChange, true);
+            document.removeEventListener('keyup', preventPrintScreen, true);
+        }
+        
+        // Track mousedown on UI elements to prevent false blur violations
+        function handleUIMousedown(e) {
+            if (!securityActive) return;
+            if (isAllowedUIElement(e.target)) {
+                markUIInteraction();
+            }
+        }
+        
+        // Prevent right-click context menu (but allow on UI elements)
+        function preventContextMenu(e) {
+            if (!securityActive) return;
+            // Allow right-click on UI elements (for accessibility)
+            if (isAllowedUIElement(e.target)) {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            recordViolation('Right-click menu attempted', 'copy');
+            return false;
+        }
+        
+        // Prevent copy/paste/cut
+        function preventCopyPaste(e) {
+            if (!securityActive) return;
+            // Allow copy/paste in input fields and textareas (for legitimate text entry)
+            if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            const type = e.type === 'copy' ? 'Copy' : e.type === 'paste' ? 'Paste' : 'Cut';
+            recordViolation(type + ' operation attempted', 'copy');
+            return false;
+        }
+        
+        // Prevent keyboard shortcuts
+        function preventKeyboardShortcuts(e) {
+            if (!securityActive) return;
+            
+            // Allow all keys in input fields and textareas (for text entry)
+            if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+                // Still block F12 and PrintScreen even in text fields
+                if (e.key !== 'F12' && e.key !== 'PrintScreen') {
+                    return;
+                }
+            }
+            
+            // Prevent Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+P, Ctrl+S, Ctrl+A, F12, PrintScreen
+            const blockedKeys = [
+                { key: 'c', ctrl: true, name: 'Copy (Ctrl+C)' },
+                { key: 'v', ctrl: true, name: 'Paste (Ctrl+V)' },
+                { key: 'x', ctrl: true, name: 'Cut (Ctrl+X)' },
+                { key: 'p', ctrl: true, name: 'Print (Ctrl+P)' },
+                { key: 's', ctrl: true, name: 'Save (Ctrl+S)' },
+                { key: 'a', ctrl: true, name: 'Select All (Ctrl+A)' },
+                { key: 'F12', ctrl: false, name: 'Developer Tools (F12)' },
+            ];
+            
+            for (let blocked of blockedKeys) {
+                if (e.key === blocked.key && (blocked.ctrl ? e.ctrlKey : true)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    recordViolation('Keyboard shortcut attempted: ' + blocked.name, 'copy');
+                    return false;
+                }
+            }
+            
+            // Prevent PrintScreen
+            if (e.key === 'PrintScreen') {
+                e.preventDefault();
+                recordViolation('Screenshot key (PrintScreen) pressed', 'screenshot');
+                return false;
+            }
+            
+            // Prevent Alt+Tab simulation (Alt key monitoring)
+            if (e.key === 'Alt') {
+                e.preventDefault();
+                return false;
+            }
+        }
+        
+        // Prevent PrintScreen
+        function preventPrintScreen(e) {
+            if (!securityActive) return;
+            if (e.key === 'PrintScreen') {
+                e.preventDefault();
+                recordViolation('Screenshot key pressed', 'screenshot');
+                navigator.clipboard.writeText(''); // Clear clipboard
+            }
+        }
+        
+        // Handle window blur (user clicked outside or switched windows)
+        function handleWindowBlur() {
+            if (!securityActive || !testInProgress) return;
+            // Don't record blur if it was caused by UI interaction
+            if (recentUIInteraction) return;
+            blurStartTime = Date.now();
+        }
+        
+        // Handle window focus return
+        function handleWindowFocus() {
+            if (!securityActive || !testInProgress) return;
+            // Don't record if blur was caused by UI interaction
+            if (recentUIInteraction) {
+                blurStartTime = null;
+                recentUIInteraction = false;
+                return;
+            }
+            if (blurStartTime) {
+                const blurDuration = Date.now() - blurStartTime;
+                if (blurDuration > 500) { // Only count if blurred for more than 500ms
+                    recordViolation('Window switching detected (away for ' + Math.round(blurDuration/1000) + 's)', 'window');
+                }
+                blurStartTime = null;
+            }
+        }
+        
+        // Handle visibility change (tab switching)
+        function handleVisibilityChange() {
+            if (!securityActive || !testInProgress) return;
+            // Don't record if caused by UI interaction
+            if (recentUIInteraction && !document.hidden) return;
+            if (document.hidden) {
+                recordViolation('Tab switching detected', 'window');
+            }
+        }
+        
+        // Record a security violation
+        function recordViolation(message, type) {
+            if (!securityActive) return;
+            
+            securityViolations++;
+            
+            // Show warning overlay
+            showSecurityWarning(message, securityViolations);
+            
+            // Update strike counter display
+            updateStrikeDisplay();
+            
+            // Check if max violations reached
+            if (securityViolations >= maxViolations) {
+                setTimeout(terminateTest, 2000);
+            }
+        }
+        
+        // Show security warning overlay
+        function showSecurityWarning(message, strike) {
+            const overlay = document.getElementById('security-warning');
+            const messageEl = document.getElementById('violation-message');
+            const currentStrikeEl = document.getElementById('current-strike');
+            
+            messageEl.textContent = message;
+            currentStrikeEl.textContent = strike;
+            
+            // Update strike dots
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById('strike-' + i);
+                if (dot) {
+                    if (i <= strike) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                }
+            }
+            
+            overlay.classList.remove('hidden');
+        }
+        
+        // Update strike counter display
+        function updateStrikeDisplay() {
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById('strike-' + i);
+                if (dot) {
+                    if (i <= securityViolations) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                }
+            }
+        }
+        
+        // Dismiss security warning
+        function dismissSecurityWarning() {
+            const overlay = document.getElementById('security-warning');
+            overlay.classList.add('hidden');
+        }
+        
+        // Terminate the test
+        function terminateTest() {
+            // Stop all timers
+            stopAllTimers();
+            stopSecurityMonitoring();
+            
+            // Hide all sections
+            document.querySelectorAll('.section-view').forEach(el => {
+                el.style.display = 'none';
+                el.classList.remove('active');
+            });
+            
+            // Show termination overlay
+            const overlay = document.getElementById('test-terminated');
+            overlay.classList.remove('hidden');
+            overlay.style.display = 'flex';
+        }
+        
+        // Override start functions to enable security
+        const originalStartReading = startReading;
+        const originalStartListening = startListening;
+        const originalStartSpeaking = startSpeaking;
+        const originalStartWriting = startWriting;
+        
+        startReading = function() {
+            startSecurityMonitoring();
+            document.getElementById('reading-ready').style.display = 'none';
+            document.getElementById('reading-test').style.display = 'block';
+            readingStarted = true;
+            document.getElementById('reading-timer').classList.remove('timer-waiting');
+            readingTimer = setInterval(() => {
+                readingSeconds++;
+                const mins = Math.floor(readingSeconds / 60).toString().padStart(2, '0');
+                const secs = (readingSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('reading-timer').textContent = mins + ':' + secs;
+            }, 1000);
+        };
+        
+        startListening = function() {
+            startSecurityMonitoring();
+            document.getElementById('listening-ready').style.display = 'none';
+            document.getElementById('listening-test').style.display = 'block';
+            listeningTimer = setInterval(() => {
+                listeningSeconds++;
+                const mins = Math.floor(listeningSeconds / 60).toString().padStart(2, '0');
+                const secs = (listeningSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('listening-timer').textContent = mins + ':' + secs;
+            }, 1000);
+        };
+        
+        startSpeaking = function() {
+            startSecurityMonitoring();
+            document.getElementById('speaking-ready').style.display = 'none';
+            document.getElementById('speaking-test').style.display = 'block';
+            speakingTimer = setInterval(() => {
+                speakingSeconds++;
+                const mins = Math.floor(speakingSeconds / 60).toString().padStart(2, '0');
+                const secs = (speakingSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('speaking-timer').textContent = mins + ':' + secs;
+            }, 1000);
+        };
+        
+        startWriting = function() {
+            startSecurityMonitoring();
+            document.getElementById('writing-ready').style.display = 'none';
+            document.getElementById('writing-test').style.display = 'block';
+            writingTimer = setInterval(() => {
+                writingSeconds++;
+                const mins = Math.floor(writingSeconds / 60).toString().padStart(2, '0');
+                const secs = (writingSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('writing-timer').textContent = mins + ':' + secs;
+            }, 1000);
+        };
+        
+        // Override logout to stop security monitoring
+        const originalLogout = logout;
+        logout = function() {
+            stopSecurityMonitoring();
+            securityViolations = 0;
+            updateStrikeDisplay();
+            studentName = '';
+            studentId = '';
+            completedSections = { reading: false, listening: false, speaking: false, writing: false };
+            document.getElementById('student-name').value = '';
+            document.getElementById('student-id').value = '';
+            showView('login-screen');
+        };
+        
+        // Override backToDashboard to stop security monitoring
+        const originalBackToDashboard = backToDashboard;
+        backToDashboard = function() {
+            stopSecurityMonitoring();
+            stopAllTimers();
+            showView('dashboard-screen');
+            updateDashboard();
+        };
+        
+        // Override handleLogin to show security notice first
+        const originalHandleLogin = handleLogin;
+        handleLogin = function(e) {
+            e.preventDefault();
+            studentName = document.getElementById('student-name').value.trim();
+            studentId = document.getElementById('student-id').value.trim();
+            
+            if (studentName && studentId) {
+                // Show security notice instead of going directly to dashboard
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('login-screen').classList.remove('active');
+                document.getElementById('security-notice').style.display = 'flex';
+                document.getElementById('security-notice').classList.add('active');
+                document.getElementById('dashboard-name').textContent = studentName;
+            }
+        };
     </script>
 </body>
 </html>

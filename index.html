@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <title>ESL Teacher Ry's Content Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; }
@@ -244,40 +244,94 @@
             50% { opacity: 0.6; transform: translateX(-50%) scale(0.8); }
         }
         
-        /* Glass Header - Light */
+        /* Nav Pill - Educational */
         .glass-header {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 20px;
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
             z-index: 100;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 999px;
+            padding: 8px 12px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255,255,255,0.6);
+            max-width: 92vw;
+            width: auto;
         }
-        .glass-header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary-blue), var(--accent-cyan), var(--primary-blue), transparent);
-            background-size: 200% 100%;
-            animation: gradientMove 4s linear infinite;
-            opacity: 0.5;
-        }
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
+        .glass-header.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255,255,255,0.8);
+            top: 12px;
         }
         
-        .glass-header.scrolled {
-            background: rgba(255, 255, 255, 0.95);
-            border-bottom-color: rgba(15, 23, 42, 0.1);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08), 0 0 20px rgba(37, 99, 235, 0.08);
+        .nav-pill-inner {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .nav-pill-logo {
+            display: none;
+        }
+        
+        @media (min-width: 1100px) {
+            .nav-pill-logo {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding-right: 12px;
+                margin-right: 8px;
+                border-right: 1px solid rgba(15,23,42,0.08);
+            }
+        }
+        
+        .corner-logo {
+            position: fixed;
+            top: 28px;
+            left: 28px;
+            z-index: 101;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .corner-logo .logo-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+        }
+        .corner-logo span {
+            font-weight: 700;
+            color: var(--slate-800);
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .corner-actions {
+            position: fixed;
+            top: 28px;
+            right: 28px;
+            z-index: 101;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        @media (max-width: 768px) {
+            .corner-logo span { display: none; }
+            .corner-actions { top: 20px; right: 16px; }
+            .corner-logo { top: 20px; left: 16px; }
+            .glass-header { top: 80px; padding: 6px 8px; }
+            .glass-header.scrolled { top: 72px; }
         }
         
         .nav-link {
@@ -541,20 +595,24 @@
             box-shadow: 0 0 20px rgba(37, 99, 235, 0.08);
         }
         
+        .hero-title {
+            font-size: clamp(2.2rem, 6vw, 3.8rem);
+            font-weight: 800;
+            color: var(--slate-900);
+            line-height: 1.05;
+            margin: 0 0 16px;
+            letter-spacing: -2px;
+        }
         .hero-title span {
+            font-family: 'JetBrains Mono', monospace;
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            display: inline-block;
         }
-        
-        .hero-title {
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            font-weight: 800;
-            color: var(--slate-900);
-            line-height: 1.1;
-            margin: 0 0 16px;
-            letter-spacing: -1.5px;
+        .hero-title span.decode-done {
+            text-shadow: 0 0 30px rgba(37,99,235,0.25), 0 0 60px rgba(6,182,212,0.15);
         }
         
         .hero-subtitle {
@@ -811,6 +869,90 @@
             transform: translate(0, 0);
         }
 
+        /* Parallax Flash Strips - Educational */
+        .flash-strips-section {
+            position: relative;
+            width: 100%;
+            padding: 50px 0;
+            overflow: hidden;
+            z-index: 10;
+            background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+            border-top: 1px solid rgba(15,23,42,0.04);
+            border-bottom: 1px solid rgba(15,23,42,0.04);
+        }
+        .flash-strip-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 0 24px;
+        }
+        .flash-strip-header p {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+        .flash-strip-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--slate-800);
+            margin: 0;
+        }
+        .flash-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            will-change: transform;
+        }
+        .flash-row:last-child { margin-bottom: 0; }
+        .flash-card {
+            flex-shrink: 0;
+            width: 260px;
+            height: 160px;
+            border-radius: 20px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease;
+        }
+        .flash-card:hover { transform: scale(1.03); }
+        .flash-card .fc-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: white;
+        }
+        .flash-card .fc-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        .flash-card .fc-meta {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.8);
+        }
+        .fc-1 { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .fc-2 { background: linear-gradient(135deg, #0891b2, #0e7490); }
+        .fc-3 { background: linear-gradient(135deg, #475569, #334155); }
+        .fc-4 { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+        .fc-5 { background: linear-gradient(135deg, #64748b, #475569); }
+        .fc-6 { background: linear-gradient(135deg, #1e40af, #2563eb); }
+
         /* Cards Grid */
         .cards-grid {
             display: grid;
@@ -896,9 +1038,29 @@
         .games-section {
             max-width: 1150px;
             margin: 0 auto 60px;
-            padding: 0 24px;
+            padding: 60px 24px;
             position: relative;
             z-index: 10;
+            border-radius: 32px;
+        }
+        .games-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 32px;
+            background-image: 
+                linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
+            background-size: 56px 56px;
+            pointer-events: none;
+            z-index: 0;
+            mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+        }
+        .games-section .section-heading,
+        .games-section .games-grid {
+            position: relative;
+            z-index: 1;
         }
         .section-heading {
             text-align: center;
@@ -1487,36 +1649,44 @@
 <!-- Mouse Spotlight -->
 <div class="mouse-spotlight" id="spotlight"></div>
 
-<!-- Custom Cursor Glow -->
-<div class="cursor-glow" id="cursorGlow"></div>
-
 <canvas id="neuron-canvas"></canvas>
 
-<!-- Header -->
+<!-- Corner Logo -->
+<div class="corner-logo">
+    <div class="logo-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+    <span>Ryshub</span>
+</div>
+
+<!-- Corner Actions -->
+<div class="corner-actions">
+    <button class="btn-outline hidden sm:block" onclick="logoutUser()">Logout</button>
+    <button class="md:hidden w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 shadow-sm" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+</div>
+
+<!-- Header Nav Pill -->
 <header class="glass-header" id="mainHeader">
-    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-lg shadow-lg shadow-blue-500/20">
+    <div class="nav-pill-inner">
+        <div class="nav-pill-logo">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-xs shadow-md shadow-blue-500/20">
                 <i class="fas fa-chalkboard-teacher"></i>
             </div>
-            <span class="text-slate-800 font-bold text-lg tracking-tight">Ryshub</span>
+            <span class="text-slate-800 font-bold text-sm tracking-tight">Ryshub</span>
         </div>
         
-        <nav class="hidden md:flex nav-scroll">
-            <a href="#" class="nav-3d" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
-            <a href="#" class="nav-3d" onclick="requireTeacher(function(){openToeflModal();}); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
-            <a href="#" class="nav-3d" onclick="requireTeacher(function(){openBook1Modal();}); return false;"><i class="fas fa-book text-xs"></i> World Class 2-1</a>
-            <a href="#" class="nav-3d" onclick="requireTeacher(function(){openBook2bModal();}); return false;"><i class="fas fa-book-open text-xs"></i> World Class 2-2</a>
-            <a href="#" class="nav-3d" onclick="requireLoggedIn(function(){openBrickForgeModal();}); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
-            <a href="#games" class="nav-3d" onclick="event.preventDefault(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});"><i class="fas fa-gamepad text-xs"></i> Arcade</a>
+        <nav class="hidden md:flex nav-scroll" style="max-width: 640px; mask-image: none; -webkit-mask-image: none;">
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openToeflModal();}); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openBook1Modal();}); return false;"><i class="fas fa-book text-xs"></i> Book 2-1</a>
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openBook2bModal();}); return false;"><i class="fas fa-book-open text-xs"></i> Book 2-2</a>
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireLoggedIn(function(){openBrickForgeModal();}); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
+            <a href="#games" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="event.preventDefault(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});"><i class="fas fa-gamepad text-xs"></i> Arcade</a>
         </nav>
         
-        <div class="flex items-center gap-3">
-            <button class="btn-outline hidden sm:block" onclick="logoutUser()">Logout</button>
-            <button class="md:hidden w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
+        <button class="md:hidden w-9 h-9 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
     </div>
 </header>
 
@@ -1618,6 +1788,34 @@
 </section>
 
 <div class="section-divider"></div>
+
+<!-- Parallax Flash Strips - Educational -->
+<div class="flash-strips-section" id="flashStrips">
+    <div class="flash-strip-header">
+        <p>Learning Resources</p>
+        <h2>Explore Every Subject</h2>
+    </div>
+    <div class="flash-row top-row" id="flashRowTop">
+        <div class="flash-card fc-1"><div class="fc-icon"><i class="fas fa-graduation-cap"></i></div><div><div class="fc-meta">Mock Test</div><div class="fc-label">TOEFL iBT</div></div></div>
+        <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-book"></i></div><div><div class="fc-meta">Textbook</div><div class="fc-label">World Class 2-1</div></div></div>
+        <div class="flash-card fc-3"><div class="fc-icon"><i class="fas fa-book-open"></i></div><div><div class="fc-meta">Textbook</div><div class="fc-label">World Class 2-2</div></div></div>
+        <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-brain"></i></div><div><div class="fc-meta">AI Tool</div><div class="fc-label">EduGrade Pro</div></div></div>
+        <div class="flash-card fc-5"><div class="fc-icon"><i class="fas fa-pencil-alt"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Practice</div></div></div>
+        <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-cube"></i></div><div><div class="fc-meta">3D Builder</div><div class="fc-label">Brick Forge</div></div></div>
+        <div class="flash-card fc-1"><div class="fc-icon"><i class="fas fa-graduation-cap"></i></div><div><div class="fc-meta">Mock Test</div><div class="fc-label">TOEFL iBT</div></div></div>
+        <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-book"></i></div><div><div class="fc-meta">Textbook</div><div class="fc-label">World Class 2-1</div></div></div>
+    </div>
+    <div class="flash-row bottom-row" id="flashRowBottom" style="transform: translateX(-120px);">
+        <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-rocket"></i></div><div><div class="fc-meta">Strategy</div><div class="fc-label">Last Colony</div></div></div>
+        <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-puzzle-piece"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Scramble</div></div></div>
+        <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-bolt"></i></div><div><div class="fc-meta">Speed</div><div class="fc-label">Typing Race</div></div></div>
+        <div class="flash-card fc-3"><div class="fc-icon"><i class="fas fa-brain"></i></div><div><div class="fc-meta">Memory</div><div class="fc-label">Memory Match</div></div></div>
+        <div class="flash-card fc-1"><div class="fc-icon"><i class="fas fa-laptop-code"></i></div><div><div class="fc-meta">Portal</div><div class="fc-label">Homework</div></div></div>
+        <div class="flash-card fc-5"><div class="fc-icon"><i class="fas fa-headphones"></i></div><div><div class="fc-meta">Listening</div><div class="fc-label">Audio Drills</div></div></div>
+        <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-rocket"></i></div><div><div class="fc-meta">Strategy</div><div class="fc-label">Last Colony</div></div></div>
+        <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-puzzle-piece"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Scramble</div></div></div>
+    </div>
+</div>
 
 <!-- Cards -->
 <div class="cards-grid">
@@ -1771,22 +1969,18 @@
 <!-- Live Ticker -->
 <div class="live-ticker">
     <div class="ticker-track" id="tickerTrack">
-        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sokha</strong> started a TOEFL test</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Dara</strong> opened World Class 2-1</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Chanda</strong> scored 92% on Listening</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Bopha</strong> launched Brick Forge</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Visal</strong> completed Unit 8 quiz</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sreyneang</strong> started Word Scramble</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Kosal</strong> opened World Class 2-2</span>
-        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Maly</strong> started a TOEFL test</span>
-        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sokha</strong> started a TOEFL test</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Dara</strong> opened World Class 2-1</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Chanda</strong> scored 92% on Listening</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Bopha</strong> launched Brick Forge</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Visal</strong> completed Unit 8 quiz</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sreyneang</strong> started Word Scramble</span>
         <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Kosal</strong> opened World Class 2-2</span>
-        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Maly</strong> started a TOEFL test</span>
     </div>
 </div>
 
@@ -2033,7 +2227,6 @@ function logoutUser() {
 
 function setNavActive(key) {
     const map = {
-        'toefl': ['TOEFL', 'TOEFL iBT'],
         'book1': ['World Class 2-1'],
         'book2': ['World Class 2-2'],
         'brickforge': ['Brick Forge'],
@@ -2058,8 +2251,9 @@ function toggleMenu() {
 }
 
 function openToeflModal() {
+    showToast('Loading TOEFL iBT... one moment');
     var frame = document.getElementById('toefl-frame');
-    frame.src = 'apps/toefl.html';
+    frame.src = 'apps/toefl/index.html';
     document.getElementById('toefl-modal').classList.add('open');
     setNavActive('toefl');
 }
@@ -2126,7 +2320,7 @@ function showToast(msg) {
 
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') { 
-        closeToeflModal(); 
+        closeToeflModal();
         closeBook1Modal();
         closeBook2bModal(); 
         closeBrickForgeModal();
@@ -2141,16 +2335,23 @@ document.addEventListener('keydown', function(e) {
     const title = document.querySelector('.hero-title span');
     if (!title) return;
     const original = title.textContent;
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
     let iterations = 0;
+    const maxIterations = original.length * 8;
+    title.classList.add('decoding');
     const interval = setInterval(() => {
         title.textContent = original.split('').map((char, i) => {
-            if (i < iterations) return original[i];
+            if (i < iterations / 8) return original[i];
             return chars[Math.floor(Math.random() * chars.length)];
         }).join('');
-        if (iterations >= original.length) clearInterval(interval);
-        iterations += 1/2;
-    }, 40);
+        iterations += 1;
+        if (iterations >= maxIterations) {
+            clearInterval(interval);
+            title.textContent = original;
+            title.classList.remove('decoding');
+            title.classList.add('decode-done');
+        }
+    }, 35);
 })();
 
 /* ===== Mouse Spotlight ===== */
@@ -2183,31 +2384,37 @@ document.addEventListener('keydown', function(e) {
     });
 })();
 
-/* ===== Custom Cursor Glow ===== */
+/* ===== Parallax Flash Strips ===== */
 (function(){
-    const cursor = document.getElementById('cursorGlow');
-    if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
-    let mx = 0, my = 0, cx = 0, cy = 0;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-    const interactive = document.querySelectorAll('a, button, .tool-card, .game-card, .nav-3d, .menu-item');
-    interactive.forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    });
-    function animate(){
-        cx += (mx - cx) * 0.15;
-        cy += (my - cy) * 0.15;
-        cursor.style.left = cx + 'px';
-        cursor.style.top = cy + 'px';
-        requestAnimationFrame(animate);
-    }
-    animate();
+    const topRow = document.getElementById('flashRowTop');
+    const bottomRow = document.getElementById('flashRowBottom');
+    if (!topRow || !bottomRow) return;
+    
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrollY = window.scrollY;
+                const section = document.getElementById('flashStrips');
+                if (!section) { ticking = false; return; }
+                const rect = section.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                if (rect.top < viewportHeight && rect.bottom > 0) {
+                    const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
+                    topRow.style.transform = `translateX(${-progress * 120}px)`;
+                    bottomRow.style.transform = `translateX(${-120 + progress * 120}px)`;
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
 })();
 
 /* ===== Random Ticker Updates ===== */
 (function(){
     const names = ['Sokha','Dara','Chanda','Bopha','Visal','Sreyneang','Kosal','Maly','Nita','Rithy','Pisey','Vannak'];
-    const actions = ['started a TOEFL test','opened World Class 2-1','scored 92% on Listening','launched Brick Forge','completed Unit 8 quiz','started Word Scramble','opened World Class 2-2','joined a TOEFL session'];
+    const actions = ['opened World Class 2-1','scored 92% on Listening','launched Brick Forge','completed Unit 8 quiz','started Word Scramble','opened World Class 2-2','started TOEFL iBT','finished a homework set','played Last Colony'];
     const ticker = document.getElementById('tickerTrack');
     if (!ticker) return;
     setInterval(() => {
