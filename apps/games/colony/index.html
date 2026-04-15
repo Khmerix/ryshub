@@ -903,45 +903,45 @@ function mkBuilding(type){
   const ME=(c,e,ei=.5)=>new THREE.MeshStandardMaterial({color:c,emissive:e,emissiveIntensity:ei,roughness:.3,metalness:.5})
   switch(type){
     case 'solar':{
-      const slab=new THREE.Mesh(new THREE.BoxGeometry(5.5,.22,5.5),M(0x3a3030,.9,.05));slab.position.y=.11;g.add(slab)
-      const pole=new THREE.Mesh(new THREE.CylinderGeometry(.18,.24,2.2,14),M(0x556677,.5,.75));pole.position.y=1.1;g.add(pole)
+      const slab=new THREE.Mesh(new THREE.BoxGeometry(5.5,.22,5.5),M(0x7a6050,.8,.1));slab.position.y=.11;g.add(slab)
+      const pole=new THREE.Mesh(new THREE.CylinderGeometry(.18,.24,2.2,14),M(0x889aaa,.4,.8));pole.position.y=1.1;g.add(pole)
       const pb=new THREE.Group();pb.position.y=2.5;pb.name='solarGroup';g.add(pb)
-      const rows=[-0.55,0.55];rows.forEach(row=>{for(let col=-1.5;col<=1.5;col++){const cell=new THREE.Mesh(new THREE.BoxGeometry(1.06,.04,.82),ME(0x081860,0x001840,.5));cell.position.set(col*1.2,.04,row);pb.add(cell);const frame=new THREE.Mesh(new THREE.BoxGeometry(1.15,.06,.9),M(0x778899,.35,.85));frame.position.set(col*1.2,0,row);pb.add(frame)}})
+      const rows=[-0.55,0.55];rows.forEach(row=>{for(let col=-1.5;col<=1.5;col++){const cell=new THREE.Mesh(new THREE.BoxGeometry(1.06,.04,.82),ME(0x0a2090,0x0033cc,.7));cell.position.set(col*1.2,.04,row);pb.add(cell);const frame=new THREE.Mesh(new THREE.BoxGeometry(1.15,.06,.9),M(0x99aabb,.3,.9));frame.position.set(col*1.2,0,row);pb.add(frame)}})
       break}
     case 'habitat':{
-      const fRing=new THREE.Mesh(new THREE.CylinderGeometry(3.5,3.7,.45,24),M(0x2a3040,.7,.5));fRing.position.y=.22;g.add(fRing)
-      const wall=new THREE.Mesh(new THREE.CylinderGeometry(3.3,3.3,1.2,24),M(0x334455,.6,.4));wall.position.y=1.05;g.add(wall)
-      const dome=new THREE.Mesh(new THREE.SphereGeometry(3.3,20,12,0,Math.PI*2,0,Math.PI*.5),new THREE.MeshStandardMaterial({color:0x3a5080,transparent:true,opacity:.58,metalness:.3,roughness:.1}));dome.position.y=1.65;g.add(dome)
+      const fRing=new THREE.Mesh(new THREE.CylinderGeometry(3.5,3.7,.45,24),M(0x6080a0,.5,.6));fRing.position.y=.22;g.add(fRing)
+      const wall=new THREE.Mesh(new THREE.CylinderGeometry(3.3,3.3,1.2,24),M(0x5570a0,.5,.5));wall.position.y=1.05;g.add(wall)
+      const dome=new THREE.Mesh(new THREE.SphereGeometry(3.3,20,12,0,Math.PI*2,0,Math.PI*.5),new THREE.MeshStandardMaterial({color:0x5580cc,transparent:true,opacity:.72,metalness:.4,roughness:.08}));dome.position.y=1.65;g.add(dome)
       const dw=new THREE.Mesh(new THREE.SphereGeometry(3.32,16,10,0,Math.PI*2,0,Math.PI*.5),new THREE.MeshBasicMaterial({color:0x556688,wireframe:true,transparent:true,opacity:.3}));dw.position.y=1.65;g.add(dw)
-      const lock=new THREE.Mesh(new THREE.CylinderGeometry(.9,.9,1.8,14),M(0x445566,.5,.6));lock.position.set(3.2,1.0,0);lock.rotation.z=Math.PI/2;g.add(lock)
+      const lock=new THREE.Mesh(new THREE.CylinderGeometry(.9,.9,1.8,14),M(0x6688aa,.4,.7));lock.position.set(3.2,1.0,0);lock.rotation.z=Math.PI/2;g.add(lock)
       const il=new THREE.PointLight(0x8899ff,.7,10);il.position.y=2.5;g.add(il)
       break}
     case 'greenhouse':{
-      const base=new THREE.Mesh(new THREE.BoxGeometry(4.5,.25,6.5),M(0x1e2a1e,.85,.1));base.position.y=.12;g.add(base)
-      const secArr=[-2,0,2];secArr.forEach(sec=>{const aG=new THREE.CylinderGeometry(2,2,1.5,14,1,false,0,Math.PI);const arch=new THREE.Mesh(aG,M(0x3a4e3a,.6,.55));arch.rotation.z=Math.PI/2;arch.position.set(0,2,sec);g.add(arch);const glG=new THREE.CylinderGeometry(1.95,1.95,1.45,14,1,false,0,Math.PI);const gl=new THREE.Mesh(glG,new THREE.MeshStandardMaterial({color:0x44ff88,transparent:true,opacity:.22,roughness:.05}));gl.rotation.z=Math.PI/2;gl.position.set(0,2,sec);g.add(gl)})
+      const base=new THREE.Mesh(new THREE.BoxGeometry(4.5,.25,6.5),M(0x3a5a3a,.75,.15));base.position.y=.12;g.add(base)
+      const secArr=[-2,0,2];secArr.forEach(sec=>{const aG=new THREE.CylinderGeometry(2,2,1.5,14,1,false,0,Math.PI);const arch=new THREE.Mesh(aG,M(0x5a7a5a,.5,.45));arch.rotation.z=Math.PI/2;arch.position.set(0,2,sec);g.add(arch);const glG=new THREE.CylinderGeometry(1.95,1.95,1.45,14,1,false,0,Math.PI);const gl=new THREE.Mesh(glG,new THREE.MeshStandardMaterial({color:0x66ffaa,transparent:true,opacity:.38,roughness:.05}));gl.rotation.z=Math.PI/2;gl.position.set(0,2,sec);g.add(gl)})
       const gL=new THREE.PointLight(0x22ff44,.5,10);gL.position.y=1.8;g.add(gL)
       break}
     case 'extractor':{
-      const base=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.6,.5,16),M(0x2a3848,.7,.55));base.position.y=.25;g.add(base)
-      const tank=new THREE.Mesh(new THREE.CylinderGeometry(1.3,1.3,3.5,18),M(0x1e4a99,.3,.72));tank.position.y=2.25;g.add(tank)
-      const top=new THREE.Mesh(new THREE.SphereGeometry(1.32,18,9,0,Math.PI*2,0,Math.PI*.5),M(0x163888,.25,.8));top.position.y=4.0;g.add(top)
+      const base=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.6,.5,16),M(0x5070a0,.5,.65));base.position.y=.25;g.add(base)
+      const tank=new THREE.Mesh(new THREE.CylinderGeometry(1.3,1.3,3.5,18),M(0x2266cc,.25,.8));tank.position.y=2.25;g.add(tank)
+      const top=new THREE.Mesh(new THREE.SphereGeometry(1.32,18,9,0,Math.PI*2,0,Math.PI*.5),M(0x1e4eaa,.2,.85));top.position.y=4.0;g.add(top)
       for(let fi=0;fi<6;fi++){const fa=fi/6*Math.PI*2;const fin=new THREE.Mesh(new THREE.BoxGeometry(.8,1.2,.04),M(0x5588aa,.35,.7));fin.position.set(Math.cos(fa)*1.5,2.5,Math.sin(fa)*1.5);fin.rotation.y=fa;g.add(fin)}
       break}
     case 'oxygen':{
-      const base=new THREE.Mesh(new THREE.BoxGeometry(3.5,.4,3.5),M(0x28283a,.7,.5));base.position.y=.2;g.add(base)
-      const stack=new THREE.Mesh(new THREE.BoxGeometry(1.6,2.8,1.2),M(0x7744aa,.35,.65));stack.position.set(-.6,1.8,0);g.add(stack)
-      const sph=new THREE.Mesh(new THREE.SphereGeometry(.75,16,16),M(0x9966bb,.25,.75));sph.position.set(.95,1.6,0);g.add(sph)
+      const base=new THREE.Mesh(new THREE.BoxGeometry(3.5,.4,3.5),M(0x4848aa,.5,.6));base.position.y=.2;g.add(base)
+      const stack=new THREE.Mesh(new THREE.BoxGeometry(1.6,2.8,1.2),M(0x9966dd,.3,.7));stack.position.set(-.6,1.8,0);g.add(stack)
+      const sph=new THREE.Mesh(new THREE.SphereGeometry(.75,16,16),M(0xbb88ee,.2,.8));sph.position.set(.95,1.6,0);g.add(sph)
       const ol=new THREE.PointLight(0xaa33ff,1.0,10);ol.position.y=2.5;ol.name='oLight';g.add(ol)
       break}
     case 'mineral':{
-      const base=new THREE.Mesh(new THREE.BoxGeometry(4,.5,4),M(0x4a2a18,.8,.4));base.position.y=.25;g.add(base)
+      const base=new THREE.Mesh(new THREE.BoxGeometry(4,.5,4),M(0x8a5a38,.65,.45));base.position.y=.25;g.add(base)
       const postArr=[[-1.5,-1.5],[-1.5,1.5],[1.5,-1.5],[1.5,1.5]];postArr.forEach(([px,pz])=>{const post=new THREE.Mesh(new THREE.BoxGeometry(.18,2.2,.18),M(0x556677,.5,.7));post.position.set(px,1.35,pz);g.add(post)})
-      const hop=new THREE.Mesh(new THREE.CylinderGeometry(.55,1.1,1.6,12),M(0xff8800,.5,.4));hop.position.set(0,2,0);g.add(hop)
+      const hop=new THREE.Mesh(new THREE.CylinderGeometry(.55,1.1,1.6,12),M(0xff9922,.4,.5));hop.position.set(0,2,0);g.add(hop)
       break}
     case 'medbay':{
-      const base=new THREE.Mesh(new THREE.BoxGeometry(4.5,.3,4.5),M(0x281828,.8,.4));base.position.y=.15;g.add(base)
-      const body=new THREE.Mesh(new THREE.CylinderGeometry(1.9,1.9,3.5,20),M(0x3a2a3a,.7,.35));body.rotation.z=Math.PI/2;body.position.set(0,2,0);g.add(body)
-      const caps=[-1.85,1.85];caps.forEach(ex=>{const cap=new THREE.Mesh(new THREE.SphereGeometry(1.9,18,10,0,Math.PI*2,0,Math.PI*.5),M(0x332232,.7,.35));cap.rotation.z=ex<0?-Math.PI/2:Math.PI/2;cap.position.set(ex,2,0);g.add(cap)})
+      const base=new THREE.Mesh(new THREE.BoxGeometry(4.5,.3,4.5),M(0x604060,.65,.45));base.position.y=.15;g.add(base)
+      const body=new THREE.Mesh(new THREE.CylinderGeometry(1.9,1.9,3.5,20),M(0x7060a0,.55,.4));body.rotation.z=Math.PI/2;body.position.set(0,2,0);g.add(body)
+      const caps=[-1.85,1.85];caps.forEach(ex=>{const cap=new THREE.Mesh(new THREE.SphereGeometry(1.9,18,10,0,Math.PI*2,0,Math.PI*.5),M(0x604870,.6,.4));cap.rotation.z=ex<0?-Math.PI/2:Math.PI/2;cap.position.set(ex,2,0);g.add(cap)})
       const cv=new THREE.Mesh(new THREE.BoxGeometry(.32,1.4,.08),ME(0xff1111,0xff0000,.6));cv.position.set(0,2,1.92);g.add(cv)
       const ch=new THREE.Mesh(new THREE.BoxGeometry(1.4,.32,.08),ME(0xff1111,0xff0000,.6));ch.position.set(0,2,1.92);g.add(ch)
       const ml=new THREE.PointLight(0xff3344,.6,12);ml.position.y=2.5;g.add(ml)
@@ -952,7 +952,7 @@ function mkBuilding(type){
       const cl=new THREE.PointLight(0x00ff88,1.2,14);cl.position.y=7;g.add(cl)
       break}
     case 'lab':{
-      const bldg=new THREE.Mesh(new THREE.BoxGeometry(3.8,3.2,3.8),M(0x22224a,.65,.4));bldg.position.y=1.85;g.add(bldg)
+      const bldg=new THREE.Mesh(new THREE.BoxGeometry(3.8,3.2,3.8),M(0x4444aa,.5,.5));bldg.position.y=1.85;g.add(bldg)
       const obs=new THREE.Mesh(new THREE.SphereGeometry(1.1,16,10,0,Math.PI*2,0,Math.PI*.55),new THREE.MeshStandardMaterial({color:0x3333aa,transparent:true,opacity:.55,metalness:.3}));obs.position.y=4.1;g.add(obs)
       const wm=ME(0x221133,0x8888ff,.95);const winPos=[-1.3,0,1.3];winPos.forEach(wx=>{const w=new THREE.Mesh(new THREE.BoxGeometry(.7,.55,.04),wm);w.position.set(wx,1.65,1.95);g.add(w)})
       const ll=new THREE.PointLight(0x4444ff,1.2,14);ll.position.y=3.5;g.add(ll)
@@ -965,22 +965,22 @@ function mkBuilding(type){
       for(let li=0;li<4;li++){const la=li/4*Math.PI*2;const lp=new THREE.PointLight(0xffffff,.8,6);lp.position.set(Math.cos(la)*5.5,1.72,Math.sin(la)*5.5);lp.name='padL';g.add(lp)}
       break}
     case 'shield':{
-      const base=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.5,.5,18),M(0x1a1a33,.6,.6));base.position.y=.25;g.add(base)
-      const pole=new THREE.Mesh(new THREE.CylinderGeometry(.22,.28,5.5,14),M(0x2a2a55,.4,.8));pole.position.y=4.5;g.add(pole)
-      const sd=new THREE.Mesh(new THREE.SphereGeometry(2.4,18,10,0,Math.PI*2,0,Math.PI*.42),new THREE.MeshStandardMaterial({color:0x2233aa,metalness:.8,roughness:.15,transparent:true,opacity:.85}));sd.position.y=7.2;g.add(sd)
+      const base=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.5,.5,18),M(0x3a3a88,.5,.7));base.position.y=.25;g.add(base)
+      const pole=new THREE.Mesh(new THREE.CylinderGeometry(.22,.28,5.5,14),M(0x5555cc,.35,.85));pole.position.y=4.5;g.add(pole)
+      const sd=new THREE.Mesh(new THREE.SphereGeometry(2.4,18,10,0,Math.PI*2,0,Math.PI*.42),new THREE.MeshStandardMaterial({color:0x4466ee,metalness:.8,roughness:.1,transparent:true,opacity:.9}));sd.position.y=7.2;g.add(sd)
       const field=new THREE.Mesh(new THREE.SphereGeometry(4,16,12,0,Math.PI*2,0,Math.PI*.5),new THREE.MeshStandardMaterial({color:0x2244ff,transparent:true,opacity:.06}));field.position.y=.3;g.add(field)
       const sl=new THREE.PointLight(0x4455ff,1.5,20);sl.position.y=6;g.add(sl)
       break}
     case 'reactor':{
       const base=new THREE.Mesh(new THREE.CylinderGeometry(2.5,2.8,.6,16),M(0x1a2a3a,.7,.6));base.position.y=.3;g.add(base)
-      const core=new THREE.Mesh(new THREE.CylinderGeometry(1.2,1.2,4,14),M(0x0a2244,.3,.8));core.position.y=2.6;g.add(core)
+      const core=new THREE.Mesh(new THREE.CylinderGeometry(1.2,1.2,4,14),M(0x1a44aa,.25,.85));core.position.y=2.6;g.add(core)
       const dome=new THREE.Mesh(new THREE.SphereGeometry(1.22,16,8,0,Math.PI*2,0,Math.PI*.5),M(0x0a1e40,.2,.9));dome.position.y=4.6;g.add(dome)
       const rl=new THREE.PointLight(0x00aaff,2,16);rl.position.y=3;g.add(rl)
       for(let i=0;i<6;i++){const a=i/6*Math.PI*2;const pipe=new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,3,8),M(0x335566,.4,.7));pipe.position.set(Math.cos(a)*2,1.5,Math.sin(a)*2);g.add(pipe)}
       break}
     case 'droid':{
-      const body=new THREE.Mesh(new THREE.BoxGeometry(1.2,1.8,0.9),M(0x334455,.5,.8));body.position.y=1.3;g.add(body)
-      const head=new THREE.Mesh(new THREE.BoxGeometry(0.9,0.7,0.7),M(0x445566,.4,.9));head.position.y=2.55;g.add(head)
+      const body=new THREE.Mesh(new THREE.BoxGeometry(1.2,1.8,0.9),M(0x5577aa,.4,.85));body.position.y=1.3;g.add(body)
+      const head=new THREE.Mesh(new THREE.BoxGeometry(0.9,0.7,0.7),M(0x6688cc,.35,.9));head.position.y=2.55;g.add(head)
       const visor=new THREE.Mesh(new THREE.BoxGeometry(0.7,0.25,0.1),ME(0x002244,0x0044ff,.9));visor.position.set(0,2.58,0.36);g.add(visor)
       const aL=new THREE.Mesh(new THREE.CylinderGeometry(.15,.12,.9,8),M(0x445566,.5,.8));aL.position.set(-.75,1.6,0);g.add(aL)
       const aR=new THREE.Mesh(new THREE.CylinderGeometry(.15,.12,.9,8),M(0x445566,.5,.8));aR.position.set(.75,1.6,0);aR.name='droidArm';g.add(aR)
@@ -1018,7 +1018,7 @@ function mkBuilding(type){
       const tl=new THREE.PointLight(0x88aaff,.6,8);tl.position.y=3;g.add(tl)
     }
   }
-  const holo=new THREE.Mesh(new THREE.TorusGeometry(3.2,.07,8,30),new THREE.MeshBasicMaterial({color:0x00d4ff,transparent:true,opacity:.5}));holo.rotation.x=Math.PI/2;holo.position.y=.08;holo.name='holo';g.add(holo)
+  const holo=new THREE.Mesh(new THREE.TorusGeometry(3.2,.12,8,30),new THREE.MeshBasicMaterial({color:0x00ffff,transparent:true,opacity:.8}));holo.rotation.x=Math.PI/2;holo.position.y=.08;holo.name='holo';g.add(holo)
   return g
 }
 
@@ -1098,7 +1098,7 @@ class MarsGame {
     this.fenceMode=false;this.fenceStyle='wall';this.fenceStart=null;this.fencePreview=null
     this.dilemmaQueue=[...PHASES[0].dilemmas];this.storyDone=new Set();this.lastTx=null
     this.selectedTool=null;this.placeRotY=0;this.selectedBuilding=null;this.selectedUpgTier=null
-    this.cameraAngle=0;this.camDist=64;this.camH=42;this.camTarget=new THREE.Vector3();this.keys={}
+    this.cameraAngle=0;this.camDist=58;this.camH=36;this.camTarget=new THREE.Vector3();this.keys={}
     this.craters=[];this.ridges=[]
     this._initRenderer();this._genTerrain();this._initScene();this._setupControls()
     this._buildBuildBar();this._updateObjectives()
@@ -1113,7 +1113,7 @@ class MarsGame {
   }
 
   _initRenderer(){
-    this.scene=new THREE.Scene();this.scene.fog=new THREE.FogExp2(0x1a0f0f,.010)
+    this.scene=new THREE.Scene();this.scene.fog=new THREE.FogExp2(0x3a1a0a,.0028)
     this.camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,.1,1200)
     this.renderer=new THREE.WebGLRenderer({antialias:true})
     this.renderer.setSize(innerWidth,innerHeight);this.renderer.setPixelRatio(Math.min(devicePixelRatio,2))
@@ -1135,16 +1135,27 @@ class MarsGame {
     return h
   }
   _initScene(){
-    this.ambLight=new THREE.AmbientLight(0x601808,.65);this.scene.add(this.ambLight)
-    this.sunLight=new THREE.DirectionalLight(0xffd0a0,1.5);this.sunLight.castShadow=true
+    this.ambLight=new THREE.AmbientLight(0xc08050,1.8);this.scene.add(this.ambLight)
+    this.sunLight=new THREE.DirectionalLight(0xffeec0,2.8);this.sunLight.castShadow=true
     this.sunLight.shadow.mapSize.set(2048,2048);const sd=100
     ;['left','right','top','bottom'].forEach((s,i)=>this.sunLight.shadow.camera[s]=[-sd,sd,sd,-sd][i]);this.scene.add(this.sunLight)
     this.sunSphere=new THREE.Mesh(new THREE.SphereGeometry(2.2,12,12),new THREE.MeshBasicMaterial({color:0xffe8a0}));this.scene.add(this.sunSphere)
     const geo=new THREE.PlaneGeometry(240,240,140,140);const pos=geo.attributes.position,cols=[]
-    for(let i=0;i<pos.count;i++){const wx=pos.getX(i),wz=pos.getY(i),h=this._getH(wx,wz);pos.setZ(i,h);const t=Math.min(Math.abs(h)/3,1);const c=new THREE.Color().lerpColors(new THREE.Color(0xc0602a),new THREE.Color(0x5a2810),t);cols.push(c.r,c.g,c.b)}
+    for(let i=0;i<pos.count;i++){
+      const wx=pos.getX(i),wz=pos.getY(i),h=this._getH(wx,wz);pos.setZ(i,h)
+      let tc,inCr=false,inRm=false,inCan=false,onRdg=false
+      for(const cr of this.craters){const cdx=wx-cr.x,cdz=wz-cr.z,cd=Math.sqrt(cdx*cdx+cdz*cdz);if(cd<cr.r*.82)inCr=true;else if(cd<cr.r*1.28)inRm=true}
+      for(const r of this.ridges){const pd=Math.abs(wx*Math.sin(r.angle)-wz*Math.cos(r.angle)-r.offset);if(pd<r.width*.38){if(r.isCanyon)inCan=true;else onRdg=true}}
+      if(inCr)tc=new THREE.Color(0x6a2e0e)
+      else if(inRm)tc=new THREE.Color(0xe8723a)
+      else if(inCan)tc=new THREE.Color(0x4a1e08)
+      else if(onRdg)tc=new THREE.Color(0xd46030)
+      else{const t=Math.min(Math.abs(h)/3,1);tc=new THREE.Color().lerpColors(new THREE.Color(0xd07040),new THREE.Color(0x7a3018),t)}
+      cols.push(tc.r,tc.g,tc.b)
+    }
     pos.needsUpdate=true;geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));geo.computeVertexNormals()
-    this.terrainMesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.95,metalness:.02}));this.terrainMesh.rotation.x=-Math.PI/2;this.terrainMesh.receiveShadow=true;this.scene.add(this.terrainMesh)
-    const rM=[new THREE.MeshStandardMaterial({color:0x5a3018,roughness:.9}),new THREE.MeshStandardMaterial({color:0x4a2810,roughness:.88})]
+    this.terrainMesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.82,metalness:.05}));this.terrainMesh.rotation.x=-Math.PI/2;this.terrainMesh.receiveShadow=true;this.scene.add(this.terrainMesh)
+    const rM=[new THREE.MeshStandardMaterial({color:0x7a4828,roughness:.88}),new THREE.MeshStandardMaterial({color:0x6a3820,roughness:.85})]
     for(let i=0;i<55;i++){const s=Math.random()*2.2+.3,a=Math.random()*Math.PI*2,d=20+Math.random()*90,rx=Math.cos(a)*d,rz=Math.sin(a)*d;const r=new THREE.Mesh(Math.random()<.5?new THREE.DodecahedronGeometry(s):new THREE.OctahedronGeometry(s),rM[i%2]);r.position.set(rx,this._getH(rx,rz)+s*.4,rz);r.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);r.castShadow=true;this.scene.add(r)}
     const sp=[];for(let i=0;i<2200;i++)sp.push((Math.random()-.5)*600,70+Math.random()*300,(Math.random()-.5)*600)
     const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(sp,3))
@@ -1162,8 +1173,8 @@ class MarsGame {
     this._updateSky();this._updateCamera()
   }
   _buildCrash(){
-    const mM=new THREE.MeshStandardMaterial({color:0x556677,metalness:.8,roughness:.4})
-    const mB=new THREE.MeshStandardMaterial({color:0x2a2020,metalness:.5,roughness:.9})
+    const mM=new THREE.MeshStandardMaterial({color:0x8899bb,metalness:.75,roughness:.35})
+    const mB=new THREE.MeshStandardMaterial({color:0x5a4040,metalness:.4,roughness:.85})
     const g=new THREE.Group();g.position.set(-20,0,-24);g.rotation.y=.7
     const fuse=new THREE.Mesh(new THREE.CylinderGeometry(2.2,1.9,15,16),mM);fuse.rotation.z=.44;fuse.position.set(0,2.8,0);fuse.castShadow=true;g.add(fuse)
     const nose=new THREE.Mesh(new THREE.ConeGeometry(2.1,5,16),mB);nose.position.set(7.5,-.8,0);nose.rotation.z=1.1;g.add(nose)
@@ -1191,7 +1202,7 @@ class MarsGame {
   _spawnMineral(type){
     const a=Math.random()*Math.PI*2,d=type==='iron'?24+Math.random()*70:36+Math.random()*80
     const mx=Math.cos(a)*d,mz=Math.sin(a)*d,my=this._getH(mx,mz)+1.5
-    const mesh=type==='iron'?new THREE.Mesh(new THREE.OctahedronGeometry(1.4),new THREE.MeshStandardMaterial({color:0xCD7F32,roughness:.45,metalness:.5})):new THREE.Mesh(new THREE.OctahedronGeometry(1.7),new THREE.MeshStandardMaterial({color:0xaa44ff,emissive:0x7722cc,emissiveIntensity:.6,roughness:.18,metalness:.65}))
+    const mesh=type==='iron'?new THREE.Mesh(new THREE.OctahedronGeometry(1.5),new THREE.MeshStandardMaterial({color:0xE8952A,emissive:0x883300,emissiveIntensity:.3,roughness:.35,metalness:.6})):new THREE.Mesh(new THREE.OctahedronGeometry(1.8),new THREE.MeshStandardMaterial({color:0xcc66ff,emissive:0x9922cc,emissiveIntensity:.8,roughness:.12,metalness:.7}))
     if(type==='rare'){const pl=new THREE.PointLight(0x9922ff,2,12);pl.position.y=2;mesh.add(pl)}
     mesh.position.set(mx,my,mz);mesh.castShadow=true;mesh.userData={type,amount:type==='iron'?55:22};this.scene.add(mesh);this.minerals.push(mesh)
   }
@@ -1236,7 +1247,7 @@ class MarsGame {
     const M=(c,r=.7,m=.3)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m})
     const ME=(c,e,ei=.7)=>new THREE.MeshStandardMaterial({color:c,emissive:e,emissiveIntensity:ei,roughness:.2,metalness:.6})
     // Chassis
-    const chassis=new THREE.Mesh(new THREE.BoxGeometry(2.8,.7,1.8),M(0xb8860b))
+    const chassis=new THREE.Mesh(new THREE.BoxGeometry(2.8,.7,1.8),M(0xe8a010))
     chassis.position.y=.7;chassis.castShadow=true;g.add(chassis)
     // Solar panel on top
     const panel=new THREE.Mesh(new THREE.BoxGeometry(2.2,.06,1.4),new THREE.MeshStandardMaterial({color:0x0a1a55,metalness:.7,roughness:.1}))
@@ -1852,17 +1863,24 @@ class MarsGame {
   }
   _updateSky(){
     const h=this.hour
-    const yearDark=Math.max(0,(this.year-2)*.08)
+    // Subtle year darkening only from year 4+
+    const yearDark=Math.max(0,(this.year-3)*.05)
     let sky,si
     const C=(hex)=>new THREE.Color(hex)
-    if(h<5||h>=22){sky=C(0x040106);si=0}
-    else if(h<8){const t=(h-5)/3;sky=new THREE.Color().lerpColors(C(0x040106),C(0x3d1005),t);si=t*.5}
-    else if(h<16){const t=Math.min((h-8)/8,1);sky=new THREE.Color().lerpColors(C(0x3d1005),C(0xae5c28),t);si=.5+t*1.0}
-    else{const t=(h-16)/6;sky=new THREE.Color().lerpColors(C(0xae5c28),C(0x040106),t);si=1.5*(1-t)}
-    if(this.dustStorm){si*=.14;sky=C(0x3a1506)}
-    sky.r=Math.max(0,sky.r-yearDark*.3);sky.g=Math.max(0,sky.g-yearDark*.4)
-    this.scene.background=sky;this.scene.fog.color.copy(sky);this.sunLight.intensity=si
-    this.stars.material.opacity=(h<7||h>20)?.92:0
+    if(h<5||h>=22){sky=C(0x060208);si=0}
+    else if(h<8){const t=(h-5)/3;sky=new THREE.Color().lerpColors(C(0x060208),C(0x6d2a10),t);si=t*1.2}
+    else if(h<11){const t=(h-8)/3;sky=new THREE.Color().lerpColors(C(0x6d2a10),C(0xd97040),t);si=1.2+t*1.6}
+    else if(h<16){sky=C(0xd97040);si=2.8}  // full bright midday
+    else if(h<20){const t=(h-16)/4;sky=new THREE.Color().lerpColors(C(0xd97040),C(0x7a2010),t);si=2.8-t*2.8}
+    else{const t=(h-20)/2;sky=new THREE.Color().lerpColors(C(0x7a2010),C(0x060208),t);si=0}
+    if(this.dustStorm){si*=.18;sky=C(0x4a2008)}
+    sky.r=Math.max(0,sky.r-yearDark*.2);sky.g=Math.max(0,sky.g-yearDark*.25)
+    this.scene.background=sky
+    this.scene.fog.color.setRGB(sky.r*.5,sky.g*.5,sky.b*.5)
+    this.sunLight.intensity=si
+    // Keep ambient always at least a bit lit
+    this.ambLight.intensity=1.8+si*.3
+    this.stars.material.opacity=(h<7||h>20)?.88:0
     const sa=(h/24)*Math.PI,sx=Math.cos(sa)*140,sy=Math.sin(sa)*95
     this.sunLight.position.set(sx,sy,20);this.sunSphere.position.set(sx*.62,sy*.62,-55);this.sunSphere.visible=sy>-8
   }
