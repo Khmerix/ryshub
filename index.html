@@ -1660,9 +1660,6 @@
 <!-- Corner Actions -->
 <div class="corner-actions">
     <button class="btn-outline hidden sm:block" onclick="logoutUser()">Logout</button>
-    <button class="md:hidden w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 shadow-sm" onclick="toggleMenu()">
-        <i class="fas fa-bars"></i>
-    </button>
 </div>
 
 <!-- Header Nav Pill -->
@@ -1675,16 +1672,7 @@
             <span class="text-slate-800 font-bold text-sm tracking-tight">Ryshub</span>
         </div>
         
-        <nav class="hidden md:flex nav-scroll" style="max-width: 640px; mask-image: none; -webkit-mask-image: none;">
-            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
-            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openToeflModal();}); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
-            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openBook1Modal();}); return false;"><i class="fas fa-book text-xs"></i> Book 2-1</a>
-            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openBook2bModal();}); return false;"><i class="fas fa-book-open text-xs"></i> Book 2-2</a>
-            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireLoggedIn(function(){openBrickForgeModal();}); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
-            <a href="#games" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="event.preventDefault(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});"><i class="fas fa-gamepad text-xs"></i> Arcade</a>
-        </nav>
-        
-        <button class="md:hidden w-9 h-9 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700" onclick="toggleMenu()">
+        <button class="w-9 h-9 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </button>
     </div>
@@ -1786,114 +1774,6 @@
         <i class="fas fa-chevron-down"></i>
     </div>
 </section>
-
-<div class="section-divider"></div>
-
-<!-- Parallax Flash Strips - Educational -->
-<div class="flash-strips-section" id="flashStrips">
-    <div class="flash-strip-header">
-        <p>Learning Resources</p>
-        <h2>Explore Every Subject</h2>
-    </div>
-    <div class="flash-row top-row" id="flashRowTop">
-        <div class="flash-card fc-1"><div class="fc-icon"><i class="fas fa-graduation-cap"></i></div><div><div class="fc-meta">Mock Test</div><div class="fc-label">TOEFL iBT</div></div></div>
-        <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-book"></i></div><div><div class="fc-meta">Textbook</div><div class="fc-label">World Class 2-1</div></div></div>
-        <div class="flash-card fc-3"><div class="fc-icon"><i class="fas fa-book-open"></i></div><div><div class="fc-meta">Textbook</div><div class="fc-label">World Class 2-2</div></div></div>
-        <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-brain"></i></div><div><div class="fc-meta">AI Tool</div><div class="fc-label">EduGrade Pro</div></div></div>
-        <div class="flash-card fc-5"><div class="fc-icon"><i class="fas fa-pencil-alt"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Practice</div></div></div>
-        <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-cube"></i></div><div><div class="fc-meta">3D Builder</div><div class="fc-label">Brick Forge</div></div></div>
-        <div class="flash-card fc-1"><div class="fc-icon"><i class="fas fa-graduation-cap"></i></div><div><div class="fc-meta">Mock Test</div><div class="fc-label">TOEFL iBT</div></div></div>
-        <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-book"></i></div><div><div class="fc-meta">Textbook</div><div class="fc-label">World Class 2-1</div></div></div>
-    </div>
-    <div class="flash-row bottom-row" id="flashRowBottom" style="transform: translateX(-120px);">
-        <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-rocket"></i></div><div><div class="fc-meta">Strategy</div><div class="fc-label">Last Colony</div></div></div>
-        <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-puzzle-piece"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Scramble</div></div></div>
-        <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-bolt"></i></div><div><div class="fc-meta">Speed</div><div class="fc-label">Typing Race</div></div></div>
-        <div class="flash-card fc-3"><div class="fc-icon"><i class="fas fa-brain"></i></div><div><div class="fc-meta">Memory</div><div class="fc-label">Memory Match</div></div></div>
-        <div class="flash-card fc-1"><div class="fc-icon"><i class="fas fa-laptop-code"></i></div><div><div class="fc-meta">Portal</div><div class="fc-label">Homework</div></div></div>
-        <div class="flash-card fc-5"><div class="fc-icon"><i class="fas fa-headphones"></i></div><div><div class="fc-meta">Listening</div><div class="fc-label">Audio Drills</div></div></div>
-        <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-rocket"></i></div><div><div class="fc-meta">Strategy</div><div class="fc-label">Last Colony</div></div></div>
-        <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-puzzle-piece"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Scramble</div></div></div>
-    </div>
-</div>
-
-<!-- Cards -->
-<div class="cards-grid">
-    <!-- TOEFL -->
-    <div class="tool-card" data-glow="blue" onclick="requireTeacher(function(){openToeflModal();})" style="animation-delay:0.05s;">
-        <div class="shine"></div>
-        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
-        <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white"><i class="fas fa-graduation-cap"></i></div>
-        <div class="tool-badge">Mock Test</div>
-        <h3>TOEFL iBT</h3>
-        <p>Full practice test — Reading, Listening, Speaking & Writing with timed security monitoring.</p>
-        <div class="meta-row">
-            <span><i class="fas fa-list-check text-blue-500"></i> 4 Sections</span>
-            <span class="meta-dots" style="color:#2563eb;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i><i class="meta-dot"></i></span>
-        </div>
-        <button class="card-btn"><i class="fas fa-play"></i> Start Test</button>
-    </div>
-    
-    <!-- World Class 2-1 -->
-    <div class="tool-card" data-glow="sky" onclick="requireTeacher(function(){openBook1Modal();})" style="animation-delay:0.15s;">
-        <div class="shine"></div>
-        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
-        <div class="tool-icon bg-gradient-to-br from-cyan-600 to-blue-700 text-white"><i class="fas fa-book"></i></div>
-        <div class="tool-badge">Teacher's Edition</div>
-        <h3>World Class 2-1</h3>
-        <p>Complete Book 2-1 with units, vocab, grammar, reading & homework materials.</p>
-        <div class="meta-row">
-            <span><i class="fas fa-book text-cyan-600"></i> Full Book</span>
-            <span class="meta-dots" style="color:#0891b2;" title="Units"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i></span>
-        </div>
-        <button class="card-btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);box-shadow:0 4px 0 #075985,0 8px 24px rgba(2,132,199,.25);"><i class="fas fa-book"></i> World Class 2-1</button>
-    </div>
-
-    <!-- World Class 2-2 -->
-    <div class="tool-card" data-glow="rose" onclick="requireTeacher(function(){openBook2bModal();})" style="animation-delay:0.25s;">
-        <div class="shine"></div>
-        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
-        <div class="tool-icon bg-gradient-to-br from-slate-600 to-slate-800 text-white"><i class="fas fa-book-open"></i></div>
-        <div class="tool-badge">Teacher's Edition</div>
-        <h3>World Class 2-2</h3>
-        <p>Units 7–12 with vocab, grammar, reading & interactive homework portal for Level 11.</p>
-        <div class="meta-row">
-            <span><i class="fas fa-book text-slate-500"></i> Units 7–12</span>
-            <span class="meta-dots" style="color:#64748b;" title="Units"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i></span>
-        </div>
-        <button class="card-btn" style="background:linear-gradient(135deg,#475569,#334155);box-shadow:0 4px 0 #1e293b,0 8px 24px rgba(71,85,105,.25);"><i class="fas fa-book-open"></i> World Class 2-2</button>
-    </div>
-    
-    <!-- EduGrade -->
-    <div class="tool-card" data-glow="emerald" onclick="showToast('EduGrade Pro coming soon!')" style="animation-delay:0.35s;">
-        <div class="shine"></div>
-        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
-        <div class="tool-icon bg-gradient-to-br from-blue-400 to-cyan-500 text-white"><i class="fas fa-brain"></i></div>
-        <div class="tool-badge">AI-Powered</div>
-        <h3>EduGrade Pro</h3>
-        <p>AI writing grader for essays, sentences & summaries. Upload handwritten work for instant rubric feedback.</p>
-        <div class="meta-row">
-            <span><i class="fas fa-camera text-blue-400"></i> Photo Upload</span>
-            <span class="meta-dots" style="color:#3b82f6;" title="Accuracy"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i></span>
-        </div>
-        <button class="card-btn" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 4px 0 #1e3a8a,0 8px 24px rgba(37,99,235,.2);"><i class="fas fa-arrow-right"></i> Open Grader</button>
-    </div>
-    
-    <!-- Word Practice -->
-    <div class="tool-card" data-glow="purple" onclick="showToast('Word Practice coming soon!')" style="animation-delay:0.45s;">
-        <div class="shine"></div>
-        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
-        <div class="tool-icon bg-gradient-to-br from-cyan-400 to-blue-500 text-white"><i class="fas fa-pencil-alt"></i></div>
-        <div class="tool-badge">Vocabulary</div>
-        <h3>Word Practice</h3>
-        <p>Interactive vocabulary exercises and sentence writing for World Class 2 — Level 11.</p>
-        <div class="meta-row">
-            <span><i class="fas fa-book text-cyan-500"></i> World Class 2</span>
-            <span class="meta-dots" style="color:#06b6d4;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
-        </div>
-        <button class="card-btn" style="background:linear-gradient(135deg,#06b6d4,#0891b2);box-shadow:0 4px 0 #0e7490,0 8px 24px rgba(6,182,212,.2);"><i class="fas fa-arrow-right"></i> Open Practice</button>
-    </div>
-</div>
 
 <!-- Games Section -->
 <div class="games-section">
