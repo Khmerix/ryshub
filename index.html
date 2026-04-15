@@ -1241,8 +1241,9 @@
                     90deg,
                     rgba(56,189,248,0.95) 0 3px,
                     transparent 3px 9px
-                );
+            );
             mask-image: linear-gradient(180deg, transparent 0%, black 35%, black 65%, transparent 100%);
+            -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 35%, black 65%, transparent 100%);
             opacity: 0.8;
             border-radius: 12px;
         }
@@ -1968,10 +1969,10 @@
                 <div class="hb-chip"><i class="fas fa-sparkles"></i> Coded Visual Banner</div>
             </div>
             <div class="hb-grid">
-                <p class="hb-title">
+                <div class="hb-title" aria-hidden="true">
                     Teach English with
                     <span>Artful Digital Experiences</span>
-                </p>
+                </div>
                 <div class="hb-meta">
                     Designed for teachers who want bold visuals, clear pedagogy, and engaging classroom-ready learning moments.
                 </div>
