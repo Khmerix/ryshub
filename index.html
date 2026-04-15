@@ -378,6 +378,15 @@
             height: auto;
             max-height: 260px;
             display: block;
+            animation: kenBurns 25s ease-in-out infinite alternate;
+        }
+        @keyframes kenBurns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.06); }
+        }
+        .hero-banner { border-radius: 12px; margin-top: 8px; }
+        @media (max-width: 768px) {
+            .hero-banner { border-radius: 0 0 16px 16px; margin-top: 0; }
         }
         
         .hero-badge {
@@ -430,12 +439,26 @@
         
         .hero-subtitle {
             color: var(--gray-400);
-            font-size: 1.2rem;
-            max-width: 580px;
-            margin: 0 auto 40px;
-            line-height: 1.7;
+            font-size: 1.15rem;
+            max-width: 560px;
+            margin: 0 0 36px 0;
+            line-height: 1.5;
         }
         
+        .hero-content {
+            text-align: left;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        @media (min-width: 768px) {
+            .hero-section { text-align: left; }
+            .hero-content { margin-left: max(24px, calc((100vw - 1200px)/2 + 24px)); margin-right: auto; }
+            .hero-title { margin-left: 0; margin-right: 0; }
+            .hero-subtitle { margin-left: 0; margin-right: 0; }
+            .hero-btn-row { justify-content: flex-start; }
+            .feature-strip { justify-content: flex-start; }
+        }
         .hero-btn-row {
             display: flex;
             align-items: center;
@@ -591,16 +614,88 @@
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 28px;
+            gap: 22px;
             max-width: 1150px;
-            margin: 0 auto 100px;
+            margin: 0 auto 80px;
             padding: 0 24px;
             position: relative;
             z-index: 10;
         }
+        .meta-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .meta-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+        }
+        .meta-dot.active { background: currentColor; }
+        .whats-new {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border: 1px solid rgba(251,191,36,0.5);
+            margin-bottom: 18px;
+            box-shadow: 0 4px 15px rgba(251,191,36,0.25);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            animation: pulseGold 2.5s ease-in-out infinite;
+        }
+        .whats-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251,191,36,0.4);
+        }
+        @keyframes pulseGold {
+            0%, 100% { box-shadow: 0 4px 15px rgba(251,191,36,0.2); }
+            50% { box-shadow: 0 6px 22px rgba(251,191,36,0.45); }
+        }
+        .stat-strip {
+            max-width: 1150px;
+            margin: 0 auto 90px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+        .stat-card {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 28px 34px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            border-color: rgba(251,191,36,0.35);
+            transform: translateY(-4px);
+        }
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
         
         .tool-card {
-            background: rgba(17, 24, 39, 0.6);
+            background: rgba(17, 24, 39, 0.75);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
             padding: 34px;
@@ -609,6 +704,12 @@
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(12px);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardFadeUp 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes cardFadeUp {
+            to { opacity: 1; transform: translateY(0); }
         }
         .tool-card::before {
             content: '';
@@ -687,17 +788,20 @@
             border-radius: 50px;
             padding: 4px 12px;
             margin-bottom: 12px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2.5px;
         }
         
         .tool-card h3 {
             font-size: 1.3rem;
             font-weight: 700;
-            color: var(--white);
             margin: 0 0 10px;
+            background: linear-gradient(180deg, #ffffff 0%, #e5e7eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .tool-card p {
@@ -995,6 +1099,42 @@
         .menu-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 16px; border-top: 1px solid var(--gray-700); background: var(--gray-900); }
         .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999; }
         .menu-overlay.open { opacity: 1; visibility: visible; }
+
+        /* Nav active state */
+        .nav-3d.active-nav {
+            background: linear-gradient(180deg, rgba(37,99,235,.28) 0%, rgba(37,99,235,.1) 100%);
+            border-color: rgba(37,99,235,0.65);
+            box-shadow: 0 0 20px rgba(37,99,235,0.35), 0 4px 0 rgba(0,0,0,0.4);
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.4);
+        }
+        .menu-item.active-nav {
+            background: linear-gradient(135deg, rgba(37,99,235,.35) 0%, rgba(37,99,235,.1) 100%);
+            border-color: rgba(37,99,235,0.6);
+            box-shadow: 0 4px 15px rgba(37,99,235,0.3);
+            color: white;
+        }
+
+        /* Focus rings */
+        .nav-3d:focus-visible,
+        .glow-btn:focus-visible,
+        .glow-btn-outline:focus-visible,
+        .card-btn:focus-visible,
+        .arrow-btn:focus-visible,
+        .btn-primary:focus-visible,
+        .btn-outline:focus-visible {
+            outline: 2px solid var(--primary-light);
+            outline-offset: 3px;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .orb, .hero-banner img, .scroll-indicator, .tool-card, .card-arrow, .whats-new {
+                animation: none !important;
+                transition: none !important;
+            }
+            .tool-card { opacity: 1; transform: none; }
+        }
     </style>
 </head>
 <body>
@@ -1077,37 +1217,42 @@
 <!-- Hero -->
 <section class="hero-section">
     <div class="hero-banner">
-        <img src="assets/images/page-banner.png" alt="Creative Minds Banner">
+        <img src="assets/images/page-banner.png" alt="Creative Minds Banner" loading="lazy">
     </div>
-    <div class="hero-badge">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse"></span>
-        Live Platform 2026
-    </div>
-    <h1 class="hero-title">
-        ESL Teacher Ry's<br>
-        <span>Content Hub</span>
-    </h1>
-    <p class="hero-subtitle">
-        Digital tools & resources crafted for modern English learners at <strong class="text-white font-semibold">ESL Learning Hub</strong>
-    </p>
-    <div class="hero-btn-row">
-        <div class="hero-btns">
-            <button class="glow-btn text-base px-8 py-3.5" onclick="openToeflLogin()">
-                <i class="fas fa-play mr-2"></i> Start TOEFL Test
-            </button>
-            <button class="glow-btn-outline text-base px-8 py-3.5" onclick="openBook1Modal()">
-                <i class="fas fa-book mr-2"></i> World Class 2-1
-            </button>
-            <button class="glow-btn-outline text-base px-8 py-3.5" onclick="openBook2bModal()">
-                <i class="fas fa-book-open mr-2"></i> World Class 2-2
-            </button>
+    <div class="hero-content">
+        <div class="whats-new" onclick="openBrickForgeModal()">
+            <i class="fas fa-bolt"></i> New: Brick Forge 3D builder now live
         </div>
-    </div>
-    <div class="feature-strip">
-        <div class="feature-pill"><i class="fas fa-stopwatch"></i> Timed Tests</div>
-        <div class="feature-pill"><i class="fas fa-laptop-code"></i> Homework Portal</div>
-        <div class="feature-pill"><i class="fas fa-robot"></i> AI Grader</div>
-        <div class="feature-pill"><i class="fas fa-cubes"></i> 3D Builder</div>
+        <div class="hero-badge">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse"></span>
+            Live Platform 2026
+        </div>
+        <h1 class="hero-title">
+            ESL Teacher Ry's<br>
+            <span>Content Hub</span>
+        </h1>
+        <p class="hero-subtitle">
+            Digital tools & resources crafted for modern English learners at <strong class="text-white font-semibold">ESL Learning Hub</strong>
+        </p>
+        <div class="hero-btn-row">
+            <div class="hero-btns">
+                <button class="glow-btn text-base px-8 py-3.5" onclick="openToeflLogin()">
+                    <i class="fas fa-play mr-2"></i> Start TOEFL Test
+                </button>
+                <button class="glow-btn-outline text-base px-8 py-3.5" onclick="openBook1Modal()">
+                    <i class="fas fa-book mr-2"></i> World Class 2-1
+                </button>
+                <button class="glow-btn-outline text-base px-8 py-3.5" onclick="openBook2bModal()">
+                    <i class="fas fa-book-open mr-2"></i> World Class 2-2
+                </button>
+            </div>
+        </div>
+        <div class="feature-strip">
+            <div class="feature-pill"><i class="fas fa-stopwatch"></i> Timed Tests</div>
+            <div class="feature-pill"><i class="fas fa-laptop-code"></i> Homework Portal</div>
+            <div class="feature-pill"><i class="fas fa-robot"></i> AI Grader</div>
+            <div class="feature-pill"><i class="fas fa-cubes"></i> 3D Builder</div>
+        </div>
     </div>
     <div class="scroll-indicator">
         <span>Scroll</span>
@@ -1120,7 +1265,7 @@
 <!-- Cards -->
 <div class="cards-grid">
     <!-- TOEFL -->
-    <div class="tool-card" data-glow="blue" onclick="openToeflLogin()">
+    <div class="tool-card" data-glow="blue" onclick="openToeflLogin()" style="animation-delay:0.05s;">
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white"><i class="fas fa-graduation-cap"></i></div>
         <div class="tool-badge text-blue-300">Mock Test</div>
@@ -1128,13 +1273,13 @@
         <p>Full practice test — Reading, Listening, Speaking & Writing with timed security monitoring.</p>
         <div class="meta-row">
             <span><i class="fas fa-list-check text-blue-400"></i> 4 Sections</span>
-            <span><i class="fas fa-clock text-blue-400"></i> ~2 hours</span>
+            <span class="meta-dots" style="color:#60a5fa;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i><i class="meta-dot"></i></span>
         </div>
         <button class="card-btn"><i class="fas fa-play"></i> Start Test</button>
     </div>
     
     <!-- World Class 2-1 -->
-    <div class="tool-card" data-glow="sky" onclick="openBook1Modal()">
+    <div class="tool-card" data-glow="sky" onclick="openBook1Modal()" style="animation-delay:0.15s;">
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-sky-600 to-sky-800 text-white"><i class="fas fa-book"></i></div>
         <div class="tool-badge text-sky-300">Teacher's Edition</div>
@@ -1142,13 +1287,13 @@
         <p>Complete Book 2-1 with units, vocab, grammar, reading & homework materials.</p>
         <div class="meta-row">
             <span><i class="fas fa-book text-sky-400"></i> Full Book</span>
-            <span><i class="fas fa-pencil-alt text-sky-400"></i> HW Portal</span>
+            <span class="meta-dots" style="color:#38bdf8;" title="Units"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i></span>
         </div>
         <button class="card-btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);box-shadow:0 4px 0 #075985,0 8px 24px rgba(2,132,199,.35);"><i class="fas fa-book"></i> World Class 2-1</button>
     </div>
 
     <!-- World Class 2-2 -->
-    <div class="tool-card" data-glow="rose" onclick="openBook2bModal()">
+    <div class="tool-card" data-glow="rose" onclick="openBook2bModal()" style="animation-delay:0.25s;">
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-rose-700 to-rose-900 text-white"><i class="fas fa-book-open"></i></div>
         <div class="tool-badge text-amber-300">Teacher's Edition</div>
@@ -1156,13 +1301,13 @@
         <p>Units 7–12 with vocab, grammar, reading & interactive homework portal for Level 11.</p>
         <div class="meta-row">
             <span><i class="fas fa-book text-amber-400"></i> Units 7–12</span>
-            <span><i class="fas fa-pencil-alt text-amber-400"></i> HW Portal</span>
+            <span class="meta-dots" style="color:#fbbf24;" title="Units"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i></span>
         </div>
         <button class="card-btn" style="background:linear-gradient(135deg,#9f1239,#881337);box-shadow:0 4px 0 #4c0519,0 8px 24px rgba(159,18,57,.35);"><i class="fas fa-book-open"></i> World Class 2-2</button>
     </div>
     
     <!-- EduGrade -->
-    <div class="tool-card" data-glow="emerald" onclick="showToast('EduGrade Pro coming soon!')">
+    <div class="tool-card" data-glow="emerald" onclick="showToast('EduGrade Pro coming soon!')" style="animation-delay:0.35s;">
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-emerald-400 to-emerald-600 text-white"><i class="fas fa-brain"></i></div>
         <div class="tool-badge text-emerald-300">AI-Powered</div>
@@ -1170,13 +1315,13 @@
         <p>AI writing grader for essays, sentences & summaries. Upload handwritten work for instant rubric feedback.</p>
         <div class="meta-row">
             <span><i class="fas fa-camera text-emerald-400"></i> Photo Upload</span>
-            <span><i class="fas fa-star text-emerald-400"></i> Rubric AI</span>
+            <span class="meta-dots" style="color:#34d399;" title="Accuracy"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i></span>
         </div>
         <button class="card-btn" style="background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 4px 0 #047857,0 8px 24px rgba(16,185,129,.3);"><i class="fas fa-arrow-right"></i> Open Grader</button>
     </div>
     
     <!-- Word Practice -->
-    <div class="tool-card" data-glow="purple" onclick="showToast('Word Practice coming soon!')">
+    <div class="tool-card" data-glow="purple" onclick="showToast('Word Practice coming soon!')" style="animation-delay:0.45s;">
         <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
         <div class="tool-icon bg-gradient-to-br from-purple-400 to-purple-600 text-white"><i class="fas fa-pencil-alt"></i></div>
         <div class="tool-badge text-purple-300">Vocabulary</div>
@@ -1184,9 +1329,17 @@
         <p>Interactive vocabulary exercises and sentence writing for World Class 2 — Level 11.</p>
         <div class="meta-row">
             <span><i class="fas fa-book text-purple-400"></i> World Class 2</span>
-            <span><i class="fas fa-star text-purple-400"></i> Level 11</span>
+            <span class="meta-dots" style="color:#c084fc;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
         </div>
         <button class="card-btn" style="background:linear-gradient(135deg,#a855f7,#7c3aed);box-shadow:0 4px 0 #5b21b6,0 8px 24px rgba(168,85,247,.3);"><i class="fas fa-arrow-right"></i> Open Practice</button>
+    </div>
+</div>
+
+<!-- Stat Strip -->
+<div class="stat-strip">
+    <div class="stat-card">
+        <div class="stat-number">200+</div>
+        <div class="stat-label">Level 11 students using these tools this semester</div>
     </div>
 </div>
 
@@ -1340,12 +1493,6 @@
             if (this.x < 0 || this.x > width) this.vx *= -1;
             if (this.y < 0 || this.y > height) this.vy *= -1;
         }
-        draw(){
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(96, 165, 250, 0.55)';
-            ctx.fill();
-        }
     }
     
     for (let i = 0; i < particleCount; i++) particles.push(new Particle());
@@ -1359,7 +1506,25 @@
     
     function animate(){
         ctx.clearRect(0, 0, width, height);
-        for (let p of particles) { p.update(); p.draw(); }
+        for (let p of particles) {
+            p.update();
+            let radius = p.radius;
+            let alpha = 0.55;
+            if (mouse.x !== null) {
+                let dx = p.x - mouse.x;
+                let dy = p.y - mouse.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 180) {
+                    let t = 1 - dist/180;
+                    radius += t * 1.8;
+                    alpha = 0.55 + t * 0.45;
+                }
+            }
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(96, 165, 250, ${alpha})`;
+            ctx.fill();
+        }
         
         for (let i = 0; i < particles.length; i++){
             let connections = 0;
@@ -1381,10 +1546,10 @@
                 let dx = particles[i].x - mouse.x;
                 let dy = particles[i].y - mouse.y;
                 let dist = Math.sqrt(dx*dx + dy*dy);
-                if (dist < 200){
+                if (dist < 220){
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(37, 99, 235, ${0.35 * (1 - dist/200)})`;
-                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = `rgba(251, 191, 36, ${0.45 * (1 - dist/220)})`;
+                    ctx.lineWidth = 1.2;
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(mouse.x, mouse.y);
                     ctx.stroke();
@@ -1406,6 +1571,24 @@ window.addEventListener('scroll', () => {
 /* ===== Original App Logic ===== */
 var toastTimer;
 
+function setNavActive(key) {
+    const map = {
+        'toefl': ['TOEFL', 'TOEFL iBT'],
+        'book1': ['World Class 2-1'],
+        'book2': ['World Class 2-2'],
+        'brickforge': ['Brick Forge']
+    };
+    const labels = map[key] || [];
+    document.querySelectorAll('.nav-3d, .menu-item').forEach(el => {
+        const txt = el.textContent.trim();
+        if (labels.some(l => txt.includes(l))) el.classList.add('active-nav');
+        else el.classList.remove('active-nav');
+    });
+}
+function clearNavActive() {
+    document.querySelectorAll('.nav-3d, .menu-item').forEach(el => el.classList.remove('active-nav'));
+}
+
 function toggleMenu() {
     const menu = document.getElementById('slideMenu');
     const overlay = document.getElementById('menuOverlay');
@@ -1415,10 +1598,12 @@ function toggleMenu() {
 
 function openToeflLogin() {
     document.getElementById('toefl-login-overlay').classList.add('open');
+    setNavActive('toefl');
     setTimeout(function(){ document.getElementById('toefl-name').focus(); }, 200);
 }
 function closeToeflLogin() {
     document.getElementById('toefl-login-overlay').classList.remove('open');
+    clearNavActive();
 }
 function launchToefl() {
     var name = document.getElementById('toefl-name').value.trim();
@@ -1428,6 +1613,7 @@ function launchToefl() {
     var frame = document.getElementById('toefl-frame');
     frame.src = 'apps/toefl.html';
     document.getElementById('toefl-modal').classList.add('open');
+    setNavActive('toefl');
     frame.onload = function() {
         try {
             frame.contentDocument.getElementById('student-name').value = name;
@@ -1437,36 +1623,43 @@ function launchToefl() {
 }
 function closeToeflModal() {
     document.getElementById('toefl-modal').classList.remove('open');
+    clearNavActive();
 }
 
 function openBook1Modal() {
-    showToast('Loading World Class 2-1... one moment ⏳');
+    showToast('Loading World Class 2-1... one moment');
     var frame = document.getElementById('book1-frame');
     frame.src = 'apps/book1.html';
     document.getElementById('book1-modal').classList.add('open');
+    setNavActive('book1');
 }
 function closeBook1Modal() {
     document.getElementById('book1-modal').classList.remove('open');
+    clearNavActive();
 }
 
 function openBook2bModal() {
-    showToast('Loading World Class 2-2... one moment ⏳');
+    showToast('Loading World Class 2-2... one moment');
     var frame = document.getElementById('book2b-frame');
     frame.src = 'apps/book2b.html';
     document.getElementById('book2b-modal').classList.add('open');
+    setNavActive('book2');
 }
 function closeBook2bModal() {
     document.getElementById('book2b-modal').classList.remove('open');
+    clearNavActive();
 }
 
 function openBrickForgeModal() {
-    showToast('Loading Brick Forge... one moment ⏳');
+    showToast('Loading Brick Forge... one moment');
     var frame = document.getElementById('brickforge-frame');
     frame.src = 'apps/brickforge.html';
     document.getElementById('brickforge-modal').classList.add('open');
+    setNavActive('brickforge');
 }
 function closeBrickForgeModal() {
     document.getElementById('brickforge-modal').classList.remove('open');
+    clearNavActive();
 }
 
 function showToast(msg) {
