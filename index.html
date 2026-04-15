@@ -570,16 +570,116 @@
             box-shadow: 0 32px 100px rgba(0,0,0,0.16), 0 0 0 1px rgba(255,255,255,0.5) inset;
             transform: translateY(-2px);
         }
-        .hero-banner img {
-            width: 100%;
-            height: auto;
-            max-height: 280px;
-            display: block;
-            animation: kenBurns 20s ease-in-out infinite alternate;
+        .hero-banner-coded {
+            position: relative;
+            min-height: 280px;
+            padding: 34px clamp(18px, 4vw, 38px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 28px;
+            background:
+                radial-gradient(circle at 10% 15%, rgba(59,130,246,0.24), transparent 45%),
+                radial-gradient(circle at 86% 24%, rgba(6,182,212,0.2), transparent 42%),
+                linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #0e7490 100%);
+            overflow: hidden;
         }
-        @keyframes kenBurns {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.04); }
+        .hero-banner-coded::before {
+            content: '';
+            position: absolute;
+            inset: -50% -30%;
+            background:
+                repeating-linear-gradient(
+                    115deg,
+                    rgba(255,255,255,0.08) 0 2px,
+                    transparent 2px 28px
+                );
+            opacity: 0.32;
+            transform: rotate(-4deg);
+            pointer-events: none;
+        }
+        .hero-banner-coded::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(15,23,42,0.08) 0%, rgba(15,23,42,0.45) 100%);
+            pointer-events: none;
+        }
+        .hb-top, .hb-bottom {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .hb-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.24);
+            background: rgba(255,255,255,0.1);
+            color: rgba(248,250,252,0.95);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+            backdrop-filter: blur(8px);
+        }
+        .hb-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 14px;
+        }
+        .hb-title {
+            grid-column: span 8;
+            margin: 0;
+            color: #f8fafc;
+            font-size: clamp(1.6rem, 3.7vw, 2.8rem);
+            line-height: 1.05;
+            letter-spacing: -1.2px;
+            text-shadow: 0 10px 28px rgba(15,23,42,0.45);
+        }
+        .hb-title span {
+            display: block;
+            color: #93c5fd;
+        }
+        .hb-meta {
+            grid-column: span 4;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 18px;
+            background: rgba(15,23,42,0.35);
+            padding: 14px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            line-height: 1.55;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+        }
+        .hb-lineup {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .hb-line {
+            width: 38px;
+            height: 5px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #38bdf8, #93c5fd);
+            box-shadow: 0 0 16px rgba(56,189,248,0.45);
+        }
+        @media (max-width: 900px) {
+            .hb-title, .hb-meta { grid-column: 1 / -1; }
+        }
+        @media (max-width: 640px) {
+            .hero-banner-coded { min-height: 240px; padding: 22px; }
+            .hb-title { font-size: clamp(1.45rem, 6.2vw, 2rem); }
         }
         @media (max-width: 768px) {
             .hero-banner { border-radius: 16px; margin-top: 0; }
@@ -1032,6 +1132,149 @@
             font-size: 0.85rem;
             color: var(--slate-500);
             font-weight: 500;
+        }
+
+        /* ESL Art Cards */
+        .art-cards-section {
+            max-width: 1150px;
+            margin: 0 auto 24px;
+            padding: 0 24px 24px;
+            position: relative;
+            z-index: 10;
+        }
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+        }
+        .art-card {
+            position: relative;
+            min-height: 260px;
+            padding: 24px;
+            border-radius: 24px;
+            border: 1px solid rgba(15,23,42,0.08);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(15,23,42,0.1), inset 0 0 0 1px rgba(255,255,255,0.32);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+        .art-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 28px 70px rgba(15,23,42,0.16), inset 0 0 0 1px rgba(255,255,255,0.36);
+        }
+        .art-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 18% 20%, rgba(255,255,255,0.42), transparent 36%),
+                radial-gradient(circle at 85% 80%, rgba(255,255,255,0.24), transparent 45%);
+            pointer-events: none;
+        }
+        .art-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 35%, rgba(15,23,42,0.45) 100%);
+            pointer-events: none;
+        }
+        .art-card-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            color: #f8fafc;
+        }
+        .art-card h3 {
+            margin: 0 0 8px;
+            font-size: 1.2rem;
+            letter-spacing: -0.2px;
+        }
+        .art-card p {
+            margin: 0;
+            color: rgba(241,245,249,0.9);
+            font-size: 0.84rem;
+            line-height: 1.5;
+            max-width: 95%;
+        }
+        .art-card .art-tag {
+            align-self: flex-start;
+            margin-bottom: 12px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.28);
+            background: rgba(255,255,255,0.12);
+        }
+        .art-card.classroom {
+            background:
+                linear-gradient(140deg, #1d4ed8 0%, #0f766e 48%, #155e75 100%);
+        }
+        .art-card.classroom .art-sketch {
+            position: absolute;
+            inset: 16px 18px auto;
+            height: 82px;
+            border: 1px dashed rgba(255,255,255,0.28);
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            color: rgba(255,255,255,0.88);
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .art-card.phonics {
+            background:
+                linear-gradient(135deg, #581c87 0%, #1e1b4b 52%, #0f172a 100%);
+        }
+        .art-card.phonics .sound-wave {
+            position: absolute;
+            left: 22px;
+            right: 22px;
+            top: 36px;
+            height: 78px;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(56,189,248,0.95) 0 3px,
+                    transparent 3px 9px
+                );
+            mask-image: linear-gradient(180deg, transparent 0%, black 35%, black 65%, transparent 100%);
+            opacity: 0.8;
+            border-radius: 12px;
+        }
+        .art-card.global {
+            background:
+                linear-gradient(135deg, #0f172a 0%, #1e40af 40%, #0e7490 100%);
+        }
+        .art-card.global .globe-ring {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.35);
+            box-shadow: inset 0 0 0 6px rgba(255,255,255,0.07);
+        }
+        .art-card.global .globe-ring::before,
+        .art-card.global .globe-ring::after {
+            content: '';
+            position: absolute;
+            inset: 16%;
+            border-radius: 50%;
+            border: 1px dashed rgba(255,255,255,0.35);
+        }
+        .art-card.global .globe-ring::after {
+            inset: 0;
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.32);
+            border-bottom: 1px solid rgba(255,255,255,0.32);
+            border-radius: 50%;
+            transform: rotate(22deg);
         }
 
         /* Games Section */
@@ -1615,7 +1858,7 @@
 
         /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
-            .mesh-bg, .light-ray, .hero-banner img, .scroll-indicator, .tool-card, .card-arrow, .whats-new {
+            .mesh-bg, .light-ray, .hero-banner-coded, .scroll-indicator, .tool-card, .card-arrow, .whats-new {
                 animation: none !important;
                 transition: none !important;
             }
@@ -1719,7 +1962,29 @@
 <!-- Hero -->
 <section class="hero-section">
     <div class="hero-banner">
-        <img src="assets/images/page-banner.png" alt="Creative Minds Banner" loading="lazy">
+        <div class="hero-banner-coded" role="img" aria-label="ESL Teachers Hub digital banner">
+            <div class="hb-top">
+                <div class="hb-chip"><i class="fas fa-chalkboard-teacher"></i> ESL Teachers Hub</div>
+                <div class="hb-chip"><i class="fas fa-sparkles"></i> Coded Visual Banner</div>
+            </div>
+            <div class="hb-grid">
+                <h2 class="hb-title">
+                    Teach English with
+                    <span>Artful Digital Experiences</span>
+                </h2>
+                <div class="hb-meta">
+                    Designed for teachers who want bold visuals, clear pedagogy, and engaging classroom-ready learning moments.
+                </div>
+            </div>
+            <div class="hb-bottom">
+                <div class="hb-lineup">
+                    <span class="hb-line"></span>
+                    <span class="hb-line"></span>
+                    <span class="hb-line"></span>
+                </div>
+                <div class="hb-chip"><i class="fas fa-language"></i> Reading · Speaking · Writing · Listening</div>
+            </div>
+        </div>
     </div>
     <div class="hero-content">
         <div class="whats-new" onclick="requireLoggedIn(function(){openBrickForgeModal();})">
@@ -1766,6 +2031,41 @@
     <div class="scroll-indicator">
         <span>Scroll</span>
         <i class="fas fa-chevron-down"></i>
+    </div>
+</section>
+
+<!-- ESL Art Cards -->
+<section class="art-cards-section">
+    <div class="section-heading">
+        <div class="section-tag"><i class="fas fa-palette"></i> ESL Teachers Hub Theme</div>
+        <h2 class="section-title">Highly Detailed Art Cards</h2>
+        <p class="section-subtitle">Coded visuals for showcasing key teaching experiences</p>
+    </div>
+    <div class="art-grid">
+        <article class="art-card classroom">
+            <div class="art-sketch">CLASSROOM LAB</div>
+            <div class="art-card-content">
+                <span class="art-tag">Immersive Scene</span>
+                <h3>Interactive Classroom Canvas</h3>
+                <p>Layered gradients and sketch overlays emulate a dynamic teaching board ready for lesson highlights.</p>
+            </div>
+        </article>
+        <article class="art-card phonics">
+            <div class="sound-wave"></div>
+            <div class="art-card-content">
+                <span class="art-tag">Audio Focus</span>
+                <h3>Pronunciation Studio Card</h3>
+                <p>Soundwave-inspired geometry presents speaking and listening practice with a premium visual rhythm.</p>
+            </div>
+        </article>
+        <article class="art-card global">
+            <div class="globe-ring"></div>
+            <div class="art-card-content">
+                <span class="art-tag">Global English</span>
+                <h3>World Language Journey</h3>
+                <p>Orbital ring motifs and deep tonal contrast frame cross-cultural English learning pathways.</p>
+            </div>
+        </article>
     </div>
 </section>
 
