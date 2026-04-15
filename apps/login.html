@@ -3,91 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Login - Ryshub</title>
+    <title>Login - Ryshub</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-        
         .login-container {
             background: white;
-            padding: 50px;
+            padding: 45px;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            max-width: 460px;
             width: 100%;
             text-align: center;
         }
-        
         .logo {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #722f37 0%, #d4af37 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
             border-radius: 50%;
-            margin: 0 auto 30px;
+            margin: 0 auto 25px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
+            font-size: 38px;
         }
-        
         h1 {
-            color: #2c3e50;
-            margin-bottom: 10px;
+            color: #1e3a8a;
+            margin-bottom: 8px;
             font-size: 28px;
         }
-        
         .subtitle {
             color: #666;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
             font-size: 14px;
         }
-        
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 6px;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 15px;
+        }
+        .tab.active {
+            background: white;
+            color: #1e3a8a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             text-align: left;
         }
-        
         label {
             display: block;
-            margin-bottom: 8px;
-            color: #555;
+            margin-bottom: 7px;
+            color: #475569;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13.5px;
         }
-        
         input[type="text"],
+        input[type="email"],
         input[type="password"] {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
             border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            font-size: 15px;
+            transition: border-color 0.2s;
         }
-        
-        input[type="text"]:focus,
-        input[type="password"]:focus {
+        input:focus {
             outline: none;
-            border-color: #d4af37;
+            border-color: #2563eb;
         }
-        
+        .role-note {
+            font-size: 12.5px;
+            color: #64748b;
+            background: #f8fafc;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: left;
+            border-left: 3px solid #2563eb;
+        }
         .login-btn {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #722f37 0%, #8b3a3a 100%);
+            padding: 15px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white;
             border: none;
             border-radius: 10px;
@@ -95,86 +116,47 @@
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
+            margin-top: 6px;
         }
-        
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(114, 47, 55, 0.3);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
         }
-        
         .error-message {
             background: #fee;
             color: #c33;
             padding: 12px;
             border-radius: 8px;
-            margin-top: 20px;
+            margin-top: 16px;
             display: none;
-            font-size: 14px;
+            font-size: 13.5px;
         }
-        
-        .error-message.show {
-            display: block;
-        }
-        
-        .secure-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 30px;
-            color: #4caf50;
-            font-size: 13px;
-        }
-        
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            font-size: 12px;
-            color: #999;
-        }
-        
-        .info-box {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            text-align: left;
-            font-size: 13px;
-            color: #666;
-            border-left: 4px solid #d4af37;
-        }
-        
-        .info-box strong {
-            color: #722f37;
-        }
-        
-        .toggle-form {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
-        }
-        .toggle-form a {
-            color: #722f37;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .toggle-form a:hover {
-            text-decoration: underline;
-        }
+        .error-message.show { display: block; }
         .success-message {
             background: #e8f5e9;
             color: #2e7d32;
             padding: 12px;
             border-radius: 8px;
-            margin-top: 20px;
+            margin-top: 16px;
             display: none;
-            font-size: 14px;
+            font-size: 13.5px;
         }
-        .success-message.show {
-            display: block;
+        .success-message.show { display: block; }
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+            color: #2563eb;
+            font-size: 13px;
+        }
+        .footer {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 12px;
+            color: #94a3b8;
         }
     </style>
 </head>
@@ -182,175 +164,169 @@
     <div class="login-container">
         <div class="logo">📚</div>
         <h1>Log into Ryshub</h1>
-        <p class="subtitle">Teacher Portal</p>
-        
-        <div class="info-box">
-            <strong>🔒 Teacher Access Only</strong><br>
-            This area contains teacher materials including answer keys, assessments, and test platforms. Please login to continue.
+        <p class="subtitle">One account for everything</p>
+
+        <div class="tabs">
+            <button class="tab active" id="tabLogin" onclick="switchTab('login')">Login</button>
+            <button class="tab" id="tabRegister" onclick="switchTab('register')">Register</button>
         </div>
-        
+
         <form id="loginForm">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                <input type="text" id="username" placeholder="Enter your username" required>
             </div>
-            
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <input type="password" id="password" placeholder="Enter your password" required>
             </div>
-            
-            <button type="submit" class="login-btn">Login to Teacher Portal</button>
+            <button type="submit" class="login-btn">Login</button>
         </form>
-        
+
         <form id="registerForm" style="display:none;">
             <div class="form-group">
                 <label for="regUsername">Username</label>
                 <input type="text" id="regUsername" placeholder="Choose a username" required>
             </div>
-            
+            <div class="form-group">
+                <label for="regEmail">School Email</label>
+                <input type="email" id="regEmail" placeholder="you@school.edu" required>
+            </div>
+            <div class="role-note" id="roleNote">
+                <strong>🎓 Auto-detected role:</strong> <span id="roleText">Student</span><br>
+                Use a school email address (e.g., <em>.edu</em>) to register as a teacher.
+            </div>
             <div class="form-group">
                 <label for="regPassword">Password</label>
                 <input type="password" id="regPassword" placeholder="Create a password" required>
             </div>
-            
             <div class="form-group">
                 <label for="regConfirm">Confirm Password</label>
                 <input type="password" id="regConfirm" placeholder="Re-enter password" required>
             </div>
-            
             <button type="submit" class="login-btn">Create Account</button>
         </form>
-        
-        <p class="toggle-form" id="toggleText">Don't have an account? <a onclick="toggleMode(event); return false;">Register</a></p>
-        <p class="toggle-form" id="toggleTextRegister" style="display:none;"><a onclick="toggleMode(event); return false;">Back to Login</a></p>
-        
-        <div id="errorMessage" class="error-message">
-            Invalid username or password. Please try again.
-        </div>
-        
-        <div id="successMessage" class="success-message">
-            Account created successfully! Please log in.
-        </div>
-        
+
+        <div id="errorMessage" class="error-message">Invalid username or password. Please try again.</div>
+        <div id="successMessage" class="success-message">Account created successfully! Please log in.</div>
+
         <div class="secure-badge">
             <span>🔒</span>
-            <span>Secure, Encrypted Access</span>
+            <span>Secure Access Portal</span>
         </div>
-        
-        <div class="footer">
-            © 2026 Ryshub - Teacher Resources<br>
-            Unauthorized distribution prohibited
-        </div>
+        <div class="footer">© 2026 Ryshub — Built for ESL learners & teachers</div>
     </div>
-    
+
     <script>
-        // Legacy hardcoded credentials for backward compatibility
-        const validUsers = {
-            'teacher': 'WorldClass2024!',
-            'admin': 'Admin2024!'
+        const LEGACY_USERS = {
+            'teacher': { password: 'WorldClass2024!', role: 'teacher', email: 'teacher@school.edu' },
+            'admin':   { password: 'Admin2024!', role: 'teacher', email: 'admin@school.edu' }
         };
-        
-        function getRegisteredUsers() {
+
+        function getAccounts() {
             try {
-                const data = localStorage.getItem('ryshub_users');
+                const data = localStorage.getItem('ryshub_accounts');
                 return data ? JSON.parse(data) : {};
-            } catch(e) {
-                return {};
-            }
+            } catch(e) { return {}; }
         }
-        
-        function saveRegisteredUsers(users) {
-            localStorage.setItem('ryshub_users', JSON.stringify(users));
+        function saveAccounts(accounts) {
+            localStorage.setItem('ryshub_accounts', JSON.stringify(accounts));
         }
-        
-        function toggleMode(e) {
-            e.preventDefault();
-            const isLogin = document.getElementById('loginForm').style.display !== 'none';
-            document.getElementById('loginForm').style.display = isLogin ? 'none' : 'block';
-            document.getElementById('registerForm').style.display = isLogin ? 'block' : 'none';
-            document.getElementById('toggleText').style.display = isLogin ? 'none' : 'block';
-            document.getElementById('toggleTextRegister').style.display = isLogin ? 'block' : 'none';
+        function detectRole(email) {
+            return email.toLowerCase().includes('.edu') ? 'teacher' : 'student';
+        }
+        function switchTab(mode) {
+            document.getElementById('loginForm').style.display = mode === 'login' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = mode === 'register' ? 'block' : 'none';
+            document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
+            document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
             document.getElementById('errorMessage').classList.remove('show');
             document.getElementById('successMessage').classList.remove('show');
         }
-        
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMessage');
-            const registered = getRegisteredUsers();
-            
-            const isValid = (validUsers[username] && validUsers[username] === password) ||
-                            (registered[username] && registered[username] === password);
-            
-            if (isValid) {
-                sessionStorage.setItem('teacherLoggedIn', 'true');
-                sessionStorage.setItem('userRole', 'teacher');
-                sessionStorage.setItem('teacherUsername', username);
-                sessionStorage.setItem('loginTime', new Date().toISOString());
+            const accounts = getAccounts();
+
+            let role = null;
+            if (LEGACY_USERS[username] && LEGACY_USERS[username].password === password) {
+                role = LEGACY_USERS[username].role;
+            } else if (accounts[username] && accounts[username].password === password) {
+                role = accounts[username].role;
+            }
+
+            if (role) {
+                sessionStorage.setItem('ryshub_loggedIn', 'true');
+                sessionStorage.setItem('ryshub_user', username);
+                sessionStorage.setItem('ryshub_role', role);
                 window.location.href = '../index.html';
             } else {
+                errorDiv.textContent = 'Invalid username or password. Please try again.';
                 errorDiv.classList.add('show');
                 document.getElementById('password').value = '';
                 document.getElementById('password').focus();
             }
         });
-        
+
+        document.getElementById('regEmail').addEventListener('input', function() {
+            const role = detectRole(this.value);
+            document.getElementById('roleText').textContent = role === 'teacher' ? 'Teacher' : 'Student';
+            document.getElementById('roleText').style.color = role === 'teacher' ? '#2563eb' : '#059669';
+        });
+
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const username = document.getElementById('regUsername').value.trim().toLowerCase();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
             const password = document.getElementById('regPassword').value;
             const confirm = document.getElementById('regConfirm').value;
             const errorDiv = document.getElementById('errorMessage');
             const successDiv = document.getElementById('successMessage');
-            
-            if (!username || !password) {
-                errorDiv.textContent = 'Please enter a username and password.';
+
+            if (!username || !email || !password) {
+                errorDiv.textContent = 'Please fill in all fields.';
                 errorDiv.classList.add('show');
                 return;
             }
-            
             if (password !== confirm) {
-                errorDiv.textContent = 'Passwords do not match. Please try again.';
+                errorDiv.textContent = 'Passwords do not match.';
                 errorDiv.classList.add('show');
                 document.getElementById('regConfirm').value = '';
                 document.getElementById('regConfirm').focus();
                 return;
             }
-            
-            const registered = getRegisteredUsers();
-            if (registered[username] || validUsers[username]) {
+
+            const accounts = getAccounts();
+            if (accounts[username] || LEGACY_USERS[username]) {
                 errorDiv.textContent = 'Username already exists. Please choose another.';
                 errorDiv.classList.add('show');
                 return;
             }
-            
-            registered[username] = password;
-            saveRegisteredUsers(registered);
-            
+
+            const role = detectRole(email);
+            accounts[username] = { password, email, role };
+            saveAccounts(accounts);
+
             errorDiv.classList.remove('show');
+            successDiv.textContent = 'Account created! You registered as a ' + role + '. Please log in.';
             successDiv.classList.add('show');
             document.getElementById('registerForm').reset();
-            setTimeout(function() {
-                toggleMode({ preventDefault: function(){} });
-            }, 1500);
+            document.getElementById('roleText').textContent = 'Student';
+            document.getElementById('roleText').style.color = 'inherit';
+            setTimeout(function() { switchTab('login'); }, 1800);
         });
-        
-        // Clear messages on input
-        ['username','password','regUsername','regPassword','regConfirm'].forEach(function(id) {
+
+        ['username','password','regUsername','regEmail','regPassword','regConfirm'].forEach(function(id) {
             document.getElementById(id).addEventListener('input', function() {
                 document.getElementById('errorMessage').classList.remove('show');
-                document.getElementById('successMessage').classList.remove('show');
             });
         });
-        
-        // Handle ?mode=register
+
         if (window.location.search.includes('mode=register')) {
-            toggleMode({ preventDefault: function(){} });
+            switchTab('register');
         }
     </script>
 </body>

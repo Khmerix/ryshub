@@ -1473,6 +1473,11 @@
     </style>
 </head>
 <body>
+    <script>
+        if (sessionStorage.getItem('ryshub_loggedIn') !== 'true') {
+            window.location.href = 'apps/login.html';
+        }
+    </script>
 <!-- Background Orbs -->
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
@@ -1506,13 +1511,12 @@
             <a href="#" class="nav-3d" onclick="requireTeacher(function(){openToeflModal();}); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
             <a href="#" class="nav-3d" onclick="requireTeacher(function(){openBook1Modal();}); return false;"><i class="fas fa-book text-xs"></i> World Class 2-1</a>
             <a href="#" class="nav-3d" onclick="requireTeacher(function(){openBook2bModal();}); return false;"><i class="fas fa-book-open text-xs"></i> World Class 2-2</a>
-            <a href="#" class="nav-3d" onclick="requireStudentOrTeacher(function(){openBrickForgeModal();}); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
+            <a href="#" class="nav-3d" onclick="requireLoggedIn(function(){openBrickForgeModal();}); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
             <a href="#games" class="nav-3d" onclick="event.preventDefault(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});"><i class="fas fa-gamepad text-xs"></i> Arcade</a>
         </nav>
         
         <div class="flex items-center gap-3">
-            <button class="btn-outline hidden sm:block" onclick="window.location.href='apps/student-login.html'">Student Login</button>
-            <button class="btn-primary" onclick="window.location.href='apps/login.html'">Teacher Login</button>
+            <button class="btn-outline hidden sm:block" onclick="logoutUser()">Logout</button>
             <button class="md:hidden w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white" onclick="toggleMenu()">
                 <i class="fas fa-bars"></i>
             </button>
@@ -1542,7 +1546,7 @@
         <a href="#" class="menu-item" onclick="requireTeacher(function(){openBook2bModal(); toggleMenu();}); return false;">
             <i class="fas fa-book-open"></i><span>World Class 2-2</span>
         </a>
-        <a href="#" class="menu-item" onclick="requireStudentOrTeacher(function(){openBrickForgeModal(); toggleMenu();}); return false;">
+        <a href="#" class="menu-item" onclick="requireLoggedIn(function(){openBrickForgeModal(); toggleMenu();}); return false;">
             <i class="fas fa-cube"></i><span>Brick Forge</span>
         </a>
         <a href="#games" class="menu-item" onclick="event.preventDefault(); toggleMenu(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});">
@@ -1570,7 +1574,7 @@
         <img src="assets/images/page-banner.png" alt="Creative Minds Banner" loading="lazy">
     </div>
     <div class="hero-content">
-        <div class="whats-new" onclick="requireStudentOrTeacher(function(){openBrickForgeModal();})">
+        <div class="whats-new" onclick="requireLoggedIn(function(){openBrickForgeModal();})">
             <i class="fas fa-bolt"></i> New: Brick Forge 3D builder now live
         </div>
         <div class="hero-badge">
@@ -1705,7 +1709,7 @@
         <p class="section-subtitle">Quick brain breaks — no install needed</p>
     </div>
     <div class="games-grid">
-        <div class="game-card" onclick="requireStudentOrTeacher(function(){openColonyModal();})" style="animation-delay:0.05s;">
+        <div class="game-card" onclick="requireLoggedIn(function(){openColonyModal();})" style="animation-delay:0.05s;">
             <div class="shine"></div>
             <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
             <div class="game-thumb bg-gradient-to-br from-rose-600 to-rose-800"><i class="fas fa-rocket"></i></div>
@@ -1716,7 +1720,7 @@
                 <span><i class="fas fa-globe text-rose-400"></i> Mars 2041</span>
                 <span class="meta-dots" style="color:#fb7185;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
             </div>
-            <button class="game-btn" onclick="event.stopPropagation(); requireStudentOrTeacher(function(){openColonyModal();});"><i class="fas fa-play"></i> Play Now</button>
+            <button class="game-btn" onclick="event.stopPropagation(); requireLoggedIn(function(){openColonyModal();});"><i class="fas fa-play"></i> Play Now</button>
         </div>
         <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.15s;">
             <div class="shine"></div>
@@ -2008,21 +2012,27 @@ window.addEventListener('scroll', () => {
 var toastTimer;
 
 function requireTeacher(callback) {
-    if (sessionStorage.getItem('teacherLoggedIn') === 'true') {
+    if (sessionStorage.getItem('ryshub_role') === 'teacher') {
         callback();
     } else {
-        showToast('Teacher login required');
+        showToast('Teacher access required');
+    }
+}
+
+function requireLoggedIn(callback) {
+    if (sessionStorage.getItem('ryshub_loggedIn') === 'true') {
+        callback();
+    } else {
+        showToast('Please log in first');
         setTimeout(function(){ window.location.href = 'apps/login.html'; }, 800);
     }
 }
 
-function requireStudentOrTeacher(callback) {
-    if (sessionStorage.getItem('studentLoggedIn') === 'true' || sessionStorage.getItem('teacherLoggedIn') === 'true') {
-        callback();
-    } else {
-        showToast('Please log in to play');
-        setTimeout(function(){ window.location.href = 'apps/student-login.html'; }, 800);
-    }
+function logoutUser() {
+    sessionStorage.removeItem('ryshub_loggedIn');
+    sessionStorage.removeItem('ryshub_user');
+    sessionStorage.removeItem('ryshub_role');
+    window.location.href = 'apps/login.html';
 }
 
 function setNavActive(key) {
