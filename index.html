@@ -549,51 +549,57 @@
         
         .hero-banner {
             width: 100%;
-            max-width: 1400px;
-            margin: 0 auto 28px;
-            border-radius: 0 0 20px 20px;
+            max-width: 1200px;
+            margin: 0 auto 36px;
+            border-radius: 24px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 0 50px rgba(37,99,235,0.06);
-            border: 1px solid rgba(15,23,42,0.06);
-            border-top: none;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.12), 0 0 0 1px rgba(255,255,255,0.5) inset;
+            border: 1px solid rgba(15,23,42,0.08);
             transition: all 0.4s ease;
             z-index: 10;
         }
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 60%, rgba(15,23,42,0.04) 100%);
+            pointer-events: none;
+        }
         .hero-banner:hover {
-            box-shadow: 0 30px 80px rgba(0,0,0,0.12), 0 0 70px rgba(37,99,235,0.1);
+            box-shadow: 0 32px 100px rgba(0,0,0,0.16), 0 0 0 1px rgba(255,255,255,0.5) inset;
+            transform: translateY(-2px);
         }
         .hero-banner img {
             width: 100%;
             height: auto;
-            max-height: 260px;
+            max-height: 280px;
             display: block;
-            animation: kenBurns 25s ease-in-out infinite alternate;
+            animation: kenBurns 20s ease-in-out infinite alternate;
         }
         @keyframes kenBurns {
             0% { transform: scale(1); }
-            100% { transform: scale(1.06); }
+            100% { transform: scale(1.04); }
         }
-        .hero-banner { border-radius: 12px; margin-top: 8px; }
         @media (max-width: 768px) {
-            .hero-banner { border-radius: 0 0 16px 16px; margin-top: 0; }
+            .hero-banner { border-radius: 16px; margin-top: 0; }
         }
         
         .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(37, 99, 235, 0.08);
-            border: 1px solid rgba(37, 99, 235, 0.2);
+            background: rgba(15, 23, 42, 0.06);
+            border: 1px solid rgba(15, 23, 42, 0.12);
             border-radius: 50px;
             padding: 8px 18px;
             font-size: 0.75rem;
             font-weight: 700;
-            color: var(--primary-blue);
+            color: var(--slate-600);
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.08);
+            box-shadow: 0 0 20px rgba(15, 23, 42, 0.04);
         }
         
         .hero-title {
@@ -605,15 +611,8 @@
             letter-spacing: -2px;
         }
         .hero-title span {
-            font-family: 'JetBrains Mono', monospace;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--slate-800);
             display: inline-block;
-        }
-        .hero-title span.decode-done {
-            text-shadow: 0 0 30px rgba(37,99,235,0.25), 0 0 60px rgba(6,182,212,0.15);
         }
         
         .hero-subtitle {
@@ -802,7 +801,7 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37,99,235,0.06);
         }
-        .feature-pill i { font-size: 0.75rem; color: var(--primary-blue); }
+        .feature-pill i { font-size: 0.75rem; color: var(--slate-500); }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1727,15 +1726,15 @@
             <i class="fas fa-bolt"></i> New: Brick Forge 3D builder now live
         </div>
         <div class="hero-badge">
-            <span class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(37,99,235,0.5)] animate-pulse"></span>
+            <span class="w-2 h-2 rounded-full bg-slate-500 shadow-[0_0_8px_rgba(100,116,139,0.5)] animate-pulse"></span>
             Live Platform 2026
         </div>
         <h1 class="hero-title">
-            ESL Teacher Ry's<br>
-            <span>Content Hub</span>
+            Teaching Tools Built for<br>
+            <span>Modern Classrooms</span>
         </h1>
         <p class="hero-subtitle">
-            Digital tools & resources crafted for modern English learners at <strong class="text-slate-800 font-semibold">ESL Learning Hub</strong>
+            Everything you need in one place — practice tests, digital textbooks, and interactive learning experiences for English language students.
         </p>
         <div class="hero-btn-row">
             <div class="hero-btns">
@@ -1756,13 +1755,6 @@
             <div class="feature-pill"><i class="fas fa-robot"></i> AI Grader</div>
             <div class="feature-pill"><i class="fas fa-cubes"></i> 3D Builder</div>
         </div>
-    </div>
-    <div class="hero-visual">
-        <div class="hv-orb"></div>
-        <div class="hv-ring"></div>
-        <div class="hv-float float-1"><i class="fas fa-graduation-cap"></i> TOEFL</div>
-        <div class="hv-float float-2"><i class="fas fa-rocket"></i> Colony</div>
-        <div class="hv-float float-3"><i class="fas fa-cube"></i> BrickForge</div>
     </div>
     <div class="scroll-indicator">
         <span>Scroll</span>
@@ -2204,30 +2196,6 @@ document.addEventListener('keydown', function(e) {
         if (menu.classList.contains('open')) toggleMenu();
     }
 });
-
-/* ===== Text Scramble Effect on Hero Title ===== */
-(function(){
-    const title = document.querySelector('.hero-title span');
-    if (!title) return;
-    const original = title.textContent;
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-    let iterations = 0;
-    const maxIterations = original.length * 8;
-    title.classList.add('decoding');
-    const interval = setInterval(() => {
-        title.textContent = original.split('').map((char, i) => {
-            if (i < iterations / 8) return original[i];
-            return chars[Math.floor(Math.random() * chars.length)];
-        }).join('');
-        iterations += 1;
-        if (iterations >= maxIterations) {
-            clearInterval(interval);
-            title.textContent = original;
-            title.classList.remove('decoding');
-            title.classList.add('decode-done');
-        }
-    }, 35);
-})();
 
 /* ===== Mouse Spotlight ===== */
 (function(){
