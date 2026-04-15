@@ -23,6 +23,9 @@
             --gray-300: #d1d5db;
             --gray-100: #f3f4f6;
             --white: #ffffff;
+            --neon-blue: #00f0ff;
+            --neon-purple: #bd00ff;
+            --neon-pink: #ff0055;
         }
         
         body { 
@@ -34,14 +37,76 @@
             color: var(--gray-100);
         }
         
+        /* Background Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatOrb 20s ease-in-out infinite;
+        }
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(37,99,235,0.6) 0%, transparent 70%);
+            top: -10%; left: -10%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(189,0,255,0.5) 0%, transparent 70%);
+            top: 40%; right: -5%;
+            animation-delay: -7s;
+        }
+        .orb-3 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(0,240,255,0.4) 0%, transparent 70%);
+            bottom: 10%; left: 20%;
+            animation-delay: -14s;
+        }
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -40px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+        
         /* Neuron Canvas */
         #neuron-canvas {
             position: fixed;
             inset: 0;
             width: 100%;
             height: 100%;
-            z-index: 0;
+            z-index: 1;
             pointer-events: none;
+        }
+        
+        /* Section Divider */
+        .section-divider {
+            height: 1px;
+            max-width: 900px;
+            margin: 0 auto 60px;
+            background: linear-gradient(90deg, transparent, rgba(37,99,235,0.5), rgba(189,0,255,0.5), rgba(0,240,255,0.5), transparent);
+            position: relative;
+            z-index: 10;
+            opacity: 0.6;
+        }
+        .section-divider::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--neon-blue), 0 0 30px var(--neon-blue);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.5; transform: translateX(-50%) scale(0.7); }
         }
         
         /* Glass Header */
@@ -51,15 +116,33 @@
             left: 0;
             right: 0;
             z-index: 100;
-            background: rgba(11, 15, 25, 0.75);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+        }
+        .glass-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-blue), var(--neon-purple), var(--neon-blue), transparent);
+            background-size: 200% 100%;
+            animation: gradientMove 4s linear infinite;
+            opacity: 0.7;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
         }
         
         .glass-header.scrolled {
-            background: rgba(11, 15, 25, 0.92);
-            border-bottom-color: rgba(255, 255, 255, 0.1);
+            background: rgba(11, 15, 25, 0.95);
+            border-bottom-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(37, 99, 235, 0.15);
         }
         
         .nav-link {
@@ -69,10 +152,7 @@
             transition: color 0.2s;
             text-decoration: none;
         }
-        
-        .nav-link:hover {
-            color: var(--white);
-        }
+        .nav-link:hover { color: var(--white); }
 
         .nav-3d {
             display: inline-flex;
@@ -91,13 +171,24 @@
             cursor: pointer;
             white-space: nowrap;
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
         }
+        .nav-3d::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        .nav-3d:hover::before { transform: translateX(100%); }
         .nav-3d:hover {
             color: var(--white);
             background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
-            border-color: rgba(255,255,255,0.18);
+            border-color: rgba(255,255,255,0.25);
             transform: translateY(-2px);
-            box-shadow: 0 6px 0 rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3), 0 0 15px rgba(37,99,235,0.2);
         }
         .nav-3d:active {
             transform: translateY(2px);
@@ -117,6 +208,111 @@
         }
         .nav-scroll::-webkit-scrollbar { display: none; }
 
+        /* Glowing Buttons */
+        .glow-btn {
+            position: relative;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: white;
+            background: rgba(17, 24, 39, 0.8);
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 1;
+        }
+        .glow-btn::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 16px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--neon-purple), var(--neon-blue), var(--primary-blue));
+            background-size: 300% 300%;
+            z-index: -2;
+            animation: gradientRotate 4s linear infinite;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .glow-btn::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: 13px;
+            background: linear-gradient(135deg, rgba(37,99,235,0.9), rgba(30,64,175,1));
+            z-index: -1;
+            transition: all 0.3s;
+        }
+        .glow-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.5), 0 10px 40px rgba(37, 99, 235, 0.3);
+        }
+        .glow-btn:hover::before { opacity: 1; }
+        .glow-btn:active { transform: translateY(0) scale(0.98); }
+        @keyframes gradientRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .glow-btn-outline {
+            position: relative;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--white);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            z-index: 1;
+        }
+        .glow-btn-outline::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            padding: 1.5px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+            transition: all 0.3s;
+        }
+        .glow-btn-outline::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            z-index: -1;
+        }
+        .glow-btn-outline:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 0 25px rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .glow-btn-outline:hover::before {
+            background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(37,99,235,0.4));
+        }
+        .glow-btn-outline:hover::after { transform: translateX(100%); }
+        .glow-btn-outline:active { transform: translateY(0) scale(0.98); }
+
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
             color: white;
@@ -129,7 +325,6 @@
             transition: all 0.2s ease;
             box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
         }
-        
         .btn-primary:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
@@ -146,7 +341,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
         .btn-outline:hover {
             background: rgba(255,255,255,0.06);
             border-color: rgba(255,255,255,0.25);
@@ -156,7 +350,7 @@
         .hero-section {
             position: relative;
             z-index: 10;
-            padding: 140px 24px 80px;
+            padding: 160px 24px 100px;
             text-align: center;
         }
         
@@ -165,94 +359,138 @@
             align-items: center;
             gap: 8px;
             background: rgba(37, 99, 235, 0.12);
-            border: 1px solid rgba(37, 99, 235, 0.25);
+            border: 1px solid rgba(37, 99, 235, 0.3);
             border-radius: 50px;
-            padding: 6px 16px;
+            padding: 8px 18px;
             font-size: 0.75rem;
             font-weight: 700;
             color: var(--primary-light);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(37, 99, 235, 0.15); }
+            50% { box-shadow: 0 0 25px rgba(37, 99, 235, 0.35); }
         }
         
         .hero-title {
-            font-size: clamp(2.4rem, 6vw, 4rem);
+            font-size: clamp(2.6rem, 7vw, 4.5rem);
             font-weight: 800;
             color: var(--white);
-            line-height: 1.1;
-            margin: 0 0 18px;
-            letter-spacing: -1.5px;
+            line-height: 1.05;
+            margin: 0 0 22px;
+            letter-spacing: -2px;
+            text-shadow: 0 0 40px rgba(37, 99, 235, 0.2);
         }
         
         .hero-title span {
-            background: linear-gradient(135deg, var(--primary-blue), #60a5fa);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #60a5fa 50%, var(--neon-blue) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(37,99,235,0.3));
         }
         
         .hero-subtitle {
             color: var(--gray-400);
-            font-size: 1.15rem;
-            max-width: 560px;
-            margin: 0 auto 32px;
+            font-size: 1.2rem;
+            max-width: 580px;
+            margin: 0 auto 40px;
             line-height: 1.7;
         }
         
         /* Cards */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 24px;
-            max-width: 1100px;
-            margin: 0 auto 80px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            max-width: 1150px;
+            margin: 0 auto 100px;
             padding: 0 24px;
             position: relative;
             z-index: 10;
         }
         
         .tool-card {
-            background: rgba(17, 24, 39, 0.65);
+            background: rgba(17, 24, 39, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 32px;
+            border-radius: 24px;
+            padding: 34px;
             cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
         }
-        
         .tool-card::before {
             content: '';
             position: absolute;
             inset: 0;
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 1px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             pointer-events: none;
         }
+        .tool-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: left 0.7s ease;
+            pointer-events: none;
+        }
+        .tool-card:hover::after { left: 100%; }
         
         .tool-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(37, 99, 235, 0.4);
-            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.18);
+            transform: translateY(-10px) scale(1.01);
+        }
+        
+        /* Card-specific glows */
+        .tool-card[data-glow="blue"]:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 25px 60px rgba(37, 99, 235, 0.25), 0 0 40px rgba(37, 99, 235, 0.15);
+        }
+        .tool-card[data-glow="sky"]:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            box-shadow: 0 25px 60px rgba(2, 132, 199, 0.25), 0 0 40px rgba(2, 132, 199, 0.15);
+        }
+        .tool-card[data-glow="rose"]:hover {
+            border-color: rgba(251, 113, 133, 0.5);
+            box-shadow: 0 25px 60px rgba(159, 18, 57, 0.25), 0 0 40px rgba(159, 18, 57, 0.15);
+        }
+        .tool-card[data-glow="emerald"]:hover {
+            border-color: rgba(52, 211, 153, 0.5);
+            box-shadow: 0 25px 60px rgba(16, 185, 129, 0.25), 0 0 40px rgba(16, 185, 129, 0.15);
+        }
+        .tool-card[data-glow="purple"]:hover {
+            border-color: rgba(192, 132, 252, 0.5);
+            box-shadow: 0 25px 60px rgba(168, 85, 247, 0.25), 0 0 40px rgba(168, 85, 247, 0.15);
         }
         
         .tool-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
+            width: 62px;
+            height: 62px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 18px;
-            font-size: 1.5rem;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .tool-card:hover .tool-icon {
+            transform: scale(1.1) rotate(-3deg);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
         
         .tool-badge {
@@ -262,8 +500,8 @@
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 50px;
-            padding: 3px 10px;
-            margin-bottom: 10px;
+            padding: 4px 12px;
+            margin-bottom: 12px;
             font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -271,24 +509,24 @@
         }
         
         .tool-card h3 {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--white);
-            margin: 0 0 8px;
+            margin: 0 0 10px;
         }
         
         .tool-card p {
             color: var(--gray-400);
             font-size: 0.9rem;
-            line-height: 1.6;
-            margin: 0 0 18px;
+            line-height: 1.65;
+            margin: 0 0 20px;
         }
         
         .meta-row {
             display: flex;
             gap: 14px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
         
         .meta-row span {
@@ -301,7 +539,7 @@
         
         .card-btn {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             border: none;
             border-radius: 12px;
             font-weight: 700;
@@ -311,20 +549,31 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-family: inherit;
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
             color: white;
             box-shadow: 0 4px 0 var(--primary-dark), 0 8px 24px rgba(37, 99, 235, 0.25);
+            position: relative;
+            overflow: hidden;
         }
-        
+        .card-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .card-btn:hover::before { left: 100%; }
         .card-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 var(--primary-dark), 0 12px 28px rgba(37, 99, 235, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 0 var(--primary-dark), 0 14px 32px rgba(37, 99, 235, 0.4);
         }
-        
         .card-btn:active {
-            transform: translateY(2px);
+            transform: translateY(1px);
             box-shadow: 0 2px 0 var(--primary-dark), 0 4px 12px rgba(37, 99, 235, 0.2);
         }
         
@@ -332,15 +581,40 @@
         .site-footer {
             position: relative;
             z-index: 10;
+            background: rgba(8, 11, 20, 0.92);
+            backdrop-filter: blur(20px) saturate(180%);
+            padding: 60px 24px 40px;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
-            background: rgba(11, 15, 25, 0.6);
-            backdrop-filter: blur(10px);
-            padding: 48px 24px 32px;
+            overflow: hidden;
+        }
+        .site-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), var(--primary-blue), var(--neon-purple), transparent);
+            background-size: 200% 100%;
+            animation: gradientMove 5s linear infinite;
+            opacity: 0.8;
+        }
+        .site-footer::after {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 200px;
+            background: radial-gradient(ellipse, rgba(37,99,235,0.12) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
         }
         
         .social-link {
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -348,16 +622,36 @@
             color: var(--gray-400);
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
-        
+        .social-link::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--neon-purple));
+            z-index: -2;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .social-link::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: 50%;
+            background: rgba(17, 24, 39, 0.95);
+            z-index: -1;
+        }
         .social-link:hover {
             color: var(--white);
-            background: rgba(37, 99, 235, 0.2);
-            border-color: rgba(37, 99, 235, 0.4);
-            transform: translateY(-2px);
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
         }
+        .social-link:hover::before { opacity: 1; }
         
         /* Modals preserved */
         .fs-modal { display: none; position: fixed; inset: 0; z-index: 9000; flex-direction: column; }
@@ -449,10 +743,10 @@
             left: 0;
             top: 0;
             height: 100vh;
-            width: 280px;
+            width: 220px;
             background: linear-gradient(180deg, var(--gray-900) 0%, var(--gray-800) 100%);
             border-right: 1px solid var(--gray-700);
-            transform: translateX(-240px);
+            transform: translateX(-185px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 1000;
             box-shadow: 4px 0 24px rgba(0,0,0,.4);
@@ -460,13 +754,13 @@
         .slide-menu.open { transform: translateX(0); }
         .menu-tab {
             position: absolute;
-            right: -50px;
+            right: -35px;
             top: 50%;
             transform: translateY(-50%);
-            width: 50px;
-            height: 120px;
+            width: 35px;
+            height: 90px;
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
-            border-radius: 0 12px 12px 0;
+            border-radius: 0 10px 10px 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -474,30 +768,35 @@
             box-shadow: 4px 0 20px rgba(37,99,235,.4);
             transition: all 0.3s ease;
         }
-        .menu-tab:hover { width: 55px; box-shadow: 6px 0 30px rgba(37,99,235,.6); }
-        .menu-tab i { color: white; font-size: 1.5rem; animation: pulse 2s infinite; }
+        .menu-tab:hover { width: 40px; box-shadow: 6px 0 30px rgba(37,99,235,.6); }
+        .menu-tab i { color: white; font-size: 1.2rem; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .menu-header { padding: 30px 20px; border-bottom: 1px solid var(--gray-700); background: linear-gradient(135deg, rgba(37,99,235,.2), transparent); }
-        .menu-header h3 { margin: 0; color: var(--white); font-size: 1.2rem; font-weight: 700; }
-        .menu-header p { margin: 5px 0 0; color: var(--gray-400); font-size: 0.85rem; }
-        .menu-nav { padding: 20px 0; }
-        .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px 20px; color: var(--gray-300); text-decoration: none; transition: all 0.3s ease; border-left: 3px solid transparent; }
-        .menu-item:hover { background: rgba(37,99,235,.1); color: var(--white); border-left-color: var(--primary-blue); padding-left: 25px; }
-        .menu-item i { width: 24px; text-align: center; color: var(--primary-light); }
+        .menu-header { padding: 18px 16px; border-bottom: 1px solid var(--gray-700); background: linear-gradient(135deg, rgba(37,99,235,.2), transparent); }
+        .menu-header h3 { margin: 0; color: var(--white); font-size: 1.05rem; font-weight: 700; }
+        .menu-header p { margin: 4px 0 0; color: var(--gray-400); font-size: 0.8rem; }
+        .menu-nav { padding: 10px 0; }
+        .menu-item { display: flex; align-items: center; gap: 12px; padding: 11px 16px; color: var(--gray-300); text-decoration: none; transition: all 0.3s ease; border-left: 3px solid transparent; font-size: 0.9rem; }
+        .menu-item:hover { background: rgba(37,99,235,.1); color: var(--white); border-left-color: var(--primary-blue); padding-left: 20px; }
+        .menu-item i { width: 20px; text-align: center; color: var(--primary-light); font-size: 0.95rem; }
         .menu-item.active { background: rgba(37,99,235,.2); color: var(--white); border-left-color: var(--primary-blue); }
-        .menu-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; border-top: 1px solid var(--gray-700); background: var(--gray-900); }
+        .menu-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 16px; border-top: 1px solid var(--gray-700); background: var(--gray-900); }
         .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999; }
         .menu-overlay.open { opacity: 1; visibility: visible; }
     </style>
 </head>
 <body>
+<!-- Background Orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
 <canvas id="neuron-canvas"></canvas>
 
 <!-- Header -->
 <header class="glass-header" id="mainHeader">
     <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-lg shadow-lg shadow-blue-500/20">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-lg shadow-lg shadow-blue-500/30">
                 <i class="fas fa-chalkboard-teacher"></i>
             </div>
             <span class="text-white font-bold text-lg tracking-tight">Ryshub</span>
@@ -506,12 +805,12 @@
         <nav class="hidden md:flex nav-scroll">
             <a href="#" class="nav-3d" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
             <a href="#" class="nav-3d" onclick="openToeflLogin(); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
-            <a href="#" class="nav-3d" onclick="openBook1Modal(); return false;"><i class="fas fa-book text-xs"></i> Book 1</a>
-            <a href="#" class="nav-3d" onclick="openBook2bModal(); return false;"><i class="fas fa-book-open text-xs"></i> Book 2B</a>
+            <a href="#" class="nav-3d" onclick="openBook1Modal(); return false;"><i class="fas fa-book text-xs"></i> World Class 2-1</a>
+            <a href="#" class="nav-3d" onclick="openBook2bModal(); return false;"><i class="fas fa-book-open text-xs"></i> World Class 2-2</a>
             <a href="#" class="nav-3d" onclick="openBrickForgeModal(); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
             <a href="apps/toefl.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> TOEFL</a>
-            <a href="apps/book1.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> Book 1</a>
-            <a href="apps/book2b.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> Book 2B</a>
+            <a href="apps/book1.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> World Class 2-1</a>
+            <a href="apps/book2b.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> World Class 2-2</a>
             <a href="apps/brickforge.html" target="_blank" class="nav-3d"><i class="fas fa-external-link-alt text-xs"></i> Brick Forge</a>
         </nav>
         
@@ -542,10 +841,10 @@
             <i class="fas fa-graduation-cap"></i><span>TOEFL iBT</span>
         </a>
         <a href="#" class="menu-item" onclick="openBook1Modal(); toggleMenu(); return false;">
-            <i class="fas fa-book"></i><span>World Class Book 1</span>
+            <i class="fas fa-book"></i><span>World Class 2-1</span>
         </a>
         <a href="#" class="menu-item" onclick="openBook2bModal(); toggleMenu(); return false;">
-            <i class="fas fa-book-open"></i><span>World Class 2B</span>
+            <i class="fas fa-book-open"></i><span>World Class 2-2</span>
         </a>
         <a href="#" class="menu-item" onclick="openBrickForgeModal(); toggleMenu(); return false;">
             <i class="fas fa-cube"></i><span>Brick Forge</span>
@@ -554,10 +853,10 @@
             <i class="fas fa-external-link-alt"></i><span>TOEFL (Full Page)</span>
         </a>
         <a href="apps/book1.html" target="_blank" class="menu-item">
-            <i class="fas fa-external-link-alt"></i><span>Book 1 (Full Page)</span>
+            <i class="fas fa-external-link-alt"></i><span>World Class 2-1 (Full)</span>
         </a>
         <a href="apps/book2b.html" target="_blank" class="menu-item">
-            <i class="fas fa-external-link-alt"></i><span>Book 2B (Full Page)</span>
+            <i class="fas fa-external-link-alt"></i><span>World Class 2-2 (Full)</span>
         </a>
         <a href="apps/brickforge.html" target="_blank" class="menu-item">
             <i class="fas fa-external-link-alt"></i><span>Brick Forge (Full Page)</span>
@@ -570,14 +869,9 @@
         </a>
     </nav>
     <div class="menu-footer">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-blue), var(--primary-light)); display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-chalkboard-teacher" style="color: white; font-size: 0.9rem;"></i>
-            </div>
-            <div>
-                <div style="font-weight: 600; color: var(--white); font-size: 0.9rem;">Teacher Ry</div>
-                <div style="color: var(--gray-400); font-size: 0.75rem;">ESL Learning Hub</div>
-            </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-size: 0.75rem; color: var(--gray-400); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Contact</div>
+            <a href="mailto:mam.ry@aii.edu.kh" style="font-size: 0.8rem; color: var(--white); text-decoration: none; word-break: break-all;">mam.ry@aii.edu.kh</a>
         </div>
     </div>
 </div>
@@ -597,22 +891,24 @@
         Digital tools & resources crafted for modern English learners at <strong class="text-white font-semibold">ESL Learning Hub</strong>
     </p>
     <div class="flex items-center justify-center gap-4 flex-wrap">
-        <button class="btn-primary text-base px-7 py-3" onclick="openToeflLogin()">
+        <button class="glow-btn text-base px-8 py-3.5" onclick="openToeflLogin()">
             <i class="fas fa-play mr-2"></i> Start TOEFL Test
         </button>
-        <button class="btn-outline text-base px-7 py-3" onclick="openBook1Modal()">
-            <i class="fas fa-book mr-2"></i> Open Book 1
+        <button class="glow-btn-outline text-base px-8 py-3.5" onclick="openBook1Modal()">
+            <i class="fas fa-book mr-2"></i> World Class 2-1
         </button>
-        <button class="btn-outline text-base px-7 py-3" onclick="openBook2bModal()">
-            <i class="fas fa-book-open mr-2"></i> Open Book 2B
+        <button class="glow-btn-outline text-base px-8 py-3.5" onclick="openBook2bModal()">
+            <i class="fas fa-book-open mr-2"></i> World Class 2-2
         </button>
     </div>
 </section>
 
+<div class="section-divider"></div>
+
 <!-- Cards -->
 <div class="cards-grid">
     <!-- TOEFL -->
-    <div class="tool-card" onclick="openToeflLogin()">
+    <div class="tool-card" data-glow="blue" onclick="openToeflLogin()">
         <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white">🎓</div>
         <div class="tool-badge text-blue-300">Mock Test</div>
         <h3>TOEFL iBT</h3>
@@ -624,34 +920,34 @@
         <button class="card-btn"><i class="fas fa-play"></i> Start Test</button>
     </div>
     
-    <!-- Book 1 -->
-    <div class="tool-card" onclick="openBook1Modal()">
+    <!-- World Class 2-1 -->
+    <div class="tool-card" data-glow="sky" onclick="openBook1Modal()">
         <div class="tool-icon bg-gradient-to-br from-sky-600 to-sky-800 text-white">📖</div>
         <div class="tool-badge text-sky-300">Teacher's Edition</div>
-        <h3>World Class Book 1</h3>
-        <p>Complete Book 1 with units, vocab, grammar, reading & homework materials.</p>
+        <h3>World Class 2-1</h3>
+        <p>Complete Book 2-1 with units, vocab, grammar, reading & homework materials.</p>
         <div class="meta-row">
             <span><i class="fas fa-book text-sky-400"></i> Full Book</span>
             <span><i class="fas fa-pencil-alt text-sky-400"></i> HW Portal</span>
         </div>
-        <button class="card-btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);box-shadow:0 4px 0 #075985,0 8px 24px rgba(2,132,199,.35);"><i class="fas fa-book"></i> Open Book 1</button>
+        <button class="card-btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);box-shadow:0 4px 0 #075985,0 8px 24px rgba(2,132,199,.35);"><i class="fas fa-book"></i> World Class 2-1</button>
     </div>
 
-    <!-- Book 2B -->
-    <div class="tool-card" onclick="openBook2bModal()">
+    <!-- World Class 2-2 -->
+    <div class="tool-card" data-glow="rose" onclick="openBook2bModal()">
         <div class="tool-icon bg-gradient-to-br from-rose-700 to-rose-900 text-white">📚</div>
         <div class="tool-badge text-amber-300">Teacher's Edition</div>
-        <h3>World Class 2B</h3>
+        <h3>World Class 2-2</h3>
         <p>Units 7–12 with vocab, grammar, reading & interactive homework portal for Level 11.</p>
         <div class="meta-row">
             <span><i class="fas fa-book text-amber-400"></i> Units 7–12</span>
             <span><i class="fas fa-pencil-alt text-amber-400"></i> HW Portal</span>
         </div>
-        <button class="card-btn" style="background:linear-gradient(135deg,#9f1239,#881337);box-shadow:0 4px 0 #4c0519,0 8px 24px rgba(159,18,57,.35);"><i class="fas fa-book-open"></i> Open Book 2B</button>
+        <button class="card-btn" style="background:linear-gradient(135deg,#9f1239,#881337);box-shadow:0 4px 0 #4c0519,0 8px 24px rgba(159,18,57,.35);"><i class="fas fa-book-open"></i> World Class 2-2</button>
     </div>
     
     <!-- EduGrade -->
-    <div class="tool-card" onclick="showToast('EduGrade Pro coming soon! 📝')">
+    <div class="tool-card" data-glow="emerald" onclick="showToast('EduGrade Pro coming soon! 📝')">
         <div class="tool-icon bg-gradient-to-br from-emerald-400 to-emerald-600 text-white">🧠</div>
         <div class="tool-badge text-emerald-300">AI-Powered</div>
         <h3>EduGrade Pro</h3>
@@ -664,7 +960,7 @@
     </div>
     
     <!-- Word Practice -->
-    <div class="tool-card" onclick="showToast('Word Practice coming soon! 📖')">
+    <div class="tool-card" data-glow="purple" onclick="showToast('Word Practice coming soon! 📖')">
         <div class="tool-icon bg-gradient-to-br from-purple-400 to-purple-600 text-white">✏️</div>
         <div class="tool-badge text-purple-300">Vocabulary</div>
         <h3>Word Practice</h3>
@@ -679,9 +975,9 @@
 
 <!-- Footer -->
 <footer class="site-footer">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-lg">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
                 <i class="fas fa-chalkboard-teacher"></i>
             </div>
             <div>
@@ -690,7 +986,7 @@
             </div>
         </div>
         
-        <div class="flex items-center gap-6">
+        <div class="flex items-center gap-5">
             <a href="mailto:mam.ry@aii.edu.kh" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
             <a href="tel:+85512617940" class="social-link" title="Phone"><i class="fas fa-phone"></i></a>
             <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -698,7 +994,7 @@
             <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
     </div>
-    <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-white/5 text-center text-gray-500 text-xs">
+    <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-white/5 text-center text-gray-500 text-xs relative z-10">
         © 2026 Ryshub. Built for modern English learners.
     </div>
 </footer>
@@ -750,8 +1046,8 @@
         <div style="display:flex;align-items:center;gap:12px;">
             <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;">📖</div>
             <div>
-                <div style="font-weight:800;color:var(--white);font-size:.95rem;">World Class Book 1 — Teacher's Edition</div>
-                <div style="font-size:.7rem;color:rgba(56,189,248,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Complete Book 1</div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">World Class 2-1 — Teacher's Edition</div>
+                <div style="font-size:.7rem;color:rgba(56,189,248,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Complete Book 2-1</div>
             </div>
         </div>
         <button onclick="closeBook1Modal()"><i class="fas fa-times"></i> Close</button>
@@ -759,13 +1055,13 @@
     <iframe id="book1-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
-<!-- BOOK 2B FULLSCREEN MODAL -->
+<!-- BOOK 2-2 FULLSCREEN MODAL -->
 <div id="book2b-modal" class="fs-modal">
     <div class="fs-modal-bar" style="background: linear-gradient(135deg, #722f37, #5c1a1a);">
         <div style="display:flex;align-items:center;gap:12px;">
             <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#d4af37,#b8962f);display:flex;align-items:center;justify-content:center;font-size:1rem;">📚</div>
             <div>
-                <div style="font-weight:800;color:var(--white);font-size:.95rem;">World Class 2B — Teacher's Edition</div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">World Class 2-2 — Teacher's Edition</div>
                 <div style="font-size:.7rem;color:rgba(212,175,55,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Units 7–12 · Level 11</div>
             </div>
         </div>
@@ -864,7 +1160,6 @@
                     connections++;
                 }
             }
-            // mouse interaction
             if (mouse.x !== null){
                 let dx = particles[i].x - mouse.x;
                 let dy = particles[i].y - mouse.y;
@@ -928,7 +1223,7 @@ function closeToeflModal() {
 }
 
 function openBook1Modal() {
-    showToast('Loading Book 1... one moment ⏳');
+    showToast('Loading World Class 2-1... one moment ⏳');
     var frame = document.getElementById('book1-frame');
     frame.src = 'apps/book1.html';
     document.getElementById('book1-modal').classList.add('open');
@@ -938,7 +1233,7 @@ function closeBook1Modal() {
 }
 
 function openBook2bModal() {
-    showToast('Loading Book 2B... one moment ⏳');
+    showToast('Loading World Class 2-2... one moment ⏳');
     var frame = document.getElementById('book2b-frame');
     frame.src = 'apps/book2b.html';
     document.getElementById('book2b-modal').classList.add('open');
