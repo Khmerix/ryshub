@@ -85,7 +85,7 @@
         .section-divider {
             height: 1px;
             max-width: 900px;
-            margin: 0 auto 60px;
+            margin: 0 auto 40px;
             background: linear-gradient(90deg, transparent, rgba(212,175,55,0.5), rgba(37,99,235,0.5), rgba(0,240,255,0.5), transparent);
             position: relative;
             z-index: 10;
@@ -353,7 +353,7 @@
         .hero-section {
             position: relative;
             z-index: 10;
-            padding: 100px 24px 80px;
+            padding: 90px 24px 50px;
             text-align: center;
         }
         
@@ -491,6 +491,102 @@
         .arrow-btn:hover::before { opacity: 1; }
         .arrow-btn:active { transform: scale(0.95); }
         
+        /* Feature Strip */
+        .feature-strip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 28px;
+            animation: fadeInUp 0.8s ease both;
+        }
+        .feature-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--gray-300);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            transition: all 0.25s ease;
+        }
+        .feature-pill:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+        .feature-pill i { font-size: 0.75rem; color: #fbbf24; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: var(--gray-500);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            animation: bounceDown 2s infinite;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .scroll-indicator i { font-size: 1rem; color: #fbbf24; }
+        @keyframes bounceDown {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(8px); }
+            60% { transform: translateX(-50%) translateY(4px); }
+        }
+
+        /* Mobile hero buttons */
+        @media (max-width: 640px) {
+            .hero-btns { flex-direction: column; width: 100%; max-width: 320px; }
+            .hero-btns button { width: 100%; justify-content: center; }
+            .hero-section { padding: 80px 18px 60px; }
+            .feature-strip { gap: 8px; }
+            .feature-pill { padding: 6px 12px; font-size: 0.7rem; }
+        }
+
+        /* Card hover arrow */
+        .card-arrow {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            opacity: 0;
+            transform: translate(-6px, 6px);
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+        .tool-card:hover .card-arrow {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
         /* Cards */
         .cards-grid {
             display: grid;
@@ -1007,6 +1103,16 @@
             </button>
         </div>
     </div>
+    <div class="feature-strip">
+        <div class="feature-pill"><i class="fas fa-stopwatch"></i> Timed Tests</div>
+        <div class="feature-pill"><i class="fas fa-laptop-code"></i> Homework Portal</div>
+        <div class="feature-pill"><i class="fas fa-robot"></i> AI Grader</div>
+        <div class="feature-pill"><i class="fas fa-cubes"></i> 3D Builder</div>
+    </div>
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <i class="fas fa-chevron-down"></i>
+    </div>
 </section>
 
 <div class="section-divider"></div>
@@ -1015,7 +1121,8 @@
 <div class="cards-grid">
     <!-- TOEFL -->
     <div class="tool-card" data-glow="blue" onclick="openToeflLogin()">
-        <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white">🎓</div>
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white"><i class="fas fa-graduation-cap"></i></div>
         <div class="tool-badge text-blue-300">Mock Test</div>
         <h3>TOEFL iBT</h3>
         <p>Full practice test — Reading, Listening, Speaking & Writing with timed security monitoring.</p>
@@ -1028,7 +1135,8 @@
     
     <!-- World Class 2-1 -->
     <div class="tool-card" data-glow="sky" onclick="openBook1Modal()">
-        <div class="tool-icon bg-gradient-to-br from-sky-600 to-sky-800 text-white">📖</div>
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-sky-600 to-sky-800 text-white"><i class="fas fa-book"></i></div>
         <div class="tool-badge text-sky-300">Teacher's Edition</div>
         <h3>World Class 2-1</h3>
         <p>Complete Book 2-1 with units, vocab, grammar, reading & homework materials.</p>
@@ -1041,7 +1149,8 @@
 
     <!-- World Class 2-2 -->
     <div class="tool-card" data-glow="rose" onclick="openBook2bModal()">
-        <div class="tool-icon bg-gradient-to-br from-rose-700 to-rose-900 text-white">📚</div>
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-rose-700 to-rose-900 text-white"><i class="fas fa-book-open"></i></div>
         <div class="tool-badge text-amber-300">Teacher's Edition</div>
         <h3>World Class 2-2</h3>
         <p>Units 7–12 with vocab, grammar, reading & interactive homework portal for Level 11.</p>
@@ -1053,8 +1162,9 @@
     </div>
     
     <!-- EduGrade -->
-    <div class="tool-card" data-glow="emerald" onclick="showToast('EduGrade Pro coming soon! 📝')">
-        <div class="tool-icon bg-gradient-to-br from-emerald-400 to-emerald-600 text-white">🧠</div>
+    <div class="tool-card" data-glow="emerald" onclick="showToast('EduGrade Pro coming soon!')">
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-emerald-400 to-emerald-600 text-white"><i class="fas fa-brain"></i></div>
         <div class="tool-badge text-emerald-300">AI-Powered</div>
         <h3>EduGrade Pro</h3>
         <p>AI writing grader for essays, sentences & summaries. Upload handwritten work for instant rubric feedback.</p>
@@ -1066,8 +1176,9 @@
     </div>
     
     <!-- Word Practice -->
-    <div class="tool-card" data-glow="purple" onclick="showToast('Word Practice coming soon! 📖')">
-        <div class="tool-icon bg-gradient-to-br from-purple-400 to-purple-600 text-white">✏️</div>
+    <div class="tool-card" data-glow="purple" onclick="showToast('Word Practice coming soon!')">
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-purple-400 to-purple-600 text-white"><i class="fas fa-pencil-alt"></i></div>
         <div class="tool-badge text-purple-300">Vocabulary</div>
         <h3>Word Practice</h3>
         <p>Interactive vocabulary exercises and sentence writing for World Class 2 — Level 11.</p>
@@ -1135,7 +1246,7 @@
 <div id="toefl-modal" class="fs-modal">
     <div class="fs-modal-bar">
         <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;font-size:1rem;">🎓</div>
+            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-graduation-cap" style="color:white;"></i></div>
             <div>
                 <div style="font-weight:800;color:var(--white);font-size:.95rem;">TOEFL iBT Complete Test</div>
                 <div style="font-size:.7rem;color:var(--gray-400);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Teacher Ry · ESL Learning Hub</div>
@@ -1150,7 +1261,7 @@
 <div id="book1-modal" class="fs-modal">
     <div class="fs-modal-bar" style="background: linear-gradient(135deg, #0369a1, #0c4a6e);">
         <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;">📖</div>
+            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-book" style="color:white;"></i></div>
             <div>
                 <div style="font-weight:800;color:var(--white);font-size:.95rem;">World Class 2-1 — Teacher's Edition</div>
                 <div style="font-size:.7rem;color:rgba(56,189,248,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Complete Book 2-1</div>
@@ -1165,7 +1276,7 @@
 <div id="book2b-modal" class="fs-modal">
     <div class="fs-modal-bar" style="background: linear-gradient(135deg, #722f37, #5c1a1a);">
         <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#d4af37,#b8962f);display:flex;align-items:center;justify-content:center;font-size:1rem;">📚</div>
+            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#d4af37,#b8962f);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-book-open" style="color:white;"></i></div>
             <div>
                 <div style="font-weight:800;color:var(--white);font-size:.95rem;">World Class 2-2 — Teacher's Edition</div>
                 <div style="font-size:.7rem;color:rgba(212,175,55,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Units 7–12 · Level 11</div>
@@ -1180,7 +1291,7 @@
 <div id="brickforge-modal" class="fs-modal">
     <div class="fs-modal-bar" style="background: linear-gradient(135deg, #0891b2, #0e7490);">
         <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#22d3ee,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:1rem;">🧱</div>
+            <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#22d3ee,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-cube" style="color:white;"></i></div>
             <div>
                 <div style="font-weight:800;color:var(--white);font-size:.95rem;">Brick Forge Pro</div>
                 <div style="font-size:.7rem;color:rgba(34,211,238,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">3D Voxel Builder</div>
