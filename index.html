@@ -149,41 +149,30 @@
 
         .hero-banner {
             position: relative;
-            max-inline-size: 1120px;
-            margin: 0 auto 18px;
+            max-inline-size: 920px;
+            margin: 0 auto 14px;
+            padding: 8px;
             border-radius: 18px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(17,24,39,0.92);
-            box-shadow: 0 14px 36px rgba(0,0,0,0.22);
+            background: rgba(17,24,39,0.88);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
         }
 
-        .hero-banner::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(7,10,18,0.06) 0%, rgba(7,10,18,0.24) 100%);
-            z-index: 1;
-            pointer-events: none;
-        }
-
+        .hero-banner::before,
         .hero-banner::after {
-            content: '';
-            position: absolute;
-            inset-inline: 0;
-            inset-block-end: 0;
-            block-size: 54px;
-            background: linear-gradient(180deg, transparent, rgba(11,15,25,0.45));
-            z-index: 2;
-            pointer-events: none;
+            display: none;
         }
 
         .hero-banner img {
             inline-size: 100%;
-            block-size: clamp(120px, 18vw, 190px);
-            object-fit: cover;
-            object-position: center;
+            block-size: auto;
+            max-block-size: 320px;
+            object-fit: contain;
+            object-position: center top;
             display: block;
+            border-radius: 12px;
+            background: #0b1220;
         }
 
         .hero-banner-copy {
@@ -246,7 +235,7 @@
         .hero-section {
             position: relative;
             z-index: 10;
-            padding: 102px 18px 48px;
+            padding: 92px 16px 40px;
             text-align: center;
         }
         
@@ -819,7 +808,7 @@
 <!-- Hero -->
 <section class="hero-section">
     <div class="hero-banner">
-        <img src="assets/images/page-banner.png?v=20260416f" alt="Creative Minds banner">
+        <img src="assets/images/page-banner.png?v=20260416g" alt="Creative Minds banner">
         <div class="hero-banner-copy"></div>
     </div>
 
