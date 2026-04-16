@@ -4,6 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>World Class 2 - Book 1 | Teacher's Edition (Protected)</title>
+    <script>
+        (function () {
+            function getTeacherProfile() {
+                try {
+                    return JSON.parse(localStorage.getItem('ryshubTeacherProfile') || sessionStorage.getItem('ryshubTeacherProfile') || 'null');
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            function isSchoolEmail(email) {
+                var value = (email || '').trim().toLowerCase();
+                return !!value && (value.endsWith('@aii.edu.kh') || /@.+\.(edu|edu\.kh|ac\.th|ac\.uk)$/i.test(value));
+            }
+
+            var profile = getTeacherProfile();
+            if (!(profile && isSchoolEmail(profile.email))) {
+                alert('Teacher-only content. Please register with your school email first.');
+                window.location.replace('../index.html');
+            }
+        })();
+    </script>
             <style>
         /* ===== MODERN THEME VARIABLES ===== */
         :root {
