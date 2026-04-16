@@ -676,9 +676,7 @@
             inline-size: 190px;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            overflow-x: hidden;
-            overscroll-behavior: contain;
+            overflow: visible;
             background: linear-gradient(180deg, var(--gray-900) 0%, var(--gray-800) 100%);
             border-inline-end: 1px solid var(--gray-700);
             transform: translateX(-156px);
@@ -702,6 +700,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            z-index: 2;
             box-shadow: 4px 0 18px rgba(37,99,235,.35);
             transition: all 0.2s ease;
         }
