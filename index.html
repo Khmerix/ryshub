@@ -1859,11 +1859,14 @@
 
         /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
-            .mesh-bg, .light-ray, .hero-banner-coded, .scroll-indicator, .tool-card, .card-arrow, .whats-new {
+            .mesh-bg, .light-ray, .hero-banner, .hero-banner-coded, .scroll-indicator, .tool-card, .art-card, .card-arrow, .whats-new {
                 animation: none !important;
                 transition: none !important;
             }
             .tool-card { opacity: 1; transform: none; }
+            .hero-banner:hover,
+            .tool-card:hover,
+            .art-card:hover { transform: none !important; }
         }
     </style>
 </head>
