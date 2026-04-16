@@ -786,11 +786,41 @@
         .menu-header { padding: 20px 14px; border-block-end: 1px solid var(--gray-700); background: linear-gradient(135deg, rgba(37,99,235,.2), transparent); }
         .menu-header h3 { margin: 0; color: var(--white); font-size: 1rem; font-weight: 700; }
         .menu-header p { margin: 4px 0 0; color: var(--gray-400); font-size: 0.78rem; }
-        .menu-nav { flex: 1 1 auto; padding: 10px 0 12px; overflow-y: auto; min-block-size: 0; }
-        .menu-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; color: var(--gray-300); text-decoration: none; transition: all 0.2s ease; border-inline-start: 3px solid transparent; font-size: 0.88rem; }
-        .menu-item:hover { background: rgba(37,99,235,.1); color: var(--white); border-inline-start-color: var(--primary-blue); padding-inline-start: 18px; }
+        .menu-nav { flex: 1 1 auto; padding: 12px 10px 14px; overflow-y: auto; min-block-size: 0; display: flex; flex-direction: column; gap: 10px; }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 12px;
+            color: var(--gray-200);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.28), 0 8px 16px rgba(0,0,0,0.16);
+        }
+        .menu-item:hover {
+            background: linear-gradient(180deg, rgba(59,130,246,0.28) 0%, rgba(37,99,235,0.12) 100%);
+            color: var(--white);
+            border-color: rgba(59,130,246,0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.28), 0 12px 22px rgba(37,99,235,0.18);
+        }
+        .menu-item:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.28), 0 4px 10px rgba(0,0,0,0.16);
+        }
         .menu-item i { inline-size: 24px; text-align: center; color: var(--primary-light); }
-        .menu-item.active { background: rgba(37,99,235,.2); color: var(--white); border-inline-start-color: var(--primary-blue); }
+        .menu-item span { flex: 1; }
+        .menu-item.active {
+            background: linear-gradient(180deg, rgba(59,130,246,0.34) 0%, rgba(37,99,235,0.18) 100%);
+            color: var(--white);
+            border-color: rgba(59,130,246,0.5);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.28), 0 10px 20px rgba(37,99,235,0.22);
+        }
         .menu-footer { position: sticky; inset-block-end: 0; margin-block-start: auto; padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px)); border-block-start: 1px solid var(--gray-700); background: linear-gradient(180deg, rgba(17,24,39,.96), rgba(11,15,25,.98)); }
         .slide-menu::-webkit-scrollbar { inline-size: 8px; }
         .slide-menu::-webkit-scrollbar-track { background: rgba(255,255,255,.04); }
@@ -807,9 +837,8 @@
                 inset-inline-start: 0;
             }
 
-            .slide-menu,
-            .menu-overlay {
-                display: none;
+            .slide-menu {
+                display: flex;
             }
         }
 
@@ -926,6 +955,9 @@
         </a>
         <a href="apps/brickforge.html" target="_blank" class="menu-item">
             <i class="fas fa-external-link-alt"></i><span>Brick Forge (Full Page)</span>
+        </a>
+        <a href="https://app.box.com/s/izbnvr08d4vxmt1bp3np99oceowpywpf" target="_blank" rel="noopener noreferrer" class="menu-item">
+            <i class="fas fa-box-open"></i><span>Shared Files</span>
         </a>
         <a href="#" class="menu-item" onclick="showToast('EduGrade coming soon!'); return false;">
             <i class="fas fa-brain"></i><span>EduGrade Pro</span>
@@ -1370,10 +1402,16 @@ function updateTeacherStatusUi() {
 }
 
 function openTeacherRegister(featureName, callback) {
-    if (typeof callback === 'function') pendingTeacherAction = callback;
+    pendingTeacherAction = typeof callback === 'function' ? callback : null;
+    var profile = getTeacherProfile();
     var copy = document.getElementById('teacher-register-copy');
     if (copy) {
         copy.textContent = 'Register with your school email to unlock ' + (featureName || 'teacher resources') + '.';
+    }
+    if (profile) {
+        document.getElementById('teacher-name').value = profile.name || '';
+        document.getElementById('teacher-email').value = profile.email || '';
+        document.getElementById('teacher-school').value = profile.school || 'Aii Language Center';
     }
     document.getElementById('teacher-register-overlay').classList.add('open');
     setTimeout(function(){ document.getElementById('teacher-name').focus(); }, 150);
@@ -1410,6 +1448,8 @@ function registerTeacherAccess() {
     var profile = { name: name, email: email.toLowerCase(), school: school, registeredAt: new Date().toISOString() };
     localStorage.setItem('ryshubTeacherProfile', JSON.stringify(profile));
     sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(profile));
+    localStorage.setItem('ryshub_role', 'teacher');
+    sessionStorage.setItem('ryshub_role', 'teacher');
     updateTeacherStatusUi();
     closeTeacherRegister();
     showToast('Teacher access approved');
