@@ -821,6 +821,24 @@
             border-color: rgba(59,130,246,0.5);
             box-shadow: 0 4px 0 rgba(0,0,0,0.28), 0 10px 20px rgba(37,99,235,0.22);
         }
+
+        .menu-item.featured-link {
+            background: linear-gradient(180deg, rgba(250,204,21,0.32) 0%, rgba(245,158,11,0.18) 100%);
+            border-color: rgba(250,204,21,0.45);
+            color: #fef3c7;
+            box-shadow: 0 4px 0 rgba(120,53,15,0.35), 0 10px 20px rgba(245,158,11,0.2);
+        }
+
+        .menu-item.featured-link i {
+            color: #facc15;
+        }
+
+        .menu-item.featured-link:hover {
+            background: linear-gradient(180deg, rgba(253,224,71,0.45) 0%, rgba(245,158,11,0.24) 100%);
+            border-color: rgba(253,224,71,0.7);
+            color: #fff8db;
+            box-shadow: 0 6px 0 rgba(120,53,15,0.35), 0 14px 26px rgba(245,158,11,0.25);
+        }
         .menu-footer { position: sticky; inset-block-end: 0; margin-block-start: auto; padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px)); border-block-start: 1px solid var(--gray-700); background: linear-gradient(180deg, rgba(17,24,39,.96), rgba(11,15,25,.98)); }
         .slide-menu::-webkit-scrollbar { inline-size: 8px; }
         .slide-menu::-webkit-scrollbar-track { background: rgba(255,255,255,.04); }
@@ -956,7 +974,7 @@
         <a href="apps/brickforge.html" target="_blank" class="menu-item">
             <i class="fas fa-external-link-alt"></i><span>Brick Forge (Full Page)</span>
         </a>
-        <a href="https://app.box.com/s/izbnvr08d4vxmt1bp3np99oceowpywpf" target="_blank" rel="noopener noreferrer" class="menu-item">
+        <a href="https://app.box.com/s/izbnvr08d4vxmt1bp3np99oceowpywpf" target="_blank" rel="noopener noreferrer" class="menu-item featured-link">
             <i class="fas fa-box-open"></i><span>Shared Files</span>
         </a>
         <a href="#" class="menu-item" onclick="showToast('EduGrade coming soon!'); return false;">
