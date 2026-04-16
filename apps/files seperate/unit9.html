@@ -1609,7 +1609,15 @@ body.dark-mode .unit-nav {
             color: #d4af37;
         }
 
-        </style>
+            /* ===== BOOK 1 BLUE THEME ALIGNMENT ===== */
+        :root { --wc-blue-dark:#0c4a6e; --wc-blue:#0369a1; --wc-sky:#0ea5e9; --wc-sky-light:#38bdf8; }
+        body { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); }
+        .unit-selector, .nav-bar { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); border-bottom-color: var(--wc-sky-light); }
+        .unit-btn, .teacher-toggle { background: linear-gradient(135deg, var(--wc-blue) 0%, var(--wc-blue-dark) 100%); }
+        .unit-btn:hover, .unit-btn.active, .teacher-toggle:hover { background: linear-gradient(135deg, var(--wc-sky) 0%, var(--wc-sky-light) 100%); color: #082f49; }
+        .nav-links a:hover { color: var(--wc-sky-light); }
+        .unit-header, .outcomes-box, .section-header { background: linear-gradient(135deg, var(--wc-blue-dark) 0%, var(--wc-blue) 55%, var(--wc-sky) 100%) !important; border-left-color: var(--wc-sky-light) !important; }
+    </style>
     <base target="_blank">
 </head>
 <body>

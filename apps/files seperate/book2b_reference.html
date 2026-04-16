@@ -1189,7 +1189,15 @@
                 inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
-        </style>
+            /* ===== BOOK 1 BLUE THEME ALIGNMENT ===== */
+        :root { --wc-blue-dark:#0c4a6e; --wc-blue:#0369a1; --wc-sky:#0ea5e9; --wc-sky-light:#38bdf8; }
+        body { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); }
+        .unit-selector, .nav-bar, .ref-header { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%) !important; border-bottom-color: var(--wc-sky-light); }
+        .unit-btn, .teacher-toggle, .ref-btn { background: linear-gradient(135deg, var(--wc-blue) 0%, var(--wc-blue-dark) 100%) !important; }
+        .unit-btn:hover, .unit-btn.active, .teacher-toggle:hover, .ref-btn:hover { background: linear-gradient(135deg, var(--wc-sky) 0%, var(--wc-sky-light) 100%) !important; color: #082f49; }
+        .nav-links a:hover { color: var(--wc-sky-light); }
+        .section-header, .answer-header, .ref-card h3 { color: var(--wc-blue-dark) !important; border-left-color: var(--wc-sky-light) !important; }
+    </style>
 <base target="_blank">
 </head>
 <body>

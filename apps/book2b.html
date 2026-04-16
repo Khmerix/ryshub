@@ -982,6 +982,125 @@
                 inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
+        /* ===== BOOK 1 BLUE THEME ALIGNMENT ===== */
+        :root {
+            --book1-navy: #0f172a;
+            --book1-deep: #0c4a6e;
+            --book1-blue: #0369a1;
+            --book1-sky: #0ea5e9;
+            --book1-glow: #38bdf8;
+            --book1-soft: #e0f2fe;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+
+        .book-nav,
+        body.dark-mode .book-nav,
+        .hero-header,
+        body.dark-mode .hero-header {
+            background: linear-gradient(135deg, var(--book1-navy) 0%, var(--book1-deep) 55%, var(--book1-blue) 100%);
+            border-bottom-color: var(--book1-glow);
+        }
+
+        .teacher-badge,
+        .book-badge,
+        .teacher-remake-badge,
+        .teacher-banner,
+        body.dark-mode .teacher-banner {
+            background: linear-gradient(135deg, rgba(14,165,233,0.16) 0%, rgba(56,189,248,0.26) 100%);
+            color: #e0f2fe;
+            border-color: var(--book1-glow);
+        }
+
+        .book-nav a, .book-nav button,
+        body.dark-mode .book-nav a,
+        body.dark-mode .book-nav button,
+        .btn-3d,
+        body.dark-mode .btn-3d,
+        .audio-btn, .play-btn,
+        body.dark-mode .audio-btn,
+        body.dark-mode .play-btn {
+            background: linear-gradient(145deg, var(--book1-blue) 0%, var(--book1-sky) 50%, var(--book1-deep) 100%);
+            color: white;
+            border-color: var(--book1-glow);
+        }
+
+        .book-nav a:hover, .book-nav button:hover,
+        .book-nav a.active, .book-nav button.active,
+        body.dark-mode .book-nav a:hover,
+        body.dark-mode .book-nav button:hover,
+        body.dark-mode .book-nav a.active,
+        body.dark-mode .book-nav button.active,
+        .btn-3d:hover,
+        .nav-bar button:hover,
+        .nav-bar button.active {
+            background: linear-gradient(145deg, var(--book1-sky) 0%, var(--book1-glow) 55%, #7dd3fc 100%);
+            color: #082f49;
+            border-color: var(--book1-glow);
+            box-shadow: 0 8px 18px rgba(14,165,233,0.28), 0 0 0 3px rgba(56,189,248,0.16);
+        }
+
+        .dark-mode-toggle,
+        body.dark-mode .dark-mode-toggle,
+        .btn-outline,
+        body.dark-mode .btn-outline {
+            border-color: var(--book1-glow) !important;
+            color: var(--book1-glow) !important;
+        }
+
+        .btn-outline:hover,
+        body.dark-mode .btn-outline:hover {
+            background: var(--book1-blue) !important;
+            color: white !important;
+        }
+
+        .unit-7 .unit-card-header,
+        .unit-8 .unit-card-header,
+        .unit-9 .unit-card-header,
+        .unit-10 .unit-card-header,
+        .unit-11 .unit-card-header,
+        .unit-12 .unit-card-header,
+        .unit-ref .unit-card-header {
+            background: linear-gradient(135deg, var(--book1-deep) 0%, var(--book1-blue) 55%, var(--book1-sky) 100%);
+        }
+
+        .unit-7 .skill-icon,
+        .unit-8 .skill-icon,
+        .unit-9 .skill-icon,
+        .unit-10 .skill-icon,
+        .unit-11 .skill-icon,
+        .unit-12 .skill-icon,
+        .unit-ref .skill-icon {
+            background: var(--book1-blue);
+        }
+
+        .skill-label,
+        .footer-creator h3,
+        .footer-creator .contact-item a {
+            color: var(--book1-blue);
+        }
+
+        body.dark-mode .skill-label,
+        body.dark-mode .footer-creator h3,
+        body.dark-mode .footer-creator .contact-item a {
+            color: var(--book1-glow);
+        }
+
+        .unit-card:hover {
+            box-shadow: 0 20px 40px rgba(14,165,233,0.18), 0 10px 20px rgba(0,0,0,0.1), 0 0 0 2px rgba(56,189,248,0.2);
+        }
+
+        .footer-creator {
+            border-color: var(--book1-glow);
+            background: linear-gradient(145deg, #f0f9ff 0%, #ffffff 100%);
+        }
+
+        body.dark-mode .footer-creator {
+            border-color: var(--book1-glow);
+        }
+
         </style>
     <base target="_blank">
 </head>
@@ -1002,7 +1121,7 @@
             <button onclick="loadUnit('files seperate/unit11.html')" id="nav-unit11">11</button>
             <button onclick="loadUnit('files seperate/unit12.html')" id="nav-unit12">12</button>
             <button onclick="loadUnit('files seperate/book2b_reference.html')" id="nav-reference">Ref</button>
-            <button onclick="loadUnit('files seperate/homework/homework_portal.html')" id="nav-homework" style="background: linear-gradient(145deg, #d4af37 0%, #e5c76b 100%); color: #722f37; font-weight: 700;">📝 HW</button>
+            <button onclick="loadUnit('files seperate/homework/homework_portal.html')" id="nav-homework" style="background: linear-gradient(145deg, #0ea5e9 0%, #38bdf8 100%); color: #082f49; font-weight: 700;">📝 HW</button>
             <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙 Dark</button>
         </div>
     </nav>
