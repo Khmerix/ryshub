@@ -149,30 +149,46 @@
 
         .hero-banner {
             position: relative;
-            max-inline-size: 920px;
+            max-inline-size: 1040px;
             margin: 0 auto 14px;
-            padding: 8px;
             border-radius: 18px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(17,24,39,0.88);
+            background:
+                linear-gradient(180deg, rgba(7,10,18,0.10) 0%, rgba(7,10,18,0.30) 100%),
+                url('assets/images/page-banner.png?v=20260416h') center 28% / cover no-repeat;
             box-shadow: 0 12px 28px rgba(0,0,0,0.2);
         }
 
-        .hero-banner::before,
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            backdrop-filter: blur(10px);
+            background: rgba(11,15,25,0.12);
+            z-index: 1;
+            pointer-events: none;
+        }
+
         .hero-banner::after {
-            display: none;
+            content: '';
+            position: absolute;
+            inset-inline: 0;
+            inset-block-end: 0;
+            block-size: 56px;
+            background: linear-gradient(180deg, transparent, rgba(11,15,25,0.22));
+            z-index: 2;
+            pointer-events: none;
         }
 
         .hero-banner img {
+            position: relative;
+            z-index: 3;
             inline-size: 100%;
-            block-size: auto;
-            max-block-size: 320px;
+            block-size: clamp(210px, 24vw, 280px);
             object-fit: contain;
-            object-position: center top;
+            object-position: center;
             display: block;
-            border-radius: 12px;
-            background: #0b1220;
         }
 
         .hero-banner-copy {
@@ -808,7 +824,7 @@
 <!-- Hero -->
 <section class="hero-section">
     <div class="hero-banner">
-        <img src="assets/images/page-banner.png?v=20260416g" alt="Creative Minds banner">
+        <img src="assets/images/page-banner.png?v=20260416h" alt="Creative Minds banner">
         <div class="hero-banner-copy"></div>
     </div>
 
