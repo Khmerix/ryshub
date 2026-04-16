@@ -1703,6 +1703,9 @@
         <a href="#" class="menu-item" onclick="openBrickForgeModal(); toggleMenu(); return false;">
             <i class="fas fa-cube"></i><span>Brick Forge</span>
         </a>
+        <a href="#" class="menu-item" onclick="openColonyModal(); toggleMenu(); return false;">
+            <i class="fas fa-rocket"></i><span>Last Colony RPG</span>
+        </a>
         <a href="#" class="menu-item" onclick="openProtectedPage('apps/toefl/', 'TOEFL iBT'); toggleMenu(); return false;">
             <i class="fas fa-external-link-alt"></i><span>TOEFL (Full Page)</span>
         </a>
@@ -1990,6 +1993,24 @@
         <button class="card-btn" style="background:linear-gradient(135deg,#06b6d4,#0e7490);box-shadow:0 4px 0 #155e75,0 8px 24px rgba(6,182,212,.35);"><i class="fas fa-cube"></i> Open Builder</button>
     </div>
 
+    <div class="tool-card" onclick="openColonyModal()">
+        <div class="card-art" style="display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%, rgba(248,113,113,0.35), transparent 24%), radial-gradient(circle at 74% 30%, rgba(56,189,248,0.35), transparent 22%), linear-gradient(135deg,#2b0f0f 0%,#7c2d12 42%,#0f172a 100%);">
+            <div style="text-align:center;color:#f8fafc;">
+                <div style="font-size:2rem;line-height:1;margin-bottom:6px;">🚀</div>
+                <div style="font-size:.8rem;font-weight:800;letter-spacing:.24em;">LAST COLONY</div>
+            </div>
+        </div>
+        <div class="tool-icon bg-gradient-to-br from-orange-500 to-rose-700 text-white">🚀</div>
+        <div class="tool-badge text-orange-300">Strategy RPG</div>
+        <h3>Last Colony</h3>
+        <p>Lead humanity’s final Mars settlement with story choices, base building, survival systems, and sci-fi strategy.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-globe text-orange-400"></i> Mars Colony</span>
+            <span><i class="fas fa-gamepad text-orange-400"></i> Story Strategy</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#f97316,#b91c1c);box-shadow:0 4px 0 #7f1d1d,0 8px 24px rgba(249,115,22,.35);"><i class="fas fa-rocket"></i> Launch Colony</button>
+    </div>
+
     <!-- EduGrade -->
     <div class="tool-card" onclick="showToast('EduGrade Pro coming soon! 📝')">
         <div class="card-art"><img src="assets/teacher-dashboard.svg?v=20260416" alt="EduGrade preview"></div>
@@ -2169,6 +2190,21 @@
         <button onclick="closeBrickForgeModal()"><i class="fas fa-times"></i> Close</button>
     </div>
     <iframe id="brickforge-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- LAST COLONY FULLSCREEN MODAL -->
+<div id="colony-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #9a3412, #7f1d1d);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#fb923c,#dc2626);display:flex;align-items:center;justify-content:center;font-size:1rem;">🚀</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">Last Colony</div>
+                <div style="font-size:.7rem;color:rgba(253,186,116,.9);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Mars Strategy RPG</div>
+            </div>
+        </div>
+        <button onclick="closeColonyModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="colony-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
 <!-- Toast -->
@@ -2450,6 +2486,16 @@ function closeBrickForgeModal() {
     document.getElementById('brickforge-modal').classList.remove('open');
 }
 
+function openColonyModal() {
+    showToast('Launching Last Colony... stand by 🚀');
+    var frame = document.getElementById('colony-frame');
+    frame.src = 'apps/games/colony/';
+    document.getElementById('colony-modal').classList.add('open');
+}
+function closeColonyModal() {
+    document.getElementById('colony-modal').classList.remove('open');
+}
+
 function updateThemeToggleUi() {
     var btn = document.getElementById('themeToggleBtn');
     if (!btn) return;
@@ -2609,6 +2655,7 @@ document.addEventListener('keydown', function(e) {
         closeBook2bModal(); 
         closeToeflLogin();
         closeTeacherRegister();
+        closeColonyModal();
         const menu = document.getElementById('slideMenu');
         if (menu.classList.contains('open')) toggleMenu();
     }
