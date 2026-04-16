@@ -120,13 +120,13 @@
         .header-status {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 14px;
+            gap: 8px;
+            padding: 6px 12px;
             border-radius: 999px;
             background: rgba(17, 24, 39, 0.7);
             border: 1px solid rgba(255,255,255,0.1);
             color: var(--gray-300);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.16);
             backdrop-filter: blur(10px);
         }
 
@@ -149,23 +149,20 @@
 
         .hero-banner {
             position: relative;
-            max-inline-size: 1200px;
-            margin: 0 auto 28px;
-            border-radius: 28px;
+            max-inline-size: 1120px;
+            margin: 0 auto 18px;
+            border-radius: 18px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: linear-gradient(135deg, rgba(17,24,39,0.95), rgba(30,41,59,0.8));
-            box-shadow: 0 26px 70px rgba(0,0,0,0.28);
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(17,24,39,0.92);
+            box-shadow: 0 14px 36px rgba(0,0,0,0.22);
         }
 
         .hero-banner::before {
             content: '';
             position: absolute;
             inset: 0;
-            background:
-                linear-gradient(180deg, rgba(11,15,25,0.08) 0%, rgba(11,15,25,0.38) 100%),
-                radial-gradient(circle at 20% 50%, rgba(59,130,246,0.22), transparent 35%),
-                radial-gradient(circle at 80% 20%, rgba(34,211,238,0.2), transparent 30%);
+            background: linear-gradient(180deg, rgba(7,10,18,0.06) 0%, rgba(7,10,18,0.24) 100%);
             z-index: 1;
             pointer-events: none;
         }
@@ -175,41 +172,22 @@
             position: absolute;
             inset-inline: 0;
             inset-block-end: 0;
-            block-size: 120px;
-            background: linear-gradient(180deg, transparent, var(--gray-900));
+            block-size: 54px;
+            background: linear-gradient(180deg, transparent, rgba(11,15,25,0.45));
             z-index: 2;
             pointer-events: none;
         }
 
         .hero-banner img {
             inline-size: 100%;
-            block-size: clamp(180px, 28vw, 280px);
+            block-size: clamp(120px, 18vw, 190px);
             object-fit: cover;
+            object-position: center;
             display: block;
-            transform: scale(1.02);
-            filter: saturate(1.1) contrast(1.05);
         }
 
         .hero-banner-copy {
-            position: absolute;
-            inset-inline-start: 24px;
-            inset-block-end: 22px;
-            z-index: 3;
-            text-align: start;
-        }
-
-        .hero-banner-copy strong {
-            display: block;
-            color: var(--white);
-            font-size: clamp(1.1rem, 2.4vw, 1.6rem);
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-block-end: 4px;
-        }
-
-        .hero-banner-copy span {
-            color: var(--gray-300);
-            font-size: 0.9rem;
+            display: none;
         }
 
         .hero-highlight {
@@ -268,7 +246,7 @@
         .hero-section {
             position: relative;
             z-index: 10;
-            padding: 140px 24px 80px;
+            padding: 102px 18px 48px;
             text-align: center;
         }
         
@@ -306,18 +284,18 @@
         
         .hero-subtitle {
             color: var(--gray-400);
-            font-size: 1.15rem;
-            max-inline-size: 560px;
-            margin: 0 auto 32px;
-            line-height: 1.7;
+            font-size: 1rem;
+            max-inline-size: 540px;
+            margin: 0 auto 20px;
+            line-height: 1.65;
         }
 
         .hero-shell {
-            max-inline-size: 1200px;
+            max-inline-size: 1120px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-            gap: 32px;
+            grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.75fr);
+            gap: 20px;
             align-items: center;
         }
 
@@ -333,37 +311,45 @@
             position: relative;
         }
 
+        .hero-preview {
+            max-inline-size: 380px;
+            inline-size: 100%;
+            margin-inline-start: auto;
+        }
+
         .hero-preview-card {
-            background: rgba(17, 24, 39, 0.68);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px;
-            padding: 14px;
-            box-shadow: 0 24px 70px rgba(0,0,0,0.28);
-            backdrop-filter: blur(14px);
+            background: rgba(17, 24, 39, 0.56);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 10px;
+            box-shadow: 0 18px 42px rgba(0,0,0,0.22);
+            backdrop-filter: blur(10px);
         }
 
         .hero-preview-card img {
             inline-size: 100%;
+            block-size: 220px;
             display: block;
-            border-radius: 16px;
+            object-fit: cover;
+            border-radius: 12px;
         }
 
         .hero-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 14px;
-            max-inline-size: 860px;
-            margin: 28px 0 0;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            max-inline-size: 760px;
+            margin: 18px 0 0;
         }
 
         .stat-chip {
-            background: rgba(17, 24, 39, 0.68);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 16px 18px;
+            background: rgba(17, 24, 39, 0.62);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            padding: 12px 14px;
             text-align: start;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.16);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.14);
         }
 
         .stat-chip strong {
@@ -419,20 +405,20 @@
         /* Cards */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
             max-inline-size: 1100px;
-            margin: 0 auto 80px;
-            padding: 0 24px;
+            margin: 0 auto 60px;
+            padding: 0 18px;
             position: relative;
             z-index: 10;
         }
-        
+
         .tool-card {
             background: rgba(17, 24, 39, 0.65);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 32px;
+            border-radius: 18px;
+            padding: 24px;
             cursor: pointer;
             transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
@@ -546,10 +532,10 @@
         }
 
         .card-art {
-            margin: -32px -32px 20px;
-            block-size: 150px;
+            margin: -24px -24px 16px;
+            block-size: 120px;
             overflow: hidden;
-            border-radius: 20px 20px 16px 16px;
+            border-radius: 18px 18px 14px 14px;
             border-block-end: 1px solid rgba(255,255,255,0.08);
             background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(15,23,42,0.85));
         }
@@ -682,40 +668,40 @@
             inset-inline-start: 0;
             inset-block-start: 0;
             block-size: 100vh;
-            inline-size: 220px;
+            inline-size: 190px;
             background: linear-gradient(180deg, var(--gray-900) 0%, var(--gray-800) 100%);
             border-inline-end: 1px solid var(--gray-700);
-            transform: translateX(-178px);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateX(-100%);
+            transition: transform 0.28s ease;
             z-index: 1000;
             box-shadow: 4px 0 24px rgba(0,0,0,.4);
         }
         .slide-menu.open { transform: translateX(0); }
         .menu-tab {
             position: absolute;
-            inset-inline-end: -42px;
-            inset-block-start: 50%;
-            transform: translateY(-50%);
-            inline-size: 42px;
-            block-size: 96px;
+            inset-inline-end: -34px;
+            inset-block-start: 92px;
+            transform: none;
+            inline-size: 34px;
+            block-size: 72px;
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
-            border-radius: 0 12px 12px 0;
+            border-radius: 0 10px 10px 0;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 4px 0 20px rgba(37,99,235,.4);
-            transition: all 0.3s ease;
+            box-shadow: 4px 0 18px rgba(37,99,235,.35);
+            transition: all 0.2s ease;
         }
-        .menu-tab:hover { inline-size: 46px; box-shadow: 6px 0 30px rgba(37,99,235,.6); }
-        .menu-tab i { color: white; font-size: 1.2rem; animation: pulse 2s infinite; }
+        .menu-tab:hover { inline-size: 38px; box-shadow: 6px 0 24px rgba(37,99,235,.5); }
+        .menu-tab i { color: white; font-size: 1rem; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .menu-header { padding: 30px 20px; border-block-end: 1px solid var(--gray-700); background: linear-gradient(135deg, rgba(37,99,235,.2), transparent); }
-        .menu-header h3 { margin: 0; color: var(--white); font-size: 1.2rem; font-weight: 700; }
-        .menu-header p { margin: 5px 0 0; color: var(--gray-400); font-size: 0.85rem; }
-        .menu-nav { padding: 20px 0; }
-        .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px 20px; color: var(--gray-300); text-decoration: none; transition: all 0.3s ease; border-inline-start: 3px solid transparent; }
-        .menu-item:hover { background: rgba(37,99,235,.1); color: var(--white); border-inline-start-color: var(--primary-blue); padding-inline-start: 25px; }
+        .menu-header { padding: 20px 14px; border-block-end: 1px solid var(--gray-700); background: linear-gradient(135deg, rgba(37,99,235,.2), transparent); }
+        .menu-header h3 { margin: 0; color: var(--white); font-size: 1rem; font-weight: 700; }
+        .menu-header p { margin: 4px 0 0; color: var(--gray-400); font-size: 0.78rem; }
+        .menu-nav { padding: 10px 0; }
+        .menu-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; color: var(--gray-300); text-decoration: none; transition: all 0.2s ease; border-inline-start: 3px solid transparent; font-size: 0.88rem; }
+        .menu-item:hover { background: rgba(37,99,235,.1); color: var(--white); border-inline-start-color: var(--primary-blue); padding-inline-start: 18px; }
         .menu-item i { inline-size: 24px; text-align: center; color: var(--primary-light); }
         .menu-item.active { background: rgba(37,99,235,.2); color: var(--white); border-inline-start-color: var(--primary-blue); }
         .menu-footer { position: absolute; inset-block-end: 0; inset-inline-start: 0; inset-inline-end: 0; padding: 20px; border-block-start: 1px solid var(--gray-700); background: var(--gray-900); }
@@ -833,11 +819,8 @@
 <!-- Hero -->
 <section class="hero-section">
     <div class="hero-banner">
-        <img src="assets/classroom-glow.svg?v=20260416d" alt="Dynamic classroom banner">
-        <div class="hero-banner-copy">
-            <strong>Creative minds. Dynamic lessons.</strong>
-            <span>One smooth hub for tests, books, and interactive classroom tools.</span>
-        </div>
+        <img src="assets/images/page-banner.png?v=20260416f" alt="Creative Minds banner">
+        <div class="hero-banner-copy"></div>
     </div>
 
     <div class="hero-shell">
@@ -876,7 +859,7 @@
 
         <div class="hero-preview">
             <div class="hero-preview-card">
-                <img src="assets/classroom-glow.svg?v=20260416" alt="RysHub overview illustration">
+                <img src="assets/hub-hero.svg?v=20260416" alt="RysHub overview illustration">
             </div>
         </div>
     </div>
