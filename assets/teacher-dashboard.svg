@@ -1,18 +1,32 @@
 <svg width="800" height="480" viewBox="0 0 800 480" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg2" x1="0" y1="0" x2="800" y2="480">
-      <stop stop-color="#064E3B"/>
-      <stop offset="0.5" stop-color="#0F172A"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="480">
+      <stop stop-color="#071926"/>
+      <stop offset="0.55" stop-color="#0F766E"/>
       <stop offset="1" stop-color="#1D4ED8"/>
     </linearGradient>
   </defs>
-  <rect width="800" height="480" rx="28" fill="url(#bg2)"/>
-  <rect x="86" y="78" width="628" height="324" rx="24" fill="#0F172A" fill-opacity="0.76" stroke="#6EE7B7" stroke-opacity="0.45"/>
-  <text x="124" y="144" fill="white" font-family="Arial, sans-serif" font-size="30" font-weight="700">Teacher Dashboard</text>
-  <text x="124" y="178" fill="#D1FAE5" font-family="Arial, sans-serif" font-size="16">Assignments, feedback, and classroom tools</text>
-  <rect x="124" y="214" width="176" height="88" rx="16" fill="#10B981" fill-opacity="0.2" stroke="#6EE7B7"/>
-  <rect x="320" y="214" width="176" height="88" rx="16" fill="#3B82F6" fill-opacity="0.18" stroke="#93C5FD"/>
-  <rect x="516" y="214" width="150" height="88" rx="16" fill="#8B5CF6" fill-opacity="0.18" stroke="#C4B5FD"/>
-  <rect x="124" y="326" width="542" height="14" rx="7" fill="#334155"/>
-  <rect x="124" y="350" width="380" height="14" rx="7" fill="#10B981"/>
+  <rect width="800" height="480" rx="28" fill="url(#bg)"/>
+  <rect x="66" y="58" width="668" height="364" rx="24" fill="#08121F" stroke="#6EE7B7" stroke-opacity="0.25"/>
+  <rect x="90" y="86" width="122" height="308" rx="18" fill="#0D1B2B"/>
+  <rect x="108" y="116" width="86" height="12" rx="6" fill="#10B981"/>
+  <rect x="108" y="148" width="74" height="10" rx="5" fill="#334155"/>
+  <rect x="108" y="172" width="74" height="10" rx="5" fill="#334155"/>
+  <rect x="108" y="196" width="74" height="10" rx="5" fill="#334155"/>
+  <text x="236" y="116" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="700">EduGrade Dashboard</text>
+  <rect x="236" y="136" width="128" height="10" rx="5" fill="#A7F3D0"/>
+  <rect x="236" y="170" width="144" height="86" rx="16" fill="#0F2B24" stroke="#10B981"/>
+  <rect x="396" y="170" width="144" height="86" rx="16" fill="#10243A" stroke="#60A5FA"/>
+  <rect x="556" y="170" width="144" height="86" rx="16" fill="#231942" stroke="#C4B5FD"/>
+  <text x="256" y="204" fill="#A7F3D0" font-family="Arial, sans-serif" font-size="13" font-weight="700">Submissions</text>
+  <text x="416" y="204" fill="#BFDBFE" font-family="Arial, sans-serif" font-size="13" font-weight="700">Avg Score</text>
+  <text x="578" y="204" fill="#E9D5FF" font-family="Arial, sans-serif" font-size="13" font-weight="700">Feedback</text>
+  <text x="256" y="236" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="800">28</text>
+  <text x="416" y="236" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="800">91%</text>
+  <text x="578" y="236" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="800">Ready</text>
+  <rect x="236" y="284" width="464" height="90" rx="16" fill="#0D1727" stroke="#243B53"/>
+  <rect x="258" y="310" width="230" height="12" rx="6" fill="#334155"/>
+  <rect x="258" y="334" width="186" height="12" rx="6" fill="#10B981"/>
+  <rect x="516" y="306" width="160" height="38" rx="12" fill="#0EA5E9"/>
+  <text x="560" y="330" fill="#082F49" font-family="Arial, sans-serif" font-size="14" font-weight="800">Review</text>
 </svg>

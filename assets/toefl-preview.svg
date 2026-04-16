@@ -1,17 +1,33 @@
 <svg width="800" height="480" viewBox="0 0 800 480" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="g1" x1="0" y1="0" x2="800" y2="480">
-      <stop stop-color="#1D4ED8"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="480">
+      <stop stop-color="#09162A"/>
+      <stop offset="0.55" stop-color="#123A6B"/>
       <stop offset="1" stop-color="#0F172A"/>
     </linearGradient>
   </defs>
-  <rect width="800" height="480" rx="28" fill="url(#g1)"/>
-  <circle cx="640" cy="92" r="72" fill="#60A5FA" fill-opacity="0.2"/>
-  <rect x="88" y="86" width="624" height="308" rx="22" fill="#0F172A" stroke="#60A5FA" stroke-opacity="0.35"/>
-  <text x="130" y="146" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">TOEFL iBT</text>
-  <text x="130" y="182" fill="#BFDBFE" font-family="Arial, sans-serif" font-size="18">Reading • Listening • Speaking • Writing</text>
-  <rect x="130" y="220" width="180" height="42" rx="12" fill="#2563EB"/>
-  <text x="170" y="247" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="700">Start Test</text>
-  <rect x="130" y="288" width="230" height="10" rx="5" fill="#334155"/>
-  <rect x="130" y="310" width="180" height="10" rx="5" fill="#60A5FA"/>
+  <rect width="800" height="480" rx="28" fill="url(#bg)"/>
+  <rect x="58" y="54" width="684" height="372" rx="24" fill="#06111F" stroke="#60A5FA" stroke-opacity="0.28"/>
+  <rect x="58" y="54" width="684" height="42" rx="24" fill="#0B1D36"/>
+  <circle cx="88" cy="75" r="5" fill="#22C55E"/><circle cx="106" cy="75" r="5" fill="#F59E0B"/><circle cx="124" cy="75" r="5" fill="#EF4444"/>
+  <text x="154" y="81" fill="#DCEBFF" font-family="Arial, sans-serif" font-size="14" font-weight="700">TOEFL Mock Test Interface</text>
+  <rect x="84" y="118" width="236" height="270" rx="16" fill="#0F2038" stroke="#243B5A"/>
+  <text x="104" y="148" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="700">Reading Passage</text>
+  <rect x="104" y="166" width="122" height="10" rx="5" fill="#38BDF8" fill-opacity="0.9"/>
+  <rect x="104" y="196" width="186" height="8" rx="4" fill="#334155"/>
+  <rect x="104" y="214" width="176" height="8" rx="4" fill="#334155"/>
+  <rect x="104" y="232" width="188" height="8" rx="4" fill="#334155"/>
+  <rect x="104" y="250" width="164" height="8" rx="4" fill="#334155"/>
+  <rect x="104" y="282" width="104" height="30" rx="10" fill="#1D4ED8"/>
+  <text x="131" y="302" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="13" font-weight="700">Review</text>
+  <rect x="340" y="118" width="376" height="270" rx="16" fill="#0D1727" stroke="#243B5A"/>
+  <text x="364" y="148" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="20" font-weight="700">Question 12 of 40</text>
+  <rect x="580" y="130" width="112" height="24" rx="12" fill="#082F49" stroke="#38BDF8"/>
+  <text x="607" y="146" fill="#BAE6FD" font-family="Arial, sans-serif" font-size="12" font-weight="700">14:23 left</text>
+  <rect x="364" y="178" width="316" height="10" rx="5" fill="#475569"/>
+  <rect x="364" y="196" width="250" height="10" rx="5" fill="#475569"/>
+  <rect x="364" y="228" width="320" height="34" rx="11" fill="#13263F" stroke="#3B82F6"/>
+  <rect x="364" y="274" width="320" height="34" rx="11" fill="#13263F" stroke="#243B5A"/>
+  <rect x="364" y="320" width="320" height="34" rx="11" fill="#13263F" stroke="#243B5A"/>
+  <circle cx="388" cy="245" r="8" fill="#38BDF8"/><circle cx="388" cy="291" r="8" stroke="#64748B" stroke-width="2"/><circle cx="388" cy="337" r="8" stroke="#64748B" stroke-width="2"/>
 </svg>

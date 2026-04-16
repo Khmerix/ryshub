@@ -1,19 +1,31 @@
 <svg width="800" height="480" viewBox="0 0 800 480" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="g3" x1="0" y1="0" x2="800" y2="480">
-      <stop stop-color="#0F172A"/>
-      <stop offset="0.5" stop-color="#155E75"/>
-      <stop offset="1" stop-color="#0E7490"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="480">
+      <stop stop-color="#07111F"/>
+      <stop offset="0.5" stop-color="#0E7490"/>
+      <stop offset="1" stop-color="#0F172A"/>
     </linearGradient>
   </defs>
-  <rect width="800" height="480" rx="28" fill="url(#g3)"/>
-  <g fill="#67E8F9" fill-opacity="0.9">
-    <rect x="156" y="232" width="96" height="96" rx="10"/>
-    <rect x="262" y="178" width="96" height="96" rx="10"/>
-    <rect x="368" y="232" width="96" height="96" rx="10"/>
-    <rect x="474" y="178" width="96" height="96" rx="10"/>
-    <rect x="580" y="232" width="96" height="96" rx="10"/>
+  <rect width="800" height="480" rx="28" fill="url(#bg)"/>
+  <rect x="68" y="64" width="664" height="350" rx="24" fill="#06111A" stroke="#22D3EE" stroke-opacity="0.28"/>
+  <rect x="94" y="92" width="104" height="292" rx="16" fill="#0B1F2D" stroke="#164E63"/>
+  <rect x="110" y="116" width="72" height="24" rx="8" fill="#0891B2"/>
+  <rect x="110" y="154" width="72" height="24" rx="8" fill="#123246"/>
+  <rect x="110" y="192" width="72" height="24" rx="8" fill="#123246"/>
+  <rect x="218" y="92" width="488" height="292" rx="16" fill="#081521" stroke="#1F2937"/>
+  <path d="M250 318 L462 210 L676 318" stroke="#164E63" stroke-width="2" opacity="0.6"/>
+  <path d="M250 278 L462 170 L676 278" stroke="#164E63" stroke-width="2" opacity="0.35"/>
+  <path d="M250 238 L462 130 L676 238" stroke="#164E63" stroke-width="2" opacity="0.2"/>
+  <g>
+    <polygon points="404,232 450,208 496,232 450,256" fill="#67E8F9"/>
+    <polygon points="404,232 404,278 450,302 450,256" fill="#22D3EE"/>
+    <polygon points="496,232 496,278 450,302 450,256" fill="#0891B2"/>
   </g>
-  <text x="154" y="124" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">Brick Forge Pro</text>
-  <text x="154" y="160" fill="#CFFAFE" font-family="Arial, sans-serif" font-size="18">Build, design, and imagine in 3D</text>
+  <g>
+    <polygon points="494,188 540,164 586,188 540,212" fill="#A5F3FC"/>
+    <polygon points="494,188 494,234 540,258 540,212" fill="#67E8F9"/>
+    <polygon points="586,188 586,234 540,258 540,212" fill="#0EA5E9"/>
+  </g>
+  <text x="238" y="126" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="700">Brick Forge Studio</text>
+  <text x="238" y="152" fill="#CFFAFE" font-family="Arial, sans-serif" font-size="14">3D build tools • scenes • blocks • projects</text>
 </svg>
