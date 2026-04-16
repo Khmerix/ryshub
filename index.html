@@ -2082,52 +2082,32 @@
 
     <div class="games-score-grid">
         <div class="score-spotlight">
-            <div class="score-kicker"><i class="fas fa-fire"></i> Featured this week</div>
-            <h3>Last Colony is leading the hub</h3>
-            <p>Use this area to highlight your most-played game, best classroom challenge, and standout performance numbers in one premium block.</p>
+            <div class="score-kicker"><i class="fas fa-fire"></i> Live featured game</div>
+            <h3 id="featuredGameTitle">Last Colony is leading the hub</h3>
+            <p id="featuredGameDesc">Use this area to highlight your most-played game, best classroom challenge, and standout performance numbers in one premium block.</p>
             <div class="score-meta-grid">
                 <div class="score-meta-card">
-                    <strong>92%</strong>
-                    <span>Top colony readiness</span>
+                    <strong id="featuredGameBest">92%</strong>
+                    <span id="featuredGameMetric">Top colony readiness</span>
                 </div>
                 <div class="score-meta-card">
-                    <strong>148</strong>
-                    <span>Best builder score</span>
+                    <strong id="featuredGamePlays">18</strong>
+                    <span>Total launches</span>
                 </div>
                 <div class="score-meta-card">
-                    <strong>3</strong>
-                    <span>Live game experiences</span>
+                    <strong id="featuredGameTrend">Hot</strong>
+                    <span>Current trend</span>
                 </div>
             </div>
-            <button class="card-btn" style="background:linear-gradient(135deg,#f97316,#b91c1c);box-shadow:0 4px 0 #7f1d1d,0 8px 24px rgba(249,115,22,.35);" onclick="openColonyModal()"><i class="fas fa-trophy"></i> Open top game</button>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+                <button id="featuredGameButton" class="card-btn" style="background:linear-gradient(135deg,#f97316,#b91c1c);box-shadow:0 4px 0 #7f1d1d,0 8px 24px rgba(249,115,22,.35);" onclick="launchFeaturedGame()"><i class="fas fa-trophy"></i> Open top game</button>
+                <button class="btn-outline" onclick="cycleFeaturedGame()"><i class="fas fa-rotate"></i> Rotate spotlight</button>
+            </div>
         </div>
 
         <div class="score-list">
             <div class="score-kicker"><i class="fas fa-ranking-star"></i> Popular now</div>
-            <div class="score-row">
-                <span class="score-rank">1</span>
-                <div class="score-game">
-                    <strong>Last Colony</strong>
-                    <span>Best survival run</span>
-                </div>
-                <span class="score-value">92%</span>
-            </div>
-            <div class="score-row">
-                <span class="score-rank">2</span>
-                <div class="score-game">
-                    <strong>Brick Forge Pro</strong>
-                    <span>Creative build points</span>
-                </div>
-                <span class="score-value">148</span>
-            </div>
-            <div class="score-row">
-                <span class="score-rank">3</span>
-                <div class="score-game">
-                    <strong>TOEFL Challenge</strong>
-                    <span>Fastest completed mock</span>
-                </div>
-                <span class="score-value">27m</span>
-            </div>
+            <div id="gamesScoreRows"></div>
         </div>
     </div>
 </section>
@@ -2680,6 +2660,7 @@ function launchToefl() {
     var name = document.getElementById('toefl-name').value.trim();
     var id = document.getElementById('toefl-id').value.trim();
     if (!name || !id) { showToast('Please enter your name and ID'); return; }
+    recordGameLaunch('toefl');
     closeToeflLogin();
     var frame = document.getElementById('toefl-frame');
     frame.src = 'apps/toefl/';
@@ -2716,6 +2697,7 @@ function closeBook2bModal() {
 }
 
 function openBrickForgeModal() {
+    recordGameLaunch('brickforge');
     showToast('Loading Brick Forge... one moment ⏳');
     var frame = document.getElementById('brickforge-frame');
     frame.src = 'apps/brickforge.html';
@@ -2726,6 +2708,7 @@ function closeBrickForgeModal() {
 }
 
 function openColonyModal() {
+    recordGameLaunch('colony');
     showToast('Launching Last Colony... stand by 🚀');
     var frame = document.getElementById('colony-frame');
     frame.src = 'apps/games/colony/';
@@ -2885,6 +2868,138 @@ function scrollToSection(id) {
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+var featuredGameIndex = 0;
+var currentFeaturedGameId = 'colony';
+var gameScoreTimer = null;
+var GAME_META = {
+    colony: {
+        name: 'Last Colony',
+        metric: 'Top colony readiness',
+        best: '92%',
+        desc: 'Lead Mars survival missions and keep the colony alive through high-pressure strategy and story choices.',
+        cta: 'Launch Colony'
+    },
+    brickforge: {
+        name: 'Brick Forge Pro',
+        metric: 'Creative build points',
+        best: '148',
+        desc: 'Fast visual building challenges make this one of the most replayed creative experiences on the hub.',
+        cta: 'Open Builder'
+    },
+    toefl: {
+        name: 'TOEFL Challenge',
+        metric: 'Fastest completed mock',
+        best: '27m',
+        desc: 'Timed test practice becomes a score-style challenge students can return to again and again.',
+        cta: 'Start TOEFL'
+    }
+};
+
+function loadGameStats() {
+    var defaults = {
+        colony: { plays: 18, best: '92%' },
+        brickforge: { plays: 14, best: '148' },
+        toefl: { plays: 11, best: '27m' }
+    };
+    try {
+        var saved = JSON.parse(localStorage.getItem('ryshubGameStats') || '{}');
+        return Object.assign({}, defaults, saved);
+    } catch (e) {
+        return defaults;
+    }
+}
+
+function saveGameStats(stats) {
+    localStorage.setItem('ryshubGameStats', JSON.stringify(stats));
+}
+
+function getTrendLabel(plays) {
+    if (plays >= 18) return 'Hot';
+    if (plays >= 12) return 'Trending';
+    return 'Rising';
+}
+
+function openGameFromScores(id) {
+    if (id === 'colony') openColonyModal();
+    else if (id === 'brickforge') openBrickForgeModal();
+    else if (id === 'toefl') openProtectedToefl();
+}
+
+function launchFeaturedGame() {
+    openGameFromScores(currentFeaturedGameId);
+}
+
+function recordGameLaunch(id) {
+    var stats = loadGameStats();
+    if (!stats[id]) stats[id] = { plays: 0, best: (GAME_META[id] && GAME_META[id].best) || '0' };
+    stats[id].plays = (stats[id].plays || 0) + 1;
+    stats[id].lastPlayed = Date.now();
+    saveGameStats(stats);
+    renderGameScores();
+}
+
+function renderGameScores() {
+    var stats = loadGameStats();
+    var ranking = Object.keys(GAME_META).map(function(id) {
+        return {
+            id: id,
+            name: GAME_META[id].name,
+            metric: GAME_META[id].metric,
+            desc: GAME_META[id].desc,
+            cta: GAME_META[id].cta,
+            plays: (stats[id] && stats[id].plays) || 0,
+            best: (stats[id] && stats[id].best) || GAME_META[id].best
+        };
+    }).sort(function(a, b) {
+        return b.plays - a.plays;
+    });
+
+    if (!ranking.length) return;
+    var featured = ranking[featuredGameIndex % ranking.length];
+    currentFeaturedGameId = featured.id;
+
+    var title = document.getElementById('featuredGameTitle');
+    var desc = document.getElementById('featuredGameDesc');
+    var best = document.getElementById('featuredGameBest');
+    var metric = document.getElementById('featuredGameMetric');
+    var plays = document.getElementById('featuredGamePlays');
+    var trend = document.getElementById('featuredGameTrend');
+    var button = document.getElementById('featuredGameButton');
+    var rows = document.getElementById('gamesScoreRows');
+
+    if (title) title.textContent = featured.name + ' is leading the hub';
+    if (desc) desc.textContent = featured.desc;
+    if (best) best.textContent = featured.best;
+    if (metric) metric.textContent = featured.metric;
+    if (plays) plays.textContent = featured.plays;
+    if (trend) trend.textContent = getTrendLabel(featured.plays);
+    if (button) button.innerHTML = '<i class="fas fa-trophy"></i> ' + featured.cta;
+
+    if (rows) {
+        rows.innerHTML = ranking.map(function(game, index) {
+            return '<div class="score-row">'
+                + '<span class="score-rank">' + (index + 1) + '</span>'
+                + '<div class="score-game"><strong>' + game.name + '</strong><span>' + game.metric + ' · ' + game.plays + ' plays</span></div>'
+                + '<span class="score-value">' + game.best + '</span>'
+                + '</div>';
+        }).join('');
+    }
+}
+
+function cycleFeaturedGame() {
+    featuredGameIndex += 1;
+    renderGameScores();
+}
+
+function initGameScores() {
+    renderGameScores();
+    if (gameScoreTimer) window.clearInterval(gameScoreTimer);
+    gameScoreTimer = window.setInterval(function() {
+        featuredGameIndex += 1;
+        renderGameScores();
+    }, 6000);
+}
+
 function showToast(msg) {
     var t = document.getElementById('hub-toast');
     document.getElementById('hub-toast-msg').textContent = msg;
@@ -2919,6 +3034,7 @@ updateTeacherStatusUi();
 initHubMode();
 initLiveCounters();
 initParallaxTilt();
+initGameScores();
 </script>
 </body>
 </html>
