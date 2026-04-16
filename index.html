@@ -181,6 +181,54 @@
             pointer-events: none;
         }
 
+        .hero-circuit {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0.9;
+        }
+
+        .hero-circuit::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59,130,246,0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,0.12) 1px, transparent 1px);
+            background-size: 88px 88px;
+            mask-image: linear-gradient(180deg, transparent 0%, black 16%, black 84%, transparent 100%);
+            animation: circuitDrift 12s linear infinite;
+        }
+
+        .hero-circuit::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(118deg, transparent 0%, transparent 23%, rgba(96,165,250,0) 23%, rgba(96,165,250,0.55) 25%, transparent 27%, transparent 100%),
+                linear-gradient(28deg, transparent 0%, transparent 56%, rgba(34,211,238,0) 56%, rgba(34,211,238,0.52) 58%, transparent 60%, transparent 100%),
+                radial-gradient(circle at 16% 34%, rgba(96,165,250,0.95) 0 2px, transparent 8px),
+                radial-gradient(circle at 37% 58%, rgba(34,211,238,0.9) 0 2px, transparent 8px),
+                radial-gradient(circle at 64% 26%, rgba(59,130,246,0.9) 0 2px, transparent 8px),
+                radial-gradient(circle at 82% 62%, rgba(14,165,233,0.92) 0 2px, transparent 9px);
+            filter: drop-shadow(0 0 8px rgba(59,130,246,0.32));
+            mix-blend-mode: screen;
+            animation: circuitPulse 3.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes circuitDrift {
+            from { background-position: 0 0, 0 0; }
+            to { background-position: 88px 0, 0 88px; }
+        }
+
+        @keyframes circuitPulse {
+            0% { opacity: 0.35; transform: scale(1); }
+            50% { opacity: 0.72; }
+            100% { opacity: 0.48; transform: scale(1.015); }
+        }
+
         .hero-banner img {
             position: relative;
             z-index: 3;
@@ -863,6 +911,7 @@
 <!-- Hero -->
 <section class="hero-section">
     <div class="hero-banner">
+        <div class="hero-circuit" aria-hidden="true"></div>
         <img src="assets/images/page-banner.png?v=20260416h" alt="Creative Minds banner">
         <div class="hero-banner-copy"></div>
     </div>
