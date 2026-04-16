@@ -4,6 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TOEFL iBT - Complete Test</title>
+    <script>
+        (function () {
+            function getTeacherProfile() {
+                try {
+                    return JSON.parse(localStorage.getItem('ryshubTeacherProfile') || sessionStorage.getItem('ryshubTeacherProfile') || 'null');
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            function isSchoolEmail(email) {
+                var value = (email || '').trim().toLowerCase();
+                return !!value && (value.endsWith('@aii.edu.kh') || /@.+\.(edu|edu\.kh|ac\.th|ac\.uk)$/i.test(value));
+            }
+
+            var profile = getTeacherProfile();
+            if (!(profile && isSchoolEmail(profile.email))) {
+                alert('Teacher-only content. Please register with your school email first.');
+                window.location.replace('../../index.html');
+            }
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
