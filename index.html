@@ -174,6 +174,158 @@
             margin-block-end: 12px;
         }
 
+        .top-section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 0 0 18px;
+        }
+
+        .section-jump-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(15,23,42,0.55);
+            color: var(--gray-100);
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+            box-shadow: 0 10px 24px rgba(15,23,42,.16);
+        }
+
+        .section-jump-btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(96,165,250,.45);
+            box-shadow: 0 14px 28px rgba(37,99,235,.2);
+        }
+
+        .games-score-section {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto 34px;
+            padding: 0 16px;
+        }
+
+        .games-score-grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 18px;
+        }
+
+        .score-spotlight,
+        .score-list {
+            background: linear-gradient(180deg, rgba(15,23,42,.88), rgba(15,23,42,.72));
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 20px 45px rgba(2,6,23,.24);
+            backdrop-filter: blur(14px);
+        }
+
+        .score-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: .72rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: #93c5fd;
+            font-weight: 800;
+        }
+
+        .score-spotlight h3 {
+            margin: 0 0 8px;
+            font-size: 1.4rem;
+            color: var(--white);
+        }
+
+        .score-spotlight p {
+            margin: 0 0 16px;
+            color: var(--gray-300);
+            line-height: 1.7;
+        }
+
+        .score-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0,1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .score-meta-card {
+            padding: 12px;
+            border-radius: 16px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.06);
+        }
+
+        .score-meta-card strong {
+            display: block;
+            color: var(--white);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .score-meta-card span {
+            color: var(--gray-400);
+            font-size: .78rem;
+        }
+
+        .score-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+
+        .score-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .score-rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+            color: white;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .score-game {
+            flex: 1;
+        }
+
+        .score-game strong {
+            display: block;
+            color: var(--white);
+            font-size: .96rem;
+            margin-bottom: 2px;
+        }
+
+        .score-game span {
+            color: var(--gray-400);
+            font-size: .8rem;
+        }
+
+        .score-value {
+            color: #fbbf24;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
         .hero-banner {
             position: relative;
             max-inline-size: 1040px;
@@ -1602,6 +1754,18 @@
         }
 
         @media (max-inline-size: 900px) {
+            .games-score-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .score-meta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .top-section-nav {
+                justify-content: center;
+            }
+
             body {
                 padding-inline-start: 0;
             }
@@ -1666,6 +1830,13 @@
             <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span>
             <strong>Live classroom hub</strong>
             <span>Use the side panel to explore tools</span>
+        </div>
+
+        <div class="hidden xl:flex nav-scroll">
+            <a href="#" class="nav-3d" onclick="scrollToSection('topHome'); return false;">Overview</a>
+            <a href="#" class="nav-3d" onclick="scrollToSection('featuredApps'); return false;">Featured Apps</a>
+            <a href="#" class="nav-3d" onclick="scrollToSection('gamesScores'); return false;">Games &amp; Scores</a>
+            <a href="#" class="nav-3d" onclick="scrollToSection('commandCenterSection'); return false;">Command Center</a>
         </div>
         
         <div class="flex items-center gap-3">
@@ -1743,7 +1914,7 @@
 <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 
     <!-- Hero -->
-<section class="hero-section">
+<section class="hero-section" id="topHome">
     <div class="hero-banner">
         <div class="hero-banner-coded">
             <div class="hb-top">
@@ -1788,6 +1959,12 @@
                 <div class="hero-highlight"><i class="fas fa-book-open"></i> Book resources live</div>
                 <div class="hero-highlight"><i class="fas fa-cube"></i> BrickForge synced</div>
             </div>
+            <div class="top-section-nav">
+                <button class="section-jump-btn" onclick="scrollToSection('featuredApps')"><i class="fas fa-layer-group"></i> Featured apps</button>
+                <button class="section-jump-btn" onclick="scrollToSection('gamesScores')"><i class="fas fa-trophy"></i> Games &amp; scores</button>
+                <button class="section-jump-btn" onclick="scrollToSection('commandCenterSection')"><i class="fas fa-bolt"></i> Command center</button>
+                <button class="section-jump-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Launch Colony</button>
+            </div>
             <div class="hero-stats">
                 <div class="stat-chip">
                     <strong>4+ live tools</strong>
@@ -1812,7 +1989,7 @@
     </div>
 </section>
 
-<section class="command-center-section">
+<section class="command-center-section" id="commandCenterSection">
     <div class="section-intro">
         <div>
             <div class="section-kicker">Dynamic Experience</div>
@@ -1893,6 +2070,68 @@
     </div>
 </section>
 
+<section class="games-score-section" id="gamesScores">
+    <div class="section-intro">
+        <div>
+            <div class="section-kicker">Popular games showcase</div>
+            <h2>Most played games and score highlights</h2>
+            <p>A dedicated section for spotlighting the games students return to most and the best runs worth showing off.</p>
+        </div>
+        <div class="hb-chip"><i class="fas fa-trophy"></i> Arcade leaderboard</div>
+    </div>
+
+    <div class="games-score-grid">
+        <div class="score-spotlight">
+            <div class="score-kicker"><i class="fas fa-fire"></i> Featured this week</div>
+            <h3>Last Colony is leading the hub</h3>
+            <p>Use this area to highlight your most-played game, best classroom challenge, and standout performance numbers in one premium block.</p>
+            <div class="score-meta-grid">
+                <div class="score-meta-card">
+                    <strong>92%</strong>
+                    <span>Top colony readiness</span>
+                </div>
+                <div class="score-meta-card">
+                    <strong>148</strong>
+                    <span>Best builder score</span>
+                </div>
+                <div class="score-meta-card">
+                    <strong>3</strong>
+                    <span>Live game experiences</span>
+                </div>
+            </div>
+            <button class="card-btn" style="background:linear-gradient(135deg,#f97316,#b91c1c);box-shadow:0 4px 0 #7f1d1d,0 8px 24px rgba(249,115,22,.35);" onclick="openColonyModal()"><i class="fas fa-trophy"></i> Open top game</button>
+        </div>
+
+        <div class="score-list">
+            <div class="score-kicker"><i class="fas fa-ranking-star"></i> Popular now</div>
+            <div class="score-row">
+                <span class="score-rank">1</span>
+                <div class="score-game">
+                    <strong>Last Colony</strong>
+                    <span>Best survival run</span>
+                </div>
+                <span class="score-value">92%</span>
+            </div>
+            <div class="score-row">
+                <span class="score-rank">2</span>
+                <div class="score-game">
+                    <strong>Brick Forge Pro</strong>
+                    <span>Creative build points</span>
+                </div>
+                <span class="score-value">148</span>
+            </div>
+            <div class="score-row">
+                <span class="score-rank">3</span>
+                <div class="score-game">
+                    <strong>TOEFL Challenge</strong>
+                    <span>Fastest completed mock</span>
+                </div>
+                <span class="score-value">27m</span>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ESL Art Cards -->
 <section class="art-cards-section">
     <div class="section-heading">
@@ -1929,7 +2168,7 @@
 </section>
 
 <!-- Cards -->
-<div class="section-intro">
+<div class="section-intro" id="featuredApps">
     <div>
         <p class="section-kicker">Featured learning apps</p>
         <h2>Everything important, in one aligned hub</h2>
@@ -2638,6 +2877,12 @@ function initParallaxTilt() {
             });
         });
     });
+}
+
+function scrollToSection(id) {
+    var section = document.getElementById(id);
+    if (!section) return;
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function showToast(msg) {
