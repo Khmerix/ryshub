@@ -1246,6 +1246,9 @@ class MarsGame {
     this.scene=new THREE.Scene();this.scene.fog=new THREE.FogExp2(0x3a1a0a,.0028)
     this.camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,.1,1200)
     this.renderer=new THREE.WebGLRenderer({antialias:true})
+    this.renderer.outputEncoding=THREE.sRGBEncoding
+    this.renderer.toneMapping=THREE.ACESFilmicToneMapping
+    this.renderer.toneMappingExposure=1.08
     this.renderer.setSize(innerWidth,innerHeight);this.renderer.setPixelRatio(Math.min(devicePixelRatio,2))
     this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap
     document.getElementById('gameCanvas').appendChild(this.renderer.domElement)
@@ -1265,11 +1268,14 @@ class MarsGame {
     return h
   }
   _initScene(){
-    this.ambLight=new THREE.AmbientLight(0xc08050,1.8);this.scene.add(this.ambLight)
+    this.ambLight=new THREE.AmbientLight(0xc08050,1.35);this.scene.add(this.ambLight)
+    this.hemiLight=new THREE.HemisphereLight(0xffd5ae,0x291308,1.2);this.scene.add(this.hemiLight)
     this.sunLight=new THREE.DirectionalLight(0xffeec0,2.8);this.sunLight.castShadow=true
-    this.sunLight.shadow.mapSize.set(2048,2048);const sd=100
+    this.sunLight.shadow.mapSize.set(2048,2048);this.sunLight.shadow.bias=-0.00018;this.sunLight.shadow.normalBias=.02;const sd=100
     ;['left','right','top','bottom'].forEach((s,i)=>this.sunLight.shadow.camera[s]=[-sd,sd,sd,-sd][i]);this.scene.add(this.sunLight)
+    this.moonLight=new THREE.DirectionalLight(0x8ec5ff,.18);this.scene.add(this.moonLight)
     this.sunSphere=new THREE.Mesh(new THREE.SphereGeometry(2.2,12,12),new THREE.MeshBasicMaterial({color:0xffe8a0}));this.scene.add(this.sunSphere)
+    this.moonSphere=new THREE.Mesh(new THREE.SphereGeometry(1.5,12,12),new THREE.MeshBasicMaterial({color:0xcfe8ff,transparent:true,opacity:.85}));this.scene.add(this.moonSphere)
     const geo=new THREE.PlaneGeometry(240,240,140,140);const pos=geo.attributes.position,cols=[]
     for(let i=0;i<pos.count;i++){
       const wx=pos.getX(i),wz=pos.getY(i),h=this._getH(wx,wz);pos.setZ(i,h)
@@ -1284,7 +1290,7 @@ class MarsGame {
       cols.push(tc.r,tc.g,tc.b)
     }
     pos.needsUpdate=true;geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));geo.computeVertexNormals()
-    this.terrainMesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.82,metalness:.05}));this.terrainMesh.rotation.x=-Math.PI/2;this.terrainMesh.receiveShadow=true;this.scene.add(this.terrainMesh)
+    this.terrainMesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.88,metalness:.03,flatShading:false}));this.terrainMesh.rotation.x=-Math.PI/2;this.terrainMesh.receiveShadow=true;this.scene.add(this.terrainMesh)
     const rM=[new THREE.MeshStandardMaterial({color:0x7a4828,roughness:.88}),new THREE.MeshStandardMaterial({color:0x6a3820,roughness:.85})]
     for(let i=0;i<55;i++){const s=Math.random()*2.2+.3,a=Math.random()*Math.PI*2,d=20+Math.random()*90,rx=Math.cos(a)*d,rz=Math.sin(a)*d;const r=new THREE.Mesh(Math.random()<.5?new THREE.DodecahedronGeometry(s):new THREE.OctahedronGeometry(s),rM[i%2]);r.position.set(rx,this._getH(rx,rz)+s*.4,rz);r.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);r.castShadow=true;this.scene.add(r)}
     const sp=[];for(let i=0;i<2200;i++)sp.push((Math.random()-.5)*600,70+Math.random()*300,(Math.random()-.5)*600)
@@ -1537,7 +1543,7 @@ class MarsGame {
   // ── FENCE BUILDER ────────────────────────────────────────
   startFenceMode(style='wall'){
     this.fenceMode=true;this.fenceStyle=style;this.fenceStart=null
-    this.notify(`Fence mode: ${style}. Click start point, then end point.`,'info')
+    this.notify(`Fence mode: ${style}. Click to start and keep clicking to extend.`,'info')
     document.getElementById('xhair').classList.add('bmode')
   }
   _getFenceAnchorPoints(){
@@ -1585,25 +1591,72 @@ class MarsGame {
     const hit=ray.intersectObject(this.terrainMesh);if(hit.length)snapped.y=hit[0].point.y
     return snapped
   }
+  _getPlacementPoint(x,z,type=this.selectedTool){
+    const snapped=new THREE.Vector3(Math.round(x),0,Math.round(z))
+    if(type==='gate'||type==='wall_seg'){
+      const anchors=this._getFenceAnchorPoints()
+      let best=null,bestDist=type==='gate'?5.2:3.2
+      anchors.forEach(anchor=>{
+        const dist=Math.hypot(anchor.x-snapped.x,anchor.z-snapped.z)
+        if(dist<bestDist){best=anchor;bestDist=dist}
+      })
+      if(best){
+        if(type==='gate'){snapped.x=best.x;snapped.z=best.z}
+        else {
+          const baseRot=Math.round(this.placeRotY/(Math.PI/4))*(Math.PI/4)
+          const side=((snapped.x-best.x)*Math.cos(baseRot)+(snapped.z-best.z)*Math.sin(baseRot))>=0?1:-1
+          snapped.x=best.x+Math.cos(baseRot)*2.9*side
+          snapped.z=best.z+Math.sin(baseRot)*2.9*side
+        }
+      }
+    }
+    const ray=new THREE.Raycaster();ray.set(new THREE.Vector3(snapped.x,50,snapped.z),new THREE.Vector3(0,-1,0))
+    const hit=ray.intersectObject(this.terrainMesh);if(hit.length)snapped.y=hit[0].point.y
+    return snapped
+  }
+  _getPlacementRotation(x,z,type=this.selectedTool){
+    const snappedRot=Math.round(this.placeRotY/(Math.PI/4))*(Math.PI/4)
+    if(type!=='gate'&&type!=='wall_seg')return snappedRot
+    const anchors=this._getFenceAnchorPoints().filter(anchor=>Math.hypot(anchor.x-x,anchor.z-z)>.35)
+    let best=null,bestDist=9.5
+    anchors.forEach(anchor=>{
+      const dist=Math.hypot(anchor.x-x,anchor.z-z)
+      if(dist<bestDist){best=anchor;bestDist=dist}
+    })
+    if(best)return Math.atan2(best.z-z,best.x-x)
+    return snappedRot
+  }
+  _canPlaceBuildingAt(type,x,z){
+    const gapMap={wall_seg:4.4,gate:4.8,road:5.2,tunnel:5.8,waterline:4.2,powerline:4.2}
+    const minGap=gapMap[type]??8
+    return !this.buildings.some(b=>{
+      if(!b.mesh?.parent)return false
+      const otherGap=gapMap[b.data.type]??8
+      const dx=b.mesh.position.x-x,dz=b.mesh.position.z-z
+      return Math.sqrt(dx*dx+dz*dz)<Math.min(minGap,otherGap)
+    })
+  }
   _handleFenceClick(worldPt){
     const snapped=this._getSnappedFencePoint(worldPt)
     if(!this.fenceStart){
       this.fenceStart=snapped.clone()
-      this.notify('Fence start set. Click end point.','info')
+      this.notify('Fence anchor set. Click again to extend.','info')
     } else {
-      this._placeFenceSegment(this.fenceStart,snapped)
-      this.fenceStart=null;this.fenceMode=false
-      document.getElementById('xhair').classList.remove('bmode','binvalid')
-      this.notify('Fence segment placed!','success');SND.complete()
+      const placed=this._placeFenceSegment(this.fenceStart,snapped)
+      if(placed){
+        this.fenceStart=snapped.clone()
+        document.getElementById('xhair').classList.add('bmode')
+        this.notify('Fence segment placed — keep building or press Esc to stop.','success');SND.complete()
+      }
     }
   }
   _placeFenceSegment(a,b){
     const start=a.clone(),end=b.clone()
     const dx=end.x-start.x,dz=end.z-start.z
     const len=Math.sqrt(dx*dx+dz*dz)
-    if(len<1||len>80){this.notify('Fence must be 1-80m long','error');return}
+    if(len<1||len>80){this.notify('Fence must be 1-80m long','error');return false}
     const ironCost=Math.ceil(len*1.5)
-    if(this.resources.iron<ironCost){this.notify('Need '+ironCost+' Fe for this fence','error');SND.error();return}
+    if(this.resources.iron<ironCost){this.notify('Need '+ironCost+' Fe for this fence','error');SND.error();return false}
     this.resources.iron-=ironCost;SND.build()
     const seg=mkFenceSegment(len,this.fenceStyle)
     const mx=(start.x+end.x)/2,mz=(start.z+end.z)/2,fy=(start.y+end.y)/2
@@ -1611,6 +1664,7 @@ class MarsGame {
     seg.rotation.y=Math.atan2(dz,dx)
     this.scene.add(seg);this.fenceSegments.push({mesh:seg,length:len,style:this.fenceStyle,start:start.clone(),end:end.clone()})
     this._spawnParticles(new THREE.Vector3(mx,fy+1,mz),0x00ffcc)
+    return true
   }
 
   // ── DYNAMIC STRUCTURE EFFECTS ────────────────────────────
@@ -1783,7 +1837,7 @@ class MarsGame {
     if(def?.isFence){
       this.cancelTool()
       this.fenceMode=true;this.fenceStyle=def.fenceStyle;this.fenceStart=null
-      document.getElementById('selTip').textContent=def.label+' — click start, then end'
+      document.getElementById('selTip').textContent=def.label+' — click to start, keep clicking to extend'
       document.getElementById('cancelBuildBtn').style.display='inline-flex'
       document.getElementById('xhair').classList.add('bmode')
       this._buildBuildBar();return
@@ -1805,6 +1859,7 @@ class MarsGame {
     document.getElementById('rotateBuildBtn').style.display='none'
     document.getElementById('xhair').classList.remove('bmode','binvalid')
     if(this.ghostMesh){this.scene.remove(this.ghostMesh);this.ghostMesh=null}
+    if(this.fencePreviewLine){this.scene.remove(this.fencePreviewLine);this.fencePreviewLine=null}
     this._buildBuildBar()
   }
   rotatePlacement(){SND.click();this.placeRotY+=Math.PI/4;if(this.ghostMesh)this.ghostMesh.rotation.y=this.placeRotY}
@@ -1818,11 +1873,12 @@ class MarsGame {
   _placeBuilding(type,x,z,instant=false){
     const allItems=Object.values(BCAT).flat()
     const def=allItems.find(b=>b.id===type);if(!def)return
+    const snapPt=this._getPlacementPoint(x,z,type);x=snapPt.x;z=snapPt.z
     const ic=Math.round(def.cost*(this.bd.costM||1)),rc=def.rareReq||0
     if(!instant){
       if(this.resources.iron<ic){this.notify('Not enough iron!','error');SND.error();return}
       if(rc&&this.resources.rare<rc){this.notify('Need '+rc+' Rare!','error');SND.error();return}
-      if(this.buildings.some(b=>{const dx=b.mesh.position.x-x,dz=b.mesh.position.z-z;return Math.sqrt(dx*dx+dz*dz)<8})){this.notify('Too close!','error');SND.error();return}
+      if(!this._canPlaceBuildingAt(type,x,z)){this.notify('Placement blocked here!','error');SND.error();return}
       this.resources.iron-=ic;if(rc)this.resources.rare-=rc;SND.build()
     }
     const mesh=mkBuilding(type)
@@ -1839,7 +1895,7 @@ class MarsGame {
     const _th=_sr.intersectObject(this.terrainMesh)
     const terrY=_th.length?_th[0].point.y:0
     mesh.position.set(x, terrY+(YLIFT[type]??0), z)
-    mesh.rotation.y=this.placeRotY
+    mesh.rotation.y=this._getPlacementRotation(x,z,type)
     const ctBase=Math.round(320*(this.bd.timeM||1)) // Slower construction
     mesh.userData={type,level:1,upgradeTier:0,constructed:instant,constructionTime:instant?0:ctBase,maxCT:ctBase,offline:false}
     if(instant){const holo=mesh.getObjectByName('holo');if(holo)mesh.remove(holo)}
@@ -2086,26 +2142,44 @@ class MarsGame {
   }
   _updateSky(){
     const h=this.hour
-    // Subtle year darkening only from year 4+
     const yearDark=Math.max(0,(this.year-3)*.05)
-    let sky,si
     const C=(hex)=>new THREE.Color(hex)
-    if(h<5||h>=22){sky=C(0x060208);si=0}
-    else if(h<8){const t=(h-5)/3;sky=new THREE.Color().lerpColors(C(0x060208),C(0x6d2a10),t);si=t*1.2}
-    else if(h<11){const t=(h-8)/3;sky=new THREE.Color().lerpColors(C(0x6d2a10),C(0xd97040),t);si=1.2+t*1.6}
-    else if(h<16){sky=C(0xd97040);si=2.8}  // full bright midday
-    else if(h<20){const t=(h-16)/4;sky=new THREE.Color().lerpColors(C(0xd97040),C(0x7a2010),t);si=2.8-t*2.8}
-    else{const t=(h-20)/2;sky=new THREE.Color().lerpColors(C(0x7a2010),C(0x060208),t);si=0}
-    if(this.dustStorm){si*=.18;sky=C(0x4a2008)}
+    const sunLift=Math.sin(((h-6)/24)*Math.PI*2)
+    const daylight=Math.max(0,sunLift)
+    const nightness=1-daylight
+    let sky
+    if(h<5||h>=22)sky=C(0x060814)
+    else if(h<8){const t=(h-5)/3;sky=new THREE.Color().lerpColors(C(0x060814),C(0x8a3b1a),t)}
+    else if(h<11){const t=(h-8)/3;sky=new THREE.Color().lerpColors(C(0x8a3b1a),C(0xe58852),t)}
+    else if(h<16)sky=C(0xe58852)
+    else if(h<20){const t=(h-16)/4;sky=new THREE.Color().lerpColors(C(0xe58852),C(0x6f2414),t)}
+    else{const t=(h-20)/2;sky=new THREE.Color().lerpColors(C(0x6f2414),C(0x060814),t)}
+    if(this.dustStorm)sky=C(0x5a2a12)
     sky.r=Math.max(0,sky.r-yearDark*.2);sky.g=Math.max(0,sky.g-yearDark*.25)
     this.scene.background=sky
-    this.scene.fog.color.setRGB(sky.r*.5,sky.g*.5,sky.b*.5)
-    this.sunLight.intensity=si
-    // Keep ambient always at least a bit lit
-    this.ambLight.intensity=1.8+si*.3
-    this.stars.material.opacity=(h<7||h>20)?.88:0
-    const sa=(h/24)*Math.PI,sx=Math.cos(sa)*140,sy=Math.sin(sa)*95
-    this.sunLight.position.set(sx,sy,20);this.sunSphere.position.set(sx*.62,sy*.62,-55);this.sunSphere.visible=sy>-8
+    this.scene.fog.color.copy(sky.clone().multiplyScalar(.52))
+    this.scene.fog.density=this.dustStorm?.0054:(.0018+nightness*.001)
+
+    const sunIntensity=(this.dustStorm?.35:1)*(0.12+daylight*2.9)
+    const moonIntensity=(this.dustStorm?.15:1)*(0.1+nightness*.42)
+    this.sunLight.intensity=sunIntensity
+    this.moonLight.intensity=moonIntensity
+    this.ambLight.intensity=.4+daylight*1.15
+    this.hemiLight.intensity=.22+daylight*1.1
+    this.hemiLight.color.copy(new THREE.Color().lerpColors(C(0x9cc7ff),C(0xffd8b8),daylight))
+    this.hemiLight.groundColor.copy(new THREE.Color().lerpColors(C(0x12080a),C(0x452112),daylight))
+    this.sunLight.color.copy(new THREE.Color().lerpColors(C(0xff8b5a),C(0xfff2da),Math.min(1,daylight*1.2)))
+    this.moonLight.color.copy(C(0x8ec5ff))
+    if(this.stars)this.stars.material.opacity=Math.min(.95,nightness*.92)
+
+    const sa=(h/24)*Math.PI*2-Math.PI/2
+    const sx=Math.cos(sa)*140,sy=Math.sin(sa)*95
+    this.sunLight.position.set(sx,sy,20)
+    this.sunSphere.position.set(sx*.62,sy*.62,-55)
+    this.sunSphere.visible=sy>-10
+    this.moonLight.position.set(-sx,Math.max(18,-sy*.85),-35)
+    this.moonSphere.position.set(-sx*.58,Math.max(12,-sy*.56),60)
+    this.moonSphere.visible=nightness>.2
   }
   _updateCamera(){const x=Math.sin(this.cameraAngle)*this.camDist,z=Math.cos(this.cameraAngle)*this.camDist;this.camera.position.set(this.camTarget.x+x,this.camH,this.camTarget.z+z);this.camera.lookAt(this.camTarget)}
   _setupControls(){
@@ -2283,8 +2357,10 @@ class MarsGame {
       this.raycaster.setFromCamera(this.mouse,this.camera)
       const hit=this.raycaster.intersectObject(this.terrainMesh)
       if(hit.length){
-        const pt=hit[0].point;this.ghostMesh.position.set(pt.x,pt.y,pt.z)
-        const bad=this.buildings.some(b=>{const dx=b.mesh.position.x-pt.x,dz=b.mesh.position.z-pt.z;return Math.sqrt(dx*dx+dz*dz)<8})
+        const snapPt=this._getPlacementPoint(hit[0].point.x,hit[0].point.z,this.selectedTool)
+        this.ghostMesh.position.set(snapPt.x,snapPt.y,snapPt.z)
+        this.ghostMesh.rotation.y=this._getPlacementRotation(snapPt.x,snapPt.z,this.selectedTool)
+        const bad=!this._canPlaceBuildingAt(this.selectedTool,snapPt.x,snapPt.z)
         const col=bad?0xff2222:0x00ff88;this.ghostMesh.children.forEach(c=>{if(c.material)c.material.color.setHex(col)})
         const xh=document.getElementById('xhair');xh.classList.toggle('bmode',!bad);xh.classList.toggle('binvalid',bad)
       }
@@ -2294,16 +2370,15 @@ class MarsGame {
       this.raycaster.setFromCamera(this.mouse,this.camera)
       const fhit=this.raycaster.intersectObject(this.terrainMesh)
       if(fhit.length){
-        const ep=fhit[0].point
+        const ep=this._getSnappedFencePoint(fhit[0].point)
         if(this.fencePreviewLine){this.scene.remove(this.fencePreviewLine)}
         const pts=[this.fenceStart.clone().add(new THREE.Vector3(0,1.5,0)),ep.clone().add(new THREE.Vector3(0,1.5,0))]
         const geo=new THREE.BufferGeometry().setFromPoints(pts)
         const col=this.fenceStyle==='energy'?0x0088ff:this.fenceStyle==='fence'?0x667788:0x00ffcc
         this.fencePreviewLine=new THREE.Line(geo,new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.7}))
         this.scene.add(this.fencePreviewLine)
-        // Show length in tip
         const len=this.fenceStart.distanceTo(ep)
-        document.getElementById('selTip').textContent=`${this.fenceStyle} fence — ${Math.ceil(len)}m · ~${Math.ceil(len*1.5)} Fe`
+        document.getElementById('selTip').textContent=`${this.fenceStyle} fence — ${Math.ceil(len)}m · ~${Math.ceil(len*1.5)} Fe · Esc to stop`
       }
     } else if(this.fencePreviewLine&&!this.fenceStart){
       this.scene.remove(this.fencePreviewLine);this.fencePreviewLine=null
