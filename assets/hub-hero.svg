@@ -1,0 +1,46 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.5" stop-color="#111827"/>
+      <stop offset="1" stop-color="#0B1220"/>
+    </linearGradient>
+    <linearGradient id="card1" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="card2" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#06B6D4"/>
+      <stop offset="1" stop-color="#0E7490"/>
+    </linearGradient>
+    <linearGradient id="card3" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F59E0B"/>
+      <stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="720" rx="36" fill="url(#bg)"/>
+  <circle cx="960" cy="120" r="140" fill="#2563EB" fill-opacity="0.18"/>
+  <circle cx="200" cy="620" r="180" fill="#06B6D4" fill-opacity="0.1"/>
+  <rect x="72" y="88" width="1056" height="544" rx="28" fill="#0F172A" stroke="rgba(255,255,255,0.08)"/>
+  <rect x="118" y="136" width="400" height="160" rx="24" fill="url(#card1)"/>
+  <rect x="546" y="136" width="258" height="160" rx="24" fill="url(#card2)"/>
+  <rect x="832" y="136" width="248" height="160" rx="24" fill="url(#card3)"/>
+  <rect x="118" y="326" width="306" height="220" rx="24" fill="#111827" stroke="#1F2937"/>
+  <rect x="450" y="326" width="306" height="220" rx="24" fill="#111827" stroke="#1F2937"/>
+  <rect x="782" y="326" width="298" height="220" rx="24" fill="#111827" stroke="#1F2937"/>
+  <text x="150" y="194" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="700">RysHub</text>
+  <text x="150" y="232" fill="#DBEAFE" font-family="Arial, sans-serif" font-size="16">Learning tools in one clean space</text>
+  <text x="580" y="198" fill="white" font-family="Arial, sans-serif" font-size="22" font-weight="700">TOEFL</text>
+  <text x="580" y="228" fill="#CFFAFE" font-family="Arial, sans-serif" font-size="14">Timed practice</text>
+  <text x="864" y="198" fill="white" font-family="Arial, sans-serif" font-size="22" font-weight="700">Books</text>
+  <text x="864" y="228" fill="#FEF3C7" font-family="Arial, sans-serif" font-size="14">Teacher resources</text>
+  <text x="150" y="386" fill="#E5E7EB" font-family="Arial, sans-serif" font-size="18" font-weight="700">World Class</text>
+  <text x="482" y="386" fill="#E5E7EB" font-family="Arial, sans-serif" font-size="18" font-weight="700">Brick Forge</text>
+  <text x="814" y="386" fill="#E5E7EB" font-family="Arial, sans-serif" font-size="18" font-weight="700">Word Practice</text>
+  <rect x="150" y="414" width="240" height="12" rx="6" fill="#374151"/>
+  <rect x="150" y="438" width="190" height="12" rx="6" fill="#1D4ED8"/>
+  <rect x="482" y="414" width="240" height="12" rx="6" fill="#374151"/>
+  <rect x="482" y="438" width="160" height="12" rx="6" fill="#06B6D4"/>
+  <rect x="814" y="414" width="220" height="12" rx="6" fill="#374151"/>
+  <rect x="814" y="438" width="170" height="12" rx="6" fill="#8B5CF6"/>
+</svg>

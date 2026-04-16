@@ -1,0 +1,19 @@
+<svg width="800" height="480" viewBox="0 0 800 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g3" x1="0" y1="0" x2="800" y2="480">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.5" stop-color="#155E75"/>
+      <stop offset="1" stop-color="#0E7490"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="480" rx="28" fill="url(#g3)"/>
+  <g fill="#67E8F9" fill-opacity="0.9">
+    <rect x="156" y="232" width="96" height="96" rx="10"/>
+    <rect x="262" y="178" width="96" height="96" rx="10"/>
+    <rect x="368" y="232" width="96" height="96" rx="10"/>
+    <rect x="474" y="178" width="96" height="96" rx="10"/>
+    <rect x="580" y="232" width="96" height="96" rx="10"/>
+  </g>
+  <text x="154" y="124" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">Brick Forge Pro</text>
+  <text x="154" y="160" fill="#CFFAFE" font-family="Arial, sans-serif" font-size="18">Build, design, and imagine in 3D</text>
+</svg>

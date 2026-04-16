@@ -1,0 +1,17 @@
+<svg width="800" height="480" viewBox="0 0 800 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g4" x1="0" y1="0" x2="800" y2="480">
+      <stop stop-color="#4C1D95"/>
+      <stop offset="0.6" stop-color="#7C3AED"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="480" rx="28" fill="url(#g4)"/>
+  <rect x="112" y="96" width="576" height="288" rx="24" fill="#0F172A" fill-opacity="0.6" stroke="#C4B5FD" stroke-opacity="0.5"/>
+  <text x="150" y="156" fill="white" font-family="Arial, sans-serif" font-size="32" font-weight="700">Word Practice</text>
+  <text x="150" y="192" fill="#E9D5FF" font-family="Arial, sans-serif" font-size="18">Vocabulary, spelling, and sentence building</text>
+  <circle cx="182" cy="260" r="22" fill="#A78BFA"/>
+  <rect x="220" y="248" width="180" height="18" rx="9" fill="#D8B4FE"/>
+  <circle cx="182" cy="314" r="22" fill="#8B5CF6"/>
+  <rect x="220" y="302" width="220" height="18" rx="9" fill="#C4B5FD"/>
+</svg>

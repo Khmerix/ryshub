@@ -1,0 +1,17 @@
+<svg width="800" height="480" viewBox="0 0 800 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="800" y2="480">
+      <stop stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="480" rx="28" fill="url(#g1)"/>
+  <circle cx="640" cy="92" r="72" fill="#60A5FA" fill-opacity="0.2"/>
+  <rect x="88" y="86" width="624" height="308" rx="22" fill="#0F172A" stroke="#60A5FA" stroke-opacity="0.35"/>
+  <text x="130" y="146" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">TOEFL iBT</text>
+  <text x="130" y="182" fill="#BFDBFE" font-family="Arial, sans-serif" font-size="18">Reading • Listening • Speaking • Writing</text>
+  <rect x="130" y="220" width="180" height="42" rx="12" fill="#2563EB"/>
+  <text x="170" y="247" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="700">Start Test</text>
+  <rect x="130" y="288" width="230" height="10" rx="5" fill="#334155"/>
+  <rect x="130" y="310" width="180" height="10" rx="5" fill="#60A5FA"/>
+</svg>
