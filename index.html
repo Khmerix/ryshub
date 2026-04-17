@@ -649,6 +649,38 @@
             padding: 92px 16px 40px;
             text-align: center;
         }
+
+        .random-mini-mention {
+            position: absolute;
+            z-index: 18;
+            pointer-events: none;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(125, 211, 252, 0.38);
+            background: rgba(15, 23, 42, 0.78);
+            color: #bfdbfe;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 26px rgba(2, 6, 23, 0.28), 0 0 14px rgba(56, 189, 248, 0.25);
+            opacity: 0;
+            transform: translateY(8px) scale(0.98);
+            transition: opacity 0.38s ease, transform 0.38s ease;
+        }
+
+        .random-mini-mention.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        @media (max-width: 768px) {
+            .random-mini-mention {
+                font-size: 0.72rem;
+                padding: 7px 11px;
+            }
+        }
         
         .hero-banner {
             width: 100%;
@@ -2105,6 +2137,7 @@
 
     <!-- Hero -->
 <section class="hero-section" id="topHome">
+    <div id="randomMiniMention" class="random-mini-mention" aria-hidden="true"></div>
     <div class="hero-banner">
         <div class="hero-banner-coded">
             <div class="hb-top">
@@ -3165,6 +3198,45 @@ function initHeaderNavScroll() {
     nav.addEventListener('mouseleave', stopPointerDrag);
 }
 
+function initRandomMiniMention() {
+    var mention = document.getElementById('randomMiniMention');
+    var host = document.getElementById('topHome');
+    if (!mention || !host) return;
+
+    var messages = [
+        'Typing Race mini game is now live',
+        'Try Typing Race for quick speed practice',
+        'Typing Race: accuracy + speed training',
+        'New mini game mention: Typing Race'
+    ];
+
+    function placeMention() {
+        var hostWidth = host.clientWidth || window.innerWidth;
+        var hostHeight = Math.max(host.clientHeight, 560);
+
+        mention.textContent = messages[Math.floor(Math.random() * messages.length)];
+
+        var minX = 22;
+        var maxX = Math.max(minX + 1, hostWidth - 320);
+        var minY = 110;
+        var maxY = Math.max(minY + 1, Math.min(hostHeight - 80, 620));
+
+        var x = Math.floor(minX + Math.random() * (maxX - minX));
+        var y = Math.floor(minY + Math.random() * (maxY - minY));
+
+        mention.style.left = x + 'px';
+        mention.style.top = y + 'px';
+
+        mention.classList.remove('show');
+        void mention.offsetWidth;
+        mention.classList.add('show');
+    }
+
+    placeMention();
+    window.setInterval(placeMention, 5200);
+    window.addEventListener('resize', placeMention);
+}
+
 var featuredGameIndex = 0;
 var currentFeaturedGameId = 'colony';
 var gameScoreTimer = null;
@@ -3431,6 +3503,7 @@ initParallaxTilt();
 initGameScores();
 renderMiniGamesSection();
 initHeaderNavScroll();
+initRandomMiniMention();
 </script>
 </body>
 </html>
