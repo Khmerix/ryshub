@@ -3306,8 +3306,13 @@ function updateAssignmentUI(data) {
     document.getElementById('mp-assignment-desc').textContent = data.description || 'No description';
     document.getElementById('mp-due-date').textContent = data.dueDate ? new Date(data.dueDate).toLocaleDateString() : 'No deadline';
     const reqList = document.getElementById('mp-requirements');
+    reqList.innerHTML = '';
     if (data.requirements && Array.isArray(data.requirements)) {
-        reqList.innerHTML = data.requirements.map(r => `<li>${r}</li>`).join('');
+        data.requirements.forEach((r) => {
+            const li = document.createElement('li');
+            li.textContent = r == null ? '' : String(r);
+            reqList.appendChild(li);
+        });
     }
 }
 
