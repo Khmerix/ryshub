@@ -438,108 +438,6 @@
        </div>
       </div>
      </div>
-    </div><!-- Name Input Section -->
-    <div class="max-w-2xl mx-auto px-4 mb-4 float-in" style="animation-delay: 0.05s;">
-     <div class="flex gap-2 items-center">
-      <input type="text" id="player-name" placeholder="Enter your name..." maxlength="20" class="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all" style="background: #1e293b; color: #94a3b8; border: 2px solid #334155;"> <button onclick="showLeaderboard()" class="btn-3d px-4 py-2.5 rounded-lg text-sm font-bold" style="background: #38bdf8; color: #0f172a;"> <span class="flex items-center gap-2"><i data-lucide="trophy" style="width:16px;height:16px;"></i> Top 10</span> </button>
-     </div>
-    </div><!-- Stats Bar -->
-    <div class="max-w-2xl mx-auto px-4 mb-4 float-in" style="animation-delay: 0.1s;">
-     <div class="flex justify-center gap-6 text-center">
-      <div class="px-5 py-3 rounded-xl card-3d" style="background: #1e293b;">
-       <div class="card-3d-inner">
-        <div class="text-xs font-semibold uppercase tracking-wider" style="color: #94a3b8;">
-         WPM
-        </div>
-        <div id="wpm" class="text-2xl font-bold" style="color: #63FF9F; font-family: 'JetBrains Mono', monospace;">
-         0
-        </div>
-       </div>
-      </div>
-      <div class="px-5 py-3 rounded-xl card-3d" style="background: #1e293b;">
-       <div class="card-3d-inner">
-        <div class="text-xs font-semibold uppercase tracking-wider" style="color: #94a3b8;">
-         Accuracy
-        </div>
-        <div id="accuracy" class="text-2xl font-bold" style="color: #facc15; font-family: 'JetBrains Mono', monospace;">
-         100%
-        </div>
-       </div>
-      </div>
-      <div class="px-5 py-3 rounded-xl card-3d" style="background: #1e293b;">
-       <div class="card-3d-inner">
-        <div class="text-xs font-semibold uppercase tracking-wider" style="color: #94a3b8;">
-         Time
-        </div>
-        <div id="timer" class="text-2xl font-bold" style="color: #38bdf8; font-family: 'JetBrains Mono', monospace;">
-         0s
-        </div>
-       </div>
-      </div>
-      <div class="px-5 py-3 rounded-xl card-3d" style="background: #1e293b; border: 2px solid #a78bfa;">
-       <div class="card-3d-inner">
-        <div class="text-xs font-semibold uppercase tracking-wider" style="color: #c4b5fd;">
-         Streak 🔥
-        </div>
-        <div id="streak" class="text-2xl font-bold" style="color: #a78bfa; font-family: 'JetBrains Mono', monospace;">
-         0
-        </div>
-       </div>
-      </div>
-     </div>
-    </div><!-- Achievements -->
-    <div class="max-w-2xl mx-auto px-4 mb-4 float-in" style="animation-delay: 0.11s;">
-     <div class="rounded-2xl p-4" style="background: #1e293b; border: 2px solid #334155;">
-      <div class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: #94a3b8;">🏅 Achievements</div>
-      <div class="relative grid grid-cols-3 gap-2" id="achievements-grid" style="position: relative;">
-       <div data-ach="speed_demon" class="flex flex-col items-center gap-1 p-3 rounded-xl text-center transition-all" style="background: #0f172a; opacity: 0.35;">
-        <div class="text-xl">🔥</div>
-        <div class="text-xs font-bold" style="color: #e2e8f0;">Speed Demon</div>
-        <div class="text-xs" style="color: #64748b;">80+ WPM</div>
-       </div>
-       <div data-ach="first_100" class="flex flex-col items-center gap-1 p-3 rounded-xl text-center transition-all" style="background: #0f172a; opacity: 0.35;">
-        <div class="text-xl">🚀</div>
-        <div class="text-xs font-bold" style="color: #e2e8f0;">100 WPM Club</div>
-        <div class="text-xs" style="color: #64748b;">100+ WPM</div>
-       </div>
-       <div data-ach="perfect" class="flex flex-col items-center gap-1 p-3 rounded-xl text-center transition-all" style="background: #0f172a; opacity: 0.35;">
-        <div class="text-xl">✨</div>
-        <div class="text-xs font-bold" style="color: #e2e8f0;">Perfect</div>
-        <div class="text-xs" style="color: #64748b;">100% Accuracy</div>
-       </div>
-       <div data-ach="consistent" class="flex flex-col items-center gap-1 p-3 rounded-xl text-center transition-all" style="background: #0f172a; opacity: 0.35;">
-        <div class="text-xl">🏅</div>
-        <div class="text-xs font-bold" style="color: #e2e8f0;">Consistent</div>
-        <div class="text-xs" style="color: #64748b;">5 Races</div>
-       </div>
-       <div data-ach="master" class="flex flex-col items-center gap-1 p-3 rounded-xl text-center transition-all" style="background: #0f172a; opacity: 0.35;">
-        <div class="text-xl">👑</div>
-        <div class="text-xs font-bold" style="color: #e2e8f0;">Hard Master</div>
-        <div class="text-xs" style="color: #64748b;">Hard 60+ WPM</div>
-       </div>
-       <div data-ach="legend" class="flex flex-col items-center gap-1 p-3 rounded-xl text-center transition-all" style="background: #0f172a; opacity: 0.35;">
-        <div class="text-xl">🌟</div>
-        <div class="text-xs font-bold" style="color: #e2e8f0;">Legend</div>
-        <div class="text-xs" style="color: #64748b;">Top Score</div>
-       </div>
-      </div>
-     </div>
-    </div><!-- Progress Track -->
-    <div class="max-w-2xl mx-auto px-4 mb-6 float-in card-3d" style="animation-delay: 0.12s;">
-     <div class="card-3d-inner relative h-8 rounded-full overflow-hidden" style="background: #1e293b; border: 2px solid #334155;">
-      <div id="progress-bar" class="absolute top-0 left-0 h-full rounded-full transition-all duration-300" style="background: linear-gradient(90deg, #63FF9F, #38bdf8); width: 0%;"></div>
-      <div id="car" class="absolute top-1/2 -translate-y-1/2 text-xl transition-all duration-300" style="left: 0%;">
-       🏎️
-      </div>
-     </div>
-    </div><!-- Typing Area -->
-    <div class="max-w-2xl mx-auto px-4 mb-6 float-in card-3d" style="animation-delay: 0.15s;">
-     <div class="card-3d-inner">
-      <div id="text-display" class="typing-area p-6 rounded-2xl text-lg leading-relaxed tracking-wide cursor-text" style="background: #1e293b; font-family: 'JetBrains Mono', monospace; min-height: 120px; border: 2px solid #334155; word-wrap: break-word; white-space: normal; overflow-y: auto; display: block; z-index: 20; position: relative;" tabindex="0"></div>
-      <p id="hint" class="text-center mt-3 text-sm cursor-pointer" onclick="document.getElementById('text-display').focus()" style="color: #64748b;">👆 Click here or the box above to start typing!</p>
-     </div>
-    </div><!-- Race Controls -->
-    <div class="max-w-2xl mx-auto px-4 text-center mb-8 float-in" style="animation-delay: 0.18s;">
     </div>
     <!-- Name + Difficulty -->
     <div class="max-w-2xl mx-auto px-4 mb-5 float-in" style="animation-delay: 0.07s;">
@@ -771,11 +669,17 @@
       document.getElementById('title').style.color = primary;
 
       document.querySelectorAll('[style*="background: #1e293b"], [style*="background:#1e293b"]').forEach(el => {
-        if (!el.id || (el.id !== 'progress-bar')) el.style.background = surface;
+        if (!el.id || (el.id !== 'race-progress-bar')) {
+          el.style.background = surface;
+        }
       });
 
-      document.getElementById('wpm').style.color = primary;
-      document.getElementById('accuracy').style.color = accent;
+      const raceWpm = document.getElementById('race-wpm');
+      const raceAccuracy = document.getElementById('race-accuracy');
+      const raceHint = document.getElementById('race-hint');
+      if (raceWpm) raceWpm.style.color = primary;
+      if (raceAccuracy) raceAccuracy.style.color = accent;
+      if (raceHint) raceHint.style.color = text;
 
       const activeBtn = document.getElementById('btn-' + difficulty);
       if (activeBtn) activeBtn.style.background = primary;

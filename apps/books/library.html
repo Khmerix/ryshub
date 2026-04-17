@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Books Library • RysHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        :root {
+            --bg-base: #0b1120;
+            --bg-card: rgba(20,30,50,0.85);
+            --border: rgba(255,255,255,0.07);
+            --border-hover: rgba(255,255,255,0.14);
+            --text-primary: #f0f6ff;
+            --text-secondary: #94a3b8;
+            --text-muted: #475569;
+            --accent: #2563eb;
+            --accent-light: #60a5fa;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            background-image:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(37,99,235,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(139,92,246,0.09) 0%, transparent 70%);
+        }
+
+        /* ─── Header ─── */
+        .lib-header {
+            padding: 56px 24px 36px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lib-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(37,99,235,0.08), transparent);
+            pointer-events: none;
+        }
+
+        .lib-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 14px;
+            border-radius: 999px;
+            background: rgba(37,99,235,0.12);
+            border: 1px solid rgba(37,99,235,0.3);
+            color: #93c5fd;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 18px;
+        }
+
+        .lib-header h1 {
+            font-size: clamp(1.9rem, 5vw, 3rem);
+            font-weight: 900;
+            margin: 0 0 12px;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+        }
+
+        .lib-header p {
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin: 0 auto;
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+
+        .lib-stats {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .stat-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            padding: 5px 12px;
+            border-radius: 8px;
+        }
+
+        .stat-pill i { color: var(--accent-light); }
+
+        /* ─── Navigation ─── */
+        .lib-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            max-width: 1240px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 15px;
+            border-radius: 9px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.09);
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 8px 14px;
+            transition: all 0.2s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: rgba(37,99,235,0.5);
+            background: rgba(37,99,235,0.06);
+        }
+
+        .search-bar i { color: var(--text-muted); font-size: 0.85rem; }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            width: 200px;
+        }
+
+        .search-bar input::placeholder { color: var(--text-muted); }
+
+        /* ─── Grid ─── */
+        .lib-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 16px 24px 60px;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 20px;
+        }
+
+        /* ─── Book Card ─── */
+        .book-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 190px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .book-cover::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.12);
+        }
+
+        .cover-lines {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 22px,
+                rgba(255,255,255,0.04) 22px,
+                rgba(255,255,255,0.04) 23px
+            );
+        }
+
+        .book-cover .cover-icon {
+            position: relative;
+            z-index: 1;
+            font-size: 4rem;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+        }
+
+        .book-cover.cave-theme   { background: linear-gradient(135deg, #78350f, #92400e, #b45309); }
+        .book-cover.island-theme { background: linear-gradient(135deg, #14532d, #15803d, #166534); }
+        .book-cover.time-theme   { background: linear-gradient(135deg, #4c1d95, #6d28d9, #7c3aed); }
+        .book-cover.space-theme  { background: linear-gradient(135deg, #0c1445, #1e3a8a, #1d4ed8); }
+        .book-cover.ocean-theme  { background: linear-gradient(135deg, #0e3a5f, #0369a1, #0ea5e9); }
+        .book-cover.city-theme   { background: linear-gradient(135deg, #1c1c2e, #2d2d44, #374151); }
+
+        .book-ribbon {
+            position: absolute;
+            top: 12px;
+            right: -8px;
+            z-index: 2;
+            background: #16a34a;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 3px 12px 3px 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px 0 0 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .book-ribbon.coming { background: #d97706; }
+
+        .book-info {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.4px;
+            line-height: 1.25;
+        }
+
+        .book-author {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .book-desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin: 0;
+            flex: 1;
+        }
+
+        .book-chips {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 9px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+        }
+
+        .chip i { font-size: 0.65rem; color: var(--accent-light); }
+
+        .chip.level-beginner   { border-color: rgba(34,197,94,0.3);  color: #4ade80; }
+        .chip.level-int        { border-color: rgba(234,179,8,0.3);  color: #facc15; }
+        .chip.level-advanced   { border-color: rgba(239,68,68,0.3);  color: #f87171; }
+
+        .book-progress {
+            height: 3px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .book-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #38bdf8);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        .book-btn {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            box-shadow: 0 4px 0 #1e40af, 0 6px 18px rgba(29,78,216,0.35);
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #1e40af, 0 10px 24px rgba(29,78,216,0.4);
+        }
+
+        .book-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 0 #1e40af;
+        }
+
+        .book-btn.disabled {
+            background: rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .book-btn.disabled:hover { transform: none; }
+
+        /* ─── Empty / Coming Soon slot ─── */
+        .book-card.slot {
+            border-style: dashed;
+            border-color: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.02);
+            cursor: default;
+            opacity: 0.6;
+        }
+
+        .book-card.slot:hover { transform: none; }
+
+        /* ─── Toast ─── */
+        #libToast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        #libToast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 540px) {
+            .lib-nav { flex-direction: column; align-items: flex-start; }
+            .search-bar input { width: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="lib-header">
+    <div class="lib-badge"><i class="fas fa-book-open"></i> Interactive Stories</div>
+    <h1>Choose Your Adventure</h1>
+    <p>Immersive choice-based books where every decision shapes the story. Start reading, make choices, and see where your path leads.</p>
+    <div class="lib-stats" id="libStats">
+        <div class="stat-pill"><i class="fas fa-book"></i> <span id="statBooks">0</span> Books</div>
+        <div class="stat-pill"><i class="fas fa-code-branch"></i> <span id="statChoices">0</span> Total Choices</div>
+        <div class="stat-pill"><i class="fas fa-check-circle"></i> <span id="statRead">0</span> Read</div>
+    </div>
+</header>
+
+<nav class="lib-nav">
+    <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+    <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search books..." oninput="filterBooks()">
+    </div>
+</nav>
+
+<main class="lib-container">
+    <div class="books-grid" id="booksGrid"></div>
+</main>
+
+<div id="libToast"></div>
+
+<script>
+    // ─── Book Catalogue ───────────────────────────────────────────────────────────
+    var BOOKS = [
+        {
+            id: 'the-secret-cave',
+            title: 'The Secret Cave',
+            author: 'Teacher Ry',
+            desc: 'Discover hidden treasures and uncover ancient secrets in this thrilling underground adventure. Every turn hides something new.',
+            icon: '🔐',
+            cover: 'cave-theme',
+            level: 'Intermediate',
+            levelClass: 'level-int',
+            chapters: 14,
+            choices: 45,
+            words: 4200,
+            status: 'live',
+            path: 'the-secret-cave/index.html'
+        },
+        {
+            id: 'lost-island',
+            title: 'Lost Island Adventure',
+            author: 'Teacher Ry',
+            desc: 'Stranded on a mysterious island where every decision determines your survival. Work together with islanders to find a way home.',
+            icon: '🏝️',
+            cover: 'island-theme',
+            level: 'Advanced',
+            levelClass: 'level-advanced',
+            chapters: 16,
+            choices: 54,
+            words: 5900,
+            status: 'coming',
+            path: null
+        },
+        {
+            id: 'time-traveler',
+            title: "Time Traveler's Mystery",
+            author: 'Teacher Ry',
+            desc: 'Travel through history to prevent a disaster only you can stop. Use clues from the past to change the future.',
+            icon: '⏰',
+            cover: 'time-theme',
+            level: 'Beginner',
+            levelClass: 'level-beginner',
+            chapters: 10,
+            choices: 38,
+            words: 3400,
+            status: 'coming',
+            path: null
+        },
+        {
+            id: 'slot-1',
+            title: 'Coming Soon',
+            author: '',
+            desc: 'A new interactive story is being written. Check back soon.',
+            icon: '✨',
+            cover: 'space-theme',
+            level: '',
+            levelClass: '',
+            chapters: 0,
+            choices: 0,
+            words: 0,
+            status: 'slot',
+            path: null
+        }
+    ];
+
+    // ─── Helpers ──────────────────────────────────────────────────────────────────
+    function getProgress(bookId) {
+        try {
+            var data = JSON.parse(localStorage.getItem('book_progress_' + bookId));
+            return data && data.progress ? data.progress : 0;
+        } catch (e) { return 0; }
+    }
+
+    function showToast(msg) {
+        var t = document.getElementById('libToast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(function() { t.classList.remove('show'); }, 2600);
+    }
+
+    function launchBook(bookId) {
+        var book = BOOKS.find(function(b) { return b.id === bookId; });
+        if (!book || !book.path) {
+            showToast(book ? book.title + ' is coming soon!' : 'Book not found.');
+            return;
+        }
+        window.open(book.path, '_blank');
+    }
+
+    // ─── Rendering ────────────────────────────────────────────────────────────────
+    function renderBooks(list) {
+        var grid = document.getElementById('booksGrid');
+        if (!list.length) {
+            grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:40px 0;">No books match your search.</p>';
+            return;
+        }
+
+        grid.innerHTML = list.map(function(book) {
+            var isSlot    = book.status === 'slot';
+            var isComing  = book.status === 'coming';
+            var isLive    = book.status === 'live';
+            var progress  = isLive ? getProgress(book.id) : 0;
+            var btnLabel  = progress > 0 ? '<i class="fas fa-book-open"></i> Continue Reading' : '<i class="fas fa-play"></i> Start Reading';
+            var ribbonHtml = isLive    ? '<div class="book-ribbon">Live</div>'
+                           : isComing ? '<div class="book-ribbon coming">Coming Soon</div>'
+                           : '';
+
+            var btnHtml = isSlot
+                ? '<button class="book-btn disabled" disabled><i class="fas fa-clock"></i> Coming Soon</button>'
+                : isComing
+                    ? '<button class="book-btn disabled" disabled><i class="fas fa-clock"></i> Coming Soon</button>'
+                    : '<button class="book-btn" onclick="event.stopPropagation();launchBook(\'' + book.id + '\')">' + btnLabel + '</button>';
+
+            var chipsHtml = !isSlot ? [
+                '<div class="chip"><i class="fas fa-bookmark"></i>' + book.chapters + ' ch</div>',
+                '<div class="chip"><i class="fas fa-code-branch"></i>' + book.choices + ' choices</div>',
+                book.level ? '<div class="chip ' + book.levelClass + '">' + book.level + '</div>' : ''
+            ].join('') : '';
+
+            var progressHtml = isLive && progress > 0
+                ? '<div class="book-progress"><div class="book-progress-fill" style="width:' + progress + '%;"></div></div>'
+                : '';
+
+            return '<div class="book-card' + (isSlot ? ' slot' : '') + '" onclick="' + (!isSlot && !isComing ? "launchBook('" + book.id + "')" : '') + '">'
+                + '<div class="book-cover ' + book.cover + '">'
+                + '<div class="cover-lines"></div>'
+                + '<span class="cover-icon">' + book.icon + '</span>'
+                + ribbonHtml
+                + '</div>'
+                + '<div class="book-info">'
+                + '<h2 class="book-title">' + book.title + '</h2>'
+                + (book.author ? '<p class="book-author">by ' + book.author + '</p>' : '')
+                + '<p class="book-desc">' + book.desc + '</p>'
+                + (chipsHtml ? '<div class="book-chips">' + chipsHtml + '</div>' : '')
+                + progressHtml
+                + btnHtml
+                + '</div>'
+                + '</div>';
+        }).join('');
+    }
+
+    function filterBooks() {
+        var q = document.getElementById('searchInput').value.toLowerCase().trim();
+        var filtered = q
+            ? BOOKS.filter(function(b) {
+                return b.title.toLowerCase().includes(q) || b.desc.toLowerCase().includes(q);
+            })
+            : BOOKS;
+        renderBooks(filtered);
+    }
+
+    function updateStats() {
+        var live = BOOKS.filter(function(b) { return b.status === 'live'; });
+        var totalChoices = live.reduce(function(s, b) { return s + b.choices; }, 0);
+        var read = live.filter(function(b) { return getProgress(b.id) > 0; }).length;
+
+        document.getElementById('statBooks').textContent = live.length;
+        document.getElementById('statChoices').textContent = totalChoices;
+        document.getElementById('statRead').textContent = read;
+    }
+
+    // ─── Init ─────────────────────────────────────────────────────────────────────
+    renderBooks(BOOKS);
+    updateStats();
+</script>
+</body>
+</html>
