@@ -401,13 +401,15 @@
 <script src="data.js"></script>
 <script>
     /* ── State ────────────────────────────────────────── */
-    var currentId = STORY_META.startNode;
-    var history = [STORY_META.startNode];
-    var SAVE_KEY = 'book_' + (STORY_META.title || 'default').replace(/\s+/g, '_').toLowerCase() + '_save';
+    var safeMeta = (typeof STORY_META === 'object' && STORY_META) ? STORY_META : { title: 'The Secret Cave', startNode: 'start' };
+    var safeData = (typeof STORY_DATA === 'object' && STORY_DATA) ? STORY_DATA : {};
+    var currentId = safeMeta.startNode;
+    var history = [safeMeta.startNode];
+    var SAVE_KEY = 'book_' + (safeMeta.title || 'default').replace(/\s+/g, '_').toLowerCase() + '_save';
 
     /* ── Engine ───────────────────────────────────────── */
     function renderScene(animate) {
-        var node = STORY_DATA[currentId];
+        var node = safeData[currentId];
         if (!node) { showToast('Story node missing: ' + currentId); return; }
 
         var textEl = document.getElementById('sceneText');
@@ -445,6 +447,10 @@
     }
 
     function makeChoice(nextId) {
+        if (!safeData[nextId]) {
+            showToast('That path is not available yet.');
+            return;
+        }
         currentId = nextId;
         history.push(nextId);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -459,8 +465,8 @@
     }
 
     function resetStory() {
-        currentId = STORY_META.startNode;
-        history = [STORY_META.startNode];
+        currentId = safeMeta.startNode;
+        history = [safeMeta.startNode];
         window.scrollTo({ top: 0, behavior: 'smooth' });
         renderScene(true);
         localStorage.removeItem(SAVE_KEY);
@@ -491,9 +497,12 @@
     function loadProgress() {
         try {
             var saved = JSON.parse(localStorage.getItem(SAVE_KEY));
-            if (saved && saved.nodeId && STORY_DATA[saved.nodeId]) {
+            if (saved && saved.nodeId && safeData[saved.nodeId]) {
                 currentId = saved.nodeId;
-                history = saved.history || [STORY_META.startNode];
+                history = Array.isArray(saved.history) && saved.history.length
+                    ? saved.history.filter(function(id) { return !!safeData[id]; })
+                    : [safeMeta.startNode];
+                if (!history.length) history = [safeMeta.startNode];
                 return true;
             }
         } catch (e) {}
@@ -502,11 +511,15 @@
 
     /* ── Path history ─────────────────────────────────── */
     function renderHistory() {
+        if (!Array.isArray(history) || !history.length) {
+            history = [safeMeta.startNode];
+        }
+
         var count = history.length;
         document.getElementById('historyCount').textContent = count;
 
         var html = history.map(function(id, idx) {
-            var node = STORY_DATA[id];
+            var node = safeData[id];
             var label = node ? node.text.split('\n')[0].slice(0, 60) + (node.text.length > 60 ? '…' : '') : id;
             var isCurrent = idx === history.length - 1;
             return '<div class="history-item' + (isCurrent ? ' current' : '') + '">'
@@ -532,6 +545,11 @@
     }
 
     /* ── Init ─────────────────────────────────────────── */
+    if (!Object.keys(safeData).length) {
+        document.getElementById('sceneText').textContent = 'Story data failed to load. Please refresh this page.';
+        showToast('Could not load story data.');
+    }
+
     var resumed = loadProgress();
     renderScene(false);
 

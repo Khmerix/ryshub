@@ -521,7 +521,7 @@
             showToast(book ? book.title + ' is coming soon!' : 'Book not found.');
             return;
         }
-        window.open(book.path, '_blank');
+        window.location.href = book.path;
     }
 
     // ─── Rendering ────────────────────────────────────────────────────────────────
