@@ -314,6 +314,87 @@
             font-size: 1rem;
         }
 
+        .mini-games-section {
+            position: relative;
+            z-index: 10;
+            max-inline-size: 1200px;
+            margin: 0 auto 36px;
+            padding: 0 16px;
+        }
+
+        .mini-game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .mini-game-card {
+            background: linear-gradient(180deg, rgba(15,23,42,.9), rgba(15,23,42,.74));
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 14px 28px rgba(2,6,23,.22);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mini-game-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .mini-game-head strong {
+            color: var(--white);
+            font-size: .98rem;
+        }
+
+        .mini-game-tag {
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .03em;
+            border: 1px solid rgba(255,255,255,.16);
+            color: #bfdbfe;
+            background: rgba(30,58,138,.35);
+            white-space: nowrap;
+        }
+
+        .mini-game-tag.coming {
+            color: #fde68a;
+            background: rgba(161,98,7,.25);
+            border-color: rgba(245,158,11,.4);
+        }
+
+        .mini-game-card p {
+            color: var(--gray-300);
+            margin: 0;
+            line-height: 1.6;
+            font-size: .88rem;
+        }
+
+        .mini-game-icon {
+            inline-size: 34px;
+            block-size: 34px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+            color: #fff;
+            box-shadow: 0 6px 14px rgba(37,99,235,.24);
+            flex-shrink: 0;
+        }
+
+        .mini-game-topline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .hero-banner {
             position: relative;
             max-inline-size: 1040px;
@@ -1742,6 +1823,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .mini-game-grid {
+                grid-template-columns: 1fr;
+            }
+
             .score-meta-grid {
                 grid-template-columns: 1fr;
             }
@@ -1815,6 +1900,7 @@
             <a href="#" class="nav-3d" onclick="scrollToSection('topHome'); return false;">Overview</a>
             <a href="#" class="nav-3d" onclick="scrollToSection('featuredApps'); return false;">Featured Apps</a>
             <a href="#" class="nav-3d" onclick="scrollToSection('gamesScores'); return false;">Games &amp; Scores</a>
+            <a href="#" class="nav-3d" onclick="scrollToSection('miniGamesSection'); return false;">Mini Games</a>
             <a href="#" class="nav-3d" onclick="scrollToSection('commandCenterSection'); return false;">Command Center</a>
         </div>
         
@@ -1858,6 +1944,9 @@
         </a>
         <a href="#" class="menu-item" onclick="openSolarSystemModal(); toggleMenu(); return false;">
             <i class="fas fa-globe-americas"></i><span>Solar System</span>
+        </a>
+        <a href="#" class="menu-item" onclick="scrollToSection('miniGamesSection'); toggleMenu(); return false;">
+            <i class="fas fa-gamepad"></i><span>Mini Games Hub</span>
         </a>
         <a href="#" class="menu-item" onclick="openProtectedPage('apps/toefl/', 'TOEFL iBT'); toggleMenu(); return false;">
             <i class="fas fa-external-link-alt"></i><span>TOEFL (Full Page)</span>
@@ -1947,6 +2036,7 @@
             <div class="top-section-nav">
                 <button class="section-jump-btn" onclick="scrollToSection('featuredApps')"><i class="fas fa-layer-group"></i> Featured apps</button>
                 <button class="section-jump-btn" onclick="scrollToSection('gamesScores')"><i class="fas fa-trophy"></i> Games &amp; scores</button>
+                <button class="section-jump-btn" onclick="scrollToSection('miniGamesSection')"><i class="fas fa-gamepad"></i> Mini games</button>
                 <button class="section-jump-btn" onclick="scrollToSection('commandCenterSection')"><i class="fas fa-bolt"></i> Command center</button>
                 <button class="section-jump-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Launch Colony</button>
                 <button class="section-jump-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
@@ -2096,6 +2186,18 @@
             <div id="gamesScoreRows"></div>
         </div>
     </div>
+</section>
+
+<section class="mini-games-section" id="miniGamesSection">
+    <div class="section-intro">
+        <div>
+            <div class="section-kicker">Mini Games Hub</div>
+            <h2>All mini games in one section</h2>
+            <p>This section is now your single home for every new mini game you build next. Add each new game in the Mini Games list in the script and it appears here automatically.</p>
+        </div>
+        <div class="hb-chip"><i class="fas fa-gamepad"></i> Future-ready list</div>
+    </div>
+    <div id="miniGamesGrid" class="mini-game-grid"></div>
 </section>
 
 <!-- ESL Art Cards -->
@@ -2901,6 +3003,93 @@ function scrollToSection(id) {
 var featuredGameIndex = 0;
 var currentFeaturedGameId = 'colony';
 var gameScoreTimer = null;
+var MINI_GAMES = [
+    {
+        id: 'colony',
+        title: 'Last Colony',
+        status: 'Live',
+        iconClass: 'fas fa-rocket',
+        desc: 'Strategy survival RPG set on Mars with missions, choices, and colony management.',
+        launchText: 'Launch',
+        launchAction: function() { openColonyModal(); }
+    },
+    {
+        id: 'solar',
+        title: 'Solar System',
+        status: 'Live',
+        iconClass: 'fas fa-globe-americas',
+        desc: 'Interactive space missions that teach planets, orbits, and exploration concepts.',
+        launchText: 'Launch',
+        launchAction: function() { openSolarSystemModal(); }
+    },
+    {
+        id: 'typing-race',
+        title: 'Typing Race',
+        status: 'Coming Soon',
+        iconClass: 'fas fa-keyboard',
+        desc: 'Fast keyboard challenge for sentence accuracy and speed practice.',
+        launchText: 'Coming soon',
+        launchAction: null
+    },
+    {
+        id: 'word-scramble',
+        title: 'Word Scramble',
+        status: 'Coming Soon',
+        iconClass: 'fas fa-puzzle-piece',
+        desc: 'Vocabulary scramble game focused on world-class units and core review words.',
+        launchText: 'Coming soon',
+        launchAction: null
+    },
+    {
+        id: 'memory-match',
+        title: 'Memory Match',
+        status: 'Coming Soon',
+        iconClass: 'fas fa-brain',
+        desc: 'Flip and match challenge to strengthen memory and word association.',
+        launchText: 'Coming soon',
+        launchAction: null
+    },
+    {
+        id: 'next-slot',
+        title: 'Next Mini Game Slot',
+        status: 'Future Slot',
+        iconClass: 'fas fa-plus',
+        desc: 'Reserve this card for the next mini game you create.',
+        launchText: 'Add next game',
+        launchAction: null
+    }
+];
+
+function renderMiniGamesSection() {
+    var grid = document.getElementById('miniGamesGrid');
+    if (!grid) return;
+
+    grid.innerHTML = MINI_GAMES.map(function(game) {
+        var isComing = !game.launchAction;
+        var buttonClass = isComing ? 'btn-outline' : 'card-btn';
+        var clickAction = isComing ? "showToast('" + game.title + " will be added here soon')" : "launchMiniGame('" + game.id + "')";
+        var safeTagClass = isComing ? 'mini-game-tag coming' : 'mini-game-tag';
+
+        return '<article class="mini-game-card">'
+            + '<div class="mini-game-head">'
+            + '<div class="mini-game-topline"><span class="mini-game-icon"><i class="' + game.iconClass + '"></i></span><strong>' + game.title + '</strong></div>'
+            + '<span class="' + safeTagClass + '">' + game.status + '</span>'
+            + '</div>'
+            + '<p>' + game.desc + '</p>'
+            + '<div><button class="' + buttonClass + '" onclick="' + clickAction + '">' + game.launchText + '</button></div>'
+            + '</article>';
+    }).join('');
+}
+
+function launchMiniGame(id) {
+    var game = MINI_GAMES.find(function(item) { return item.id === id; });
+    if (!game || !game.launchAction) {
+        showToast('This mini game is coming soon');
+        return;
+    }
+    game.launchAction();
+}
+
 var GAME_META = {
     colony: {
         name: 'Last Colony',
@@ -3075,6 +3264,7 @@ initHubMode();
 initLiveCounters();
 initParallaxTilt();
 initGameScores();
+renderMiniGamesSection();
 </script>
 </body>
 </html>
