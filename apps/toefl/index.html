@@ -3663,22 +3663,17 @@
         }
         
         function playListeningAudio(audioId) {
-            console.log('Playing audio:', audioId);
             const audio = document.getElementById(audioId);
             const player = document.getElementById('audio-' + audioId);
 
             if (!audio || !player) {
-                console.error('Audio element not found:', audioId);
                 return;
             }
 
             // Add error handling
             audio.onerror = function() {
-                console.error('Error loading audio:', audioId, audio.error);
                 alert('Error loading audio file. Please check that the file exists in the listening folder.');
             };
-
-            console.log('Audio src:', audio.src);
 
             // Stop any currently playing audio
             if (currentlyPlaying && currentlyPlaying !== audio) {
@@ -3690,7 +3685,6 @@
 
             if (audio.paused) {
                 audio.play().catch(e => {
-                    console.error('Play error:', e);
                     alert('Could not play audio. Error: ' + e.message);
                 });
                 player.classList.add('playing');
@@ -3705,7 +3699,6 @@
         }
         
         function audioEnded(audioId) {
-            console.log('Audio ended:', audioId);
             const player = document.getElementById('audio-' + audioId);
             if (player) {
                 player.classList.remove('playing');
@@ -3727,9 +3720,6 @@
             const totalQuestions = 34;
             const answered = Object.keys(listeningAnswers).length;
             const progress = Math.round((answered / totalQuestions) * 100);
-            
-            // Note: Progress display would need to be added to the listening section HTML if desired
-            console.log('Listening progress:', progress + '%', answered + '/' + totalQuestions);
         }
         
         function submitListening() {
@@ -3775,8 +3765,6 @@
                 // Update status
                 const status = document.getElementById('recording-status-' + qnum);
                 if (status) status.textContent = 'Playing prompt...';
-            } else {
-                console.error('Audio not found for question ' + qnum);
             }
         }
         
