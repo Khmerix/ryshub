@@ -729,6 +729,73 @@
             background: linear-gradient(145deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1)) !important;
             border-color: #10b981 !important;
         }
+
+        .fs-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 120;
+            background: rgba(2, 6, 23, 0.78);
+            backdrop-filter: blur(8px);
+            display: none;
+            flex-direction: column;
+        }
+
+        .fs-modal.active {
+            display: flex;
+        }
+
+        .fs-modal-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            border-block-end: 1px solid #e2e8f0;
+        }
+
+        .fs-modal-bar button {
+            border: none;
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: #0f172a;
+            background: #e2e8f0;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .fs-modal-bar button:hover {
+            background: #cbd5e1;
+        }
+
+        .fs-iframe {
+            inline-size: 100%;
+            block-size: calc(100% - 74px);
+            border: none;
+            background: #0f172a;
+        }
+
+        .hub-toast {
+            position: fixed;
+            inset-inline-end: 18px;
+            inset-block-end: 18px;
+            z-index: 150;
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            transform: translateY(8px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 180ms ease, transform 180ms ease;
+        }
+
+        .hub-toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -788,6 +855,7 @@
             <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openBook1Modal();}); return false;"><i class="fas fa-book text-xs"></i> Book 2-1</a>
             <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openBook2bModal();}); return false;"><i class="fas fa-book-open text-xs"></i> Book 2-2</a>
             <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireLoggedIn(function(){openBrickForgeModal();}); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireLoggedIn(function(){openSolarSystemModal();}); return false;"><i class="fas fa-globe-americas text-xs"></i> Solar System</a>
             <a href="#games" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="event.preventDefault(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});"><i class="fas fa-gamepad text-xs"></i> Arcade</a>
         </nav>
         
@@ -821,6 +889,9 @@
         </a>
         <a href="#" class="menu-item" onclick="requireLoggedIn(function(){openBrickForgeModal(); toggleMenu();}); return false;">
             <i class="fas fa-cube"></i><span>Brick Forge</span>
+        </a>
+        <a href="#" class="menu-item" onclick="requireLoggedIn(function(){openSolarSystemModal(); toggleMenu();}); return false;">
+            <i class="fas fa-globe-americas"></i><span>Solar System</span>
         </a>
         <a href="#games" class="menu-item" onclick="event.preventDefault(); toggleMenu(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});">
             <i class="fas fa-gamepad"></i><span>Arcade</span>
@@ -874,6 +945,9 @@
                 <button class="glow-btn-outline text-base px-8 py-3.5" onclick="requireTeacher(function(){openBook2bModal();})">
                     <span class="btn-badge" style="background:rgba(15,23,42,0.08);color:var(--slate-700);"><i class="fas fa-book-open"></i></span> World Class 2-2
                 </button>
+                <button class="glow-btn-outline text-base px-8 py-3.5" onclick="requireLoggedIn(function(){openSolarSystemModal();})">
+                    <span class="btn-badge" style="background:rgba(79,70,229,0.12);color:#3730a3;"><i class="fas fa-globe-americas"></i></span> Solar System
+                </button>
             </div>
         </div>
         <div class="feature-strip">
@@ -916,6 +990,7 @@
     </div>
     <div class="flash-row bottom-row" id="flashRowBottom" style="transform: translateX(-120px);">
         <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-rocket"></i></div><div><div class="fc-meta">Strategy</div><div class="fc-label">Last Colony</div></div></div>
+        <div class="flash-card fc-3"><div class="fc-icon"><i class="fas fa-globe-americas"></i></div><div><div class="fc-meta">Science</div><div class="fc-label">Solar System</div></div></div>
         <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-puzzle-piece"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Scramble</div></div></div>
         <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-bolt"></i></div><div><div class="fc-meta">Speed</div><div class="fc-label">Typing Race</div></div></div>
         <div class="flash-card fc-3"><div class="fc-icon"><i class="fas fa-brain"></i></div><div><div class="fc-meta">Memory</div><div class="fc-label">Memory Match</div></div></div>
@@ -1024,6 +1099,19 @@
                 <span class="meta-dots" style="color:#64748b;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
             </div>
             <button class="game-btn" onclick="event.stopPropagation(); requireLoggedIn(function(){openColonyModal();});"><i class="fas fa-play"></i> Play Now</button>
+        </div>
+        <div class="game-card" onclick="requireLoggedIn(function(){openSolarSystemModal();})" style="animation-delay:0.1s;">
+            <div class="shine"></div>
+            <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="game-thumb bg-gradient-to-br from-indigo-500 to-purple-700"><i class="fas fa-globe-americas"></i></div>
+            <div class="game-badge">Science</div>
+            <h4>Solar System</h4>
+            <p>Pilot through the planets, complete guided missions, and learn space science with an interactive 3D universe.</p>
+            <div class="meta-row" style="margin-block-end:14px;">
+                <span><i class="fas fa-satellite text-indigo-300"></i> Mission Mode</span>
+                <span class="meta-dots" style="color:#818cf8;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i><i class="meta-dot"></i></span>
+            </div>
+            <button class="game-btn" style="background:linear-gradient(135deg,#6366f1,#4f46e5);box-shadow:0 4px 0 #3730a3,0 6px 18px rgba(99,102,241,.25);" onclick="event.stopPropagation(); requireLoggedIn(function(){openSolarSystemModal();});"><i class="fas fa-play"></i> Launch Mission</button>
         </div>
         <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.15s;">
             <div class="shine"></div>
@@ -1162,6 +1250,51 @@
         <button onclick="closeBook2bModal()"><i class="fas fa-times"></i> Close</button>
     </div>
     <iframe id="book2b-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- SOLAR SYSTEM FULLSCREEN MODAL -->
+<div id="solar-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #e0e7ff, #ffffff); border-block-end: 1px solid #c7d2fe;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#6366f1,#4338ca);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-globe-americas" style="color:white;"></i></div>
+            <div>
+                <div style="font-weight:800;color:var(--slate-800);font-size:.95rem;">Solar System Mission Lab</div>
+                <div style="font-size:.7rem;color:#4338ca;letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Explore planets · Complete missions</div>
+            </div>
+        </div>
+        <button onclick="closeSolarSystemModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="solar-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- BRICK FORGE FULLSCREEN MODAL -->
+<div id="brickforge-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #dcfce7, #ffffff); border-block-end: 1px solid #86efac;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-cube" style="color:white;"></i></div>
+            <div>
+                <div style="font-weight:800;color:var(--slate-800);font-size:.95rem;">Brick Forge Studio</div>
+                <div style="font-size:.7rem;color:#15803d;letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Build and code in 3D</div>
+            </div>
+        </div>
+        <button onclick="closeBrickForgeModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="brickforge-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- LAST COLONY FULLSCREEN MODAL -->
+<div id="colony-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #e2e8f0, #ffffff); border-block-end: 1px solid #94a3b8;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#64748b,#334155);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-rocket" style="color:white;"></i></div>
+            <div>
+                <div style="font-weight:800;color:var(--slate-800);font-size:.95rem;">Last Colony</div>
+                <div style="font-size:.7rem;color:#475569;letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Mars strategy mission</div>
+            </div>
+        </div>
+        <button onclick="closeColonyModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="colony-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
                 <div class="glass-frame p-6 mb-6 border-l-4 border-l-blue-500">
@@ -2090,6 +2223,103 @@
         let mediaRecorder = null;
         let currentRecordingQuestion = null;
         let recordingTimeout = null;
+
+        let toastTimer = null;
+
+        function getRole() {
+            return sessionStorage.getItem('ryshub_role') || 'student';
+        }
+
+        function showToast(message) {
+            let toast = document.getElementById('hub-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'hub-toast';
+                toast.className = 'hub-toast';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = message;
+            toast.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 1800);
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('slideMenu');
+            const overlay = document.getElementById('menuOverlay');
+            if (!menu || !overlay) return;
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function logoutUser() {
+            sessionStorage.removeItem('ryshub_loggedIn');
+            sessionStorage.removeItem('ryshub_user');
+            sessionStorage.removeItem('ryshub_role');
+            window.location.href = 'apps/login.html';
+        }
+
+        function requireLoggedIn(action) {
+            if (sessionStorage.getItem('ryshub_loggedIn') !== 'true') {
+                showToast('Please log in first.');
+                window.location.href = 'apps/login.html';
+                return;
+            }
+            if (typeof action === 'function') action();
+        }
+
+        function requireTeacher(action) {
+            requireLoggedIn(() => {
+                if (getRole() !== 'teacher') {
+                    showToast('Teacher access only for this section.');
+                    return;
+                }
+                action();
+            });
+        }
+
+        function openFsModal(modalId, frameId, src) {
+            const modal = document.getElementById(modalId);
+            const frame = document.getElementById(frameId);
+            if (!modal || !frame) return;
+            frame.src = src;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFsModal(modalId, frameId) {
+            const modal = document.getElementById(modalId);
+            const frame = document.getElementById(frameId);
+            if (!modal || !frame) return;
+            modal.classList.remove('active');
+            frame.src = 'about:blank';
+            document.body.style.overflow = '';
+        }
+
+        function openToeflModal() { openFsModal('toefl-modal', 'toefl-frame', 'apps/toefl/index.html'); }
+        function closeToeflModal() { closeFsModal('toefl-modal', 'toefl-frame'); }
+        function openBook1Modal() { openFsModal('book1-modal', 'book1-frame', 'apps/book1.html'); }
+        function closeBook1Modal() { closeFsModal('book1-modal', 'book1-frame'); }
+        function openBook2bModal() { openFsModal('book2b-modal', 'book2b-frame', 'apps/book2b.html'); }
+        function closeBook2bModal() { closeFsModal('book2b-modal', 'book2b-frame'); }
+        function openBrickForgeModal() { openFsModal('brickforge-modal', 'brickforge-frame', 'apps/brickforge.html'); }
+        function closeBrickForgeModal() { closeFsModal('brickforge-modal', 'brickforge-frame'); }
+        function openColonyModal() { openFsModal('colony-modal', 'colony-frame', 'apps/games/colony/index.html'); }
+        function closeColonyModal() { closeFsModal('colony-modal', 'colony-frame'); }
+        function openSolarSystemModal() { openFsModal('solar-modal', 'solar-frame', 'apps/games/solar-system/index.html'); }
+        function closeSolarSystemModal() { closeFsModal('solar-modal', 'solar-frame'); }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') return;
+            closeToeflModal();
+            closeBook1Modal();
+            closeBook2bModal();
+            closeBrickForgeModal();
+            closeColonyModal();
+            closeSolarSystemModal();
+        });
         
         // ==================== LOGIN & NAVIGATION ====================
         function handleLogin(e) {
@@ -2803,7 +3033,7 @@
 /* ===== Random Ticker Updates ===== */
 (function(){
     const names = ['Sokha','Dara','Chanda','Bopha','Visal','Sreyneang','Kosal','Maly','Nita','Rithy','Pisey','Vannak'];
-    const actions = ['opened World Class 2-1','scored 92% on Listening','launched Brick Forge','completed Unit 8 quiz','started Word Scramble','opened World Class 2-2','started TOEFL iBT','finished a homework set','played Last Colony'];
+    const actions = ['opened World Class 2-1','scored 92% on Listening','launched Brick Forge','completed Unit 8 quiz','started Word Scramble','opened World Class 2-2','started TOEFL iBT','finished a homework set','played Last Colony','completed a Solar System mission'];
     const ticker = document.getElementById('tickerTrack');
     if (!ticker) return;
     setInterval(() => {
