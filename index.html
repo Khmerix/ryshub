@@ -2245,10 +2245,10 @@
         </div>
         
         <div class="header-cta-group">
-            <button class="btn-outline hidden sm:inline-flex" onclick="openTeacherRegister('teacher resources')">
+            <button id="headerAccessBtn" class="btn-outline hidden sm:inline-flex" onclick="openTeacherRegister('teacher resources')">
                 <i class="fas fa-id-badge"></i><span>Access</span>
             </button>
-            <button class="btn-primary" onclick="openTeacherRegister('teacher resources')">
+            <button id="headerRegisterBtn" class="btn-primary" onclick="openTeacherRegister('teacher resources')">
                 <i class="fas fa-user-plus"></i><span>Register</span>
             </button>
             <button class="md:hidden w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white" onclick="toggleMenu()">
@@ -2870,8 +2870,8 @@
             <input id="toefl-name" type="text" class="login-input" placeholder="Enter your full name">
         </div>
         <div style="margin-block-end:24px;">
-            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Student ID</label>
-            <input id="toefl-id" type="text" class="login-input" placeholder="Enter your ID">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Student Email or ID</label>
+            <input id="toefl-id" type="text" class="login-input" placeholder="Enter your email or student ID">
         </div>
         <button onclick="launchToefl()" style="inline-size:100%;padding:15px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-dark));color:white;border:none;border-radius:13px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 var(--primary-dark),0 8px 24px rgba(37,99,235,.4);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
             <i class="fas fa-sign-in-alt"></i> &nbsp;Start Test
@@ -2888,7 +2888,7 @@
                 <i class="fas fa-user-shield" style="font-size:1.7rem;color:white;"></i>
             </div>
             <h2 style="font-size:1.55rem;font-weight:800;color:var(--white);margin:0 0 6px;">Teacher verification</h2>
-            <p id="teacher-register-copy" style="color:var(--gray-400);font-size:.92rem;margin:0;line-height:1.6;">Register with your school email to unlock teacher books and TOEFL iBT resources.</p>
+            <p id="teacher-register-copy" style="color:var(--gray-400);font-size:.92rem;margin:0;line-height:1.6;">Register with your school email to unlock teacher books and TOEFL iBT resources. @aii.edu.kh is accepted.</p>
         </div>
         <div class="teacher-register-meta">
             <div class="teacher-meta-chip"><strong>Books</strong><span>Teacher editions</span></div>
@@ -2906,6 +2906,11 @@
         <div style="margin-block-end:22px;">
             <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">School / Department</label>
             <input id="teacher-school" type="text" class="login-input" placeholder="Aii Language Center">
+        </div>
+        <div style="margin-block-end:22px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Teacher Verification Code</label>
+            <input id="teacher-verify-code" type="password" class="login-input" placeholder="Enter approval code from admin" autocomplete="off">
+            <p style="color:var(--gray-500);font-size:.78rem;margin:8px 0 0;line-height:1.5;">Account approval requires this code from your school admin.</p>
         </div>
         <button onclick="registerTeacherAccess()" style="inline-size:100%;padding:15px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-dark));color:white;border:none;border-radius:13px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 var(--primary-dark),0 8px 24px rgba(37,99,235,.4);transition:all 0.3s;">
             <i class="fas fa-user-check"></i> &nbsp;Verify teacher account
@@ -3108,15 +3113,99 @@ window.addEventListener('scroll', () => {
 /* ===== Original App Logic ===== */
 var toastTimer;
 var pendingTeacherAction = null;
+var TEACHER_PROFILE_MAP_KEY = 'ryshubTeacherProfiles';
+var TEACHER_CURRENT_EMAIL_KEY = 'ryshubCurrentTeacherEmail';
+var TEACHER_APPROVAL_CODE_KEY = 'ryshubTeacherApprovalCode';
+var DEFAULT_TEACHER_APPROVAL_CODE = 'AII-VERIFY-2026';
+
+function normalizeTeacherEmail(email) {
+    return (email || '').trim().toLowerCase();
+}
+
+function getTeacherProfilesMap() {
+    try {
+        return JSON.parse(localStorage.getItem(TEACHER_PROFILE_MAP_KEY) || '{}');
+    } catch (e) {
+        return {};
+    }
+}
+
+function getTeacherScopedKey(baseKey, email) {
+    var safeEmail = normalizeTeacherEmail(email || (getTeacherProfile() && getTeacherProfile().email) || 'guest');
+    return baseKey + ':' + (safeEmail || 'guest');
+}
+
+function getCurrentTeacherEmail() {
+    return normalizeTeacherEmail(sessionStorage.getItem(TEACHER_CURRENT_EMAIL_KEY) || localStorage.getItem(TEACHER_CURRENT_EMAIL_KEY) || '');
+}
+
+function setCurrentTeacherEmail(email) {
+    var normalized = normalizeTeacherEmail(email);
+    if (!normalized) return;
+    localStorage.setItem(TEACHER_CURRENT_EMAIL_KEY, normalized);
+    sessionStorage.setItem(TEACHER_CURRENT_EMAIL_KEY, normalized);
+}
+
+function getTeacherApprovalCode() {
+    return (localStorage.getItem(TEACHER_APPROVAL_CODE_KEY) || DEFAULT_TEACHER_APPROVAL_CODE).trim();
+}
+
+function isTeacherVerified(profile) {
+    return !!(profile && (profile.verified === true || profile.approved === true));
+}
+
+function isTeacherVerificationCodeValid(code) {
+    return (code || '').trim() === getTeacherApprovalCode();
+}
 
 function isSchoolEmail(email) {
     var value = (email || '').trim().toLowerCase();
-    return !!value && (value.endsWith('@aii.edu.kh') || /@.+\.(edu|edu\.kh|ac\.th|ac\.uk)$/i.test(value));
+    return !!value && value.endsWith('@aii.edu.kh');
+}
+
+function isRegularEmail(email) {
+    var value = (email || '').trim();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+}
+
+function isValidFullName(name) {
+    var cleaned = (name || '').trim();
+    if (cleaned.length < 4) return false;
+    var tokens = cleaned.split(/\s+/).filter(Boolean);
+    if (tokens.length < 2) return false;
+    return tokens.every(function(token) {
+        return /^[A-Za-z][A-Za-z'.-]{1,}$/.test(token);
+    });
 }
 
 function getTeacherProfile() {
     try {
-        return JSON.parse(localStorage.getItem('ryshubTeacherProfile') || sessionStorage.getItem('ryshubTeacherProfile') || 'null');
+        var map = getTeacherProfilesMap();
+        var currentEmail = getCurrentTeacherEmail();
+        if (currentEmail && map[currentEmail]) {
+            if (typeof map[currentEmail].verified === 'undefined') {
+                map[currentEmail].verified = true;
+                localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(map));
+            }
+            return map[currentEmail];
+        }
+
+        var sessionProfile = JSON.parse(sessionStorage.getItem('ryshubTeacherProfile') || 'null');
+        if (sessionProfile && sessionProfile.email) {
+            setCurrentTeacherEmail(sessionProfile.email);
+            return sessionProfile;
+        }
+
+        var legacyProfile = JSON.parse(localStorage.getItem('ryshubTeacherProfile') || 'null');
+        if (legacyProfile && legacyProfile.email) {
+            if (typeof legacyProfile.verified === 'undefined') legacyProfile.verified = true;
+            map[normalizeTeacherEmail(legacyProfile.email)] = legacyProfile;
+            localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(map));
+            setCurrentTeacherEmail(legacyProfile.email);
+            return legacyProfile;
+        }
+
+        return null;
     } catch (e) {
         return null;
     }
@@ -3124,30 +3213,79 @@ function getTeacherProfile() {
 
 function hasTeacherAccess() {
     var profile = getTeacherProfile();
-    return !!(profile && profile.name && isSchoolEmail(profile.email));
+    return !!(profile && profile.name && isSchoolEmail(profile.email) && isTeacherVerified(profile));
 }
 
 function updateTeacherStatusUi() {
     var status = document.querySelector('.header-status strong');
     var statusText = document.querySelector('.header-status span:last-child');
+    var accessBtn = document.getElementById('headerAccessBtn');
+    var registerBtn = document.getElementById('headerRegisterBtn');
     var profile = getTeacherProfile();
+
     if (profile && status && statusText) {
-        status.textContent = 'Teacher verified';
-        statusText.textContent = profile.school || profile.email;
+        if (isTeacherVerified(profile)) {
+            status.textContent = 'Teacher verified';
+            statusText.textContent = (profile.name || 'Teacher') + ' • ' + (profile.school || profile.email);
+        } else {
+            status.textContent = 'Teacher pending verification';
+            statusText.textContent = (profile.name || 'Teacher') + ' • Verify account to unlock resources';
+        }
+    } else if (status && statusText) {
+        status.textContent = 'Live classroom hub';
+        statusText.textContent = 'Use the side panel to explore tools';
     }
+
+    if (accessBtn && registerBtn && profile) {
+        accessBtn.innerHTML = '<i class="fas fa-right-left"></i><span>Switch</span>';
+        accessBtn.onclick = function() { switchTeacherAccount(); };
+
+        registerBtn.innerHTML = '<i class="fas fa-right-from-bracket"></i><span>Sign out</span>';
+        registerBtn.onclick = function() { signOutTeacher(); };
+    } else if (accessBtn && registerBtn) {
+        accessBtn.innerHTML = '<i class="fas fa-id-badge"></i><span>Access</span>';
+        accessBtn.onclick = function() { openTeacherRegister('teacher resources'); };
+
+        registerBtn.innerHTML = '<i class="fas fa-user-plus"></i><span>Register</span>';
+        registerBtn.onclick = function() { openTeacherRegister('teacher resources'); };
+    }
+}
+
+function signOutTeacher() {
+    sessionStorage.removeItem('ryshubTeacherProfile');
+    sessionStorage.removeItem('ryshub_role');
+    sessionStorage.removeItem(TEACHER_CURRENT_EMAIL_KEY);
+    localStorage.removeItem(TEACHER_CURRENT_EMAIL_KEY);
+    localStorage.removeItem('ryshubTeacherProfile');
+    localStorage.removeItem('ryshub_role');
+    updateTeacherStatusUi();
+    initHubMode();
+    renderGameScores();
+    renderClassroomLabMetrics();
+    showToast('Signed out. Teacher data is hidden on this browser session.');
+}
+
+function switchTeacherAccount() {
+    document.getElementById('teacher-name').value = '';
+    document.getElementById('teacher-email').value = '';
+    document.getElementById('teacher-school').value = 'Aii Language Center';
+    document.getElementById('teacher-verify-code').value = '';
+    openTeacherRegister('switch teacher account');
 }
 
 function openTeacherRegister(featureName, callback) {
     pendingTeacherAction = typeof callback === 'function' ? callback : null;
     var profile = getTeacherProfile();
+    var isSwitchFlow = (featureName || '').toLowerCase().indexOf('switch') !== -1;
     var copy = document.getElementById('teacher-register-copy');
     if (copy) {
-        copy.textContent = 'Register with your school email to unlock ' + (featureName || 'teacher resources') + '.';
+        copy.textContent = 'Register with your school email and verification code to unlock ' + (featureName || 'teacher resources') + '.';
     }
-    if (profile) {
+    if (profile && !isSwitchFlow) {
         document.getElementById('teacher-name').value = profile.name || '';
         document.getElementById('teacher-email').value = profile.email || '';
         document.getElementById('teacher-school').value = profile.school || 'Aii Language Center';
+        document.getElementById('teacher-verify-code').value = '';
     }
     document.getElementById('teacher-register-overlay').classList.add('open');
     setTimeout(function(){ document.getElementById('teacher-name').focus(); }, 150);
@@ -3163,13 +3301,14 @@ function withTeacherAccess(featureName, callback) {
         return;
     }
     openTeacherRegister(featureName, callback);
-    showToast('Teacher verification with school email is required');
+    showToast('Teacher verification with school email and approval code is required');
 }
 
 function registerTeacherAccess() {
     var name = document.getElementById('teacher-name').value.trim();
-    var email = document.getElementById('teacher-email').value.trim();
+    var email = normalizeTeacherEmail(document.getElementById('teacher-email').value);
     var school = document.getElementById('teacher-school').value.trim() || 'Aii Language Center';
+    var verificationCode = document.getElementById('teacher-verify-code').value.trim();
 
     if (!name || !email) {
         showToast('Please enter your name and school email');
@@ -3177,18 +3316,39 @@ function registerTeacherAccess() {
     }
 
     if (!isSchoolEmail(email)) {
-        showToast('Please use a valid school email');
+        showToast('Teachers must use an @aii.edu.kh email address.');
         return;
     }
 
-    var profile = { name: name, email: email.toLowerCase(), school: school, registeredAt: new Date().toISOString() };
+    if (!isTeacherVerificationCodeValid(verificationCode)) {
+        showToast('Verification code is invalid. Please contact school admin.');
+        return;
+    }
+
+    var profile = {
+        name: name,
+        email: email,
+        school: school,
+        verified: true,
+        verifiedAt: new Date().toISOString(),
+        registeredAt: new Date().toISOString()
+    };
+    var profiles = getTeacherProfilesMap();
+    profiles[email] = profile;
+
+    localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(profiles));
     localStorage.setItem('ryshubTeacherProfile', JSON.stringify(profile));
     sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(profile));
+    setCurrentTeacherEmail(email);
     localStorage.setItem('ryshub_role', 'teacher');
     sessionStorage.setItem('ryshub_role', 'teacher');
+
     updateTeacherStatusUi();
+    initHubMode();
+    renderGameScores();
+    renderClassroomLabMetrics();
     closeTeacherRegister();
-    showToast('Teacher verification approved');
+    showToast('Teacher profile saved for ' + name);
 
     if (typeof pendingTeacherAction === 'function') {
         var nextAction = pendingTeacherAction;
@@ -3236,7 +3396,18 @@ function closeToeflLogin() {
 function launchToefl() {
     var name = document.getElementById('toefl-name').value.trim();
     var id = document.getElementById('toefl-id').value.trim();
-    if (!name || !id) { showToast('Please enter your name and ID'); return; }
+    if (!name || !id) {
+        showToast('Please enter your full name and email or ID');
+        return;
+    }
+    if (!isValidFullName(name)) {
+        showToast('Please enter your correct full name (first and last name)');
+        return;
+    }
+    if (id.indexOf('@') !== -1 && !isRegularEmail(id)) {
+        showToast('Please enter a valid student email');
+        return;
+    }
     recordGameLaunch('toefl');
     closeToeflLogin();
     var frame = document.getElementById('toefl-frame');
@@ -3377,7 +3548,7 @@ function setHubMode(mode) {
     };
 
     var state = presets[mode] || presets.teacher;
-    localStorage.setItem('ryshubHubMode', mode);
+    localStorage.setItem(getTeacherScopedKey('ryshubHubMode'), mode);
 
     document.querySelectorAll('.mode-btn').forEach(function(btn) {
         btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
@@ -3405,7 +3576,9 @@ function setHubMode(mode) {
 }
 
 function initHubMode() {
-    setHubMode(localStorage.getItem('ryshubHubMode') || 'teacher');
+    var scopedMode = localStorage.getItem(getTeacherScopedKey('ryshubHubMode'));
+    var fallbackMode = localStorage.getItem('ryshubHubMode');
+    setHubMode(scopedMode || fallbackMode || 'teacher');
 }
 
 function animateCounter(el) {
@@ -3742,7 +3915,9 @@ function loadGameStats() {
         toefl: { plays: 11, best: '27m' }
     };
     try {
-        var saved = JSON.parse(localStorage.getItem('ryshubGameStats') || '{}');
+        var scoped = localStorage.getItem(getTeacherScopedKey('ryshubGameStats'));
+        var fallback = localStorage.getItem('ryshubGameStats');
+        var saved = JSON.parse(scoped || fallback || '{}');
         return Object.assign({}, defaults, saved);
     } catch (e) {
         return defaults;
@@ -3750,7 +3925,7 @@ function loadGameStats() {
 }
 
 function saveGameStats(stats) {
-    localStorage.setItem('ryshubGameStats', JSON.stringify(stats));
+    localStorage.setItem(getTeacherScopedKey('ryshubGameStats'), JSON.stringify(stats));
 }
 
 function getTrendLabel(plays) {
