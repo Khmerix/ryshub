@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEFL iBT - Complete Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="toefl-styles.css">
+    <link rel="stylesheet" href="toefl-section-colors.css">
+    
+    <style>
+        /* Section visibility */
+        .section-view { display: none; }
+        .section-view.active { display: block; }
+        
+        /* Login page background - TOEFL Theme */
+        /* Enhanced Universal Light Theme Background */
+        .light-theme-bg,
+        body {
+            background: 
+                linear-gradient(160deg, #f8fafc 0%, #f1f5f9 30%, #e2e8f0 50%, #f1f5f9 70%, #f8fafc 100%);
+            position: relative;
+            overflow-x: hidden;
+            min-block-size: 100vh;
+        }
+        
+        /* Animated gradient orbs - layer 1 */
+        .light-theme-bg::before,
+        body::before {
+            content: '';
+            position: fixed;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            inset-block-end: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 90% 10%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 70% 60% at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 20% 70%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 40% 30% at 50% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+            animation: orbFloat 25s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes orbFloat {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1);
+                filter: blur(0px);
+            }
+            25% { 
+                transform: translate(20px, -30px) scale(1.05);
+                filter: blur(1px);
+            }
+            50% { 
+                transform: translate(-15px, 20px) scale(0.98);
+                filter: blur(0px);
+            }
+            75% { 
+                transform: translate(25px, 15px) scale(1.02);
+                filter: blur(1px);
+            }
+        }
+        
+        /* Mesh gradient overlay - layer 2 */
+        .light-theme-bg::after,
+        body::after {
+            content: '';
+            position: fixed;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            inset-block-end: 0;
+            background: 
+                /* Subtle grid pattern */
+                linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Floating shapes with blur - more visible */
+        .floating-shape {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.25;
+            animation: shapeFloat 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .shape-1 {
+            inline-size: 400px;
+            block-size: 400px;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            inset-block-start: -5%;
+            inset-inline-start: -5%;
+            animation-delay: 0s;
+        }
+        
+        .shape-2 {
+            inline-size: 350px;
+            block-size: 350px;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            inset-block-start: 50%;
+            inset-inline-end: -10%;
+            animation-delay: -7s;
+        }
+        
+        .shape-3 {
+            inline-size: 300px;
+            block-size: 300px;
+            background: linear-gradient(135deg, #34d399, #10b981);
+            inset-block-end: 10%;
+            inset-inline-start: 10%;
+            animation-delay: -14s;
+        }
+        
+        .shape-4 {
+            inline-size: 250px;
+            block-size: 250px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            inset-block-start: 20%;
+            inset-inline-end: 30%;
+            animation-delay: -10s;
+        }
+        
+        .shape-5 {
+            inline-size: 200px;
+            block-size: 200px;
+            background: linear-gradient(135deg, #818cf8, #6366f1);
+            inset-block-end: 30%;
+            inset-inline-end: 20%;
+            animation-delay: -5s;
+        }
+        
+        @keyframes shapeFloat {
+            0%, 100% { 
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            33% { 
+                transform: translate(40px, -40px) rotate(120deg) scale(1.1);
+            }
+            66% { 
+                transform: translate(-30px, 30px) rotate(240deg) scale(0.95);
+            }
+        }
+        
+        /* Decorative corner elements */
+        .corner-decoration {
+            position: fixed;
+            inline-size: 300px;
+            block-size: 300px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+        
+        .corner-decoration.top-left {
+            inset-block-start: -100px;
+            inset-inline-start: -100px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+        }
+        
+        .corner-decoration.top-right {
+            inset-block-start: -100px;
+            inset-inline-end: -100px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+        }
+        
+        .corner-decoration.bottom-left {
+            inset-block-end: -100px;
+            inset-inline-start: -100px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
+        }
+        
+        .corner-decoration.bottom-right {
+            inset-block-end: -100px;
+            inset-inline-end: -100px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
+        }
+        
+        /* Wave decoration at bottom */
+        .wave-decoration {
+            position: fixed;
+            inset-block-end: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            block-size: 200px;
+            background: linear-gradient(to top, rgba(241, 245, 249, 0.8), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Ensure content is above background */
+        .glass-frame, .login-card, .security-info-card, .security-warning-card {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-view {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Light theme glass frame override */
+        .light-theme-bg .glass-frame,
+        body .glass-frame {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
+            border: 1px solid rgba(203, 213, 225, 0.6);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+        
+        .light-theme-bg .glass-frame::before,
+        body .glass-frame::before {
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+        }
+        
+        /* Login card specific - Updated for light theme */
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(203, 213, 225, 0.5);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.8),
+                0 0 100px rgba(59, 130, 246, 0.1);
+            backdrop-filter: blur(20px);
+            max-inline-size: 420px;
+            inline-size: 100%;
+            padding: 40px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            block-size: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981, #f59e0b);
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .login-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(203, 213, 225, 0.8);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: #1e293b;
+            font-size: 1rem;
+            inline-size: 100%;
+            transition: all 0.3s;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+        
+        .login-input::placeholder {
+            color: #94a3b8;
+        }
+        
+        /* Section selection cards */
+        .section-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 2px solid rgba(51, 65, 85, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--card-accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--card-glow);
+        }
+        
+        .section-card.completed {
+            border-color: var(--success);
+            opacity: 0.8;
+        }
+        
+        .section-card.completed::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            inset-block-start: 16px;
+            inset-inline-end: 16px;
+            inline-size: 32px;
+            block-size: 32px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .section-icon {
+            inline-size: 80px;
+            block-size: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Ready screen */
+        .ready-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-block-size: 60vh;
+            text-align: center;
+        }
+        
+        .ready-icon {
+            inline-size: 120px;
+            block-size: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-block-end: 32px;
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 var(--section-glow); }
+            50% { box-shadow: 0 0 40px 20px transparent; }
+        }
+        
+        .timer-waiting {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        /* Hide original headers in sections */
+        .section-view .toefl-header {
+            display: none;
+        }
+        
+        /* Back button for sections */
+        .back-btn {
+            position: fixed;
+            inset-block-start: 20px;
+            inset-inline-start: 20px;
+            z-index: 100;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(51, 65, 85, 0.9);
+            transform: translateX(-4px);
+        }
+        
+        /* Audio container for listening */
+        .audio-container {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+        
+        .audio-visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            block-size: 40px;
+            justify-content: center;
+        }
+
+        .audio-bar {
+            inline-size: 4px;
+            background: linear-gradient(180deg, var(--section-accent) 0%, var(--section-primary) 100%);
+            border-radius: 2px;
+            animation: pulse-bar 1s ease-in-out infinite;
+            box-shadow: 0 0 6px var(--section-glow);
+        }
+
+        @keyframes pulse-bar {
+            0%, 100% { transform: scaleY(0.3); }
+            50% { transform: scaleY(1); }
+        }
+        
+        /* Recording button for speaking */
+        .btn-record {
+            background: linear-gradient(145deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
+            border: none;
+            border-radius: 50%;
+            inline-size: 80px;
+            block-size: 80px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-record 2s infinite;
+        }
+
+        @keyframes pulse-record {
+            0%, 100% { box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4), 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4), 0 0 0 20px rgba(239, 68, 68, 0); }
+        }
+
+        .btn-record:hover { transform: scale(1.1); }
+        .btn-record.recording { background: linear-gradient(145deg, #10b981 0%, #059669 50%, #047857 100%); animation: none; }
+        
+        /* Waveform for speaking */
+        .waveform {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            block-size: 60px;
+        }
+
+        .waveform-bar {
+            inline-size: 6px;
+            background: linear-gradient(180deg, var(--section-accent) 0%, var(--section-primary) 100%);
+            border-radius: 3px;
+            animation: wave 1s ease-in-out infinite;
+            box-shadow: 0 0 8px var(--section-glow);
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: scaleY(0.3); }
+            50% { transform: scaleY(1); }
+        }
+        
+        .waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+        .waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+        .waveform-bar:nth-child(4) { animation-delay: 0.3s; }
+        .waveform-bar:nth-child(5) { animation-delay: 0.4s; }
+        .waveform-bar:nth-child(6) { animation-delay: 0.3s; }
+        .waveform-bar:nth-child(7) { animation-delay: 0.2s; }
+        .waveform-bar:nth-child(8) { animation-delay: 0.1s; }
+        
+        /* Status pills */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-pill.pending { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .status-pill.completed { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-pill.recording { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); animation: blink 1s infinite; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        /* Fill input for reading */
+        .fill-input {
+            background: transparent;
+            border: none;
+            border-block-end: 2px solid var(--section-primary);
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: center;
+            padding: 4px 8px;
+            min-inline-size: 80px;
+            transition: all 0.3s;
+            font-size: 1.1em;
+        }
+
+        .fill-input:focus {
+            outline: none;
+            border-block-end-color: var(--section-accent);
+            box-shadow: 0 4px 12px var(--section-glow);
+        }
+
+        .fill-input.correct {
+            border-block-end-color: var(--success);
+            color: var(--success);
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .fill-input.incorrect {
+            border-block-end-color: var(--error);
+            color: var(--error);
+        }
+        
+        /* Writing Section Styles */
+        .word-box {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 4px;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+            border: 2px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            color: #f8fafc;
+            font-weight: 500;
+            cursor: grab;
+            user-select: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .word-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+            border-color: rgba(168, 85, 247, 0.8);
+        }
+        
+        .word-box:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+        
+        .word-box.dragging {
+            opacity: 0.5;
+        }
+        
+        .sentence-builder {
+            min-block-size: 60px;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 2px dashed rgba(100, 116, 139, 0.5);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .sentence-builder:empty::before,
+        .sentence-builder.empty::before {
+            content: 'Drop words here to build your sentence...';
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .sentence-builder.drag-over {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.8);
+        }
+        
+        .feedback-area {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .feedback-correct {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .feedback-incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Writing module tabs */
+        .module-btn {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(51, 65, 85, 0.5);
+            border-radius: 12px;
+            padding: 12px 24px;
+            color: #94a3b8;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .module-btn:hover {
+            border-color: rgba(168, 85, 247, 0.5);
+            color: #f8fafc;
+            transform: translateY(-2px);
+        }
+        
+        .module-btn.active {
+            background: linear-gradient(145deg, rgba(168, 85, 247, 0.3), rgba(124, 58, 237, 0.2));
+            border-color: rgba(168, 85, 247, 0.8);
+            color: #f8fafc;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+        }
+        
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Security Warning Overlay */
+        .security-overlay {
+            position: fixed;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            inset-block-end: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .security-warning-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 0.99) 100%);
+            border: 2px solid #ef4444;
+            border-radius: 24px;
+            max-inline-size: 500px;
+            inline-size: 100%;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 60px rgba(239, 68, 68, 0.3);
+            animation: securityPulse 2s infinite;
+        }
+        
+        @keyframes securityPulse {
+            0%, 100% { box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 60px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 80px rgba(239, 68, 68, 0.5); }
+        }
+        
+        .security-icon {
+            inline-size: 80px;
+            block-size: 80px;
+            background: linear-gradient(145deg, #ef4444, #b91c1c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 2.5rem;
+            animation: securityShake 0.5s ease-in-out;
+        }
+        
+        @keyframes securityShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        
+        .strike-counter {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+        
+        .strike-dot {
+            inline-size: 24px;
+            block-size: 24px;
+            border-radius: 50%;
+            background: rgba(51, 65, 85, 0.5);
+            border: 2px solid rgba(100, 116, 139, 0.5);
+            transition: all 0.3s;
+        }
+        
+        .strike-dot.active {
+            background: #ef4444;
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+        }
+        
+        .security-info-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(245, 158, 11, 0.4);
+            border-radius: 20px;
+            padding: 32px;
+            max-inline-size: 600px;
+            margin-block-end: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .security-rule {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(241, 245, 249, 0.8);
+            border-radius: 12px;
+            margin-block-end: 12px;
+            border-inline-start: 3px solid #f59e0b;
+        }
+        
+        .security-rule i {
+            color: #f59e0b;
+            font-size: 1.25rem;
+            margin-block-start: 2px;
+        }
+        
+        .security-acknowledged {
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1)) !important;
+            border-color: #10b981 !important;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        if (sessionStorage.getItem('ryshub_loggedIn') !== 'true') {
+            window.location.href = 'apps/login.html';
+        }
+    </script>
+
+<!-- Animated Background Elements -->
+<div class="mesh-bg"></div>
+<div class="light-ray ray-1"></div>
+<div class="light-ray ray-2"></div>
+
+<!-- Background Orbs - now lighter -->
+<div class="orb orb-1" style="position:fixed;border-radius:50%;filter:blur(80px);opacity:0.2;pointer-events:none;z-index:0;inline-size:500px;block-size:500px;background:radial-gradient(circle, rgba(37,99,235,0.3) 0%, transparent 70%);inset-block-start:-10%;inset-inline-start:-10%;animation:floatOrb 20s ease-in-out infinite;"></div>
+<div class="orb orb-2" style="position:fixed;border-radius:50%;filter:blur(80px);opacity:0.15;pointer-events:none;z-index:0;inline-size:400px;block-size:400px;background:radial-gradient(circle, rgba(6,182,212,0.25) 0%, transparent 70%);inset-block-start:40%;inset-inline-end:-5%;animation:floatOrb 20s ease-in-out infinite;animation-delay:-7s;"></div>
+<div class="orb orb-3" style="position:fixed;border-radius:50%;filter:blur(80px);opacity:0.12;pointer-events:none;z-index:0;inline-size:350px;block-size:350px;background:radial-gradient(circle, rgba(71,85,105,0.2) 0%, transparent 70%);inset-block-end:10%;inset-inline-start:20%;animation:floatOrb 20s ease-in-out infinite;animation-delay:-14s;"></div>
+<style>@keyframes floatOrb { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -40px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.95); } }</style>
+
+<!-- Floating Shapes -->
+<div class="float-shape shape-hex"></div>
+<div class="float-shape shape-tri"></div>
+<div class="float-shape shape-diamond"></div>
+
+<!-- Mouse Spotlight -->
+<div class="mouse-spotlight" id="spotlight"></div>
+
+<canvas id="neuron-canvas"></canvas>
+
+<!-- Corner Logo -->
+<div class="corner-logo">
+    <div class="logo-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+    <span>Ryshub</span>
+</div>
+
+<!-- Corner Actions -->
+<div class="corner-actions">
+    <button class="btn-outline hidden sm:block" onclick="logoutUser()">Logout</button>
+    <button class="md:hidden w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 shadow-sm" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+</div>
+
+    <!-- ==================== SECURITY WARNING OVERLAY ==================== -->
+    <div id="security-warning" class="security-overlay hidden">
+        <div class="security-warning-card">
+            <div class="security-icon">
+                <i class="fas fa-exclamation-triangle text-white"></i>
+            </div>
+            <span class="text-slate-800 font-bold text-sm tracking-tight">Ryshub</span>
+        </div>
+        
+        <nav class="hidden md:flex nav-scroll" style="max-inline-size: 640px; mask-image: none; -webkit-mask-image: none;">
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="showToast('Already on Home'); return false;"><i class="fas fa-home text-xs"></i> Home</a>
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openToeflModal();}); return false;"><i class="fas fa-graduation-cap text-xs"></i> TOEFL</a>
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openBook1Modal();}); return false;"><i class="fas fa-book text-xs"></i> Book 2-1</a>
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireTeacher(function(){openBook2bModal();}); return false;"><i class="fas fa-book-open text-xs"></i> Book 2-2</a>
+            <a href="#" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="requireLoggedIn(function(){openBrickForgeModal();}); return false;"><i class="fas fa-cube text-xs"></i> Brick Forge</a>
+            <a href="#games" class="nav-3d" style="padding: 8px 14px; font-size: 0.8rem;" onclick="event.preventDefault(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});"><i class="fas fa-gamepad text-xs"></i> Arcade</a>
+        </nav>
+        
+        <button class="md:hidden w-9 h-9 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</header>
+
+<!-- Sliding Menu -->
+<div class="slide-menu" id="slideMenu">
+    <div class="menu-tab" onclick="toggleMenu()" title="Open Menu">
+        <i class="fas fa-chevron-right"></i>
+    </div>
+    <div class="menu-header">
+        <h3><i class="fas fa-layer-group" style="color: var(--primary-blue); margin-inline-end: 10px;"></i>Sections</h3>
+        <p>Navigate content</p>
+    </div>
+    <nav class="menu-nav">
+        <a href="#" class="menu-item active" onclick="showToast('Already on Home'); toggleMenu(); return false;">
+            <i class="fas fa-home"></i><span>Home</span>
+        </a>
+        <a href="#" class="menu-item" onclick="requireTeacher(function(){openToeflModal(); toggleMenu();}); return false;">
+            <i class="fas fa-graduation-cap"></i><span>TOEFL iBT</span>
+        </a>
+        <a href="#" class="menu-item" onclick="requireTeacher(function(){openBook1Modal(); toggleMenu();}); return false;">
+            <i class="fas fa-book"></i><span>World Class 2-1</span>
+        </a>
+        <a href="#" class="menu-item" onclick="requireTeacher(function(){openBook2bModal(); toggleMenu();}); return false;">
+            <i class="fas fa-book-open"></i><span>World Class 2-2</span>
+        </a>
+        <a href="#" class="menu-item" onclick="requireLoggedIn(function(){openBrickForgeModal(); toggleMenu();}); return false;">
+            <i class="fas fa-cube"></i><span>Brick Forge</span>
+        </a>
+        <a href="#games" class="menu-item" onclick="event.preventDefault(); toggleMenu(); document.querySelector('.games-section').scrollIntoView({behavior:'smooth'});">
+            <i class="fas fa-gamepad"></i><span>Arcade</span>
+        </a>
+        <a href="#" class="menu-item" onclick="showToast('EduGrade coming soon!'); return false;">
+            <i class="fas fa-brain"></i><span>EduGrade Pro</span>
+        </a>
+        <a href="#" class="menu-item" onclick="showToast('Word Practice coming soon!'); return false;">
+            <i class="fas fa-pencil-alt"></i><span>Word Practice</span>
+        </a>
+    </nav>
+    <div class="menu-footer">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-size: 0.75rem; color: var(--slate-500); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Contact</div>
+            <div style="font-size: 0.8rem; color: var(--slate-700); word-break: break-all;">Created by ESL Teacher Ry Mam</div>
+            <a href="mailto:mam.ry@aii.edu.kh" style="font-size: 0.8rem; color: var(--slate-700); text-decoration: none; word-break: break-all;">📧 Email: mam.ry@aii.edu.kh</a>
+            <a href="tel:+85512617940" style="font-size: 0.8rem; color: var(--slate-700); text-decoration: none; word-break: break-all;">📱 Phone: (855) 012 617 940</a>
+        </div>
+    </div>
+</div>
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+<!-- Hero -->
+<section class="hero-section">
+    <div class="hero-banner">
+        <img src="assets/images/page-banner.png" alt="Creative Minds Banner" loading="lazy">
+    </div>
+    <div class="hero-content">
+        <div class="whats-new" onclick="requireLoggedIn(function(){openBrickForgeModal();})">
+            <i class="fas fa-bolt"></i> New: Brick Forge 3D builder now live
+        </div>
+        <div class="hero-badge">
+            <span class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(37,99,235,0.5)] animate-pulse"></span>
+            Live Platform 2026
+        </div>
+        <h1 class="hero-title">
+            ESL Teacher Ry's<br>
+            <span>Content Hub</span>
+        </h1>
+        <p class="hero-subtitle">
+            Digital tools & resources crafted for modern English learners at <strong class="text-slate-800 font-semibold">ESL Learning Hub</strong>
+        </p>
+        <div class="hero-btn-row">
+            <div class="hero-btns">
+                <button class="glow-btn text-base px-8 py-3.5" onclick="requireTeacher(function(){openToeflModal();})">
+                    <span class="btn-badge"><i class="fas fa-play"></i></span> Start TOEFL Test
+                </button>
+                <button class="glow-btn-outline text-base px-8 py-3.5" onclick="requireTeacher(function(){openBook1Modal();})">
+                    <span class="btn-badge" style="background:rgba(15,23,42,0.08);color:var(--slate-700);"><i class="fas fa-book"></i></span> World Class 2-1
+                </button>
+                <button class="glow-btn-outline text-base px-8 py-3.5" onclick="requireTeacher(function(){openBook2bModal();})">
+                    <span class="btn-badge" style="background:rgba(15,23,42,0.08);color:var(--slate-700);"><i class="fas fa-book-open"></i></span> World Class 2-2
+                </button>
+            </div>
+        </div>
+        <div class="feature-strip">
+            <div class="feature-pill"><i class="fas fa-stopwatch"></i> Timed Tests</div>
+            <div class="feature-pill"><i class="fas fa-laptop-code"></i> Homework Portal</div>
+            <div class="feature-pill"><i class="fas fa-robot"></i> AI Grader</div>
+            <div class="feature-pill"><i class="fas fa-cubes"></i> 3D Builder</div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="hv-orb"></div>
+        <div class="hv-ring"></div>
+        <div class="hv-float float-1"><i class="fas fa-graduation-cap"></i> TOEFL</div>
+        <div class="hv-float float-2"><i class="fas fa-rocket"></i> Colony</div>
+        <div class="hv-float float-3"><i class="fas fa-cube"></i> BrickForge</div>
+    </div>
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- Parallax Flash Strips - Educational -->
+<div class="flash-strips-section" id="flashStrips">
+    <div class="flash-strip-header">
+        <p>Learning Resources</p>
+        <h2>Explore Every Subject</h2>
+    </div>
+    <div class="flash-row top-row" id="flashRowTop">
+        <div class="flash-card fc-1"><div class="fc-icon"><i class="fas fa-graduation-cap"></i></div><div><div class="fc-meta">Mock Test</div><div class="fc-label">TOEFL iBT</div></div></div>
+        <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-book"></i></div><div><div class="fc-meta">Textbook</div><div class="fc-label">World Class 2-1</div></div></div>
+        <div class="flash-card fc-3"><div class="fc-icon"><i class="fas fa-book-open"></i></div><div><div class="fc-meta">Textbook</div><div class="fc-label">World Class 2-2</div></div></div>
+        <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-brain"></i></div><div><div class="fc-meta">AI Tool</div><div class="fc-label">EduGrade Pro</div></div></div>
+        <div class="flash-card fc-5"><div class="fc-icon"><i class="fas fa-pencil-alt"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Practice</div></div></div>
+        <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-cube"></i></div><div><div class="fc-meta">3D Builder</div><div class="fc-label">Brick Forge</div></div></div>
+        <div class="flash-card fc-1"><div class="fc-icon"><i class="fas fa-graduation-cap"></i></div><div><div class="fc-meta">Mock Test</div><div class="fc-label">TOEFL iBT</div></div></div>
+        <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-book"></i></div><div><div class="fc-meta">Textbook</div><div class="fc-label">World Class 2-1</div></div></div>
+    </div>
+    <div class="flash-row bottom-row" id="flashRowBottom" style="transform: translateX(-120px);">
+        <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-rocket"></i></div><div><div class="fc-meta">Strategy</div><div class="fc-label">Last Colony</div></div></div>
+        <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-puzzle-piece"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Scramble</div></div></div>
+        <div class="flash-card fc-2"><div class="fc-icon"><i class="fas fa-bolt"></i></div><div><div class="fc-meta">Speed</div><div class="fc-label">Typing Race</div></div></div>
+        <div class="flash-card fc-3"><div class="fc-icon"><i class="fas fa-brain"></i></div><div><div class="fc-meta">Memory</div><div class="fc-label">Memory Match</div></div></div>
+        <div class="flash-card fc-1"><div class="fc-icon"><i class="fas fa-laptop-code"></i></div><div><div class="fc-meta">Portal</div><div class="fc-label">Homework</div></div></div>
+        <div class="flash-card fc-5"><div class="fc-icon"><i class="fas fa-headphones"></i></div><div><div class="fc-meta">Listening</div><div class="fc-label">Audio Drills</div></div></div>
+        <div class="flash-card fc-4"><div class="fc-icon"><i class="fas fa-rocket"></i></div><div><div class="fc-meta">Strategy</div><div class="fc-label">Last Colony</div></div></div>
+        <div class="flash-card fc-6"><div class="fc-icon"><i class="fas fa-puzzle-piece"></i></div><div><div class="fc-meta">Vocabulary</div><div class="fc-label">Word Scramble</div></div></div>
+    </div>
+</div>
+
+<!-- Cards -->
+<div class="cards-grid">
+    <!-- TOEFL -->
+    <div class="tool-card" data-glow="blue" onclick="requireTeacher(function(){openToeflModal();})" style="animation-delay:0.05s;">
+        <div class="shine"></div>
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white"><i class="fas fa-graduation-cap"></i></div>
+        <div class="tool-badge">Mock Test</div>
+        <h3>TOEFL iBT</h3>
+        <p>Full practice test — Reading, Listening, Speaking & Writing with timed security monitoring.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-list-check text-blue-500"></i> 4 Sections</span>
+            <span class="meta-dots" style="color:#2563eb;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i><i class="meta-dot"></i></span>
+        </div>
+        <button class="card-btn"><i class="fas fa-play"></i> Start Test</button>
+    </div>
+    
+    <!-- World Class 2-1 -->
+    <div class="tool-card" data-glow="sky" onclick="requireTeacher(function(){openBook1Modal();})" style="animation-delay:0.15s;">
+        <div class="shine"></div>
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-cyan-600 to-blue-700 text-white"><i class="fas fa-book"></i></div>
+        <div class="tool-badge">Teacher's Edition</div>
+        <h3>World Class 2-1</h3>
+        <p>Complete Book 2-1 with units, vocab, grammar, reading & homework materials.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-book text-cyan-600"></i> Full Book</span>
+            <span class="meta-dots" style="color:#0891b2;" title="Units"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i></span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);box-shadow:0 4px 0 #075985,0 8px 24px rgba(2,132,199,.25);"><i class="fas fa-book"></i> World Class 2-1</button>
+    </div>
+
+    <!-- World Class 2-2 -->
+    <div class="tool-card" data-glow="sky" onclick="requireTeacher(function(){openBook2bModal();})" style="animation-delay:0.25s;">
+        <div class="shine"></div>
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-cyan-600 to-blue-700 text-white"><i class="fas fa-book-open"></i></div>
+        <div class="tool-badge">Teacher's Edition</div>
+        <h3>World Class 2-2</h3>
+        <p>Units 7–12 with vocab, grammar, reading & interactive homework portal for Level 11.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-book text-cyan-600"></i> Units 7–12</span>
+            <span class="meta-dots" style="color:#0891b2;" title="Units"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i></span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);box-shadow:0 4px 0 #075985,0 8px 24px rgba(2,132,199,.25);"><i class="fas fa-book-open"></i> World Class 2-2</button>
+    </div>
+    
+    <!-- EduGrade -->
+    <div class="tool-card" data-glow="emerald" onclick="showToast('EduGrade Pro coming soon!')" style="animation-delay:0.35s;">
+        <div class="shine"></div>
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-blue-400 to-cyan-500 text-white"><i class="fas fa-brain"></i></div>
+        <div class="tool-badge">AI-Powered</div>
+        <h3>EduGrade Pro</h3>
+        <p>AI writing grader for essays, sentences & summaries. Upload handwritten work for instant rubric feedback.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-camera text-blue-400"></i> Photo Upload</span>
+            <span class="meta-dots" style="color:#3b82f6;" title="Accuracy"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i></span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 4px 0 #1e3a8a,0 8px 24px rgba(37,99,235,.2);"><i class="fas fa-arrow-right"></i> Open Grader</button>
+    </div>
+    
+    <!-- Word Practice -->
+    <div class="tool-card" data-glow="purple" onclick="showToast('Word Practice coming soon!')" style="animation-delay:0.45s;">
+        <div class="shine"></div>
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="tool-icon bg-gradient-to-br from-cyan-400 to-blue-500 text-white"><i class="fas fa-pencil-alt"></i></div>
+        <div class="tool-badge">Vocabulary</div>
+        <h3>Word Practice</h3>
+        <p>Interactive vocabulary exercises and sentence writing for World Class 2 — Level 11.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-book text-cyan-500"></i> World Class 2</span>
+            <span class="meta-dots" style="color:#06b6d4;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#06b6d4,#0891b2);box-shadow:0 4px 0 #0e7490,0 8px 24px rgba(6,182,212,.2);"><i class="fas fa-arrow-right"></i> Open Practice</button>
+    </div>
+</div>
+
+<!-- Games Section -->
+<div class="games-section">
+    <div class="section-heading">
+        <div class="section-tag"><i class="fas fa-gamepad"></i> Arcade</div>
+        <h2 class="section-title">Browser Games</h2>
+        <p class="section-subtitle">Quick brain breaks — no install needed</p>
+    </div>
+    <div class="games-grid">
+        <div class="game-card" onclick="requireLoggedIn(function(){openColonyModal();})" style="animation-delay:0.05s;">
+            <div class="shine"></div>
+            <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="game-thumb bg-gradient-to-br from-slate-600 to-slate-800"><i class="fas fa-rocket"></i></div>
+            <div class="game-badge">Strategy</div>
+            <h4>Last Colony</h4>
+            <p>Earth is running out of time. Your mission: build a habitable colony on Mars and secure humanity's future.</p>
+            <div class="meta-row" style="margin-block-end:14px;">
+                <span><i class="fas fa-globe text-slate-500"></i> Mars 2041</span>
+                <span class="meta-dots" style="color:#64748b;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
+            </div>
+            <button class="game-btn" onclick="event.stopPropagation(); requireLoggedIn(function(){openColonyModal();});"><i class="fas fa-play"></i> Play Now</button>
+        </div>
+        <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.15s;">
+            <div class="shine"></div>
+            <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="game-thumb bg-gradient-to-br from-blue-500 to-blue-700"><i class="fas fa-puzzle-piece"></i></div>
+            <div class="game-badge">Vocabulary</div>
+            <h4>Word Scramble</h4>
+            <p>Unscramble World Class 2 vocabulary words against the clock. Fast thinking builds lasting memory.</p>
+            <div class="meta-row" style="margin-block-end:14px;">
+                <span><i class="fas fa-clock text-blue-400"></i> Timed</span>
+                <span class="meta-dots" style="color:#3b82f6;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i><i class="meta-dot"></i></span>
+            </div>
+            <button class="game-btn" style="background:linear-gradient(135deg,#475569,#334155);box-shadow:0 4px 0 #1e293b,0 6px 18px rgba(71,85,105,.15);" onclick="event.stopPropagation(); showToast('More games coming soon!');"><i class="fas fa-lock"></i> Coming Soon</button>
+        </div>
+        <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.25s;">
+            <div class="shine"></div>
+            <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="game-thumb bg-gradient-to-br from-cyan-500 to-cyan-700"><i class="fas fa-bolt"></i></div>
+            <div class="game-badge">Speed</div>
+            <h4>Typing Race</h4>
+            <p>Race against time by typing TOEFL-style sentences as fast and accurately as you can.</p>
+            <div class="meta-row" style="margin-block-end:14px;">
+                <span><i class="fas fa-keyboard text-cyan-400"></i> WPM Challenge</span>
+                <span class="meta-dots" style="color:#06b6d4;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i></span>
+            </div>
+            <button class="game-btn" style="background:linear-gradient(135deg,#475569,#334155);box-shadow:0 4px 0 #1e293b,0 6px 18px rgba(71,85,105,.15);" onclick="event.stopPropagation(); showToast('More games coming soon!');"><i class="fas fa-lock"></i> Coming Soon</button>
+        </div>
+        <div class="game-card" onclick="showToast('More games coming soon!')" style="animation-delay:0.35s;">
+            <div class="shine"></div>
+            <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="game-thumb bg-gradient-to-br from-blue-400 to-cyan-500"><i class="fas fa-brain"></i></div>
+            <div class="game-badge">Memory</div>
+            <h4>Memory Match</h4>
+            <p>Flip cards to match English words with their meanings. A classic brain trainer for vocabulary retention.</p>
+            <div class="meta-row" style="margin-block-end:14px;">
+                <span><i class="fas fa-layer-group text-blue-400"></i> Pairs</span>
+                <span class="meta-dots" style="color:#3b82f6;" title="Difficulty"><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot active"></i><i class="meta-dot"></i><i class="meta-dot"></i></span>
+            </div>
+            <button class="game-btn" style="background:linear-gradient(135deg,#475569,#334155);box-shadow:0 4px 0 #1e293b,0 6px 18px rgba(71,85,105,.15);" onclick="event.stopPropagation(); showToast('More games coming soon!');"><i class="fas fa-lock"></i> Coming Soon</button>
+        </div>
+    </div>
+</div>
+
+<!-- Stat Strip -->
+<div class="stat-strip">
+    <div class="stat-card">
+        <div class="stat-number">200+</div>
+        <div class="stat-label">Students using these tools this semester</div>
+    </div>
+</div>
+
+<!-- Live Ticker -->
+<div class="live-ticker">
+    <div class="ticker-track" id="tickerTrack">
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Dara</strong> opened World Class 2-1</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Chanda</strong> scored 92% on Listening</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Bopha</strong> launched Brick Forge</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Visal</strong> completed Unit 8 quiz</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sreyneang</strong> started Word Scramble</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Kosal</strong> opened World Class 2-2</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Dara</strong> opened World Class 2-1</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Chanda</strong> scored 92% on Listening</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Bopha</strong> launched Brick Forge</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Visal</strong> completed Unit 8 quiz</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Sreyneang</strong> started Word Scramble</span>
+        <span class="ticker-item"><i class="fas fa-circle"></i> <strong>Kosal</strong> opened World Class 2-2</span>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div>
+                <div class="text-slate-800 font-semibold text-sm">Teacher Ry · ESL Learning Hub</div>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-5">
+            <a href="mailto:mam.ry@aii.edu.kh" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+            <a href="tel:+85512617940" class="social-link" title="Phone"><i class="fas fa-phone"></i></a>
+            <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://telegram.org" target="_blank" class="social-link" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+            <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-200 text-center text-slate-500 text-xs relative z-10">
+        &copy; 2026 Ryshub. Built for modern English learners.
+    </div>
+</footer>
+
+<!-- Modals (preserved) -->
+<!-- TOEFL FULLSCREEN MODAL -->
+<div id="toefl-modal" class="fs-modal">
+    <div class="fs-modal-bar">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-graduation-cap" style="color:white;"></i></div>
+            <div>
+                <div style="font-weight:800;color:var(--slate-800);font-size:.95rem;">TOEFL iBT Complete Test</div>
+                <div style="font-size:.7rem;color:var(--slate-500);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Teacher Ry · ESL Learning Hub</div>
+            </div>
+        </div>
+        <button onclick="closeToeflModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="toefl-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- BOOK 1 FULLSCREEN MODAL -->
+<div id="book1-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #f1f5f9, #ffffff); border-block-end: 1px solid #e2e8f0;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-book" style="color:white;"></i></div>
+            <div>
+                <div style="font-weight:800;color:var(--slate-800);font-size:.95rem;">World Class 2-1 — Teacher's Edition</div>
+                <div style="font-size:.7rem;color:#64748b;letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Complete Book 2-1</div>
+            </div>
+        </div>
+        <button onclick="closeBook1Modal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="book1-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- BOOK 2-2 FULLSCREEN MODAL -->
+<div id="book2b-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #f1f5f9, #ffffff); border-block-end: 1px solid #e2e8f0;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;"><i class="fas fa-book-open" style="color:white;"></i></div>
+            <div>
+                <div style="font-weight:800;color:var(--slate-800);font-size:.95rem;">World Class 2-2 — Teacher's Edition</div>
+                <div style="font-size:.7rem;color:#0284c7;letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Units 7–12 · Level 11</div>
+            </div>
+        </div>
+        <button onclick="closeBook2bModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="book2b-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+                <div class="glass-frame p-6 mb-6 border-l-4 border-l-blue-500">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-university text-blue-400 text-xl"></i>
+                        <h3 class="text-lg font-semibold text-white">University Orientation Event</h3>
+                    </div>
+                    <p class="text-slate-400 text-sm">You are training to assist visitors at a university orientation event. Listen to the speaker and repeat what she says. Repeat only what she says.</p>
+                </div>
+                
+                <!-- Question 1 -->
+                <div class="glass-frame p-6 mb-6" id="speak-q1">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-blue"><i class="fas fa-redo mr-1"></i>Question 1</span>
+                        <span class="status-pill pending" id="status-q1"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the prompt and repeat exactly what you hear. (10 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"Welcome to our university."</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(1)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Prompt
+                        </button>
+                        <button onclick="toggleRecording(1)" id="record-btn-1" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-1" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-1">Click the microphone to start recording</p>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="glass-frame p-6 mb-6" id="speak-q2">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-blue"><i class="fas fa-redo mr-1"></i>Question 2</span>
+                        <span class="status-pill pending" id="status-q2"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the prompt and repeat exactly what you hear. (10 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"Get your name badge at the registration desk."</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(2)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Prompt
+                        </button>
+                        <button onclick="toggleRecording(2)" id="record-btn-2" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-2" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-2">Click the microphone to start recording</p>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="glass-frame p-6 mb-6" id="speak-q3">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-blue"><i class="fas fa-redo mr-1"></i>Question 3</span>
+                        <span class="status-pill pending" id="status-q3"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the prompt and repeat exactly what you hear. (10 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"Our event is in the student center."</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(3)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Prompt
+                        </button>
+                        <button onclick="toggleRecording(3)" id="record-btn-3" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-3" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-3">Click the microphone to start recording</p>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="glass-frame p-6 mb-6" id="speak-q4">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-blue"><i class="fas fa-redo mr-1"></i>Question 4</span>
+                        <span class="status-pill pending" id="status-q4"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the prompt and repeat exactly what you hear. (10 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"For small group sessions, we will be in the breakout rooms over there."</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(4)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Prompt
+                        </button>
+                        <button onclick="toggleRecording(4)" id="record-btn-4" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-4" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-4">Click the microphone to start recording</p>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="glass-frame p-6 mb-6" id="speak-q5">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-blue"><i class="fas fa-redo mr-1"></i>Question 5</span>
+                        <span class="status-pill pending" id="status-q5"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the prompt and repeat exactly what you hear. (10 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"Snacks can be found in the vending area throughout the day."</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(5)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Prompt
+                        </button>
+                        <button onclick="toggleRecording(5)" id="record-btn-5" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-5" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-5">Click the microphone to start recording</p>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="glass-frame p-6 mb-6" id="speak-q6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-blue"><i class="fas fa-redo mr-1"></i>Question 6</span>
+                        <span class="status-pill pending" id="status-q6"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the prompt and repeat exactly what you hear. (10 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"Please see the information desk if you need an escort."</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(6)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Prompt
+                        </button>
+                        <button onclick="toggleRecording(6)" id="record-btn-6" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-6" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-6">Click the microphone to start recording</p>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="glass-frame p-6 mb-6" id="speak-q7">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-blue"><i class="fas fa-redo mr-1"></i>Question 7</span>
+                        <span class="status-pill pending" id="status-q7"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the prompt and repeat exactly what you hear. (10 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"If you want to check session times and locations, please use the schedule app."</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(7)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Prompt
+                        </button>
+                        <button onclick="toggleRecording(7)" id="record-btn-7" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-7" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-7">Click the microphone to start recording</p>
+                </div>
+
+                <!-- Part 2: Interview (Questions 8-11) -->
+                <div class="glass-frame p-6 mb-6 border-l-4 border-l-purple-500">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center text-xl" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-white mb-2">Part 2: Interview</h3>
+                            <p class="text-slate-400 text-sm">You have volunteered for a research study about work-life balance. You will have a short online interview with a researcher. The researcher will ask you some questions. Answer the questions and be sure to say as much as you can in the time provided. No time for preparation will be provided.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 8 (Interview) -->
+                <div class="glass-frame p-6 mb-6" id="speak-q8">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-purple"><i class="fas fa-comments mr-1"></i>Question 8</span>
+                        <span class="status-pill pending" id="status-q8"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the interviewer's question and record your response. (45 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"First, can you share one or two strategies that you use that you think are effective in managing your work-life balance?"</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(8)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Question
+                        </button>
+                        <button onclick="toggleRecording(8)" id="record-btn-8" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-8" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-8">Click the microphone to start recording (45 seconds)</p>
+                </div>
+
+                <!-- Question 9 (Interview) -->
+                <div class="glass-frame p-6 mb-6" id="speak-q9">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-purple"><i class="fas fa-comments mr-1"></i>Question 9</span>
+                        <span class="status-pill pending" id="status-q9"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the interviewer's question and record your response. (45 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"I see. Many companies are now developing programs to help employees manage work-life balance. Would programs like this affect your interest in working for a particular company? Why or why not?"</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(9)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Question
+                        </button>
+                        <button onclick="toggleRecording(9)" id="record-btn-9" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-9" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-9">Click the microphone to start recording (45 seconds)</p>
+                </div>
+
+                <!-- Question 10 (Interview) -->
+                <div class="glass-frame p-6 mb-6" id="speak-q10">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-purple"><i class="fas fa-comments mr-1"></i>Question 10</span>
+                        <span class="status-pill pending" id="status-q10"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the interviewer's question and record your response. (45 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"Interesting. Some companies also offer flexible working hours or remote work options to help employees achieve a better work-life balance, but they are concerned that these options would reduce employee attention to tasks or engagement in the workplace. Do you think such programs are a good strategy for companies? Why or why not?"</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(10)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Question
+                        </button>
+                        <button onclick="toggleRecording(10)" id="record-btn-10" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-10" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-10">Click the microphone to start recording (45 seconds)</p>
+                </div>
+
+                <!-- Question 11 (Interview) -->
+                <div class="glass-frame p-6 mb-6" id="speak-q11">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="badge badge-purple"><i class="fas fa-comments mr-1"></i>Question 11</span>
+                        <span class="status-pill pending" id="status-q11"><i class="fas fa-clock"></i>Pending</span>
+                    </div>
+                    <p class="text-slate-300 mb-4">Listen to the interviewer's question and record your response. (45 seconds)</p>
+                    
+                    <div class="glass-frame p-4 mb-4" style="background: rgba(30, 41, 59, 0.5);">
+                        <p class="text-slate-300 text-sm italic">"Good points. Lastly, looking to the future, do you think people's attitudes towards work-life balance will change? For example, do you think people will prioritize personal life over work, or work over personal life? Explain your reasoning."</p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="playSpeakingPrompt(11)" class="btn-3d btn-3d-secondary">
+                            <i class="fas fa-play mr-2"></i>Play Question
+                        </button>
+                        <button onclick="toggleRecording(11)" id="record-btn-11" class="btn-record">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="waveform" id="waveform-11" style="opacity: 0.3;">
+                        <div class="waveform-bar" style="block-size: 30%;"></div>
+                        <div class="waveform-bar" style="block-size: 50%;"></div>
+                        <div class="waveform-bar" style="block-size: 70%;"></div>
+                        <div class="waveform-bar" style="block-size: 90%;"></div>
+                        <div class="waveform-bar" style="block-size: 100%;"></div>
+                        <div class="waveform-bar" style="block-size: 80%;"></div>
+                        <div class="waveform-bar" style="block-size: 60%;"></div>
+                        <div class="waveform-bar" style="block-size: 40%;"></div>
+                    </div>
+                    <p class="text-center text-slate-500 text-sm mt-2" id="recording-status-11">Click the microphone to start recording (45 seconds)</p>
+                </div>
+                
+                
+                <!-- Speaking Audio Elements -->
+                <audio id="speak-audio-1" src="Speaking/Speaking_Listen_Repeat_Question1.mp3" onended="speakingAudioEnded(1)"></audio>
+                <audio id="speak-audio-2" src="Speaking/Speaking_Listen_Repeat_Question2.mp3" onended="speakingAudioEnded(2)"></audio>
+                <audio id="speak-audio-3" src="Speaking/Speaking_Listen_Repeat_Question3.mp3" onended="speakingAudioEnded(3)"></audio>
+                <audio id="speak-audio-4" src="Speaking/Speaking_Listen_Repeat_Question4.mp3" onended="speakingAudioEnded(4)"></audio>
+                <audio id="speak-audio-5" src="Speaking/Speaking_Listen_Repeat_Question5.mp3" onended="speakingAudioEnded(5)"></audio>
+                <audio id="speak-audio-6" src="Speaking/Speaking_Listen_Repeat_Question6.mp3" onended="speakingAudioEnded(6)"></audio>
+                <audio id="speak-audio-7" src="Speaking/Speaking_Listen_Repeat_Question7.mp3" onended="speakingAudioEnded(7)"></audio>
+                <audio id="speak-audio-8" src="Speaking/Speaking_Interview_Question1.mp3" onended="speakingAudioEnded(8)"></audio>
+                <audio id="speak-audio-9" src="Speaking/Speaking_Interview_Question2.mp3" onended="speakingAudioEnded(9)"></audio>
+                <audio id="speak-audio-10" src="Speaking/Speaking_Interview_Question3.mp3" onended="speakingAudioEnded(10)"></audio>
+                <audio id="speak-audio-11" src="Speaking/Speaking_Interview_Question4.mp3" onended="speakingAudioEnded(11)"></audio>
+                <div class="mt-8 text-center">
+                    <button onclick="submitSpeaking()" class="btn-3d">
+                        <i class="fas fa-paper-plane mr-2"></i>Submit Speaking Section
+                    </button>
+                </div>
+            </div>
+        </div>
+        </body>
+    </div>
+
+
+    <!-- ==================== WRITING SECTION ==================== -->
+    <div id="writing-section" class="section-view light-theme-bg" style="min-block-size: 100vh;">
+        <body class="section-writing" style="background: none; min-block-size: auto;">
+        <button class="back-btn" onclick="backToDashboard()">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </button>
+        
+        <!-- Ready Screen -->
+        <div id="writing-ready" class="ready-screen" style="padding: 40px 20px;">
+            <div class="ready-icon" style="background: linear-gradient(135deg, #c084fc, #a855f7); box-shadow: 0 0 40px rgba(168, 85, 247, 0.5);">
+                <i class="fas fa-pen-fancy text-white"></i>
+            </div>
+            <h1 class="text-4xl font-bold text-white mb-4">Writing Section</h1>
+            <p class="text-xl text-slate-300 mb-2">Ready to begin?</p>
+            <p class="text-slate-400 mb-8 max-w-md">You will complete three writing modules: Sentence Building, Email Writing, and Academic Discussion.</p>
+            
+            <div class="glass-frame p-6 mb-8 max-w-md w-full">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-slate-400">Student:</span>
+                    <span id="writing-student-name" class="font-bold text-white">-</span>
+                </div>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-slate-400">Modules:</span>
+                    <span class="font-bold text-white">3</span>
+                </div>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-slate-400">Questions:</span>
+                    <span class="font-bold text-white">12 (10 Sentence + 1 Email + 1 Discussion)</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-400">Time:</span>
+                    <span class="font-bold text-white">~29 minutes</span>
+                </div>
+            </div>
+            
+            <button onclick="startWriting()" class="btn-3d" style="padding: 20px 48px; font-size: 1.2rem;">
+                <i class="fas fa-play mr-3"></i>Start Writing Section
+            </button>
+        </div>
+        
+        <!-- Writing Test Content -->
+        <div id="writing-test" style="display: none; padding: 100px 20px 40px;">
+            <div class="max-w-5xl mx-auto">
+                <!-- Header -->
+                <header class="toefl-header" style="display: block !important; position: fixed; inset-block-start: 0; inset-inline-start: 0; inset-inline-end: 0; z-index: 50;">
+                    <div class="toefl-header-content">
+                        <div class="toefl-brand">
+                            <div class="toefl-logo">
+                                <i class="fas fa-pen-fancy toefl-logo-icon"></i>
+                                <div class="toefl-logo-text">
+                                    <h1>TOEFL iBT</h1>
+                                    <p>Writing Section</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toefl-header-actions">
+                            <div class="timer-display timer-waiting" id="writing-timer">00:00</div>
+                            <button onclick="submitWriting()" class="btn-3d">
+                                <i class="fas fa-paper-plane mr-2"></i>Submit
+                            </button>
+                        </div>
+                    </div>
+                </header>
+                
+                <!-- Module Tabs -->
+                <div class="glass-frame p-4 mb-6">
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button onclick="switchWritingModule(1)" id="writing-mod1-btn" class="module-btn active">
+                            <i class="fas fa-puzzle-piece mr-2"></i>Module 1: Sentence Building
+                        </button>
+                        <button onclick="switchWritingModule(2)" id="writing-mod2-btn" class="module-btn">
+                            <i class="fas fa-envelope mr-2"></i>Module 2: Write an Email
+                        </button>
+                        <button onclick="switchWritingModule(3)" id="writing-mod3-btn" class="module-btn">
+                            <i class="fas fa-comments mr-2"></i>Module 3: Academic Discussion
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Module 1: Sentence Building -->
+                <div id="writing-module-1" class="writing-module-content">
+                    <div class="glass-frame p-6 mb-6">
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fas fa-puzzle-piece" style="color: var(--section-primary);"></i>
+                            Module 1: Sentence Building
+                        </h2>
+                        <p class="text-slate-400 mt-2">Drag and drop the words to form correct sentences. Click "Check" to verify your answer.</p>
+                    </div>
+                    
+                    <!-- Question 1 -->
+                    <div class="question-frame" id="w1q1">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 1</span>
+                            <button onclick="checkSentence('w1q1')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"What did Andre ask you at the party?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q1">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q1')" data-word="wanted">wanted</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q1')" data-word="does">does</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q1')" data-word="he">he</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q1')" data-word="ended">ended</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q1')" data-word="when">when</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q1')" data-word="to know">to know</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q1')" data-word="it">it</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q1" ondrop="drop(event, 'w1q1')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q1"></div>
+                    </div>
+                    
+                    <!-- Question 2 -->
+                    <div class="question-frame" id="w1q2">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 2</span>
+                            <button onclick="checkSentence('w1q2')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"Why was the meeting rescheduled?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q2">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q2')" data-word="was moved">was moved</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q2')" data-word="to">to</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q2')" data-word="it">it</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q2')" data-word="a time">a time</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q2')" data-word="when">when</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q2')" data-word="everyone">everyone</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q2')" data-word="could attend">could attend</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q2" ondrop="drop(event, 'w1q2')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q2"></div>
+                    </div>
+                    
+                    <!-- Question 3 -->
+                    <div class="question-frame" id="w1q3">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 3</span>
+                            <button onclick="checkSentence('w1q3')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"How did Sarah feel about the test results?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q3">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q3')" data-word="she">she</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q3')" data-word="was">was</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q3')" data-word="disappointed">disappointed</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q3')" data-word="because">because</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q3')" data-word="had">had</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q3')" data-word="studied">studied</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q3')" data-word="but">but</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q3')" data-word="didn't">didn't</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q3')" data-word="pass">pass</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q3" ondrop="drop(event, 'w1q3')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q3"></div>
+                    </div>
+                    
+                    <!-- Question 4 -->
+                    <div class="question-frame" id="w1q4">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 4</span>
+                            <button onclick="checkSentence('w1q4')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"What time does the train leave?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q4">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q4')" data-word="departs">departs</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q4')" data-word="at">at</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q4')" data-word="3pm">3pm</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q4')" data-word="the">the</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q4')" data-word="from">from</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q4')" data-word="station">station</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q4" ondrop="drop(event, 'w1q4')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q4"></div>
+                    </div>
+                    
+                    <!-- Question 5 -->
+                    <div class="question-frame" id="w1q5">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 5</span>
+                            <button onclick="checkSentence('w1q5')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"Where did Tom put my keys?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q5">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q5')" data-word="he">he</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q5')" data-word="left">left</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q5')" data-word="them">them</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q5')" data-word="on">on</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q5')" data-word="kitchen">kitchen</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q5')" data-word="counter">counter</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q5')" data-word="the">the</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q5" ondrop="drop(event, 'w1q5')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q5"></div>
+                    </div>
+                    
+                    <!-- Question 6 -->
+                    <div class="question-frame" id="w1q6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 6</span>
+                            <button onclick="checkSentence('w1q6')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"Who is coming to the dinner party?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q6">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q6')" data-word="invited">invited</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q6')" data-word="we">we</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q6')" data-word="our">our</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q6')" data-word="neighbors">neighbors</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q6')" data-word="and">and</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q6')" data-word="some">some</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q6')" data-word="friends">friends</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q6')" data-word="from">from</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q6')" data-word="work">work</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q6" ondrop="drop(event, 'w1q6')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q6"></div>
+                    </div>
+                    
+                    <!-- Question 7 -->
+                    <div class="question-frame" id="w1q7">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 7</span>
+                            <button onclick="checkSentence('w1q7')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"What should I bring to the meeting?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q7">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q7')" data-word="you">you</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q7')" data-word="should">should</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q7')" data-word="bring">bring</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q7')" data-word="your">your</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q7')" data-word="laptop">laptop</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q7')" data-word="notes">notes</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q7')" data-word="and">and</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q7')" data-word="a">a</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q7')" data-word="pen">pen</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q7" ondrop="drop(event, 'w1q7')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q7"></div>
+                    </div>
+                    
+                    <!-- Question 8 -->
+                    <div class="question-frame" id="w1q8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 8</span>
+                            <button onclick="checkSentence('w1q8')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"Why is the office closed today?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q8">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="it">it</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="is">is</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="holiday">holiday</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="national">national</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="a">a</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="so">so</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="everyone">everyone</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="has">has</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="day">day</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q8')" data-word="off">off</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q8" ondrop="drop(event, 'w1q8')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q8"></div>
+                    </div>
+                    
+                    <!-- Question 9 -->
+                    <div class="question-frame" id="w1q9">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 9</span>
+                            <button onclick="checkSentence('w1q9')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"How much does this cost?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q9">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q9')" data-word="the">the</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q9')" data-word="price">price</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q9')" data-word="is">is</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q9')" data-word="fifty">fifty</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q9')" data-word="dollars">dollars</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q9')" data-word="before">before</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q9')" data-word="tax">tax</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q9" ondrop="drop(event, 'w1q9')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q9"></div>
+                    </div>
+                    
+                    <!-- Question 10 -->
+                    <div class="question-frame" id="w1q10">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge badge-blue"><i class="fas fa-pen mr-1"></i>Question 10</span>
+                            <button onclick="checkSentence('w1q10')" class="btn-3d" style="padding: 8px 16px; font-size: 0.875rem;">
+                                <i class="fas fa-check mr-1"></i>Check
+                            </button>
+                        </div>
+                        <p class="text-white font-medium mb-4">"When will the report be finished?"</p>
+                        <div class="flex flex-wrap gap-2 mb-4" id="words-w1q10">
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q10')" data-word="will">will</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q10')" data-word="be">be</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q10')" data-word="completed">completed</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q10')" data-word="by">by</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q10')" data-word="end">end</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q10')" data-word="of">of</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q10')" data-word="the">the</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q10')" data-word="day">day</span>
+                            <span class="word-box" draggable="true" ondragstart="drag(event, 'w1q10')" data-word="Friday">Friday</span>
+                        </div>
+                        <div class="sentence-builder" id="builder-w1q10" ondrop="drop(event, 'w1q10')" ondragover="allowDrop(event)">
+                            <span class="text-slate-500">Drop words here to build your sentence...</span>
+                        </div>
+                        <div class="feedback-area mt-3" id="feedback-w1q10"></div>
+                    </div>
+                </div>
+                
+                <!-- Module 2: Write an Email -->
+                <div id="writing-module-2" class="writing-module-content hidden">
+                    <div class="glass-frame p-6 mb-6">
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fas fa-envelope" style="color: var(--section-primary);"></i>
+                            Module 2: Write an Email
+                        </h2>
+                        <p class="text-slate-400 mt-2">Read the scenario and compose an appropriate email response.</p>
+                    </div>
+                    
+                    <div class="glass-frame p-6 mb-6 border-l-4 border-l-green-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="fas fa-clock text-green-400 text-xl"></i>
+                            <span class="text-lg font-semibold text-white">Time Remaining: <span id="email-timer" class="text-green-400 font-mono">07:00</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="question-frame">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="badge badge-green"><i class="fas fa-envelope mr-1"></i>Email Task</span>
+                            <span class="text-slate-500 text-sm">7 minutes</span>
+                        </div>
+                        
+                        <div class="glass-frame p-6 mb-6" style="background: rgba(30, 41, 59, 0.5);">
+                            <h4 class="font-bold text-white mb-4"><i class="fas fa-briefcase mr-2 text-blue-400"></i>Scenario: Business Trip Planning</h4>
+                            <p class="text-slate-300 leading-relaxed mb-4">You are planning a business trip to Chicago next month for a conference. Your colleague Maria has been to Chicago several times and knows the city well.</p>
+                            <p class="text-slate-300 leading-relaxed mb-4"><strong>Task:</strong> Write an email to Maria asking for recommendations. In your email, you should:</p>
+                            <ul class="text-slate-300 list-disc list-inside space-y-2 mb-4">
+                                <li>Explain the purpose of your trip</li>
+                                <li>Ask for restaurant recommendations</li>
+                                <li>Ask for suggestions about activities or places to visit</li>
+                                <li>Mention any preferences or requirements you have</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">To: Maria &lt;maria@company.com&gt;</label>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Subject: <input type="text" class="bg-slate-800 border border-slate-600 rounded px-3 py-1 text-white w-full max-w-md" placeholder="Enter subject line..." id="email-subject"></label>
+                        </div>
+                        
+                        <textarea class="w-full bg-slate-800 border border-slate-600 rounded-lg p-4 text-white" rows="12" placeholder="Dear Maria,&#10;&#10;I hope this email finds you well...&#10;&#10;Best regards,&#10;[Your name]" id="email-body" oninput="updateWordCount('email-body', 'email-word-count')"></textarea>
+                        
+                        <div class="flex justify-between items-center mt-4">
+                            <div class="flex items-center gap-4">
+                                <span class="text-slate-400 text-sm">Word count: <span id="email-word-count" class="text-white font-bold">0</span></span>
+                                <span class="text-slate-500 text-sm">|</span>
+                                <span class="text-slate-400 text-sm">Suggested: 80-120 words</span>
+                            </div>
+                            <button onclick="saveEmail()" class="btn-3d btn-3d-secondary" style="padding: 10px 20px;">
+                                <i class="fas fa-save mr-2"></i>Save Response
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Module 3: Academic Discussion -->
+                <div id="writing-module-3" class="writing-module-content hidden">
+                    <div class="glass-frame p-6 mb-6">
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fas fa-comments" style="color: var(--section-primary);"></i>
+                            Module 3: Academic Discussion
+                        </h2>
+                        <p class="text-slate-400 mt-2">Read the discussion topic and student responses, then contribute your own response.</p>
+                    </div>
+                    
+                    <div class="glass-frame p-6 mb-6 border-l-4 border-l-purple-500">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="fas fa-clock text-purple-400 text-xl"></i>
+                            <span class="text-lg font-semibold text-white">Time Remaining: <span id="discussion-timer" class="text-purple-400 font-mono">10:00</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="question-frame">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="badge badge-purple"><i class="fas fa-university mr-1"></i>Academic Discussion</span>
+                            <span class="text-slate-500 text-sm">10 minutes</span>
+                        </div>
+                        
+                        <div class="glass-frame p-6 mb-6" style="background: rgba(30, 41, 59, 0.5);">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-full flex items-center justify-center text-xl" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">
+                                    <i class="fas fa-chalkboard-teacher text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white mb-2">Professor's Question</h4>
+                                    <p class="text-slate-300 leading-relaxed">This week, we are discussing the rise of digital nomadism - the practice of working remotely while traveling. Some argue that this lifestyle represents the future of work, offering freedom and flexibility. Others are concerned about its impact on productivity, work-life balance, and local communities.</p>
+                                    <p class="text-slate-300 leading-relaxed mt-3"><strong>Do you think digital nomadism is a positive development? Why or why not?</strong></p>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-slate-700 pt-6">
+                                <h4 class="font-bold text-white mb-4"><i class="fas fa-user-graduate mr-2 text-blue-400"></i>Student Responses</h4>
+                                
+                                <div class="bg-slate-800/50 p-4 rounded-lg mb-4">
+                                    <p class="text-sm text-slate-400 mb-2"><strong>David:</strong></p>
+                                    <p class="text-slate-300 text-sm">I believe digital nomadism is great for personal growth. Traveling exposes you to new cultures and perspectives, which can actually make you more creative at work. However, I do think it requires strong self-discipline to stay productive without a traditional office environment.</p>
+                                </div>
+                                
+                                <div class="bg-slate-800/50 p-4 rounded-lg mb-4">
+                                    <p class="text-sm text-slate-400 mb-2"><strong>Sophia:</strong></p>
+                                    <p class="text-slate-300 text-sm">I'm more skeptical about digital nomadism. While it sounds appealing, I worry about the impact on local communities in popular destinations. Rising rents and gentrification can displace locals when areas become popular with remote workers. Also, constantly moving makes it hard to build deep relationships or feel part of a community.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Your Response:</label>
+                            <p class="text-slate-400 text-sm mb-3">Express your opinion on digital nomadism. You can agree or disagree with the students above, or present a different perspective. Support your position with reasons and examples.</p>
+                        </div>
+                        
+                        <textarea class="w-full bg-slate-800 border border-slate-600 rounded-lg p-4 text-white" rows="12" placeholder="In my opinion..." id="discussion-body" oninput="updateWordCount('discussion-body', 'discussion-word-count')"></textarea>
+                        
+                        <div class="flex justify-between items-center mt-4">
+                            <div class="flex items-center gap-4">
+                                <span class="text-slate-400 text-sm">Word count: <span id="discussion-word-count" class="text-white font-bold">0</span></span>
+                                <span class="text-slate-500 text-sm">|</span>
+                                <span class="text-slate-400 text-sm">Suggested: 100+ words</span>
+                            </div>
+                            <button onclick="saveDiscussion()" class="btn-3d btn-3d-secondary" style="padding: 10px 20px;">
+                                <i class="fas fa-save mr-2"></i>Save Response
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button onclick="submitWriting()" class="btn-3d" style="padding: 16px 32px;">
+                        <i class="fas fa-paper-plane mr-2"></i>Submit Writing Section
+                    </button>
+                </div>
+            </div>
+        </div>
+        </body>
+    </div>
+
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // ==================== GLOBAL STATE ====================
+        let studentName = '';
+        let studentId = '';
+        let completedSections = { reading: false, listening: false, speaking: false, writing: false };
+        let currentSection = '';
+        
+        // Timers
+        let readingTimer = null;
+        let listeningTimer = null;
+        let speakingTimer = null;
+        let writingTimer = null;
+        let readingSeconds = 0;
+        let listeningSeconds = 0;
+        let speakingSeconds = 0;
+        let writingSeconds = 0;
+        let readingStarted = false;
+        
+        // Reading answers (stored for student reference)
+        let readingAnswers = {};
+        
+        // Listening answers (stored for student reference)
+        let listeningAnswers = {};
+        
+        // Speaking recordings
+        let speakingRecordings = {};
+        let isRecording = false;
+        let mediaRecorder = null;
+        let currentRecordingQuestion = null;
+        let recordingTimeout = null;
+        
+        // ==================== LOGIN & NAVIGATION ====================
+        function handleLogin(e) {
+            e.preventDefault();
+            studentName = document.getElementById('student-name').value.trim();
+            studentId = document.getElementById('student-id').value.trim();
+            
+            if (studentName && studentId) {
+                showView('dashboard-screen');
+                document.getElementById('dashboard-name').textContent = studentName;
+                updateDashboard();
+            }
+        }
+        
+        function logout() {
+            studentName = '';
+            studentId = '';
+            completedSections = { reading: false, listening: false, speaking: false, writing: false };
+            document.getElementById('student-name').value = '';
+            document.getElementById('student-id').value = '';
+            showView('login-screen');
+        }
+        
+        function showView(viewId) {
+            document.querySelectorAll('.section-view').forEach(el => {
+                el.classList.remove('active');
+                el.style.display = 'none';
+            });
+            const view = document.getElementById(viewId);
+            if (view) {
+                view.classList.add('active');
+                view.style.display = viewId === 'login-screen' ? 'flex' : 'block';
+            }
+        }
+        
+        function enterSection(section) {
+            currentSection = section;
+            showView(section + '-section');
+            
+            // Update student name displays
+            const nameEl = document.getElementById(section + '-student-name');
+            if (nameEl) nameEl.textContent = studentName;
+        }
+        
+        function backToDashboard() {
+            // Stop all timers
+            stopAllTimers();
+            showView('dashboard-screen');
+            updateDashboard();
+        }
+        
+        function updateDashboard() {
+            const completed = Object.values(completedSections).filter(v => v).length;
+            const progress = (completed / 4) * 100;
+            
+            document.getElementById('overall-progress-text').textContent = completed + '/4';
+            document.getElementById('overall-progress-bar').style.width = progress + '%';
+            
+            // Update section cards
+            Object.keys(completedSections).forEach(section => {
+                const card = document.getElementById('card-' + section);
+                if (completedSections[section]) {
+                    card.classList.add('completed');
+                }
+            });
+        }
+        
+        function stopAllTimers() {
+            if (readingTimer) clearInterval(readingTimer);
+            if (listeningTimer) clearInterval(listeningTimer);
+            if (speakingTimer) clearInterval(speakingTimer);
+            if (writingTimer) clearInterval(writingTimer);
+        }
+        
+        // ==================== READING SECTION ====================
+        function startReading() {
+            document.getElementById('reading-ready').style.display = 'none';
+            document.getElementById('reading-test').style.display = 'block';
+            
+            // Start the timer
+            readingStarted = true;
+            document.getElementById('reading-timer').classList.remove('timer-waiting');
+            readingTimer = setInterval(() => {
+                readingSeconds++;
+                const mins = Math.floor(readingSeconds / 60).toString().padStart(2, '0');
+                const secs = (readingSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('reading-timer').textContent = mins + ':' + secs;
+            }, 1000);
+        }
+        
+        function switchReadingModule(module) {
+            document.querySelectorAll('#reading-test .module-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('reading-module-' + module).classList.remove('hidden');
+            document.getElementById('reading-module-' + module).classList.add('fade-in');
+            
+            document.getElementById('reading-mod1-btn').className = module === 1 ? 'module-btn active flex-1' : 'module-btn flex-1';
+            document.getElementById('reading-mod2-btn').className = module === 2 ? 'module-btn active flex-1' : 'module-btn flex-1';
+        }
+        
+        function checkReadingFill(input, correct) {
+            const value = input.value.trim().toLowerCase();
+            const qid = input.id;
+            readingAnswers[qid] = value;
+            
+            if (value === correct.toLowerCase()) {
+                input.classList.add('correct');
+                input.classList.remove('incorrect');
+            } else {
+                input.classList.add('incorrect');
+                input.classList.remove('correct');
+            }
+            updateReadingProgress();
+        }
+        
+        function selectReadingOption(qid, value, element) {
+            readingAnswers[qid] = value;
+            const container = element.parentElement;
+            container.querySelectorAll('.option-3d').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            updateReadingProgress();
+        }
+        
+        function updateReadingProgress() {
+            const total = 40; // Total reading questions
+            const answered = Object.keys(readingAnswers).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            document.getElementById('reading-progress-bar').style.width = progress + '%';
+            document.getElementById('reading-progress-text').textContent = progress + '%';
+            
+            // Show answered count only (no answer key for correct/incorrect)
+            document.getElementById('reading-correct').textContent = answered;
+            document.getElementById('reading-incorrect').textContent = total - answered;
+        }
+        
+        function submitReading() {
+            if (confirm('Are you sure you want to submit the Reading section?')) {
+                clearInterval(readingTimer);
+                completedSections.reading = true;
+                alert('Reading section submitted!');
+                backToDashboard();
+            }
+        }
+        
+        // ==================== LISTENING SECTION ====================
+        let currentlyPlaying = null;
+        
+        function startListening() {
+            document.getElementById('listening-ready').style.display = 'none';
+            document.getElementById('listening-test').style.display = 'block';
+            
+            listeningTimer = setInterval(() => {
+                listeningSeconds++;
+                const mins = Math.floor(listeningSeconds / 60).toString().padStart(2, '0');
+                const secs = (listeningSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('listening-timer').textContent = mins + ':' + secs;
+            }, 1000);
+        }
+        
+        function switchListeningModule(module) {
+            document.querySelectorAll('.listening-module').forEach(el => el.classList.add('hidden'));
+            document.getElementById('listening-mod' + module).classList.remove('hidden');
+            
+            document.getElementById('listen-mod1-btn').className = module === 1 ? 'module-btn active' : 'module-btn';
+            document.getElementById('listen-mod2-btn').className = module === 2 ? 'module-btn active' : 'module-btn';
+        }
+        
+        function playListeningAudio(audioId) {
+            console.log('Playing audio:', audioId);
+            const audio = document.getElementById(audioId);
+            const player = document.getElementById('audio-' + audioId);
+
+            if (!audio || !player) {
+                console.error('Audio element not found:', audioId);
+                return;
+            }
+
+            // Add error handling
+            audio.onerror = function() {
+                console.error('Error loading audio:', audioId, audio.error);
+                alert('Error loading audio file. Please check that the file exists in the listening folder.');
+            };
+
+            console.log('Audio src:', audio.src);
+
+            // Stop any currently playing audio
+            if (currentlyPlaying && currentlyPlaying !== audio) {
+                currentlyPlaying.pause();
+                currentlyPlaying.currentTime = 0;
+                document.querySelectorAll('.audio-player').forEach(p => p.classList.remove('playing'));
+                document.querySelectorAll('.play-btn i').forEach(icon => icon.className = 'fas fa-play');
+            }
+
+            if (audio.paused) {
+                audio.play().catch(e => {
+                    console.error('Play error:', e);
+                    alert('Could not play audio. Error: ' + e.message);
+                });
+                player.classList.add('playing');
+                player.querySelector('.play-btn i').className = 'fas fa-pause';
+                currentlyPlaying = audio;
+            } else {
+                audio.pause();
+                player.classList.remove('playing');
+                player.querySelector('.play-btn i').className = 'fas fa-play';
+                currentlyPlaying = null;
+            }
+        }
+        
+        function audioEnded(audioId) {
+            console.log('Audio ended:', audioId);
+            const player = document.getElementById('audio-' + audioId);
+            if (player) {
+                player.classList.remove('playing');
+                player.querySelector('.play-btn i').className = 'fas fa-play';
+            }
+            currentlyPlaying = null;
+        }
+        
+        function selectListeningOption(qid, value, element) {
+            listeningAnswers[qid] = value;
+            const container = element.parentElement;
+            container.querySelectorAll('.option-3d').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            updateListeningProgress();
+        }
+        
+        function updateListeningProgress() {
+            // Total questions: 18 in Module 1 + 16 in Module 2 = 34 (actually 36 total)
+            const totalQuestions = 34;
+            const answered = Object.keys(listeningAnswers).length;
+            const progress = Math.round((answered / totalQuestions) * 100);
+            
+            // Note: Progress display would need to be added to the listening section HTML if desired
+            console.log('Listening progress:', progress + '%', answered + '/' + totalQuestions);
+        }
+        
+        function submitListening() {
+            if (confirm('Are you sure you want to submit the Listening section?')) {
+                clearInterval(listeningTimer);
+                completedSections.listening = true;
+                alert('Listening section submitted!');
+                backToDashboard();
+            }
+        }
+        
+        // ==================== SPEAKING SECTION ====================
+        function startSpeaking() {
+            document.getElementById('speaking-ready').style.display = 'none';
+            document.getElementById('speaking-test').style.display = 'block';
+            
+            speakingTimer = setInterval(() => {
+                speakingSeconds++;
+                const mins = Math.floor(speakingSeconds / 60).toString().padStart(2, '0');
+                const secs = (speakingSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('speaking-timer').textContent = mins + ':' + secs;
+            }, 1000);
+        }
+        
+        // Audio player management for speaking
+        let currentlyPlayingSpeaking = null;
+        
+        function playSpeakingPrompt(qnum) {
+            const audioId = 'speak-audio-' + qnum;
+            const audio = document.getElementById(audioId);
+            
+            if (audio) {
+                // Stop any currently playing audio
+                if (currentlyPlayingSpeaking && currentlyPlayingSpeaking !== audio) {
+                    currentlyPlayingSpeaking.pause();
+                    currentlyPlayingSpeaking.currentTime = 0;
+                }
+                
+                // Play the selected audio
+                audio.play();
+                currentlyPlayingSpeaking = audio;
+                
+                // Update status
+                const status = document.getElementById('recording-status-' + qnum);
+                if (status) status.textContent = 'Playing prompt...';
+            } else {
+                console.error('Audio not found for question ' + qnum);
+            }
+        }
+        
+        function speakingAudioEnded(qnum) {
+            const status = document.getElementById('recording-status-' + qnum);
+            if (status) status.textContent = 'Click the microphone to start recording';
+            currentlyPlayingSpeaking = null;
+        }
+        
+        async function toggleRecording(qnum) {
+            const btn = document.getElementById('record-btn-' + qnum);
+            const status = document.getElementById('recording-status-' + qnum);
+            const statusPill = document.getElementById('status-q' + qnum);
+            const waveform = document.getElementById('waveform-' + qnum);
+            
+            if (!isRecording) {
+                // Start recording
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    const chunks = [];
+                    
+                    mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+                    mediaRecorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'audio/webm' });
+                        speakingRecordings['q' + qnum] = blob;
+                        status.textContent = 'Recording saved!';
+                        statusPill.className = 'status-pill completed';
+                        statusPill.innerHTML = '<i class="fas fa-check"></i>Completed';
+                    };
+                    
+                    mediaRecorder.start();
+                    isRecording = true;
+                    currentRecordingQuestion = qnum;
+                    
+                    btn.classList.add('recording');
+                    status.textContent = 'Recording... (click to stop)';
+                    statusPill.className = 'status-pill recording';
+                    statusPill.innerHTML = '<i class="fas fa-circle"></i>Recording';
+                    waveform.style.opacity = '1';
+                    
+                    // Auto-stop after specified duration: 10 seconds for Q1-7, 45 seconds for Q8-11
+                    const maxDuration = qnum <= 7 ? 10000 : 45000;
+                    const durationText = qnum <= 7 ? '10 seconds' : '45 seconds';
+                    status.textContent = 'Recording... (' + durationText + ' max)';
+                    
+                    recordingTimeout = setTimeout(() => {
+                        if (isRecording && currentRecordingQuestion === qnum) {
+                            toggleRecording(qnum);
+                        }
+                    }, maxDuration);
+                    
+                } catch (err) {
+                    alert('Microphone access denied or not available.');
+                }
+            } else {
+                // Stop recording
+                if (recordingTimeout) {
+                    clearTimeout(recordingTimeout);
+                    recordingTimeout = null;
+                }
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
+                currentRecordingQuestion = null;
+                
+                btn.classList.remove('recording');
+                waveform.style.opacity = '0.3';
+            }
+        }
+        
+        function submitSpeaking() {
+            if (confirm('Are you sure you want to submit the Speaking section?')) {
+                clearInterval(speakingTimer);
+                completedSections.speaking = true;
+                alert('Speaking section submitted!');
+                backToDashboard();
+            }
+        }
+        
+        // ==================== WRITING SECTION ====================
+        let emailTimer = null;
+        let discussionTimer = null;
+        let emailSeconds = 420; // 7 minutes
+        let discussionSeconds = 600; // 10 minutes
+        let emailTimeStarted = false;
+        let discussionTimeStarted = false;
+        
+        // Correct answers for sentence building
+        const sentenceAnswers = {
+            'w1q1': 'he wanted to know when it ended',
+            'w1q2': 'it was moved to a time when everyone could attend',
+            'w1q3': 'she was disappointed because she had studied but didn\'t pass',
+            'w1q4': 'the train departs from the station at 3pm',
+            'w1q5': 'he left them on the kitchen counter',
+            'w1q6': 'we invited our neighbors and some friends from work',
+            'w1q7': 'you should bring your laptop notes and a pen',
+            'w1q8': 'it is a national holiday so everyone has the day off',
+            'w1q9': 'the price is fifty dollars before tax',
+            'w1q10': 'it will be completed by the end of friday'
+        };
+        
+        function startWriting() {
+            document.getElementById('writing-ready').style.display = 'none';
+            document.getElementById('writing-test').style.display = 'block';
+            
+            writingTimer = setInterval(() => {
+                writingSeconds++;
+                const mins = Math.floor(writingSeconds / 60).toString().padStart(2, '0');
+                const secs = (writingSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('writing-timer').textContent = mins + ':' + secs;
+            }, 1000);
+        }
+        
+        function switchWritingModule(moduleNum) {
+            // Hide all modules
+            document.querySelectorAll('.writing-module-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Show selected module
+            document.getElementById('writing-module-' + moduleNum).classList.remove('hidden');
+            
+            // Update button states
+            document.getElementById('writing-mod1-btn').className = moduleNum === 1 ? 'module-btn active' : 'module-btn';
+            document.getElementById('writing-mod2-btn').className = moduleNum === 2 ? 'module-btn active' : 'module-btn';
+            document.getElementById('writing-mod3-btn').className = moduleNum === 3 ? 'module-btn active' : 'module-btn';
+            
+            // Start module-specific timers
+            if (moduleNum === 2 && !emailTimeStarted) {
+                startEmailTimer();
+                emailTimeStarted = true;
+            }
+            if (moduleNum === 3 && !discussionTimeStarted) {
+                startDiscussionTimer();
+                discussionTimeStarted = true;
+            }
+        }
+        
+        function startEmailTimer() {
+            emailTimer = setInterval(() => {
+                emailSeconds--;
+                const mins = Math.floor(emailSeconds / 60).toString().padStart(2, '0');
+                const secs = (emailSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('email-timer').textContent = mins + ':' + secs;
+                
+                if (emailSeconds <= 0) {
+                    clearInterval(emailTimer);
+                    document.getElementById('email-timer').textContent = '00:00';
+                    alert('Email writing time is up!');
+                }
+            }, 1000);
+        }
+        
+        function startDiscussionTimer() {
+            discussionTimer = setInterval(() => {
+                discussionSeconds--;
+                const mins = Math.floor(discussionSeconds / 60).toString().padStart(2, '0');
+                const secs = (discussionSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('discussion-timer').textContent = mins + ':' + secs;
+                
+                if (discussionSeconds <= 0) {
+                    clearInterval(discussionTimer);
+                    document.getElementById('discussion-timer').textContent = '00:00';
+                    alert('Discussion writing time is up!');
+                }
+            }, 1000);
+        }
+        
+        // Drag and Drop Functions
+        function drag(event, questionId) {
+            event.dataTransfer.setData('text/plain', event.target.getAttribute('data-word'));
+            event.dataTransfer.setData('questionId', questionId);
+            event.target.classList.add('dragging');
+        }
+        
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+        
+        function drop(event, questionId) {
+            event.preventDefault();
+            const word = event.dataTransfer.getData('text/plain');
+            const sourceQuestionId = event.dataTransfer.getData('questionId');
+            const builder = document.getElementById('builder-' + questionId);
+            
+            // Remove placeholder text if present
+            if (builder.querySelector('.text-slate-500')) {
+                builder.innerHTML = '';
+                builder.classList.remove('empty');
+            }
+            
+            // Create new word element
+            const wordSpan = document.createElement('span');
+            wordSpan.className = 'word-box';
+            wordSpan.setAttribute('data-word', word);
+            wordSpan.setAttribute('draggable', 'true');
+            wordSpan.setAttribute('ondragstart', "drag(event, '" + questionId + "')");
+            wordSpan.textContent = word;
+            
+            // Check if dropping onto the builder or a specific position
+            if (event.target.classList.contains('sentence-builder')) {
+                builder.appendChild(wordSpan);
+            } else if (event.target.classList.contains('word-box') && event.target.parentElement.classList.contains('sentence-builder')) {
+                // Insert before or after the target word based on drop position
+                const rect = event.target.getBoundingClientRect();
+                const midpoint = rect.left + rect.width / 2;
+                if (event.clientX < midpoint) {
+                    builder.insertBefore(wordSpan, event.target);
+                } else {
+                    builder.insertBefore(wordSpan, event.target.nextSibling);
+                }
+            }
+            
+            // Remove from source if moving within the same builder
+            if (sourceQuestionId === questionId) {
+                const draggingElements = document.querySelectorAll('.word-box.dragging');
+                draggingElements.forEach(el => {
+                    if (el.parentElement.classList.contains('sentence-builder')) {
+                        el.remove();
+                    }
+                    el.classList.remove('dragging');
+                });
+            }
+            
+            // Clear feedback when words are changed
+            const feedback = document.getElementById('feedback-' + questionId);
+            if (feedback) {
+                feedback.innerHTML = '';
+                feedback.className = 'feedback-area mt-3';
+            }
+        }
+        
+        function checkSentence(questionId) {
+            const builder = document.getElementById('builder-' + questionId);
+            const words = Array.from(builder.querySelectorAll('.word-box')).map(el => el.getAttribute('data-word'));
+            const userSentence = words.join(' ').toLowerCase().trim();
+            const correctSentence = sentenceAnswers[questionId];
+            const feedback = document.getElementById('feedback-' + questionId);
+            
+            if (!userSentence) {
+                feedback.innerHTML = '<span class="text-yellow-400"><i class="fas fa-exclamation-triangle mr-1"></i>Please arrange the words first.</span>';
+                feedback.className = 'feedback-area mt-3';
+                return;
+            }
+            
+            if (userSentence === correctSentence) {
+                feedback.innerHTML = '<span class="feedback-correct"><i class="fas fa-check-circle mr-1"></i>Correct! Well done!</span>';
+                feedback.className = 'feedback-area mt-3 feedback-correct';
+                // Add visual feedback to words
+                builder.querySelectorAll('.word-box').forEach(el => {
+                    el.style.background = 'linear-gradient(145deg, #10b981, #059669)';
+                    el.style.borderColor = '#10b981';
+                });
+            } else {
+                feedback.innerHTML = '<span class="feedback-incorrect"><i class="fas fa-times-circle mr-1"></i>Not quite. Try rearranging the words.</span>';
+                feedback.className = 'feedback-area mt-3 feedback-incorrect';
+                // Add visual feedback to words
+                builder.querySelectorAll('.word-box').forEach(el => {
+                    el.style.background = 'linear-gradient(145deg, #ef4444, #dc2626)';
+                    el.style.borderColor = '#ef4444';
+                });
+                
+                // Reset after 1 second
+                setTimeout(() => {
+                    builder.querySelectorAll('.word-box').forEach(el => {
+                        el.style.background = '';
+                        el.style.borderColor = '';
+                    });
+                }, 1000);
+            }
+        }
+        
+        function updateWordCount(textareaId, counterId) {
+            const text = document.getElementById(textareaId).value;
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+            document.getElementById(counterId).textContent = words;
+        }
+        
+        function saveEmail() {
+            const subject = document.getElementById('email-subject').value;
+            const body = document.getElementById('email-body').value;
+            
+            if (!subject && !body) {
+                alert('Please write your email before saving.');
+                return;
+            }
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('toefl_email_subject', subject);
+            localStorage.setItem('toefl_email_body', body);
+            
+            alert('Email saved successfully!');
+        }
+        
+        function saveDiscussion() {
+            const body = document.getElementById('discussion-body').value;
+            
+            if (!body) {
+                alert('Please write your response before saving.');
+                return;
+            }
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('toefl_discussion_body', body);
+            
+            alert('Discussion response saved successfully!');
+        }
+        
+        function startWritingModuleTimers() {
+            // This function can be called to initialize timers if needed
+            // Currently timers start when modules are switched
+        }
+        
+        function submitWriting() {
+            if (confirm('Are you sure you want to submit the Writing section?')) {
+                clearInterval(writingTimer);
+                if (emailTimer) clearInterval(emailTimer);
+                if (discussionTimer) clearInterval(discussionTimer);
+                completedSections.writing = true;
+                alert('Writing section submitted!');
+                backToDashboard();
+            }
+        }
+        
+        // ==================== SECURITY SYSTEM ====================
+        let securityViolations = 0;
+        let maxViolations = 3;
+        let testInProgress = false;
+        let securityActive = false;
+        let blurStartTime = null;
+        let recentUIInteraction = false;
+        let uiInteractionTimeout = null;
+        
+        // List of allowed element selectors that won't trigger security violations
+        const allowedUISelectors = [
+            'button', 'input', 'textarea', 'select', 'label',
+            '.play-btn', '.audio-player', '.record-btn', '.speak-btn',
+            '[id^="audio-"]', '[id^="speak-audio-"]', '[id^="record-btn-"]',
+            '.btn-3d', '.option-3d', '.word-box'
+        ];
+        
+        // Check if an element is part of the test UI (allowed to be clicked)
+        function isAllowedUIElement(element) {
+            if (!element) return false;
+            // Check if element or any of its parents match allowed selectors
+            for (const selector of allowedUISelectors) {
+                if (element.matches && element.matches(selector)) return true;
+                if (element.closest && element.closest(selector)) return true;
+            }
+            return false;
+        }
+        
+        // Mark that user just interacted with UI (prevents false blur violations)
+        function markUIInteraction() {
+            recentUIInteraction = true;
+            if (uiInteractionTimeout) clearTimeout(uiInteractionTimeout);
+            // Reset the flag after 1 second (enough for focus/blur to settle)
+            uiInteractionTimeout = setTimeout(() => {
+                recentUIInteraction = false;
+            }, 1000);
+        }
+        
+        // Acknowledge security notice and proceed to dashboard
+        function acknowledgeSecurity() {
+            document.getElementById('security-notice').style.display = 'none';
+            document.getElementById('security-notice').classList.remove('active');
+            document.getElementById('dashboard-screen').style.display = 'block';
+            document.getElementById('dashboard-screen').classList.add('active');
+        }
+
+/* ===== Mouse Spotlight ===== */
+(function(){
+    const spotlight = document.getElementById('spotlight');
+    if (!spotlight) return;
+    document.addEventListener('mousemove', e => {
+        spotlight.style.setProperty('--mx', e.clientX + 'px');
+        spotlight.style.setProperty('--my', e.clientY + 'px');
+    });
+})();
+
+/* ===== 3D Tilt on Cards ===== */
+(function(){
+    const cards = document.querySelectorAll('.tool-card, .game-card');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const cx = rect.width / 2;
+            const cy = rect.height / 2;
+            const rx = (y - cy) / cy * -8;
+            const ry = (x - cx) / cx * 8;
+            card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-10px) scale(1.01)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+})();
+
+/* ===== Parallax Flash Strips ===== */
+(function(){
+    const topRow = document.getElementById('flashRowTop');
+    const bottomRow = document.getElementById('flashRowBottom');
+    if (!topRow || !bottomRow) return;
+    
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrollY = window.scrollY;
+                const section = document.getElementById('flashStrips');
+                if (!section) { ticking = false; return; }
+                const rect = section.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                if (rect.top < viewportHeight && rect.bottom > 0) {
+                    const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
+                    topRow.style.transform = `translateX(${-progress * 120}px)`;
+                    bottomRow.style.transform = `translateX(${-120 + progress * 120}px)`;
+                }
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+})();
+
+/* ===== Random Ticker Updates ===== */
+(function(){
+    const names = ['Sokha','Dara','Chanda','Bopha','Visal','Sreyneang','Kosal','Maly','Nita','Rithy','Pisey','Vannak'];
+    const actions = ['opened World Class 2-1','scored 92% on Listening','launched Brick Forge','completed Unit 8 quiz','started Word Scramble','opened World Class 2-2','started TOEFL iBT','finished a homework set','played Last Colony'];
+    const ticker = document.getElementById('tickerTrack');
+    if (!ticker) return;
+    setInterval(() => {
+        const items = ticker.querySelectorAll('.ticker-item');
+        if (items.length > 0) {
+            const randomItem = items[Math.floor(Math.random() * (items.length / 2))];
+            const name = names[Math.floor(Math.random() * names.length)];
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            randomItem.innerHTML = `<i class="fas fa-circle"></i> <strong>${name}</strong> ${action}`;
+        }
+    }, 3500);
+})();
+</script>
+</body>
+</html>

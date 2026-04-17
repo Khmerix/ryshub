@@ -96,6 +96,7 @@
             align-items: center;
             gap: 10px;
             overflow-x: auto;
+            scroll-behavior: smooth;
             scrollbar-width: none;
             -ms-overflow-style: none;
             max-inline-size: 520px;
@@ -105,9 +106,59 @@
         }
         .nav-scroll::-webkit-scrollbar { display: none; }
 
+        .nav-scroll-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-inline-size: 0;
+        }
+
+        .nav-scroll-btn {
+            inline-size: 32px;
+            block-size: 32px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.16);
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--gray-200, #e5e7eb);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .nav-scroll-btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(96, 165, 250, 0.5);
+            background: rgba(30, 41, 59, 0.9);
+        }
+
         .header-shell {
             min-block-size: 76px;
             gap: 18px;
+        }
+
+        .header-cta-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-cta-group .btn-outline,
+        .header-cta-group .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            font-size: 0.74rem;
+            border-radius: 8px;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .header-cta-group .btn-primary {
+            box-shadow: 0 3px 12px rgba(37, 99, 235, 0.3);
         }
 
         .brand-lockup {
@@ -1896,17 +1947,29 @@
             <span>Use the side panel to explore tools</span>
         </div>
 
-        <div class="hidden xl:flex nav-scroll">
-            <a href="#" class="nav-3d" onclick="scrollToSection('topHome'); return false;">Overview</a>
-            <a href="#" class="nav-3d" onclick="scrollToSection('featuredApps'); return false;">Featured Apps</a>
-            <a href="#" class="nav-3d" onclick="scrollToSection('gamesScores'); return false;">Games &amp; Scores</a>
-            <a href="#" class="nav-3d" onclick="scrollToSection('miniGamesSection'); return false;">Mini Games</a>
-            <a href="#" class="nav-3d" onclick="scrollToSection('commandCenterSection'); return false;">Command Center</a>
+        <div class="hidden xl:flex nav-scroll-wrap">
+            <button class="nav-scroll-btn" onclick="scrollHeaderNav(-1)" aria-label="Scroll header navigation left">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="nav-scroll" id="topNavScroll">
+                <a href="#" class="nav-3d" onclick="scrollToSection('topHome'); return false;">Overview</a>
+                <a href="#" class="nav-3d" onclick="scrollToSection('featuredApps'); return false;">Featured Apps</a>
+                <a href="#" class="nav-3d" onclick="scrollToSection('gamesScores'); return false;">Games &amp; Scores</a>
+                <a href="#" class="nav-3d" onclick="scrollToSection('miniGamesSection'); return false;">Mini Games</a>
+                <a href="#" class="nav-3d" onclick="scrollToSection('commandCenterSection'); return false;">Command Center</a>
+            </div>
+            <button class="nav-scroll-btn" onclick="scrollHeaderNav(1)" aria-label="Scroll header navigation right">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
         
-        <div class="flex items-center gap-3">
-            <button class="btn-outline hidden sm:block" onclick="openTeacherRegister('teacher resources')">Teacher Access</button>
-            <button class="btn-primary" onclick="openTeacherRegister('teacher resources')">Register Teacher</button>
+        <div class="header-cta-group">
+            <button class="btn-outline hidden sm:inline-flex" onclick="openTeacherRegister('teacher resources')">
+                <i class="fas fa-id-badge"></i><span>Access</span>
+            </button>
+            <button class="btn-primary" onclick="openTeacherRegister('teacher resources')">
+                <i class="fas fa-user-plus"></i><span>Register</span>
+            </button>
             <button class="md:hidden w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white" onclick="toggleMenu()">
                 <i class="fas fa-bars"></i>
             </button>
@@ -3000,6 +3063,53 @@ function scrollToSection(id) {
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+function scrollHeaderNav(direction) {
+    var nav = document.getElementById('topNavScroll');
+    if (!nav) return;
+    nav.scrollBy(direction * 180, 0);
+}
+
+function initHeaderNavScroll() {
+    var nav = document.getElementById('topNavScroll');
+    if (!nav) return;
+
+    nav.addEventListener('wheel', function(e) {
+        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+        e.preventDefault();
+        nav.scrollLeft += e.deltaY;
+    }, { passive: false });
+
+    var isPointerDown = false;
+    var startX = 0;
+    var startScroll = 0;
+
+    nav.addEventListener('pointerdown', function(e) {
+        isPointerDown = true;
+        startX = e.clientX;
+        startScroll = nav.scrollLeft;
+        nav.setPointerCapture(e.pointerId);
+        nav.style.cursor = 'grabbing';
+    });
+
+    nav.addEventListener('pointermove', function(e) {
+        if (!isPointerDown) return;
+        nav.scrollLeft = startScroll - (e.clientX - startX);
+    });
+
+    function stopPointerDrag(e) {
+        if (!isPointerDown) return;
+        isPointerDown = false;
+        nav.style.cursor = '';
+        if (e && typeof e.pointerId === 'number' && nav.hasPointerCapture(e.pointerId)) {
+            nav.releasePointerCapture(e.pointerId);
+        }
+    }
+
+    nav.addEventListener('pointerup', stopPointerDrag);
+    nav.addEventListener('pointercancel', stopPointerDrag);
+    nav.addEventListener('mouseleave', stopPointerDrag);
+}
+
 var featuredGameIndex = 0;
 var currentFeaturedGameId = 'colony';
 var gameScoreTimer = null;
@@ -3265,6 +3375,7 @@ initLiveCounters();
 initParallaxTilt();
 initGameScores();
 renderMiniGamesSection();
+initHeaderNavScroll();
 </script>
 </body>
 </html>
