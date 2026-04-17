@@ -308,6 +308,27 @@
       transform: translateY(-2px) scale(1.03);
       box-shadow: 0 0 60px rgba(99,255,159,0.5), 0 8px 30px rgba(56,189,248,0.4);
     }
+    .back-hub-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: rgba(15,23,42,0.78);
+      color: #cbd5e1;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .back-hub-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(56,189,248,0.65);
+      color: #f8fafc;
+      box-shadow: 0 8px 20px rgba(14,165,233,0.22);
+    }
     .race-track {
       background-image:
         repeating-linear-gradient(90deg, rgba(148,163,184,0.08) 0 18px, rgba(148,163,184,0) 18px 36px),
@@ -384,6 +405,9 @@
    <div id="countdown-number" class="countdown-number">3</div>
   </div>
   <div id="app" class="h-full w-full overflow-auto" style="background: rgba(15,23,42,0.9); font-family: 'Nunito', sans-serif;"><!-- Header -->
+    <div class="max-w-2xl mx-auto px-4 pt-4 pb-1 float-in" style="animation-delay: 0.01s;">
+     <button class="back-hub-btn" onclick="backOut()"><i data-lucide="corner-up-left" style="width:15px;height:15px;"></i> Back Out</button>
+    </div>
    <div class="text-center pt-8 pb-6 float-in">
     <div id="title-container">
      <h1 id="title" class="text-4xl font-extrabold tracking-tight" style="font-family: 'Orbitron', sans-serif; letter-spacing: 0.05em; color: #63FF9F; animation: title-scale-in 0.8s ease-out, glow-pulse 3s ease-in-out 0.8s infinite;">🏎️ Type Racer</h1>
@@ -645,6 +669,14 @@
    </div>
    <input id="typing-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-hidden="true" tabindex="-1" style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;border:none;outline:none;padding:0;margin:0;">
    <script>
+    function backOut() {
+      if (window.history.length > 1) {
+        window.history.back();
+        return;
+      }
+      window.location.href = '../../../index.html';
+    }
+
     function switchTab(tabName) {
       document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); });
       document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); });
