@@ -3253,14 +3253,33 @@ function closeBook2bModal() {
     document.getElementById('book2b-modal').classList.remove('open');
 }
 
+var brickForgeLoadTimer = null;
+
 function openBrickForgeModal() {
     recordGameLaunch('brickforge');
     showToast('Loading Brick Forge... one moment ⏳');
     var frame = document.getElementById('brickforge-frame');
+    var loaded = false;
+
+    clearTimeout(brickForgeLoadTimer);
+    frame.onload = function() {
+        loaded = true;
+        clearTimeout(brickForgeLoadTimer);
+    };
+
     frame.src = 'apps/brickforge.html';
     document.getElementById('brickforge-modal').classList.add('open');
+
+    brickForgeLoadTimer = setTimeout(function() {
+        if (loaded) return;
+        showToast('Brick Forge is slow in modal. Opening full page...');
+        window.open('apps/brickforge.html', '_blank');
+    }, 6000);
 }
 function closeBrickForgeModal() {
+    clearTimeout(brickForgeLoadTimer);
+    var frame = document.getElementById('brickforge-frame');
+    if (frame) frame.onload = null;
     document.getElementById('brickforge-modal').classList.remove('open');
 }
 
