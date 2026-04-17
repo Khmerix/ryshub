@@ -3262,11 +3262,14 @@ var MINI_GAMES = [
     {
         id: 'typing-race',
         title: 'Typing Race',
-        status: 'Coming Soon',
+        status: 'Live',
         iconClass: 'fas fa-keyboard',
         desc: 'Fast keyboard challenge for sentence accuracy and speed practice.',
-        launchText: 'Coming soon',
-        launchAction: null
+        launchText: 'Launch',
+        launchAction: function() {
+            recordGameLaunch('typing-race');
+            window.open('apps/games/typing-race/index.html', '_blank');
+        }
     },
     {
         id: 'word-scramble',
