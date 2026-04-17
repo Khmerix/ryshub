@@ -160,6 +160,11 @@
             min-inline-size: 0;
         }
 
+        /* Ensure sections are not hidden under fixed header when scrolled to */
+        section[id], div[id].section-intro {
+            scroll-margin-top: 92px;
+        }
+
         .nav-scroll-btn {
             inline-size: 32px;
             block-size: 32px;
@@ -3108,7 +3113,9 @@ function initParallaxTilt() {
 function scrollToSection(id) {
     var section = document.getElementById(id);
     if (!section) return;
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var headerH = (document.getElementById('mainHeader') || {offsetHeight: 80}).offsetHeight;
+    var top = section.getBoundingClientRect().top + window.pageYOffset - headerH - 12;
+    window.scrollTo({ top: top, behavior: 'smooth' });
 }
 
 function scrollHeaderNav(direction) {
