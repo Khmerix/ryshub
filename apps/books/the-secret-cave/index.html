@@ -404,7 +404,7 @@
     var safeMeta = (typeof STORY_META === 'object' && STORY_META) ? STORY_META : { title: 'The Secret Cave', startNode: 'start' };
     var safeData = (typeof STORY_DATA === 'object' && STORY_DATA) ? STORY_DATA : {};
     var currentId = safeMeta.startNode;
-    var history = [safeMeta.startNode];
+    var storyHistory = [safeMeta.startNode];
     var SAVE_KEY = 'book_' + (safeMeta.title || 'default').replace(/\s+/g, '_').toLowerCase() + '_save';
 
     /* ── Engine ───────────────────────────────────────── */
@@ -435,12 +435,12 @@
             }).join('');
         }
 
-        var depth = history.length;
+        var depth = storyHistory.length;
         var maxDepth = 22;
         var pct = Math.min((depth / maxDepth) * 100, 98);
         document.getElementById('progressFill').style.width = pct + '%';
         document.getElementById('depthLabel').textContent = 'Scene ' + depth;
-        document.getElementById('btnBack').disabled = history.length <= 1;
+        document.getElementById('btnBack').disabled = storyHistory.length <= 1;
 
         renderHistory();
         saveProgress();
@@ -452,28 +452,28 @@
             return;
         }
         currentId = nextId;
-        history.push(nextId);
+        storyHistory.push(nextId);
         window.scrollTo({ top: 0, behavior: 'smooth' });
         renderScene(true);
     }
 
     function goBack() {
-        if (history.length <= 1) return;
-        history.pop();
-        currentId = history[history.length - 1];
+        if (storyHistory.length <= 1) return;
+        storyHistory.pop();
+        currentId = storyHistory[storyHistory.length - 1];
         renderScene(true);
     }
 
     function resetStory() {
         currentId = safeMeta.startNode;
-        history = [safeMeta.startNode];
+        storyHistory = [safeMeta.startNode];
         window.scrollTo({ top: 0, behavior: 'smooth' });
         renderScene(true);
         localStorage.removeItem(SAVE_KEY);
     }
 
     function confirmReset() {
-        if (history.length <= 1 || confirm('Start over from the beginning?')) {
+        if (storyHistory.length <= 1 || confirm('Start over from the beginning?')) {
             resetStory();
         }
     }
@@ -482,10 +482,10 @@
     function saveProgress() {
         try {
             var maxDepth = 22;
-            var progress = Math.min(Math.round((history.length / maxDepth) * 100), 99);
+            var progress = Math.min(Math.round((storyHistory.length / maxDepth) * 100), 99);
             localStorage.setItem(SAVE_KEY, JSON.stringify({
                 nodeId: currentId,
-                history: history,
+                history: storyHistory,
                 progress: progress,
                 ts: Date.now()
             }));
@@ -499,10 +499,10 @@
             var saved = JSON.parse(localStorage.getItem(SAVE_KEY));
             if (saved && saved.nodeId && safeData[saved.nodeId]) {
                 currentId = saved.nodeId;
-                history = Array.isArray(saved.history) && saved.history.length
+                storyHistory = Array.isArray(saved.history) && saved.history.length
                     ? saved.history.filter(function(id) { return !!safeData[id]; })
                     : [safeMeta.startNode];
-                if (!history.length) history = [safeMeta.startNode];
+                if (!storyHistory.length) storyHistory = [safeMeta.startNode];
                 return true;
             }
         } catch (e) {}
@@ -511,17 +511,17 @@
 
     /* ── Path history ─────────────────────────────────── */
     function renderHistory() {
-        if (!Array.isArray(history) || !history.length) {
-            history = [safeMeta.startNode];
+        if (!Array.isArray(storyHistory) || !storyHistory.length) {
+            storyHistory = [safeMeta.startNode];
         }
 
-        var count = history.length;
+        var count = storyHistory.length;
         document.getElementById('historyCount').textContent = count;
 
-        var html = history.map(function(id, idx) {
+        var html = storyHistory.map(function(id, idx) {
             var node = safeData[id];
             var label = node ? node.text.split('\n')[0].slice(0, 60) + (node.text.length > 60 ? '…' : '') : id;
-            var isCurrent = idx === history.length - 1;
+            var isCurrent = idx === storyHistory.length - 1;
             return '<div class="history-item' + (isCurrent ? ' current' : '') + '">'
                 + (idx + 1) + '. ' + label + '</div>';
         }).join('');
@@ -553,8 +553,8 @@
     var resumed = loadProgress();
     renderScene(false);
 
-    if (resumed && history.length > 1) {
-        showToast('Resuming where you left off — Scene ' + history.length);
+    if (resumed && storyHistory.length > 1) {
+        showToast('Resuming where you left off — Scene ' + storyHistory.length);
     }
 </script>
 </body>
