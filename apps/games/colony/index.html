@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Last Colony — Mars 2041</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -339,6 +339,16 @@ canvas{display:block}
 @keyframes phaseFade{0%{opacity:0}10%{opacity:1}75%{opacity:1}100%{opacity:0}}
 
 .hidden{display:none!important}
+.hud-panel-group{position:absolute}
+.panel-toggle-btn{
+  position:absolute;top:-8px;right:-8px;z-index:80;
+  width:24px;height:24px;border:none;border-radius:999px;cursor:pointer;
+  background:linear-gradient(180deg,#082f49,#020617);color:#7dd3fc;
+  box-shadow:0 3px 0 rgba(0,0,0,.7),0 0 10px rgba(0,212,255,.18);
+  font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;line-height:1;
+}
+.panel-toggle-btn:hover{color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.7),0 0 16px rgba(0,212,255,.28)}
+.hud-panel-group.collapsed > :not(.panel-toggle-btn){display:none!important}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,212,255,.2);border-radius:2px}
 </style>
 </head>
@@ -438,7 +448,7 @@ canvas{display:block}
       <p>The last ship from Earth landed at 03:42 local Mars time. Colony readiness: 100%.</p>
       <p style="color:#fde68a;font-style:italic;margin-top:8px" id="vEpilogue"></p>
     </div>
-    <div id="vStats" style="font-size:12px;color:#334155;text-align:left;padding:14px;font-family:'Share Tech Mono',monospace;line-height:1.8;border-top:1px solid rgba(255,255,255,.05);margin-bottom:20px"></div>
+    <div id="vStats" style="font-size:12px;color:#334155;text-align:left;padding:14px;font-family:'Share Tech Mono',monospace;line-height:1.8;border-top:1px solid rgba(255,255,255,.05);margin-bottom:20px;white-space:pre-wrap"></div>
     <button onclick="location.reload()" class="btn3d btn-gold" style="padding:12px 30px;font-size:13px">NEW EXPEDITION</button>
   </div>
 </div>
@@ -451,7 +461,7 @@ canvas{display:block}
     <div class="orb" style="font-size:26px;font-weight:900;color:var(--clr-red)" id="goTitle">HUMANITY LOST</div>
     <div style="font-size:13px;color:#94a3b8;margin:8px 0 4px;font-weight:700" id="goReason"></div>
     <div style="font-size:11px;color:#334155;font-style:italic;margin-bottom:20px;font-family:'Share Tech Mono',monospace;line-height:1.6" id="goFlavor"></div>
-    <div id="goStats" style="font-size:11px;color:#334155;text-align:left;border-top:1px solid rgba(255,255,255,.05);padding-top:12px;margin-bottom:20px;font-family:'Share Tech Mono',monospace;line-height:1.7"></div>
+    <div id="goStats" style="font-size:11px;color:#334155;text-align:left;border-top:1px solid rgba(255,255,255,.05);padding-top:12px;margin-bottom:20px;font-family:'Share Tech Mono',monospace;line-height:1.7;white-space:pre-wrap"></div>
     <button onclick="location.reload()" class="btn3d btn-red" style="padding:11px 28px;font-size:12px">TRY AGAIN</button>
   </div>
 </div>
@@ -463,8 +473,9 @@ canvas{display:block}
 <div style="position:fixed;inset:0;pointer-events:none;z-index:50">
 
   <!-- TOP CENTER: Doomsday Clock -->
-  <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);pointer-events:none">
-    <div class="ddbox">
+  <div id="hudClock" class="hud-panel-group" style="position:absolute;top:10px;left:50%;transform:translateX(-50%);pointer-events:auto">
+    <button class="panel-toggle-btn" onclick="toggleHudPanel('hudClock', event)" aria-label="Toggle doomsday panel">−</button>
+    <div class="ddbox" style="pointer-events:none">
       <div class="dd-lbl">EARTH EXTINCTION EVENT</div>
       <div class="dd-time" id="ddTime">Y5 : 000D : 00H</div>
       <div class="dd-sub" id="ddSub">COLONY READINESS REQUIRED: 100%</div>
@@ -472,7 +483,8 @@ canvas{display:block}
   </div>
 
   <!-- TOP LEFT: Readiness + Identity -->
-  <div style="position:absolute;top:10px;left:10px;pointer-events:auto">
+  <div id="hudStatus" class="hud-panel-group" style="position:absolute;top:10px;left:10px;pointer-events:auto">
+    <button class="panel-toggle-btn" onclick="toggleHudPanel('hudStatus', event)" aria-label="Toggle colony status panel">−</button>
     <div class="fpanel panel-corners" style="border-radius:10px;padding:10px 14px;min-width:210px">
       <div class="panel-hdr-title" style="margin-bottom:6px">COLONY READINESS</div>
       <div class="rm-bar-bg" style="margin-bottom:5px"><div class="rm-bar-fill" id="rmFill" style="width:0%"></div></div>
@@ -499,7 +511,8 @@ canvas{display:block}
   </div>
 
   <!-- TOP RIGHT: Resources -->
-  <div style="position:absolute;top:10px;right:10px;pointer-events:auto">
+  <div id="hudResources" class="hud-panel-group" style="position:absolute;top:10px;right:10px;pointer-events:auto">
+    <button class="panel-toggle-btn" onclick="toggleHudPanel('hudResources', event)" aria-label="Toggle resources panel">−</button>
     <div class="fpanel" style="border-radius:10px;padding:8px 10px;display:flex;gap:7px">
       <div class="res-card"><div class="res-lbl" style="color:#22d3ee">O2</div><div class="res-val" style="color:#67e8f9" id="rO2">100</div><div class="rbar"><div class="rbar-fill" style="background:#22d3ee" id="bO2"></div></div></div>
       <div class="res-card"><div class="res-lbl" style="color:#60a5fa">H2O</div><div class="res-val" style="color:#93c5fd" id="rH2O">100</div><div class="rbar"><div class="rbar-fill" style="background:#60a5fa" id="bH2O"></div></div></div>
@@ -516,7 +529,8 @@ canvas{display:block}
   </div>
 
   <!-- LEFT: Objectives -->
-  <div style="position:absolute;left:10px;top:165px;width:248px;pointer-events:auto">
+  <div id="hudObjectives" class="hud-panel-group" style="position:absolute;left:10px;top:165px;width:248px;pointer-events:auto">
+    <button class="panel-toggle-btn" onclick="toggleHudPanel('hudObjectives', event)" aria-label="Toggle objectives panel">−</button>
     <div class="fpanel panel-corners" style="border-radius:10px;padding:10px 12px;margin-bottom:6px">
       <div class="panel-hdr-title" style="margin-bottom:6px">YEAR <span id="yrLabel">1</span> — <span id="phaseLabel">ESTABLISHMENT</span></div>
       <div style="font-size:11px;color:var(--clr-cyan);font-weight:700;line-height:1.5;margin-bottom:6px" id="objText">▶ Build Solar Array</div>
@@ -537,7 +551,8 @@ canvas{display:block}
   <div id="cLog" style="position:absolute;right:10px;bottom:130px;width:255px;pointer-events:none;max-height:220px;overflow:hidden"></div>
 
   <!-- BOTTOM: Build Bar with Tabs -->
-  <div style="position:absolute;bottom:10px;left:268px;right:10px;pointer-events:auto">
+  <div id="hudBuildBar" class="hud-panel-group" style="position:absolute;bottom:10px;left:268px;right:10px;pointer-events:auto">
+    <button class="panel-toggle-btn" onclick="toggleHudPanel('hudBuildBar', event)" aria-label="Toggle build bar">−</button>
     <div class="fpanel" style="border-radius:12px;overflow:visible;padding:0">
       <!-- Tab bar -->
       <div style="display:flex;gap:2px;padding:8px 12px 0;border-bottom:1px solid rgba(0,212,255,.1)">
@@ -693,9 +708,10 @@ const BCAT={
     {id:'shield',   label:'Shield Gen',     key:'1',icon:'🛡️',col:'#6366f1',cost:120,req:4,rareReq:8,desc:'Storm defense'},
     {id:'turret',   label:'Defense Turret', key:'2',icon:'🔫',col:'#ef4444',cost:70, req:3,desc:'Meteor deflect'},
     {id:'stormshel',label:'Storm Shelter',  key:'3',icon:'⛺',col:'#78716c',cost:45, req:2,desc:'Crew safe zone'},
-    {id:'emp_dome', label:'EMP Dome',       key:'4',icon:'💫',col:'#8b5cf6',cost:95, req:4,rareReq:15,desc:'Radiation block'},
-    {id:'wall_seg', label:'Perimeter Wall', key:'5',icon:'🧱',col:'#92400e',cost:20, req:1,desc:'Debris barrier'},
-    {id:'beacon',   label:'Signal Beacon',  key:'6',icon:'📻',col:'#22d3ee',cost:55, req:3,desc:'+8 readiness'},
+    {id:'gate',     label:'Airlock Gate',   key:'4',icon:'🚪',col:'#38bdf8',cost:38, req:1,desc:'Fence snap connector'},
+    {id:'emp_dome', label:'EMP Dome',       key:'5',icon:'💫',col:'#8b5cf6',cost:95, req:4,rareReq:15,desc:'Radiation block'},
+    {id:'wall_seg', label:'Perimeter Wall', key:'6',icon:'🧱',col:'#92400e',cost:20, req:1,desc:'Debris barrier'},
+    {id:'beacon',   label:'Signal Beacon',  key:'0',icon:'📻',col:'#22d3ee',cost:55, req:3,desc:'+8 readiness'},
   ],
 }
 
@@ -896,6 +912,15 @@ function switchBuildTab(tab){
   if(window.G)window.G._buildBuildBar()
 }
 
+function toggleHudPanel(id,e){
+  if(e)e.stopPropagation()
+  const group=document.getElementById(id)
+  if(!group)return
+  group.classList.toggle('collapsed')
+  const btn=group.querySelector('.panel-toggle-btn')
+  if(btn)btn.textContent=group.classList.contains('collapsed')?'+':'−'
+}
+
 // ══ BUILDING GEOMETRY ════════════════════════════════
 function mkBuilding(type){
   const g=new THREE.Group()
@@ -1001,6 +1026,111 @@ function mkBuilding(type){
       const head=new THREE.Mesh(new THREE.BoxGeometry(.4,.3,.6),M(0x666666,.4,.6));head.position.set(.8,2.85,0);g.add(head)
       const rle=new THREE.PointLight(0xffaa44,.6,5);rle.position.set(.8,2.9,0);g.add(rle)
       const wheels=[[-1.4,.5,-1.1],[-1.4,.5,1.1],[0,.5,-1.1],[0,.5,1.1],[1.4,.5,-1.1],[1.4,.5,1.1]];wheels.forEach(([wx,wy,wz])=>{const w=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,.3,14),M(0x333333,.9,.1));w.rotation.z=Math.PI/2;w.position.set(wx,wy,wz);g.add(w)})
+      break}
+    case 'observatory':{
+      const base=new THREE.Mesh(new THREE.CylinderGeometry(2.8,3.2,.5,20),M(0x5e6d8a,.55,.5));base.position.y=.25;g.add(base)
+      const drum=new THREE.Mesh(new THREE.CylinderGeometry(2.3,2.5,2.2,20),M(0x4b5d78,.45,.6));drum.position.y=1.5;g.add(drum)
+      const dome=new THREE.Mesh(new THREE.SphereGeometry(2.35,18,12,0,Math.PI*2,0,Math.PI*.55),new THREE.MeshStandardMaterial({color:0x7aa2d6,transparent:true,opacity:.45,roughness:.08,metalness:.35}));dome.position.y=2.55;g.add(dome)
+      const scopeMount=new THREE.Mesh(new THREE.BoxGeometry(.55,.55,.55),M(0x94a3b8,.4,.8));scopeMount.position.set(0,3.1,0);g.add(scopeMount)
+      const scope=new THREE.Mesh(new THREE.CylinderGeometry(.26,.34,3.2,12),M(0xdbeafe,.25,.9));scope.rotation.z=Math.PI/2.9;scope.position.set(1.35,3.2,-.3);scope.name='obsScope';g.add(scope)
+      const lens=new THREE.Mesh(new THREE.CylinderGeometry(.38,.38,.22,14),ME(0x60a5fa,0x1d4ed8,.9));lens.rotation.z=Math.PI/2.9;lens.position.set(2.65,3.72,-.78);g.add(lens)
+      const ol=new THREE.PointLight(0x60a5fa,.8,10);ol.position.set(0,3.5,0);ol.name='obsLight';g.add(ol)
+      break}
+    case 'domehub':{
+      const ringBase=new THREE.Mesh(new THREE.CylinderGeometry(4.2,4.6,.55,24),M(0x64748b,.55,.45));ringBase.position.y=.28;g.add(ringBase)
+      const center=new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.7,3.2,18),M(0x93a4b8,.35,.7));center.position.y=1.9;g.add(center)
+      const crown=new THREE.Mesh(new THREE.TorusGeometry(2.8,.16,10,30),M(0xcbd5e1,.25,.9));crown.rotation.x=Math.PI/2;crown.position.y=2.8;g.add(crown)
+      ;[[3.1,0],[0,3.1],[-3.1,0],[0,-3.1]].forEach(([px,pz])=>{const pod=new THREE.Mesh(new THREE.CylinderGeometry(1.05,1.05,1.4,16),M(0x475569,.5,.5));pod.position.set(px,.9,pz);g.add(pod);const cap=new THREE.Mesh(new THREE.SphereGeometry(1.02,12,8,0,Math.PI*2,0,Math.PI*.5),new THREE.MeshStandardMaterial({color:0x7dd3fc,transparent:true,opacity:.35,roughness:.1}));cap.position.set(px,1.62,pz);g.add(cap)})
+      const hl=new THREE.PointLight(0xc4b5fd,.9,12);hl.position.y=3.8;hl.name='hubLight';g.add(hl)
+      break}
+    case 'tunnel':{
+      const floor=new THREE.Mesh(new THREE.BoxGeometry(7,.18,3.2),M(0x334155,.9,.15));floor.position.y=.09;g.add(floor)
+      for(let i=-2;i<=2;i++){
+        const rib=new THREE.Mesh(new THREE.TorusGeometry(1.4,.08,8,16,Math.PI),M(0x94a3b8,.5,.6))
+        rib.rotation.z=Math.PI/2;rib.position.set(i*1.4,1.45,0);g.add(rib)
+      }
+      const shell=new THREE.Mesh(new THREE.BoxGeometry(7,.12,3),new THREE.MeshStandardMaterial({color:0x67e8f9,transparent:true,opacity:.18,roughness:.05}));shell.position.y=1.35;g.add(shell)
+      break}
+    case 'waterline':{
+      const trench=new THREE.Mesh(new THREE.BoxGeometry(7,.16,1.4),M(0x1e293b,.95,.1));trench.position.y=.08;g.add(trench)
+      const pipe=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,6.8,12),M(0x38bdf8,.35,.8));pipe.rotation.z=Math.PI/2;pipe.position.y=.45;g.add(pipe)
+      ;[-2.2,0,2.2].forEach(px=>{const valve=new THREE.Mesh(new THREE.CylinderGeometry(.42,.42,.24,12),ME(0x93c5fd,0x1d4ed8,.5));valve.position.set(px,.6,0);g.add(valve)})
+      break}
+    case 'powerline':{
+      ;[-2.6,2.6].forEach(px=>{const pole=new THREE.Mesh(new THREE.BoxGeometry(.24,3.2,.24),M(0x52525b,.6,.5));pole.position.set(px,1.6,0);g.add(pole);const cross=new THREE.Mesh(new THREE.BoxGeometry(1.5,.12,.12),M(0xa1a1aa,.45,.7));cross.position.set(px,3,0);g.add(cross)})
+      const wire=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,5.2,8),ME(0xfacc15,0xeab308,.6));wire.rotation.z=Math.PI/2;wire.position.set(0,2.9,0);g.add(wire)
+      const pylonBase=new THREE.Mesh(new THREE.BoxGeometry(6,.16,1.2),M(0x3f3f46,.95,.1));pylonBase.position.y=.08;g.add(pylonBase)
+      break}
+    case 'storagetan':{
+      const deck=new THREE.Mesh(new THREE.BoxGeometry(5.4,.22,4.6),M(0x3f3f46,.9,.15));deck.position.y=.11;g.add(deck)
+      ;[[-1.4,0],[0,0],[1.4,0]].forEach(([px,pz],i)=>{const tank=new THREE.Mesh(new THREE.CylinderGeometry(.72,.78,2.6,16),M(i===1?0x9ca3af:0x94a3b8,.35,.7));tank.position.set(px,1.45,pz);g.add(tank);const cap=new THREE.Mesh(new THREE.SphereGeometry(.7,12,8,0,Math.PI*2,0,Math.PI*.5),M(0xcbd5e1,.25,.85));cap.position.set(px,2.75,pz);g.add(cap)})
+      break}
+    case 'solartower':{
+      const footing=new THREE.Mesh(new THREE.CylinderGeometry(1.8,2.2,.45,16),M(0x4b5563,.75,.3));footing.position.y=.23;g.add(footing)
+      const mast=new THREE.Mesh(new THREE.CylinderGeometry(.22,.3,6.2,12),M(0x94a3b8,.4,.8));mast.position.y=3.2;g.add(mast)
+      const wingGroup=new THREE.Group();wingGroup.position.y=4.2;wingGroup.name='towerWing';g.add(wingGroup)
+      ;[0,Math.PI/2].forEach(a=>{const wing=new THREE.Mesh(new THREE.BoxGeometry(4.2,.08,1.2),new THREE.MeshStandardMaterial({color:0x1d4ed8,emissive:0x0f172a,emissiveIntensity:.4,roughness:.12,metalness:.8}));wing.rotation.y=a;wingGroup.add(wing)})
+      const top=new THREE.PointLight(0xfacc15,1.1,12);top.position.set(0,6.6,0);top.name='towerLight';g.add(top)
+      break}
+    case 'greenhouse2':{
+      const slab=new THREE.Mesh(new THREE.BoxGeometry(5.2,.22,5.2),M(0x204b33,.8,.15));slab.position.y=.11;g.add(slab)
+      const shell=new THREE.Mesh(new THREE.BoxGeometry(4.6,2.6,4.6),new THREE.MeshStandardMaterial({color:0x86efac,transparent:true,opacity:.18,roughness:.05}));shell.position.y=1.5;g.add(shell)
+      ;[-1.2,0,1.2].forEach(px=>{const tower=new THREE.Mesh(new THREE.CylinderGeometry(.32,.32,2.1,10),M(0x4ade80,.35,.5));tower.position.set(px,1.2,0);g.add(tower);const glow=new THREE.PointLight(0x22c55e,.4,5);glow.position.set(px,2.25,0);glow.name='growLight';g.add(glow)})
+      break}
+    case 'medbot':{
+      const chassis=new THREE.Mesh(new THREE.BoxGeometry(1.5,.75,1.1),M(0xf8fafc,.22,.55));chassis.position.y=.7;g.add(chassis)
+      const head=new THREE.Mesh(new THREE.BoxGeometry(.8,.55,.75),M(0xe2e8f0,.18,.6));head.position.set(0,1.35,0);g.add(head)
+      const crossV=new THREE.Mesh(new THREE.BoxGeometry(.12,.5,.06),ME(0xff5a7a,0xff3355,.8));crossV.position.set(0,1.35,.59);g.add(crossV)
+      const crossH=new THREE.Mesh(new THREE.BoxGeometry(.5,.12,.06),ME(0xff5a7a,0xff3355,.8));crossH.position.set(0,1.35,.59);g.add(crossH)
+      ;[[-.5,.28,-.45],[-.5,.28,.45],[.5,.28,-.45],[.5,.28,.45]].forEach(([wx,wy,wz])=>{const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.2,10),M(0x1f2937,.9,.1));wheel.rotation.z=Math.PI/2;wheel.position.set(wx,wy,wz);g.add(wheel)})
+      break}
+    case 'miner_bot':{
+      const body=new THREE.Mesh(new THREE.BoxGeometry(1.8,.8,1.4),M(0xfb923c,.55,.4));body.position.y=.75;g.add(body)
+      const rig=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,1.2,8),M(0x9ca3af,.4,.8));rig.position.set(.55,1.4,0);g.add(rig)
+      const bit=new THREE.Mesh(new THREE.ConeGeometry(.18,.5,8),M(0xfacc15,.25,.9));bit.rotation.z=-Math.PI/2;bit.position.set(1.15,1.35,0);bit.name='minerBit';g.add(bit)
+      ;[[-.55,.26,-.5],[-.55,.26,.5],[.55,.26,-.5],[.55,.26,.5]].forEach(([wx,wy,wz])=>{const tread=new THREE.Mesh(new THREE.CylinderGeometry(.24,.24,.22,10),M(0x292524,.95,.05));tread.rotation.z=Math.PI/2;tread.position.set(wx,wy,wz);g.add(tread)})
+      break}
+    case 'cargo_ship':{
+      const body=new THREE.Mesh(new THREE.CylinderGeometry(.85,1.1,5.8,14),M(0xd1d5db,.25,.85));body.rotation.z=Math.PI/2;body.position.y=2.2;g.add(body)
+      const nose=new THREE.Mesh(new THREE.ConeGeometry(.82,1.6,14),M(0xfb923c,.35,.7));nose.rotation.z=-Math.PI/2;nose.position.set(3.5,2.2,0);g.add(nose)
+      ;[-1,1].forEach(sz=>{const fin=new THREE.Mesh(new THREE.BoxGeometry(1.8,.12,1.2),M(0x94a3b8,.4,.8));fin.position.set(-1.1,1.9,sz*1.1);fin.rotation.x=sz*.32;g.add(fin)})
+      const thruster=new THREE.PointLight(0x60a5fa,1,10);thruster.position.set(-3,2.2,0);thruster.name='thrusterLight';g.add(thruster)
+      break}
+    case 'drill_rig':{
+      const base=new THREE.Mesh(new THREE.BoxGeometry(4.8,.25,4.8),M(0x5b3b1f,.85,.2));base.position.y=.12;g.add(base)
+      ;[[-1.2,-1.2],[-1.2,1.2],[1.2,-1.2],[1.2,1.2]].forEach(([px,pz])=>{const leg=new THREE.Mesh(new THREE.CylinderGeometry(.12,.16,5.2,8),M(0x94a3b8,.45,.8));leg.position.set(px,2.6,pz);leg.rotation.z=px<0?.08:-.08;g.add(leg)})
+      const crown=new THREE.Mesh(new THREE.BoxGeometry(3.1,.2,3.1),M(0xcbd5e1,.35,.7));crown.position.y=5.15;g.add(crown)
+      const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,4.6,8),M(0xfacc15,.25,.9));shaft.position.y=2.6;shaft.name='rigSpin';g.add(shaft)
+      break}
+    case 'turret':{
+      const base=new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.8,.55,16),M(0x4b5563,.7,.35));base.position.y=.28;g.add(base)
+      const head=new THREE.Mesh(new THREE.BoxGeometry(1.8,.7,1.2),M(0x9ca3af,.4,.75));head.position.y=1.05;head.name='turretHead';g.add(head)
+      const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.12,.16,2.1,10),M(0xe2e8f0,.25,.85));barrel.rotation.z=Math.PI/2;barrel.position.set(1.45,1.05,0);g.add(barrel)
+      const tl=new THREE.PointLight(0xef4444,.7,7);tl.position.set(1.8,1.1,0);tl.name='turretLight';g.add(tl)
+      break}
+    case 'gate':{
+      const base=new THREE.Mesh(new THREE.BoxGeometry(4.2,.32,1.6),M(0x334155,.85,.2));base.position.y=.16;g.add(base)
+      ;[-1.4,1.4].forEach(px=>{const post=new THREE.Mesh(new THREE.BoxGeometry(.38,2.8,.38),M(0x94a3b8,.45,.75));post.position.set(px,1.4,0);g.add(post)})
+      const arch=new THREE.Mesh(new THREE.BoxGeometry(3.2,.26,.45),M(0xcbd5e1,.25,.8));arch.position.set(0,2.7,0);g.add(arch)
+      const door=new THREE.Mesh(new THREE.BoxGeometry(2.2,2.2,.12),new THREE.MeshStandardMaterial({color:0x67e8f9,transparent:true,opacity:.16,roughness:.05}));door.position.set(0,1.3,0);g.add(door)
+      const gl=new THREE.PointLight(0x38bdf8,.7,8);gl.position.set(0,2.8,0);gl.name='gateLight';g.add(gl)
+      break}
+    case 'emp_dome':{
+      const base=new THREE.Mesh(new THREE.CylinderGeometry(2.4,2.8,.45,18),M(0x312e81,.55,.45));base.position.y=.22;g.add(base)
+      const dome=new THREE.Mesh(new THREE.SphereGeometry(3.4,18,12,0,Math.PI*2,0,Math.PI*.5),new THREE.MeshStandardMaterial({color:0xa78bfa,transparent:true,opacity:.12,roughness:.04}));dome.position.y=.25;dome.name='empField';g.add(dome)
+      ;[1.6,2.5].forEach((r,i)=>{const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.09,8,24),ME(0x8b5cf6,0x6d28d9,.9));ring.rotation.x=Math.PI/2;ring.position.y=.45+i*.7;g.add(ring)})
+      const el=new THREE.PointLight(0xa78bfa,1.1,12);el.position.y=2.6;el.name='empLight';g.add(el)
+      break}
+    case 'wall_seg':{
+      const base=new THREE.Mesh(new THREE.BoxGeometry(6,.3,1.1),M(0x57534e,.9,.15));base.position.y=.15;g.add(base)
+      const wall=new THREE.Mesh(new THREE.BoxGeometry(5.8,1.5,.45),M(0x78716c,.85,.2));wall.position.y=.95;g.add(wall)
+      ;[-2,0,2].forEach(px=>{const stripe=new THREE.Mesh(new THREE.BoxGeometry(.8,.14,.05),ME(0xfacc15,0xf59e0b,.3));stripe.position.set(px,1.3,.26);g.add(stripe)})
+      break}
+    case 'beacon':{
+      const plinth=new THREE.Mesh(new THREE.CylinderGeometry(1.2,1.5,.4,16),M(0x374151,.8,.25));plinth.position.y=.2;g.add(plinth)
+      const mast=new THREE.Mesh(new THREE.CylinderGeometry(.12,.18,5.8,10),M(0xcbd5e1,.3,.85));mast.position.y=3.1;g.add(mast)
+      const ring=new THREE.Mesh(new THREE.TorusGeometry(.8,.06,8,24),ME(0x22d3ee,0x0891b2,.8));ring.rotation.x=Math.PI/2;ring.position.y=4.1;ring.name='beaconRing';g.add(ring)
+      const light=new THREE.PointLight(0x22d3ee,1.3,16);light.position.y=5.8;light.name='beaconLight';g.add(light)
       break}
     case 'road':{
       const seg=new THREE.Mesh(new THREE.BoxGeometry(8,.15,4),M(0x444444,.95,.1));seg.position.y=.08;g.add(seg)
@@ -1116,6 +1246,9 @@ class MarsGame {
     this.scene=new THREE.Scene();this.scene.fog=new THREE.FogExp2(0x3a1a0a,.0028)
     this.camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,.1,1200)
     this.renderer=new THREE.WebGLRenderer({antialias:true})
+    this.renderer.outputEncoding=THREE.sRGBEncoding
+    this.renderer.toneMapping=THREE.ACESFilmicToneMapping
+    this.renderer.toneMappingExposure=1.08
     this.renderer.setSize(innerWidth,innerHeight);this.renderer.setPixelRatio(Math.min(devicePixelRatio,2))
     this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap
     document.getElementById('gameCanvas').appendChild(this.renderer.domElement)
@@ -1135,11 +1268,14 @@ class MarsGame {
     return h
   }
   _initScene(){
-    this.ambLight=new THREE.AmbientLight(0xc08050,1.8);this.scene.add(this.ambLight)
+    this.ambLight=new THREE.AmbientLight(0xc08050,1.35);this.scene.add(this.ambLight)
+    this.hemiLight=new THREE.HemisphereLight(0xffd5ae,0x291308,1.2);this.scene.add(this.hemiLight)
     this.sunLight=new THREE.DirectionalLight(0xffeec0,2.8);this.sunLight.castShadow=true
-    this.sunLight.shadow.mapSize.set(2048,2048);const sd=100
+    this.sunLight.shadow.mapSize.set(2048,2048);this.sunLight.shadow.bias=-0.00018;this.sunLight.shadow.normalBias=.02;const sd=100
     ;['left','right','top','bottom'].forEach((s,i)=>this.sunLight.shadow.camera[s]=[-sd,sd,sd,-sd][i]);this.scene.add(this.sunLight)
+    this.moonLight=new THREE.DirectionalLight(0x8ec5ff,.18);this.scene.add(this.moonLight)
     this.sunSphere=new THREE.Mesh(new THREE.SphereGeometry(2.2,12,12),new THREE.MeshBasicMaterial({color:0xffe8a0}));this.scene.add(this.sunSphere)
+    this.moonSphere=new THREE.Mesh(new THREE.SphereGeometry(1.5,12,12),new THREE.MeshBasicMaterial({color:0xcfe8ff,transparent:true,opacity:.85}));this.scene.add(this.moonSphere)
     const geo=new THREE.PlaneGeometry(240,240,140,140);const pos=geo.attributes.position,cols=[]
     for(let i=0;i<pos.count;i++){
       const wx=pos.getX(i),wz=pos.getY(i),h=this._getH(wx,wz);pos.setZ(i,h)
@@ -1154,7 +1290,7 @@ class MarsGame {
       cols.push(tc.r,tc.g,tc.b)
     }
     pos.needsUpdate=true;geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));geo.computeVertexNormals()
-    this.terrainMesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.82,metalness:.05}));this.terrainMesh.rotation.x=-Math.PI/2;this.terrainMesh.receiveShadow=true;this.scene.add(this.terrainMesh)
+    this.terrainMesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.88,metalness:.03,flatShading:false}));this.terrainMesh.rotation.x=-Math.PI/2;this.terrainMesh.receiveShadow=true;this.scene.add(this.terrainMesh)
     const rM=[new THREE.MeshStandardMaterial({color:0x7a4828,roughness:.88}),new THREE.MeshStandardMaterial({color:0x6a3820,roughness:.85})]
     for(let i=0;i<55;i++){const s=Math.random()*2.2+.3,a=Math.random()*Math.PI*2,d=20+Math.random()*90,rx=Math.cos(a)*d,rz=Math.sin(a)*d;const r=new THREE.Mesh(Math.random()<.5?new THREE.DodecahedronGeometry(s):new THREE.OctahedronGeometry(s),rM[i%2]);r.position.set(rx,this._getH(rx,rz)+s*.4,rz);r.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);r.castShadow=true;this.scene.add(r)}
     const sp=[];for(let i=0;i<2200;i++)sp.push((Math.random()-.5)*600,70+Math.random()*300,(Math.random()-.5)*600)
@@ -1407,36 +1543,128 @@ class MarsGame {
   // ── FENCE BUILDER ────────────────────────────────────────
   startFenceMode(style='wall'){
     this.fenceMode=true;this.fenceStyle=style;this.fenceStart=null
-    this.notify(`Fence mode: ${style}. Click start point, then end point.`,'info')
+    this.notify(`Fence mode: ${style}. Click to start and keep clicking to extend.`,'info')
     document.getElementById('xhair').classList.add('bmode')
   }
+  _getFenceAnchorPoints(){
+    const anchors=[]
+    this.fenceSegments.forEach(seg=>{
+      if(seg.start)anchors.push(seg.start.clone())
+      if(seg.end)anchors.push(seg.end.clone())
+    })
+    this.buildings.forEach(b=>{
+      if(!b.data.constructed)return
+      if(b.data.type==='gate'){
+        const dir=new THREE.Vector3(1,0,0).applyAxisAngle(new THREE.Vector3(0,1,0),b.mesh.rotation.y)
+        anchors.push(b.mesh.position.clone().add(dir.clone().multiplyScalar(2.1)))
+        anchors.push(b.mesh.position.clone().add(dir.clone().multiplyScalar(-2.1)))
+      }
+      if(b.data.type==='wall_seg'){
+        const dir=new THREE.Vector3(1,0,0).applyAxisAngle(new THREE.Vector3(0,1,0),b.mesh.rotation.y)
+        anchors.push(b.mesh.position.clone().add(dir.clone().multiplyScalar(2.9)))
+        anchors.push(b.mesh.position.clone().add(dir.clone().multiplyScalar(-2.9)))
+      }
+    })
+    return anchors
+  }
+  _getSnappedFencePoint(point){
+    const snapped=point.clone()
+    const anchors=this._getFenceAnchorPoints()
+    let best=null,bestDist=4.5
+    anchors.forEach(anchor=>{
+      const dist=Math.hypot(anchor.x-point.x,anchor.z-point.z)
+      if(dist<bestDist){best=anchor;bestDist=dist}
+    })
+    if(best){snapped.x=best.x;snapped.y=best.y;snapped.z=best.z}
+    if(this.fenceStart){
+      const dx=snapped.x-this.fenceStart.x,dz=snapped.z-this.fenceStart.z
+      const len=Math.max(1,Math.sqrt(dx*dx+dz*dz))
+      const snapAngle=Math.round(Math.atan2(dz,dx)/(Math.PI/4))*(Math.PI/4)
+      snapped.x=this.fenceStart.x+Math.cos(snapAngle)*len
+      snapped.z=this.fenceStart.z+Math.sin(snapAngle)*len
+      anchors.forEach(anchor=>{
+        const dist=Math.hypot(anchor.x-snapped.x,anchor.z-snapped.z)
+        if(dist<3.8){snapped.x=anchor.x;snapped.y=anchor.y;snapped.z=anchor.z}
+      })
+    }
+    const ray=new THREE.Raycaster();ray.set(new THREE.Vector3(snapped.x,50,snapped.z),new THREE.Vector3(0,-1,0))
+    const hit=ray.intersectObject(this.terrainMesh);if(hit.length)snapped.y=hit[0].point.y
+    return snapped
+  }
+  _getPlacementPoint(x,z,type=this.selectedTool){
+    const snapped=new THREE.Vector3(Math.round(x),0,Math.round(z))
+    if(type==='gate'||type==='wall_seg'){
+      const anchors=this._getFenceAnchorPoints()
+      let best=null,bestDist=type==='gate'?5.2:3.2
+      anchors.forEach(anchor=>{
+        const dist=Math.hypot(anchor.x-snapped.x,anchor.z-snapped.z)
+        if(dist<bestDist){best=anchor;bestDist=dist}
+      })
+      if(best){
+        if(type==='gate'){snapped.x=best.x;snapped.z=best.z}
+        else {
+          const baseRot=Math.round(this.placeRotY/(Math.PI/4))*(Math.PI/4)
+          const side=((snapped.x-best.x)*Math.cos(baseRot)+(snapped.z-best.z)*Math.sin(baseRot))>=0?1:-1
+          snapped.x=best.x+Math.cos(baseRot)*2.9*side
+          snapped.z=best.z+Math.sin(baseRot)*2.9*side
+        }
+      }
+    }
+    const ray=new THREE.Raycaster();ray.set(new THREE.Vector3(snapped.x,50,snapped.z),new THREE.Vector3(0,-1,0))
+    const hit=ray.intersectObject(this.terrainMesh);if(hit.length)snapped.y=hit[0].point.y
+    return snapped
+  }
+  _getPlacementRotation(x,z,type=this.selectedTool){
+    const snappedRot=Math.round(this.placeRotY/(Math.PI/4))*(Math.PI/4)
+    if(type!=='gate'&&type!=='wall_seg')return snappedRot
+    const anchors=this._getFenceAnchorPoints().filter(anchor=>Math.hypot(anchor.x-x,anchor.z-z)>.35)
+    let best=null,bestDist=9.5
+    anchors.forEach(anchor=>{
+      const dist=Math.hypot(anchor.x-x,anchor.z-z)
+      if(dist<bestDist){best=anchor;bestDist=dist}
+    })
+    if(best)return Math.atan2(best.z-z,best.x-x)
+    return snappedRot
+  }
+  _canPlaceBuildingAt(type,x,z){
+    const gapMap={wall_seg:4.4,gate:4.8,road:5.2,tunnel:5.8,waterline:4.2,powerline:4.2}
+    const minGap=gapMap[type]??8
+    return !this.buildings.some(b=>{
+      if(!b.mesh?.parent)return false
+      const otherGap=gapMap[b.data.type]??8
+      const dx=b.mesh.position.x-x,dz=b.mesh.position.z-z
+      return Math.sqrt(dx*dx+dz*dz)<Math.min(minGap,otherGap)
+    })
+  }
   _handleFenceClick(worldPt){
+    const snapped=this._getSnappedFencePoint(worldPt)
     if(!this.fenceStart){
-      this.fenceStart=worldPt.clone()
-      this.notify('Fence start set. Click end point.','info')
+      this.fenceStart=snapped.clone()
+      this.notify('Fence anchor set. Click again to extend.','info')
     } else {
-      this._placeFenceSegment(this.fenceStart,worldPt)
-      this.fenceStart=null;this.fenceMode=false
-      document.getElementById('xhair').classList.remove('bmode','binvalid')
-      this.notify('Fence segment placed!','success');SND.complete()
+      const placed=this._placeFenceSegment(this.fenceStart,snapped)
+      if(placed){
+        this.fenceStart=snapped.clone()
+        document.getElementById('xhair').classList.add('bmode')
+        this.notify('Fence segment placed — keep building or press Esc to stop.','success');SND.complete()
+      }
     }
   }
   _placeFenceSegment(a,b){
-    const dx=b.x-a.x,dz=b.z-a.z
+    const start=a.clone(),end=b.clone()
+    const dx=end.x-start.x,dz=end.z-start.z
     const len=Math.sqrt(dx*dx+dz*dz)
-    if(len<1||len>80){this.notify('Fence must be 1-80m long','error');return}
+    if(len<1||len>80){this.notify('Fence must be 1-80m long','error');return false}
     const ironCost=Math.ceil(len*1.5)
-    if(this.resources.iron<ironCost){this.notify('Need '+ironCost+' Fe for this fence','error');SND.error();return}
+    if(this.resources.iron<ironCost){this.notify('Need '+ironCost+' Fe for this fence','error');SND.error();return false}
     this.resources.iron-=ironCost;SND.build()
     const seg=mkFenceSegment(len,this.fenceStyle)
-    const mx=(a.x+b.x)/2,mz=(a.z+b.z)/2
-    // Terrain height at midpoint
-    const _fr=new THREE.Raycaster();_fr.set(new THREE.Vector3(mx,50,mz),new THREE.Vector3(0,-1,0))
-    const _fh=_fr.intersectObject(this.terrainMesh);const fy=_fh.length?_fh[0].point.y:0
+    const mx=(start.x+end.x)/2,mz=(start.z+end.z)/2,fy=(start.y+end.y)/2
     seg.position.set(mx,fy,mz)
-    seg.rotation.y=Math.atan2(dx,dz)
-    this.scene.add(seg);this.fenceSegments.push({mesh:seg,length:len,style:this.fenceStyle})
+    seg.rotation.y=Math.atan2(dz,dx)
+    this.scene.add(seg);this.fenceSegments.push({mesh:seg,length:len,style:this.fenceStyle,start:start.clone(),end:end.clone()})
     this._spawnParticles(new THREE.Vector3(mx,fy+1,mz),0x00ffcc)
+    return true
   }
 
   // ── DYNAMIC STRUCTURE EFFECTS ────────────────────────────
@@ -1525,6 +1753,55 @@ class MarsGame {
         const ls=m.children.filter(c=>c.isPointLight&&c.name==='padL')
         ls.forEach((l,i)=>l.intensity=Math.sin(t*1.5+i*1.57)>0?.9:.08)
         break}
+      case 'observatory':{
+        const scope=m.getObjectByName('obsScope')
+        if(scope)scope.rotation.y+=.01
+        const ol=m.getObjectByName('obsLight')
+        if(ol)ol.intensity=.55+Math.sin(t*2.2)*.35
+        break}
+      case 'beacon':{
+        const ring=m.getObjectByName('beaconRing')
+        if(ring)ring.rotation.z+=.035
+        const bl=m.getObjectById ? m.getObjectByName('beaconLight') : null
+        if(bl)bl.intensity=.7+Math.sin(t*4.2)*.8
+        break}
+      case 'turret':{
+        const head=m.getObjectByName('turretHead')
+        if(head)head.rotation.y=Math.sin(t*0.8)*.8
+        const tl=m.getObjectByName('turretLight')
+        if(tl)tl.intensity=.4+Math.sin(t*5)*.25
+        break}
+      case 'gate':{
+        const gl=m.getObjectByName('gateLight')
+        if(gl)gl.intensity=.45+Math.sin(t*4.5)*.3
+        break}
+      case 'emp_dome':{
+        const field=m.getObjectByName('empField')
+        if(field)field.material.opacity=.08+Math.sin(t*2.4)*.04
+        const el=m.getObjectByName('empLight')
+        if(el)el.intensity=.9+Math.sin(t*3.2)*.45
+        break}
+      case 'solartower':{
+        const wg=m.getObjectByName('towerWing')
+        if(wg)wg.rotation.y+=.01
+        const tl=m.getObjectByName('towerLight')
+        if(tl)tl.intensity=.75+Math.sin(t*3)*.3
+        break}
+      case 'greenhouse2':{
+        m.children.filter(c=>c.isPointLight&&c.name==='growLight').forEach((l,i)=>{l.intensity=.25+Math.sin(t*2+i)*.25})
+        break}
+      case 'cargo_ship':{
+        const thr=m.getObjectByName('thrusterLight')
+        if(thr)thr.intensity=.6+Math.sin(t*6)*.35
+        break}
+      case 'drill_rig':{
+        const shaft=m.getObjectByName('rigSpin')
+        if(shaft)shaft.rotation.y+=.08
+        break}
+      case 'miner_bot':{
+        const bit=m.getObjectByName('minerBit')
+        if(bit)bit.rotation.x+=.18
+        break}
     }
   }
 
@@ -1560,7 +1837,7 @@ class MarsGame {
     if(def?.isFence){
       this.cancelTool()
       this.fenceMode=true;this.fenceStyle=def.fenceStyle;this.fenceStart=null
-      document.getElementById('selTip').textContent=def.label+' — click start, then end'
+      document.getElementById('selTip').textContent=def.label+' — click to start, keep clicking to extend'
       document.getElementById('cancelBuildBtn').style.display='inline-flex'
       document.getElementById('xhair').classList.add('bmode')
       this._buildBuildBar();return
@@ -1582,6 +1859,7 @@ class MarsGame {
     document.getElementById('rotateBuildBtn').style.display='none'
     document.getElementById('xhair').classList.remove('bmode','binvalid')
     if(this.ghostMesh){this.scene.remove(this.ghostMesh);this.ghostMesh=null}
+    if(this.fencePreviewLine){this.scene.remove(this.fencePreviewLine);this.fencePreviewLine=null}
     this._buildBuildBar()
   }
   rotatePlacement(){SND.click();this.placeRotY+=Math.PI/4;if(this.ghostMesh)this.ghostMesh.rotation.y=this.placeRotY}
@@ -1595,11 +1873,12 @@ class MarsGame {
   _placeBuilding(type,x,z,instant=false){
     const allItems=Object.values(BCAT).flat()
     const def=allItems.find(b=>b.id===type);if(!def)return
+    const snapPt=this._getPlacementPoint(x,z,type);x=snapPt.x;z=snapPt.z
     const ic=Math.round(def.cost*(this.bd.costM||1)),rc=def.rareReq||0
     if(!instant){
       if(this.resources.iron<ic){this.notify('Not enough iron!','error');SND.error();return}
       if(rc&&this.resources.rare<rc){this.notify('Need '+rc+' Rare!','error');SND.error();return}
-      if(this.buildings.some(b=>{const dx=b.mesh.position.x-x,dz=b.mesh.position.z-z;return Math.sqrt(dx*dx+dz*dz)<8})){this.notify('Too close!','error');SND.error();return}
+      if(!this._canPlaceBuildingAt(type,x,z)){this.notify('Placement blocked here!','error');SND.error();return}
       this.resources.iron-=ic;if(rc)this.resources.rare-=rc;SND.build()
     }
     const mesh=mkBuilding(type)
@@ -1609,14 +1888,14 @@ class MarsGame {
       droid:.0,harvester:.5,rover:.55,drone:3.5,medbot:.0,miner_bot:.0,
       cargo_ship:.0,drill_rig:.0,road:.0,tunnel:.0,waterline:.0,powerline:.0,
       storagetan:.0,solartower:.0,greenhouse2:.0,turret:.0,stormshel:.0,
-      emp_dome:.0,wall_seg:.0,beacon:.0}
+      gate:.0,emp_dome:.0,wall_seg:.0,beacon:.0}
     // Sample terrain height at placement point
     const _sr=new THREE.Raycaster()
     _sr.set(new THREE.Vector3(x,50,z),new THREE.Vector3(0,-1,0))
     const _th=_sr.intersectObject(this.terrainMesh)
     const terrY=_th.length?_th[0].point.y:0
     mesh.position.set(x, terrY+(YLIFT[type]??0), z)
-    mesh.rotation.y=this.placeRotY
+    mesh.rotation.y=this._getPlacementRotation(x,z,type)
     const ctBase=Math.round(320*(this.bd.timeM||1)) // Slower construction
     mesh.userData={type,level:1,upgradeTier:0,constructed:instant,constructionTime:instant?0:ctBase,maxCT:ctBase,offline:false}
     if(instant){const holo=mesh.getObjectByName('holo');if(holo)mesh.remove(holo)}
@@ -1863,26 +2142,44 @@ class MarsGame {
   }
   _updateSky(){
     const h=this.hour
-    // Subtle year darkening only from year 4+
     const yearDark=Math.max(0,(this.year-3)*.05)
-    let sky,si
     const C=(hex)=>new THREE.Color(hex)
-    if(h<5||h>=22){sky=C(0x060208);si=0}
-    else if(h<8){const t=(h-5)/3;sky=new THREE.Color().lerpColors(C(0x060208),C(0x6d2a10),t);si=t*1.2}
-    else if(h<11){const t=(h-8)/3;sky=new THREE.Color().lerpColors(C(0x6d2a10),C(0xd97040),t);si=1.2+t*1.6}
-    else if(h<16){sky=C(0xd97040);si=2.8}  // full bright midday
-    else if(h<20){const t=(h-16)/4;sky=new THREE.Color().lerpColors(C(0xd97040),C(0x7a2010),t);si=2.8-t*2.8}
-    else{const t=(h-20)/2;sky=new THREE.Color().lerpColors(C(0x7a2010),C(0x060208),t);si=0}
-    if(this.dustStorm){si*=.18;sky=C(0x4a2008)}
+    const sunLift=Math.sin(((h-6)/24)*Math.PI*2)
+    const daylight=Math.max(0,sunLift)
+    const nightness=1-daylight
+    let sky
+    if(h<5||h>=22)sky=C(0x060814)
+    else if(h<8){const t=(h-5)/3;sky=new THREE.Color().lerpColors(C(0x060814),C(0x8a3b1a),t)}
+    else if(h<11){const t=(h-8)/3;sky=new THREE.Color().lerpColors(C(0x8a3b1a),C(0xe58852),t)}
+    else if(h<16)sky=C(0xe58852)
+    else if(h<20){const t=(h-16)/4;sky=new THREE.Color().lerpColors(C(0xe58852),C(0x6f2414),t)}
+    else{const t=(h-20)/2;sky=new THREE.Color().lerpColors(C(0x6f2414),C(0x060814),t)}
+    if(this.dustStorm)sky=C(0x5a2a12)
     sky.r=Math.max(0,sky.r-yearDark*.2);sky.g=Math.max(0,sky.g-yearDark*.25)
     this.scene.background=sky
-    this.scene.fog.color.setRGB(sky.r*.5,sky.g*.5,sky.b*.5)
-    this.sunLight.intensity=si
-    // Keep ambient always at least a bit lit
-    this.ambLight.intensity=1.8+si*.3
-    this.stars.material.opacity=(h<7||h>20)?.88:0
-    const sa=(h/24)*Math.PI,sx=Math.cos(sa)*140,sy=Math.sin(sa)*95
-    this.sunLight.position.set(sx,sy,20);this.sunSphere.position.set(sx*.62,sy*.62,-55);this.sunSphere.visible=sy>-8
+    this.scene.fog.color.copy(sky.clone().multiplyScalar(.52))
+    this.scene.fog.density=this.dustStorm?.0054:(.0018+nightness*.001)
+
+    const sunIntensity=(this.dustStorm?.35:1)*(0.12+daylight*2.9)
+    const moonIntensity=(this.dustStorm?.15:1)*(0.1+nightness*.42)
+    this.sunLight.intensity=sunIntensity
+    this.moonLight.intensity=moonIntensity
+    this.ambLight.intensity=.4+daylight*1.15
+    this.hemiLight.intensity=.22+daylight*1.1
+    this.hemiLight.color.copy(new THREE.Color().lerpColors(C(0x9cc7ff),C(0xffd8b8),daylight))
+    this.hemiLight.groundColor.copy(new THREE.Color().lerpColors(C(0x12080a),C(0x452112),daylight))
+    this.sunLight.color.copy(new THREE.Color().lerpColors(C(0xff8b5a),C(0xfff2da),Math.min(1,daylight*1.2)))
+    this.moonLight.color.copy(C(0x8ec5ff))
+    if(this.stars)this.stars.material.opacity=Math.min(.95,nightness*.92)
+
+    const sa=(h/24)*Math.PI*2-Math.PI/2
+    const sx=Math.cos(sa)*140,sy=Math.sin(sa)*95
+    this.sunLight.position.set(sx,sy,20)
+    this.sunSphere.position.set(sx*.62,sy*.62,-55)
+    this.sunSphere.visible=sy>-10
+    this.moonLight.position.set(-sx,Math.max(18,-sy*.85),-35)
+    this.moonSphere.position.set(-sx*.58,Math.max(12,-sy*.56),60)
+    this.moonSphere.visible=nightness>.2
   }
   _updateCamera(){const x=Math.sin(this.cameraAngle)*this.camDist,z=Math.cos(this.cameraAngle)*this.camDist;this.camera.position.set(this.camTarget.x+x,this.camH,this.camTarget.z+z);this.camera.lookAt(this.camTarget)}
   _setupControls(){
@@ -1911,6 +2208,11 @@ class MarsGame {
       if(mHit.length)this.mineMineral(mHit[0].object)
     })
     this.renderer.domElement.addEventListener('mousemove',e=>{this.mouse.x=(e.clientX/innerWidth)*2-1;this.mouse.y=-(e.clientY/innerHeight)*2+1})
+    this.renderer.domElement.addEventListener('wheel',e=>{
+      e.preventDefault()
+      this.camDist=Math.min(140,Math.max(18,this.camDist+(e.deltaY>0?4:-4)))
+      this.camH=Math.min(64,Math.max(20,this.camH+(e.deltaY>0?0.8:-0.8)))
+    },{passive:false})
   }
   _startLoops(){setInterval(()=>this._tickRes(),1000/60);setInterval(()=>this._tickAI(),1000/60)}
   _tickRes(){
@@ -2019,7 +2321,7 @@ class MarsGame {
     this.gameOver=true;SND.victory()
     const gd=this.decisions.filter(d=>d.good===true).length,bd=this.decisions.filter(d=>d.good===false).length
     document.getElementById('vEpilogue').textContent=gd>bd?`${this.playerName} made ${gd} decisions that preserved both lives and humanity\'s values. The colony remembers them.`:`${gd} good decisions and ${bd} hard ones. History will judge all of them.`
-    document.getElementById('vStats').innerHTML=`Commander: ${this.playerName} — ${this.char.name}\nYear: ${this.year} · Sol: ${Math.floor(this.sol)}\nPopulation: ${this.population.toLocaleString()}\nStructures: ${this.buildings.length}\nGood decisions: ${gd} / Hard decisions: ${bd}`
+    document.getElementById('vStats').textContent=`Commander: ${this.playerName} — ${this.char.name}\nYear: ${this.year} · Sol: ${Math.floor(this.sol)}\nPopulation: ${this.population.toLocaleString()}\nStructures: ${this.buildings.length}\nGood decisions: ${gd} / Hard decisions: ${bd}`
     document.getElementById('victoryModal').classList.remove('hidden')
   }
   _endGame(reason){
@@ -2055,8 +2357,10 @@ class MarsGame {
       this.raycaster.setFromCamera(this.mouse,this.camera)
       const hit=this.raycaster.intersectObject(this.terrainMesh)
       if(hit.length){
-        const pt=hit[0].point;this.ghostMesh.position.set(pt.x,pt.y,pt.z)
-        const bad=this.buildings.some(b=>{const dx=b.mesh.position.x-pt.x,dz=b.mesh.position.z-pt.z;return Math.sqrt(dx*dx+dz*dz)<8})
+        const snapPt=this._getPlacementPoint(hit[0].point.x,hit[0].point.z,this.selectedTool)
+        this.ghostMesh.position.set(snapPt.x,snapPt.y,snapPt.z)
+        this.ghostMesh.rotation.y=this._getPlacementRotation(snapPt.x,snapPt.z,this.selectedTool)
+        const bad=!this._canPlaceBuildingAt(this.selectedTool,snapPt.x,snapPt.z)
         const col=bad?0xff2222:0x00ff88;this.ghostMesh.children.forEach(c=>{if(c.material)c.material.color.setHex(col)})
         const xh=document.getElementById('xhair');xh.classList.toggle('bmode',!bad);xh.classList.toggle('binvalid',bad)
       }
@@ -2066,16 +2370,15 @@ class MarsGame {
       this.raycaster.setFromCamera(this.mouse,this.camera)
       const fhit=this.raycaster.intersectObject(this.terrainMesh)
       if(fhit.length){
-        const ep=fhit[0].point
+        const ep=this._getSnappedFencePoint(fhit[0].point)
         if(this.fencePreviewLine){this.scene.remove(this.fencePreviewLine)}
         const pts=[this.fenceStart.clone().add(new THREE.Vector3(0,1.5,0)),ep.clone().add(new THREE.Vector3(0,1.5,0))]
         const geo=new THREE.BufferGeometry().setFromPoints(pts)
         const col=this.fenceStyle==='energy'?0x0088ff:this.fenceStyle==='fence'?0x667788:0x00ffcc
         this.fencePreviewLine=new THREE.Line(geo,new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.7}))
         this.scene.add(this.fencePreviewLine)
-        // Show length in tip
         const len=this.fenceStart.distanceTo(ep)
-        document.getElementById('selTip').textContent=`${this.fenceStyle} fence — ${Math.ceil(len)}m · ~${Math.ceil(len*1.5)} Fe`
+        document.getElementById('selTip').textContent=`${this.fenceStyle} fence — ${Math.ceil(len)}m · ~${Math.ceil(len*1.5)} Fe · Esc to stop`
       }
     } else if(this.fencePreviewLine&&!this.fenceStart){
       this.scene.remove(this.fencePreviewLine);this.fencePreviewLine=null
