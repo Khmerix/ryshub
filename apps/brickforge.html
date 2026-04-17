@@ -1342,13 +1342,13 @@ function createCloudTexture() {
 function updateSkyForScene(sceneName) {
     if (!skyMesh) return;
     const skyColors = {
-        nature:   { inset-block-start:0x2a6cb5, mid:0x87CEEB, bot:0xd4aa77 },
-        city:     { inset-block-start:0x3a5a78, mid:0x7a8899, bot:0x9a8877 },
-        desert:   { inset-block-start:0xcc8833, mid:0xddaa55, bot:0xddbb66 },
-        snow:     { inset-block-start:0x5577aa, mid:0xbbd4ee, bot:0xddeeff },
-        volcanic: { inset-block-start:0x110300, mid:0x1a0500, bot:0x330800 },
-        space:    { inset-block-start:0x000005, mid:0x000010, bot:0x000015 },
-        fantasy:  { inset-block-start:0x0d0022, mid:0x1a0044, bot:0x220055 }
+        nature:   { top:0x2a6cb5, mid:0x87CEEB, bot:0xd4aa77 },
+        city:     { top:0x3a5a78, mid:0x7a8899, bot:0x9a8877 },
+        desert:   { top:0xcc8833, mid:0xddaa55, bot:0xddbb66 },
+        snow:     { top:0x5577aa, mid:0xbbd4ee, bot:0xddeeff },
+        volcanic: { top:0x110300, mid:0x1a0500, bot:0x330800 },
+        space:    { top:0x000005, mid:0x000010, bot:0x000015 },
+        fantasy:  { top:0x0d0022, mid:0x1a0044, bot:0x220055 }
     };
     const s = skyColors[sceneName] || skyColors.nature;
     skyMesh.material.uniforms.topColor.value.setHex(s.top);
