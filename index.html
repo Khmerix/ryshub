@@ -2400,6 +2400,12 @@
 <canvas id="neuron-canvas"></canvas>
 <div id="static-overlay" aria-hidden="true"></div>
 
+<!-- Demo Mode Banner -->
+<div id="demo-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(90deg,#f59e0b,#d97706);color:#1c1917;padding:10px 20px;font-size:.88rem;font-weight:700;text-align:center;box-shadow:0 3px 16px rgba(245,158,11,.45);">
+    <i class="fas fa-flask" style="margin-right:8px;"></i> DEMO MODE &mdash; Exploring as a guest. Data is temporary and will reset on close.
+    <button onclick="exitDemoMode()" style="margin-left:18px;background:rgba(0,0,0,.18);border:none;border-radius:8px;padding:4px 14px;cursor:pointer;font-weight:700;font-size:.82rem;color:#1c1917;font-family:inherit;">✕ Exit Demo</button>
+</div>
+
 <!-- Header -->
 <header class="glass-header" id="mainHeader">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between header-shell">
@@ -3189,6 +3195,14 @@
         <button onclick="registerTeacherAccess()" style="inline-size:100%;padding:15px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-dark));color:white;border:none;border-radius:13px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 var(--primary-dark),0 8px 24px rgba(37,99,235,.4);transition:all 0.3s;">
             <i class="fas fa-user-check"></i> &nbsp;Verify teacher account
         </button>
+        <div style="display:flex;align-items:center;gap:10px;margin-block-start:14px;">
+            <div style="flex:1;height:1px;background:var(--gray-700);"></div>
+            <span style="font-size:.78rem;color:var(--gray-500);white-space:nowrap;">or just exploring?</span>
+            <div style="flex:1;height:1px;background:var(--gray-700);"></div>
+        </div>
+        <button onclick="enterDemoMode()" style="inline-size:100%;padding:12px;background:transparent;color:var(--gray-400);border:2px dashed var(--gray-600);border-radius:13px;font-weight:600;font-size:.92rem;cursor:pointer;font-family:inherit;margin-block-start:4px;transition:all 0.3s;" onmouseover="this.style.borderColor='#f59e0b';this.style.color='#f59e0b';" onmouseout="this.style.borderColor='var(--gray-600)';this.style.color='var(--gray-400)';">
+            <i class="fas fa-flask"></i> &nbsp;Try Demo &mdash; no login needed
+        </button>
     </div>
 </div>
 
@@ -3826,6 +3840,57 @@ function registerTeacherAccess() {
 
 function openProtectedToefl() {
     withTeacherAccess('TOEFL iBT', function() { openToeflLogin(); });
+}
+
+var DEMO_PROFILE = {
+    name: 'Demo User',
+    email: 'demo@aii.edu.kh',
+    school: 'Aii Language Center',
+    verified: true,
+    isDemo: true,
+    verifiedAt: new Date().toISOString(),
+    registeredAt: new Date().toISOString()
+};
+
+function enterDemoMode() {
+    var profiles = getTeacherProfilesMap();
+    profiles[DEMO_PROFILE.email] = DEMO_PROFILE;
+    localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(profiles));
+    localStorage.setItem('ryshubTeacherProfile', JSON.stringify(DEMO_PROFILE));
+    sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(DEMO_PROFILE));
+    sessionStorage.setItem('ryshubDemoMode', '1');
+    setCurrentTeacherEmail(DEMO_PROFILE.email);
+    localStorage.setItem('ryshub_role', 'teacher');
+    sessionStorage.setItem('ryshub_role', 'teacher');
+    updateTeacherStatusUi();
+    initHubMode();
+    renderGameScores();
+    renderClassroomLabMetrics();
+    closeTeacherRegister();
+    document.getElementById('demo-banner').style.display = 'block';
+    document.getElementById('mainHeader').style.marginTop = '44px';
+    showToast('Demo mode active — explore freely!');
+    if (typeof pendingTeacherAction === 'function') {
+        var nextAction = pendingTeacherAction;
+        pendingTeacherAction = null;
+        nextAction();
+    }
+}
+
+function exitDemoMode() {
+    sessionStorage.removeItem('ryshubDemoMode');
+    var profiles = getTeacherProfilesMap();
+    delete profiles[DEMO_PROFILE.email];
+    localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(profiles));
+    localStorage.removeItem('ryshubTeacherProfile');
+    sessionStorage.removeItem('ryshubTeacherProfile');
+    localStorage.removeItem(TEACHER_CURRENT_EMAIL_KEY);
+    localStorage.removeItem('ryshub_role');
+    sessionStorage.removeItem('ryshub_role');
+    document.getElementById('demo-banner').style.display = 'none';
+    document.getElementById('mainHeader').style.marginTop = '';
+    updateTeacherStatusUi();
+    showToast('Demo mode ended.');
 }
 
 function openProtectedBook1() {
@@ -4519,6 +4584,10 @@ document.getElementById('blog-admin-overlay').addEventListener('click', function
 
 applySavedTheme();
 updateTeacherStatusUi();
+if (sessionStorage.getItem('ryshubDemoMode') === '1') {
+    document.getElementById('demo-banner').style.display = 'block';
+    document.getElementById('mainHeader').style.marginTop = '44px';
+}
 initHubMode();
 initLiveCounters();
 initParallaxTilt();
