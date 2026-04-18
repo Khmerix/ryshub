@@ -13,6 +13,13 @@
         }
 
         try {
+            // Primary strategy: derive repo root from current URL path.
+            // Example: /ryshub/apps/books/library.html -> /ryshub/
+            var byLocation = rootFromPathname(window.location.pathname);
+            if (byLocation && byLocation !== '/') {
+                return window.location.origin + byLocation;
+            }
+
             var script = document.currentScript;
             if (script && script.src) {
                 var u = new URL(script.src, window.location.href);
