@@ -2109,6 +2109,199 @@
             color: var(--primary-blue);
         }
 
+        /* Teacher blog */
+        .teacher-blog-section {
+            max-width: 1200px;
+            margin: 0 auto 24px;
+            padding: 0 24px;
+        }
+
+        .blog-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .blog-main-card,
+        .blog-sidebar {
+            background: linear-gradient(180deg, rgba(15,23,42,.85) 0%, rgba(10,15,25,.92) 100%);
+            border: 1px solid rgba(148,163,184,.16);
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(2,6,23,.35);
+        }
+
+        .blog-main-card {
+            padding: 22px;
+        }
+
+        .blog-main-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.2rem;
+            color: #f8fafc;
+        }
+
+        .blog-main-card p {
+            margin: 0;
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+
+        .blog-main-grid {
+            margin-top: 16px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .blog-main-tip {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 11px 12px;
+            border: 1px solid rgba(96,165,250,.18);
+            border-radius: 12px;
+            background: rgba(30,41,59,.45);
+            color: #dbeafe;
+            font-size: .9rem;
+        }
+
+        .blog-sidebar {
+            padding: 14px;
+            position: sticky;
+            top: 96px;
+        }
+
+        .blog-sidebar-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .blog-sidebar-head h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: #f8fafc;
+        }
+
+        .blog-count {
+            color: #93c5fd;
+            font-size: .76rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .blog-admin-strip {
+            display: none;
+            border: 1px solid rgba(34,197,94,.28);
+            background: rgba(15,118,110,.16);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 12px;
+        }
+
+        .blog-admin-strip.open {
+            display: block;
+        }
+
+        .blog-admin-strip label {
+            display: block;
+            font-size: .77rem;
+            color: #bae6fd;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .blog-admin-strip input,
+        .blog-admin-strip textarea {
+            width: 100%;
+            border: 1px solid rgba(148,163,184,.25);
+            border-radius: 10px;
+            background: rgba(2,6,23,.65);
+            color: #e2e8f0;
+            padding: 10px 11px;
+            font-family: inherit;
+            margin-bottom: 9px;
+            font-size: .9rem;
+        }
+
+        .blog-admin-strip textarea {
+            min-height: 95px;
+            resize: vertical;
+        }
+
+        .blog-admin-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .blog-list {
+            display: grid;
+            gap: 10px;
+            max-height: 540px;
+            overflow: auto;
+            padding-right: 2px;
+        }
+
+        .blog-post-card {
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 12px;
+            padding: 11px 12px;
+            background: rgba(15,23,42,.72);
+        }
+
+        .blog-post-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .blog-post-title {
+            margin: 0;
+            font-size: .92rem;
+            color: #f8fafc;
+            font-weight: 700;
+        }
+
+        .blog-pin {
+            font-size: .66rem;
+            font-weight: 700;
+            color: #fde68a;
+            border: 1px solid rgba(245,158,11,.35);
+            border-radius: 999px;
+            padding: 2px 8px;
+            background: rgba(245,158,11,.12);
+            white-space: nowrap;
+        }
+
+        .blog-post-body {
+            margin: 0 0 8px;
+            color: #cbd5e1;
+            font-size: .86rem;
+            line-height: 1.55;
+        }
+
+        .blog-post-meta {
+            color: #94a3b8;
+            font-size: .74rem;
+        }
+
+        @media (max-width: 1040px) {
+            .blog-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .blog-sidebar {
+                position: static;
+                top: auto;
+            }
+        }
+
         /* Focus rings */
         .nav-3d:focus-visible,
         .glow-btn:focus-visible,
@@ -2235,6 +2428,7 @@
                 <a href="#" class="nav-3d" onclick="scrollToSection('featuredApps'); return false;">Featured Apps</a>
                 <a href="#" class="nav-3d" onclick="scrollToSection('gamesScores'); return false;">Games &amp; Scores</a>
                 <a href="#" class="nav-3d" onclick="scrollToSection('classroomLabSection'); return false;">Classroom Lab</a>
+                <a href="#" class="nav-3d" onclick="scrollToSection('teacherBlogSection'); return false;">Teacher Blog</a>
                 <a href="#" class="nav-3d" onclick="scrollToSection('miniGamesSection'); return false;">Mini Games</a>
                 <a href="#" class="nav-3d" onclick="scrollToSection('commandCenterSection'); return false;">Command Center</a>
                 <a href="apps/books/library.html" class="nav-3d" target="_blank">📖 Story Library</a>
@@ -2625,6 +2819,61 @@
     </div>
 </section>
 
+<section class="teacher-blog-section" id="teacherBlogSection">
+    <div class="section-intro">
+        <div>
+            <div class="section-kicker">Teacher Voice</div>
+            <h2>Class Blog + Admin Publishing</h2>
+            <p>Post short updates for teachers in a right-column feed. Use admin login to publish announcements, reminders, and class highlights.</p>
+        </div>
+        <div class="hb-chip"><i class="fas fa-bullhorn"></i> Staff updates</div>
+    </div>
+
+    <div class="blog-layout">
+        <article class="blog-main-card">
+            <h3>How to use this blog area</h3>
+            <p>
+                This section is designed for teacher-only communication in the hub. Keep posts short and practical: weekly goals, exam reminders,
+                classroom updates, and resource notes.
+            </p>
+            <div class="blog-main-grid">
+                <div class="blog-main-tip"><i class="fas fa-check-circle"></i><span><strong>Post format:</strong> 1 title + 2-4 concise lines + optional priority pin.</span></div>
+                <div class="blog-main-tip"><i class="fas fa-users"></i><span><strong>Visibility:</strong> published posts appear in the right column for staff reference.</span></div>
+                <div class="blog-main-tip"><i class="fas fa-shield-alt"></i><span><strong>Control:</strong> publishing is locked behind admin login.</span></div>
+            </div>
+        </article>
+
+        <aside class="blog-sidebar">
+            <div class="blog-sidebar-head">
+                <div>
+                    <h3>Teacher Posts</h3>
+                    <div class="blog-count"><span id="teacherBlogCount">0</span> posts</div>
+                </div>
+                <button id="blogAdminButton" class="btn-outline" onclick="openBlogAdminLogin()"><i class="fas fa-lock"></i> Admin</button>
+            </div>
+
+            <div id="blogAdminStrip" class="blog-admin-strip" aria-live="polite">
+                <label for="blogPostTitle">Post title</label>
+                <input id="blogPostTitle" type="text" placeholder="e.g., Week 8 writing checkpoints">
+
+                <label for="blogPostBody">Post content</label>
+                <textarea id="blogPostBody" placeholder="Write your teacher update here..."></textarea>
+
+                <label style="display:flex;align-items:center;gap:8px;margin: 0 0 10px;color:#cbd5e1;font-size:.82rem;">
+                    <input id="blogPostPinned" type="checkbox" style="width:auto;margin:0;"> Pin this post
+                </label>
+
+                <div class="blog-admin-actions">
+                    <button class="btn-primary" onclick="publishTeacherBlogPost()"><i class="fas fa-paper-plane"></i> Publish</button>
+                    <button class="btn-outline" onclick="blogAdminSignOut()"><i class="fas fa-right-from-bracket"></i> Sign out</button>
+                </div>
+            </div>
+
+            <div id="teacherBlogList" class="blog-list"></div>
+        </aside>
+    </div>
+</section>
+
 <section class="mini-games-section" id="miniGamesSection">
     <div class="section-intro">
         <div>
@@ -2879,6 +3128,31 @@
     </div>
 </div>
 
+<!-- BLOG ADMIN LOGIN MODAL -->
+<div id="blog-admin-overlay" class="login-modal-overlay">
+    <div class="login-card">
+        <button onclick="closeBlogAdminLogin()" style="position:absolute;inset-block-start:16px;inset-inline-end:16px;background:var(--gray-700);border:none;border-radius:50%;inline-size:36px;block-size:36px;cursor:pointer;color:var(--gray-300);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;" onmouseover="this.style.background='var(--primary-blue)'; this.style.color='white'" onmouseout="this.style.background='var(--gray-700)'; this.style.color='var(--gray-300)'">✕</button>
+        <div style="text-align:center;margin-block-end:22px;">
+            <div style="inline-size:68px;block-size:68px;margin:0 auto 14px;border-radius:18px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px rgba(37,99,235,.4);">
+                <i class="fas fa-user-lock" style="font-size:1.7rem;color:white;"></i>
+            </div>
+            <h2 style="font-size:1.55rem;font-weight:800;color:var(--white);margin:0 0 6px;">Blog Admin Login</h2>
+            <p style="color:var(--gray-400);font-size:.9rem;margin:0;line-height:1.6;">Sign in to publish teacher posts on the right-column blog.</p>
+        </div>
+        <div style="margin-block-end:14px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Admin Email</label>
+            <input id="blog-admin-email" type="email" class="login-input" placeholder="yourname@aii.edu.kh">
+        </div>
+        <div style="margin-block-end:22px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Admin Code</label>
+            <input id="blog-admin-code" type="password" class="login-input" placeholder="Enter admin publishing code" autocomplete="off">
+        </div>
+        <button onclick="blogAdminSignIn()" style="inline-size:100%;padding:15px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-dark));color:white;border:none;border-radius:13px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 var(--primary-dark),0 8px 24px rgba(37,99,235,.4);transition:all 0.3s;">
+            <i class="fas fa-right-to-bracket"></i> &nbsp;Sign in as admin
+        </button>
+    </div>
+</div>
+
 <!-- TEACHER ACCESS MODAL -->
 <div id="teacher-register-overlay" class="login-modal-overlay">
     <div class="login-card teacher-register-card">
@@ -3117,6 +3391,10 @@ var TEACHER_PROFILE_MAP_KEY = 'ryshubTeacherProfiles';
 var TEACHER_CURRENT_EMAIL_KEY = 'ryshubCurrentTeacherEmail';
 var TEACHER_APPROVAL_CODE_KEY = 'ryshubTeacherApprovalCode';
 var DEFAULT_TEACHER_APPROVAL_CODE = 'AII-VERIFY-2026';
+var BLOG_POSTS_KEY = 'ryshubTeacherBlogPosts';
+var BLOG_ADMIN_SESSION_KEY = 'ryshubBlogAdminSession';
+var BLOG_ADMIN_CODE_KEY = 'ryshubBlogAdminCode';
+var DEFAULT_BLOG_ADMIN_CODE = 'RYS-BLOG-ADMIN-2026';
 
 function normalizeTeacherEmail(email) {
     return (email || '').trim().toLowerCase();
@@ -3144,6 +3422,195 @@ function setCurrentTeacherEmail(email) {
     if (!normalized) return;
     localStorage.setItem(TEACHER_CURRENT_EMAIL_KEY, normalized);
     sessionStorage.setItem(TEACHER_CURRENT_EMAIL_KEY, normalized);
+}
+
+function hasBlogAdminSession() {
+    return sessionStorage.getItem(BLOG_ADMIN_SESSION_KEY) === '1';
+}
+
+function getBlogAdminCode() {
+    return (localStorage.getItem(BLOG_ADMIN_CODE_KEY) || DEFAULT_BLOG_ADMIN_CODE).trim();
+}
+
+function isBlogAdminCodeValid(code) {
+    return (code || '').trim() === getBlogAdminCode();
+}
+
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function formatBlogDate(timestamp) {
+    var d = new Date(timestamp || Date.now());
+    if (Number.isNaN(d.getTime())) return 'Unknown date';
+    return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function loadTeacherBlogPosts() {
+    var defaults = [
+        {
+            id: 'welcome-1',
+            title: 'Welcome To Teacher Updates',
+            body: 'Use this area for short staff notes. Example: lesson pacing updates, homework reminders, and assessment planning.',
+            author: 'Admin',
+            createdAt: Date.now() - 86400000 * 3,
+            pinned: true
+        },
+        {
+            id: 'weekly-1',
+            title: 'Weekly Focus: Writing Clarity',
+            body: 'Please reinforce topic sentence + supporting detail structure in all writing classes this week.',
+            author: 'Admin',
+            createdAt: Date.now() - 86400000,
+            pinned: false
+        }
+    ];
+
+    try {
+        var saved = JSON.parse(localStorage.getItem(BLOG_POSTS_KEY) || 'null');
+        if (!Array.isArray(saved) || !saved.length) return defaults;
+        return saved;
+    } catch (e) {
+        return defaults;
+    }
+}
+
+function saveTeacherBlogPosts(posts) {
+    localStorage.setItem(BLOG_POSTS_KEY, JSON.stringify(posts));
+}
+
+function renderTeacherBlogPosts() {
+    var container = document.getElementById('teacherBlogList');
+    var count = document.getElementById('teacherBlogCount');
+    if (!container || !count) return;
+
+    var posts = loadTeacherBlogPosts().slice().sort(function(a, b) {
+        if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
+        return (b.createdAt || 0) - (a.createdAt || 0);
+    });
+
+    count.textContent = posts.length;
+
+    container.innerHTML = posts.map(function(post) {
+        return '<article class="blog-post-card">'
+            + '<div class="blog-post-top">'
+            + '<h4 class="blog-post-title">' + escapeHtml(post.title) + '</h4>'
+            + (post.pinned ? '<span class="blog-pin">Pinned</span>' : '')
+            + '</div>'
+            + '<p class="blog-post-body">' + escapeHtml(post.body) + '</p>'
+            + '<div class="blog-post-meta">By ' + escapeHtml(post.author || 'Admin') + ' • ' + formatBlogDate(post.createdAt) + '</div>'
+            + '</article>';
+    }).join('');
+}
+
+function updateBlogAdminUi() {
+    var strip = document.getElementById('blogAdminStrip');
+    var btn = document.getElementById('blogAdminButton');
+    if (!strip || !btn) return;
+
+    if (hasBlogAdminSession()) {
+        strip.classList.add('open');
+        btn.innerHTML = '<i class="fas fa-pen"></i> Publishing';
+        btn.onclick = function() {
+            strip.classList.toggle('open');
+        };
+    } else {
+        strip.classList.remove('open');
+        btn.innerHTML = '<i class="fas fa-lock"></i> Admin';
+        btn.onclick = function() { openBlogAdminLogin(); };
+    }
+}
+
+function openBlogAdminLogin() {
+    if (hasBlogAdminSession()) {
+        updateBlogAdminUi();
+        return;
+    }
+    var profile = getTeacherProfile();
+    var emailInput = document.getElementById('blog-admin-email');
+    var codeInput = document.getElementById('blog-admin-code');
+    if (emailInput) emailInput.value = (profile && profile.email) ? profile.email : '';
+    if (codeInput) codeInput.value = '';
+    document.getElementById('blog-admin-overlay').classList.add('open');
+    setTimeout(function(){ if (emailInput) emailInput.focus(); }, 120);
+}
+
+function closeBlogAdminLogin() {
+    var overlay = document.getElementById('blog-admin-overlay');
+    if (overlay) overlay.classList.remove('open');
+}
+
+function blogAdminSignIn() {
+    var email = normalizeTeacherEmail((document.getElementById('blog-admin-email') || {}).value || '');
+    var code = ((document.getElementById('blog-admin-code') || {}).value || '').trim();
+
+    if (!email || !email.endsWith('@aii.edu.kh')) {
+        showToast('Admin email must be @aii.edu.kh');
+        return;
+    }
+
+    if (!isBlogAdminCodeValid(code)) {
+        showToast('Admin code is invalid');
+        return;
+    }
+
+    sessionStorage.setItem(BLOG_ADMIN_SESSION_KEY, '1');
+    sessionStorage.setItem(BLOG_ADMIN_SESSION_KEY + ':email', email);
+    closeBlogAdminLogin();
+    updateBlogAdminUi();
+    showToast('Blog admin access granted');
+}
+
+function blogAdminSignOut() {
+    sessionStorage.removeItem(BLOG_ADMIN_SESSION_KEY);
+    sessionStorage.removeItem(BLOG_ADMIN_SESSION_KEY + ':email');
+    updateBlogAdminUi();
+    showToast('Blog admin signed out');
+}
+
+function publishTeacherBlogPost() {
+    if (!hasBlogAdminSession()) {
+        showToast('Please sign in as blog admin first');
+        openBlogAdminLogin();
+        return;
+    }
+
+    var titleEl = document.getElementById('blogPostTitle');
+    var bodyEl = document.getElementById('blogPostBody');
+    var pinEl = document.getElementById('blogPostPinned');
+    var title = (titleEl && titleEl.value || '').trim();
+    var body = (bodyEl && bodyEl.value || '').trim();
+    var pinned = !!(pinEl && pinEl.checked);
+
+    if (!title || !body) {
+        showToast('Please enter both title and content');
+        return;
+    }
+
+    var profile = getTeacherProfile();
+    var author = (profile && profile.name) || sessionStorage.getItem(BLOG_ADMIN_SESSION_KEY + ':email') || 'Admin';
+    var posts = loadTeacherBlogPosts();
+    posts.unshift({
+        id: 'post-' + Date.now(),
+        title: title,
+        body: body,
+        author: author,
+        createdAt: Date.now(),
+        pinned: pinned
+    });
+    saveTeacherBlogPosts(posts);
+
+    if (titleEl) titleEl.value = '';
+    if (bodyEl) bodyEl.value = '';
+    if (pinEl) pinEl.checked = false;
+
+    renderTeacherBlogPosts();
+    showToast('Teacher post published');
 }
 
 function getTeacherApprovalCode() {
@@ -4046,6 +4513,10 @@ document.getElementById('teacher-register-overlay').addEventListener('click', fu
     if (e.target === this) closeTeacherRegister();
 });
 
+document.getElementById('blog-admin-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeBlogAdminLogin();
+});
+
 applySavedTheme();
 updateTeacherStatusUi();
 initHubMode();
@@ -4056,6 +4527,8 @@ renderMiniGamesSection();
 initHeaderNavScroll();
 initRandomMiniMention();
 initClassroomLab();
+renderTeacherBlogPosts();
+updateBlogAdminUi();
 </script>
 </body>
 </html>
