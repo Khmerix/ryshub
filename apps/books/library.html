@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Books Library • RysHub</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -165,6 +166,96 @@
         }
 
         .search-bar input::placeholder { color: var(--text-muted); }
+
+        .upload-shell {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px 10px;
+        }
+
+        .upload-panel {
+            background: rgba(15,23,42,0.78);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .upload-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .upload-title {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .upload-hint {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 160px auto;
+            gap: 10px;
+        }
+
+        .upload-input,
+        .upload-select {
+            width: 100%;
+            background: rgba(2,6,23,0.6);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 9px;
+            padding: 10px 11px;
+            font-size: 0.86rem;
+        }
+
+        .upload-btn {
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 10px 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #1e3a8a;
+        }
+
+        .upload-btn:hover { transform: translateY(-1px); }
+
+        .role-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.04);
+            color: var(--text-secondary);
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .role-btn.active {
+            color: #dbeafe;
+            border-color: rgba(96,165,250,0.45);
+            background: rgba(37,99,235,0.2);
+        }
 
         /* ─── Grid ─── */
         .lib-container {
@@ -401,10 +492,83 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        .epub-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(2,6,23,0.85);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+        }
+
+        .epub-modal.open { display: flex; }
+
+        .epub-shell {
+            width: min(1100px, 100%);
+            height: min(92vh, 860px);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(148,163,184,0.24);
+            background: #0f172a;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+
+        .epub-topbar,
+        .epub-bottombar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            background: rgba(15,23,42,0.98);
+            border-bottom: 1px solid rgba(148,163,184,0.2);
+        }
+
+        .epub-bottombar {
+            border-top: 1px solid rgba(148,163,184,0.2);
+            border-bottom: none;
+        }
+
+        .epub-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .epub-btn {
+            border: 1px solid rgba(148,163,184,0.35);
+            background: rgba(30,41,59,0.72);
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 11px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .epub-btn.primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-color: rgba(96,165,250,0.45);
+            color: #fff;
+        }
+
+        #epubReaderMount {
+            background: #f8fafc;
+            min-height: 0;
+        }
+
         /* ─── Responsive ─── */
         @media (max-width: 540px) {
             .lib-nav { flex-direction: column; align-items: flex-start; }
             .search-bar input { width: 150px; }
+            .upload-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -429,15 +593,53 @@
     </div>
 </nav>
 
+<section class="upload-shell">
+    <div class="upload-panel">
+        <div class="upload-head">
+            <p class="upload-title"><i class="fas fa-file-upload"></i> Upload EPUB For Student/Teacher Reading</p>
+            <p class="upload-hint">Uploaded books are stored in this browser. No server upload yet.</p>
+        </div>
+        <div class="upload-grid">
+            <input id="epubFileInput" class="upload-input" type="file" accept=".epub,application/epub+zip">
+            <input id="epubTitleInput" class="upload-input" type="text" placeholder="Optional custom title">
+            <select id="epubAudienceSelect" class="upload-select">
+                <option value="both">Student + Teacher</option>
+                <option value="student">Student only</option>
+                <option value="teacher">Teacher only</option>
+            </select>
+            <button class="upload-btn" onclick="handleEpubUpload()"><i class="fas fa-plus"></i> Add EPUB</button>
+        </div>
+        <div class="role-filter" id="roleFilterBar">
+            <button class="role-btn active" onclick="setRoleFilter('all')">All Books</button>
+            <button class="role-btn" onclick="setRoleFilter('student')">Student View</button>
+            <button class="role-btn" onclick="setRoleFilter('teacher')">Teacher View</button>
+        </div>
+    </div>
+</section>
+
 <main class="lib-container">
     <div class="books-grid" id="booksGrid"></div>
 </main>
+
+<div id="epubReaderModal" class="epub-modal" aria-hidden="true">
+    <div class="epub-shell">
+        <div class="epub-topbar">
+            <p class="epub-title" id="epubReaderTitle">EPUB Reader</p>
+            <button class="epub-btn" onclick="closeEpubReader()"><i class="fas fa-times"></i> Close</button>
+        </div>
+        <div id="epubReaderMount"></div>
+        <div class="epub-bottombar">
+            <button class="epub-btn" onclick="epubPrevPage()"><i class="fas fa-chevron-left"></i> Previous</button>
+            <button class="epub-btn primary" onclick="epubNextPage()">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</div>
 
 <div id="libToast"></div>
 
 <script>
     // ─── Book Catalogue ───────────────────────────────────────────────────────────
-    var BOOKS = [
+    var BASE_BOOKS = [
         {
             id: 'the-secret-cave',
             title: 'The Secret Cave',
@@ -500,6 +702,13 @@
         }
     ];
 
+    var UPLOAD_META_KEY = 'ryshubUploadedEpubMeta';
+    var EPUB_DB_NAME = 'ryshubLibraryDB';
+    var EPUB_STORE = 'epubFiles';
+    var roleFilter = 'all';
+    var currentRendition = null;
+    var currentEpubBook = null;
+
     // ─── Helpers ──────────────────────────────────────────────────────────────────
     function getProgress(bookId) {
         try {
@@ -515,13 +724,234 @@
         setTimeout(function() { t.classList.remove('show'); }, 2600);
     }
 
+    function formatBytes(size) {
+        if (!size || size <= 0) return 'Unknown size';
+        var units = ['B', 'KB', 'MB', 'GB'];
+        var i = Math.floor(Math.log(size) / Math.log(1024));
+        var value = size / Math.pow(1024, i);
+        return value.toFixed(value >= 10 ? 0 : 1) + ' ' + units[i];
+    }
+
+    function getAudienceLabel(audience) {
+        if (audience === 'student') return 'Student';
+        if (audience === 'teacher') return 'Teacher';
+        return 'Student + Teacher';
+    }
+
+    function loadUploadedMeta() {
+        try {
+            var saved = JSON.parse(localStorage.getItem(UPLOAD_META_KEY) || '[]');
+            return Array.isArray(saved) ? saved : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveUploadedMeta(meta) {
+        localStorage.setItem(UPLOAD_META_KEY, JSON.stringify(meta));
+    }
+
+    function getCombinedBooks() {
+        var uploaded = loadUploadedMeta().map(function(item) {
+            return {
+                id: item.id,
+                title: item.title,
+                author: item.author || 'Uploaded EPUB',
+                desc: item.desc || ('EPUB upload for ' + getAudienceLabel(item.audience) + ' reading.'),
+                icon: '📘',
+                cover: 'ocean-theme',
+                level: getAudienceLabel(item.audience),
+                levelClass: item.audience === 'teacher' ? 'level-advanced' : (item.audience === 'student' ? 'level-beginner' : 'level-int'),
+                chapters: 0,
+                choices: 0,
+                words: 0,
+                status: 'live',
+                type: 'epub',
+                audience: item.audience || 'both',
+                size: item.size || 0,
+                uploadedAt: item.uploadedAt || Date.now(),
+                path: null
+            };
+        });
+        return BASE_BOOKS.concat(uploaded);
+    }
+
+    function openEpubDb() {
+        return new Promise(function(resolve, reject) {
+            var request = indexedDB.open(EPUB_DB_NAME, 1);
+            request.onupgradeneeded = function(event) {
+                var db = event.target.result;
+                if (!db.objectStoreNames.contains(EPUB_STORE)) {
+                    db.createObjectStore(EPUB_STORE);
+                }
+            };
+            request.onsuccess = function() { resolve(request.result); };
+            request.onerror = function() { reject(request.error); };
+        });
+    }
+
+    function saveEpubBlob(id, blob) {
+        return openEpubDb().then(function(db) {
+            return new Promise(function(resolve, reject) {
+                var tx = db.transaction(EPUB_STORE, 'readwrite');
+                tx.objectStore(EPUB_STORE).put(blob, id);
+                tx.oncomplete = function() { resolve(); };
+                tx.onerror = function() { reject(tx.error); };
+            });
+        });
+    }
+
+    function getEpubBlob(id) {
+        return openEpubDb().then(function(db) {
+            return new Promise(function(resolve, reject) {
+                var tx = db.transaction(EPUB_STORE, 'readonly');
+                var req = tx.objectStore(EPUB_STORE).get(id);
+                req.onsuccess = function() { resolve(req.result || null); };
+                req.onerror = function() { reject(req.error); };
+            });
+        });
+    }
+
+    function isVisibleForRole(book) {
+        var audience = book.audience || 'both';
+        if (roleFilter === 'all') return true;
+        if (audience === 'both') return true;
+        return audience === roleFilter;
+    }
+
+    function setRoleFilter(role) {
+        roleFilter = role;
+        var buttons = document.querySelectorAll('#roleFilterBar .role-btn');
+        buttons.forEach(function(btn) {
+            var text = (btn.textContent || '').toLowerCase();
+            var match = (role === 'all' && text.indexOf('all') !== -1)
+                || (role === 'student' && text.indexOf('student') !== -1)
+                || (role === 'teacher' && text.indexOf('teacher') !== -1);
+            btn.classList.toggle('active', match);
+        });
+        filterBooks();
+    }
+
+    function handleEpubUpload() {
+        var fileInput = document.getElementById('epubFileInput');
+        var titleInput = document.getElementById('epubTitleInput');
+        var audienceSelect = document.getElementById('epubAudienceSelect');
+        var file = fileInput && fileInput.files && fileInput.files[0];
+
+        if (!file) {
+            showToast('Please select an EPUB file first.');
+            return;
+        }
+
+        if (!/\.epub$/i.test(file.name)) {
+            showToast('Only .epub files are supported.');
+            return;
+        }
+
+        var id = 'epub-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
+        var title = (titleInput.value || '').trim() || file.name.replace(/\.epub$/i, '');
+        var audience = audienceSelect.value || 'both';
+
+        saveEpubBlob(id, file).then(function() {
+            var meta = loadUploadedMeta();
+            meta.unshift({
+                id: id,
+                title: title,
+                audience: audience,
+                author: 'Uploaded EPUB',
+                desc: 'Uploaded by teacher/admin for ' + getAudienceLabel(audience) + ' reading.',
+                size: file.size,
+                uploadedAt: Date.now()
+            });
+            saveUploadedMeta(meta);
+            fileInput.value = '';
+            titleInput.value = '';
+            filterBooks();
+            showToast('EPUB uploaded: ' + title);
+        }).catch(function() {
+            showToast('Upload failed. Try again.');
+        });
+    }
+
     function launchBook(bookId) {
-        var book = BOOKS.find(function(b) { return b.id === bookId; });
+        var book = getCombinedBooks().find(function(b) { return b.id === bookId; });
         if (!book || !book.path) {
+            if (book && book.type === 'epub') {
+                openUploadedEpub(book);
+                return;
+            }
             showToast(book ? book.title + ' is coming soon!' : 'Book not found.');
             return;
         }
         window.location.href = book.path;
+    }
+
+    function openUploadedEpub(book) {
+        getEpubBlob(book.id).then(function(blob) {
+            if (!blob) {
+                showToast('This EPUB file is not available in this browser storage.');
+                return;
+            }
+            openEpubReader(blob, book.title);
+        }).catch(function() {
+            showToast('Could not open EPUB.');
+        });
+    }
+
+    function openEpubReader(blob, title) {
+        if (typeof ePub === 'undefined') {
+            showToast('EPUB reader engine is not loaded.');
+            return;
+        }
+
+        closeEpubReader(true);
+
+        var modal = document.getElementById('epubReaderModal');
+        var mount = document.getElementById('epubReaderMount');
+        var titleEl = document.getElementById('epubReaderTitle');
+        titleEl.textContent = title || 'EPUB Reader';
+        mount.innerHTML = '';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+
+        currentEpubBook = ePub(blob);
+        currentRendition = currentEpubBook.renderTo('epubReaderMount', {
+            width: '100%',
+            height: '100%'
+        });
+        currentRendition.display();
+    }
+
+    function closeEpubReader(silent) {
+        var modal = document.getElementById('epubReaderModal');
+        var mount = document.getElementById('epubReaderMount');
+
+        if (currentRendition && typeof currentRendition.destroy === 'function') {
+            currentRendition.destroy();
+        }
+        if (currentEpubBook && typeof currentEpubBook.destroy === 'function') {
+            currentEpubBook.destroy();
+        }
+        currentRendition = null;
+        currentEpubBook = null;
+
+        if (mount) mount.innerHTML = '';
+        if (modal) {
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        if (!silent) showToast('Reader closed');
+    }
+
+    function epubPrevPage() {
+        if (!currentRendition) return;
+        currentRendition.prev();
+    }
+
+    function epubNextPage() {
+        if (!currentRendition) return;
+        currentRendition.next();
     }
 
     // ─── Rendering ────────────────────────────────────────────────────────────────
@@ -536,8 +966,11 @@
             var isSlot    = book.status === 'slot';
             var isComing  = book.status === 'coming';
             var isLive    = book.status === 'live';
+            var isEpub    = book.type === 'epub';
             var progress  = isLive ? getProgress(book.id) : 0;
-            var btnLabel  = progress > 0 ? '<i class="fas fa-book-open"></i> Continue Reading' : '<i class="fas fa-play"></i> Start Reading';
+            var btnLabel  = isEpub
+                ? '<i class="fas fa-book-open"></i> Open EPUB'
+                : (progress > 0 ? '<i class="fas fa-book-open"></i> Continue Reading' : '<i class="fas fa-play"></i> Start Reading');
             var ribbonHtml = isLive    ? '<div class="book-ribbon">Live</div>'
                            : isComing ? '<div class="book-ribbon coming">Coming Soon</div>'
                            : '';
@@ -549,8 +982,12 @@
                     : '<button class="book-btn" onclick="event.stopPropagation();launchBook(\'' + book.id + '\')">' + btnLabel + '</button>';
 
             var chipsHtml = !isSlot ? [
-                '<div class="chip"><i class="fas fa-bookmark"></i>' + book.chapters + ' ch</div>',
-                '<div class="chip"><i class="fas fa-code-branch"></i>' + book.choices + ' choices</div>',
+                (isEpub
+                    ? '<div class="chip"><i class="fas fa-file"></i>' + formatBytes(book.size) + '</div>'
+                    : '<div class="chip"><i class="fas fa-bookmark"></i>' + book.chapters + ' ch</div>'),
+                (isEpub
+                    ? '<div class="chip"><i class="fas fa-user-group"></i>' + getAudienceLabel(book.audience) + '</div>'
+                    : '<div class="chip"><i class="fas fa-code-branch"></i>' + book.choices + ' choices</div>'),
                 book.level ? '<div class="chip ' + book.levelClass + '">' + book.level + '</div>' : ''
             ].join('') : '';
 
@@ -577,18 +1014,19 @@
     }
 
     function filterBooks() {
+        var allBooks = getCombinedBooks().filter(isVisibleForRole);
         var q = document.getElementById('searchInput').value.toLowerCase().trim();
         var filtered = q
-            ? BOOKS.filter(function(b) {
+            ? allBooks.filter(function(b) {
                 return b.title.toLowerCase().includes(q) || b.desc.toLowerCase().includes(q);
             })
-            : BOOKS;
+            : allBooks;
         renderBooks(filtered);
     }
 
     function updateStats() {
-        var live = BOOKS.filter(function(b) { return b.status === 'live'; });
-        var totalChoices = live.reduce(function(s, b) { return s + b.choices; }, 0);
+        var live = getCombinedBooks().filter(function(b) { return b.status === 'live' && isVisibleForRole(b); });
+        var totalChoices = live.reduce(function(s, b) { return s + (b.choices || 0); }, 0);
         var read = live.filter(function(b) { return getProgress(b.id) > 0; }).length;
 
         document.getElementById('statBooks').textContent = live.length;
@@ -597,8 +1035,18 @@
     }
 
     // ─── Init ─────────────────────────────────────────────────────────────────────
-    renderBooks(BOOKS);
+    filterBooks();
     updateStats();
+
+    document.getElementById('epubReaderModal').addEventListener('click', function(e) {
+        if (e.target === this) closeEpubReader();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeEpubReader(true);
+        if (e.key === 'ArrowRight') epubNextPage();
+        if (e.key === 'ArrowLeft') epubPrevPage();
+    });
 </script>
 </body>
 </html>
