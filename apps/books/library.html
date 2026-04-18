@@ -518,6 +518,21 @@
 
         .book-btn.disabled:hover { transform: none; }
 
+        .book-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .book-actions .book-btn {
+            flex: 1;
+        }
+
+        .book-btn.danger {
+            background: linear-gradient(135deg, #b91c1c, #dc2626);
+            box-shadow: 0 4px 0 #7f1d1d, 0 6px 18px rgba(220,38,38,0.35);
+        }
+
         /* ─── Empty / Coming Soon slot ─── */
         .book-card.slot {
             border-style: dashed;
@@ -671,6 +686,13 @@
             </select>
             <button class="upload-btn" onclick="handleEpubUpload()"><i class="fas fa-plus"></i> Add EPUB</button>
         </div>
+        <div class="cover-upload-row">
+            <label class="cover-upload-label" for="epubCoverInput"><i class="fas fa-image"></i> Add Book Cover (JPG/PNG)</label>
+            <input id="epubCoverInput" type="file" accept="image/*" style="display:none;" onchange="previewCover(this)">
+            <img id="coverPreviewImg" class="cover-preview" alt="Cover preview">
+            <button id="coverClearBtn" class="cover-clear-btn" onclick="clearCoverInput()"><i class="fas fa-times"></i> Remove</button>
+            <span id="coverFileName" style="font-size:0.78rem;color:var(--text-muted);"></span>
+        </div>
         <div class="role-filter" id="roleFilterBar">
             <button class="role-btn active" onclick="setRoleFilter('all')">All Books</button>
             <button class="role-btn" onclick="setRoleFilter('student')">Student View</button>
@@ -696,14 +718,6 @@
         </div>
     </div>
 </div>
-        <div class="cover-upload-row">
-            <label class="cover-upload-label" for="epubCoverInput"><i class="fas fa-image"></i> Add Book Cover (JPG/PNG)</label>
-            <input id="epubCoverInput" type="file" accept="image/*" style="display:none;" onchange="previewCover(this)">
-            <img id="coverPreviewImg" class="cover-preview" alt="Cover preview">
-            <button id="coverClearBtn" class="cover-clear-btn" onclick="clearCoverInput()"><i class="fas fa-times"></i> Remove</button>
-            <span id="coverFileName" style="font-size:0.78rem;color:var(--text-muted);"></span>
-        </div>
-        <div class="role-filter" id="roleFilterBar">
 
 <div id="libToast"></div>
 
@@ -883,6 +897,17 @@
         });
     }
 
+    function deleteEpubBlob(id) {
+        return openEpubDb().then(function(db) {
+            return new Promise(function(resolve, reject) {
+                var tx = db.transaction(EPUB_STORE, 'readwrite');
+                tx.objectStore(EPUB_STORE).delete(id);
+                tx.oncomplete = function() { resolve(); };
+                tx.onerror = function() { reject(tx.error); };
+            });
+        });
+    }
+
     function isVisibleForRole(book) {
         var audience = book.audience || 'both';
         if (roleFilter === 'all') return true;
@@ -978,6 +1003,19 @@
             openEpubReader(blob, book.title);
         }).catch(function() {
             showToast('Could not open EPUB.');
+        });
+    }
+
+    function deleteUploadedEpub(bookId, title) {
+        if (!confirm('Delete uploaded EPUB "' + title + '"?')) return;
+        deleteEpubBlob(bookId).then(function() {
+            var nextMeta = loadUploadedMeta().filter(function(item) { return item.id !== bookId; });
+            saveUploadedMeta(nextMeta);
+            filterBooks();
+            updateStats();
+            showToast('Deleted: ' + title);
+        }).catch(function() {
+            showToast('Could not delete EPUB. Try again.');
         });
     }
 
@@ -1088,6 +1126,14 @@
                     ? '<button class="book-btn disabled" disabled><i class="fas fa-clock"></i> Coming Soon</button>'
                     : '<button class="book-btn" onclick="event.stopPropagation();launchBook(\'' + book.id + '\')">' + btnLabel + '</button>';
 
+            var deleteBtnHtml = isEpub
+                ? '<button class="book-btn danger" onclick="event.stopPropagation();deleteUploadedEpub(\'' + book.id + '\', \'' + book.title.replace(/'/g, "&#39;") + '\')"><i class="fas fa-trash"></i> Delete</button>'
+                : '';
+
+            var actionsHtml = deleteBtnHtml
+                ? '<div class="book-actions">' + btnHtml + deleteBtnHtml + '</div>'
+                : btnHtml;
+
             var chipsHtml = !isSlot ? [
                 (isEpub
                     ? '<div class="chip"><i class="fas fa-file"></i>' + formatBytes(book.size) + '</div>'
@@ -1110,7 +1156,7 @@
                 + '<p class="book-desc">' + book.desc + '</p>'
                 + (chipsHtml ? '<div class="book-chips">' + chipsHtml + '</div>' : '')
                 + progressHtml
-                + btnHtml
+                + actionsHtml
                 + '</div>'
                 + '</div>';
         }).join('');
@@ -1194,5 +1240,6 @@
         if (e.key === 'ArrowLeft') epubPrevPage();
     });
 </script>
+<script src="../../assets/ryshub-global-header.js"></script>
 </body>
 </html>
