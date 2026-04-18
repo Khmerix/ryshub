@@ -3,6 +3,15 @@
     window.__ryshubGlobalHeaderLoaded = true;
 
     function resolveRootUrl() {
+        function rootFromPathname(pathname) {
+            if (!pathname) return '/';
+            var marker = '/apps/';
+            var i = pathname.indexOf(marker);
+            if (i >= 0) return pathname.slice(0, i + 1);
+            var lastSlash = pathname.lastIndexOf('/');
+            return lastSlash >= 0 ? pathname.slice(0, lastSlash + 1) : '/';
+        }
+
         try {
             var script = document.currentScript;
             if (script && script.src) {
@@ -13,10 +22,24 @@
                     return u.origin + u.pathname.slice(0, idx + 1);
                 }
             }
+
+            // Fallback: locate the injected script tag directly.
+            var scriptEl = document.querySelector('script[src*="ryshub-global-header.js"]');
+            if (scriptEl && scriptEl.src) {
+                var su = new URL(scriptEl.src, window.location.href);
+                var sidx = su.pathname.lastIndexOf('/assets/');
+                if (sidx >= 0) {
+                    return su.origin + su.pathname.slice(0, sidx + 1);
+                }
+                return su.origin + rootFromPathname(su.pathname);
+            }
+
+            // Final fallback: derive repo root from current page path.
+            return window.location.origin + rootFromPathname(window.location.pathname);
         } catch (e) {
             // Fallback below
         }
-        return window.location.origin + '/';
+        return window.location.origin + rootFromPathname(window.location.pathname);
     }
 
     function injectStyles() {
