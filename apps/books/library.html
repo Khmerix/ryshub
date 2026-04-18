@@ -898,6 +898,8 @@
         });
     }
 
+    var _epubObjectUrl = null;
+
     function openEpubReader(blob, title) {
         if (typeof ePub === 'undefined') {
             showToast('EPUB reader engine is not loaded.');
@@ -914,12 +916,27 @@
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
 
-        currentEpubBook = ePub(blob);
-        currentRendition = currentEpubBook.renderTo('epubReaderMount', {
-            width: '100%',
-            height: '100%'
-        });
-        currentRendition.display();
+        // epub.js needs an ArrayBuffer or object URL — not a raw Blob
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var arrayBuffer = e.target.result;
+            currentEpubBook = ePub(arrayBuffer);
+            var w = mount.clientWidth  || window.innerWidth;
+            var h = mount.clientHeight || Math.round(window.innerHeight * 0.78);
+            currentRendition = currentEpubBook.renderTo(mount, {
+                width: w,
+                height: h,
+                spread: 'none'
+            });
+            currentRendition.display().catch(function(err) {
+                showToast('Could not render EPUB content.');
+                console.error('epub render error:', err);
+            });
+        };
+        reader.onerror = function() {
+            showToast('Failed to read EPUB file.');
+        };
+        reader.readAsArrayBuffer(blob);
     }
 
     function closeEpubReader(silent) {
@@ -934,6 +951,11 @@
         }
         currentRendition = null;
         currentEpubBook = null;
+
+        if (_epubObjectUrl) {
+            URL.revokeObjectURL(_epubObjectUrl);
+            _epubObjectUrl = null;
+        }
 
         if (mount) mount.innerHTML = '';
         if (modal) {
