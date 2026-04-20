@@ -166,49 +166,25 @@
         <h1>Log into Ryshub</h1>
         <p class="subtitle">One account for everything</p>
 
-        <div class="tabs">
-            <button class="tab active" id="tabLogin" onclick="switchTab('login')">Login</button>
-            <button class="tab" id="tabRegister" onclick="switchTab('register')">Register</button>
+        <div class="role-note" style="margin-bottom:20px;">
+            <strong>🔐 Team master login</strong><br>
+            Use the shared team username and password to unlock the full teacher hub, books, and TOEFL testing tools.
         </div>
 
         <form id="loginForm">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter your username" required>
+                <label for="username">Team Username</label>
+                <input type="text" id="username" placeholder="Enter the shared team username" required>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
+                <label for="password">Team Password</label>
+                <input type="password" id="password" placeholder="Enter the shared team password" required>
             </div>
-            <button type="submit" class="login-btn">Login</button>
+            <button type="submit" class="login-btn">Enter Teacher Hub</button>
         </form>
 
-        <form id="registerForm" style="display:none;">
-            <div class="form-group">
-                <label for="regUsername">Username</label>
-                <input type="text" id="regUsername" placeholder="Choose a username" required>
-            </div>
-            <div class="form-group">
-                <label for="regEmail">School Email</label>
-                <input type="email" id="regEmail" placeholder="you@school.edu" required>
-            </div>
-            <div class="role-note" id="roleNote">
-                <strong>🎓 Auto-detected role:</strong> <span id="roleText">Student</span><br>
-                Use a school email address (e.g., <em>.edu</em>) to register as a teacher.
-            </div>
-            <div class="form-group">
-                <label for="regPassword">Password</label>
-                <input type="password" id="regPassword" placeholder="Create a password" required>
-            </div>
-            <div class="form-group">
-                <label for="regConfirm">Confirm Password</label>
-                <input type="password" id="regConfirm" placeholder="Re-enter password" required>
-            </div>
-            <button type="submit" class="login-btn">Create Account</button>
-        </form>
-
-        <div id="errorMessage" class="error-message">Invalid username or password. Please try again.</div>
-        <div id="successMessage" class="success-message">Account created successfully! Please log in.</div>
+        <div id="errorMessage" class="error-message">Invalid team username or password. Please try again.</div>
+        <div id="successMessage" class="success-message">Access granted. Opening the teacher hub now.</div>
 
         <div class="secure-badge">
             <span>🔒</span>
@@ -218,116 +194,68 @@
     </div>
 
     <script>
-        const LEGACY_USERS = {
-            'teacher': { password: 'WorldClass2024!', role: 'teacher', email: 'teacher@school.edu' },
-            'admin':   { password: 'Admin2024!', role: 'teacher', email: 'admin@school.edu' }
+        const MASTER_CREDENTIALS = {
+            username: 'team',
+            password: 'RysHub2026!'
         };
 
-        function getAccounts() {
-            try {
-                const data = localStorage.getItem('ryshub_accounts');
-                return data ? JSON.parse(data) : {};
-            } catch(e) { return {}; }
-        }
-        function saveAccounts(accounts) {
-            localStorage.setItem('ryshub_accounts', JSON.stringify(accounts));
-        }
-        function detectRole(email) {
-            return email.toLowerCase().includes('.edu') ? 'teacher' : 'student';
-        }
-        function switchTab(mode) {
-            document.getElementById('loginForm').style.display = mode === 'login' ? 'block' : 'none';
-            document.getElementById('registerForm').style.display = mode === 'register' ? 'block' : 'none';
-            document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
-            document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
-            document.getElementById('errorMessage').classList.remove('show');
-            document.getElementById('successMessage').classList.remove('show');
-        }
+        const MASTER_PROFILE = {
+            name: 'Team Access',
+            email: 'team@aii.edu.kh',
+            school: 'Aii Language Center',
+            verified: true,
+            approved: true,
+            master: true,
+            verifiedAt: new Date().toISOString(),
+            registeredAt: new Date().toISOString()
+        };
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMessage');
-            const accounts = getAccounts();
+            const successDiv = document.getElementById('successMessage');
 
-            let role = null;
-            if (LEGACY_USERS[username] && LEGACY_USERS[username].password === password) {
-                role = LEGACY_USERS[username].role;
-            } else if (accounts[username] && accounts[username].password === password) {
-                role = accounts[username].role;
-            }
+            if (username === MASTER_CREDENTIALS.username && password === MASTER_CREDENTIALS.password) {
+                const profiles = JSON.parse(localStorage.getItem('ryshubTeacherProfiles') || '{}');
+                profiles[MASTER_PROFILE.email] = MASTER_PROFILE;
 
-            if (role) {
+                localStorage.setItem('ryshubTeacherProfiles', JSON.stringify(profiles));
+                localStorage.setItem('ryshubTeacherProfile', JSON.stringify(MASTER_PROFILE));
+                sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(MASTER_PROFILE));
+                localStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
+                sessionStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
+                localStorage.setItem('ryshub_loggedIn', 'true');
                 sessionStorage.setItem('ryshub_loggedIn', 'true');
+                localStorage.setItem('ryshub_master_access', 'true');
+                sessionStorage.setItem('ryshub_master_access', 'true');
+                localStorage.setItem('ryshub_user', username);
                 sessionStorage.setItem('ryshub_user', username);
-                sessionStorage.setItem('ryshub_role', role);
-                window.location.href = '../index.html';
+                localStorage.setItem('ryshub_role', 'teacher');
+                sessionStorage.setItem('ryshub_role', 'teacher');
+
+                errorDiv.classList.remove('show');
+                successDiv.classList.add('show');
+                setTimeout(function() {
+                    window.location.href = '../index.html';
+                }, 350);
             } else {
-                errorDiv.textContent = 'Invalid username or password. Please try again.';
+                successDiv.classList.remove('show');
+                errorDiv.textContent = 'Invalid team username or password. Please try again.';
                 errorDiv.classList.add('show');
                 document.getElementById('password').value = '';
                 document.getElementById('password').focus();
             }
         });
 
-        document.getElementById('regEmail').addEventListener('input', function() {
-            const role = detectRole(this.value);
-            document.getElementById('roleText').textContent = role === 'teacher' ? 'Teacher' : 'Student';
-            document.getElementById('roleText').style.color = role === 'teacher' ? '#2563eb' : '#059669';
-        });
-
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('regUsername').value.trim().toLowerCase();
-            const email = document.getElementById('regEmail').value.trim().toLowerCase();
-            const password = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('regConfirm').value;
-            const errorDiv = document.getElementById('errorMessage');
-            const successDiv = document.getElementById('successMessage');
-
-            if (!username || !email || !password) {
-                errorDiv.textContent = 'Please fill in all fields.';
-                errorDiv.classList.add('show');
-                return;
-            }
-            if (password !== confirm) {
-                errorDiv.textContent = 'Passwords do not match.';
-                errorDiv.classList.add('show');
-                document.getElementById('regConfirm').value = '';
-                document.getElementById('regConfirm').focus();
-                return;
-            }
-
-            const accounts = getAccounts();
-            if (accounts[username] || LEGACY_USERS[username]) {
-                errorDiv.textContent = 'Username already exists. Please choose another.';
-                errorDiv.classList.add('show');
-                return;
-            }
-
-            const role = detectRole(email);
-            accounts[username] = { password, email, role };
-            saveAccounts(accounts);
-
-            errorDiv.classList.remove('show');
-            successDiv.textContent = 'Account created! You registered as a ' + role + '. Please log in.';
-            successDiv.classList.add('show');
-            document.getElementById('registerForm').reset();
-            document.getElementById('roleText').textContent = 'Student';
-            document.getElementById('roleText').style.color = 'inherit';
-            setTimeout(function() { switchTab('login'); }, 1800);
-        });
-
-        ['username','password','regUsername','regEmail','regPassword','regConfirm'].forEach(function(id) {
-            document.getElementById(id).addEventListener('input', function() {
+        ['username','password'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', function() {
                 document.getElementById('errorMessage').classList.remove('show');
+                document.getElementById('successMessage').classList.remove('show');
             });
         });
-
-        if (window.location.search.includes('mode=register')) {
-            switchTab('register');
-        }
     </script>
 <script src="../assets/ryshub-global-header.js"></script>
 </body>

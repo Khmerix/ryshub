@@ -2,6 +2,14 @@
     if (window.__ryshubGlobalHeaderLoaded) return;
     window.__ryshubGlobalHeaderLoaded = true;
 
+    function isEmbeddedView() {
+        try {
+            return window.self !== window.top;
+        } catch (e) {
+            return true;
+        }
+    }
+
     function resolveRootUrl() {
         function rootFromPathname(pathname) {
             if (!pathname) return '/';
@@ -158,7 +166,10 @@
 
         var currentPaddingTop = parseFloat(window.getComputedStyle(document.body).paddingTop || '0') || 0;
         document.body.style.paddingTop = (currentPaddingTop + 50) + 'px';
+        document.body.classList.add('ryshub-has-global-header');
     }
+
+    if (isEmbeddedView()) return;
 
     injectStyles();
     if (document.readyState === 'loading') {
