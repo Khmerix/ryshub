@@ -303,6 +303,81 @@
             background: rgba(37,99,235,0.2);
         }
 
+        /* ─── Teacher Login Overlay ─── */
+        .login-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9500;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 6, 23, 0.75);
+            backdrop-filter: blur(6px);
+        }
+        .login-modal-overlay.open { display: flex; }
+        .login-card {
+            background: linear-gradient(135deg, var(--gray-800), var(--gray-900));
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,.5);
+            max-width: 420px;
+            width: 92%;
+            padding: 32px 28px 28px;
+            position: relative;
+            animation: cardIn .35s ease-out;
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(20px) scale(.96); }
+            to   { opacity: 1; transform: translateY(0)   scale(1); }
+        }
+        .login-input {
+            background: var(--gray-800);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: var(--white);
+            font-size: .95rem;
+            font-family: inherit;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all .25s;
+        }
+        .login-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37,99,235,.2);
+        }
+        .login-input::placeholder { color: #94a3b8; }
+
+        .teacher-login-card {
+            text-align: center;
+            padding: 28px 24px;
+            border: 1px dashed var(--border);
+            border-radius: 16px;
+            background: rgba(255,255,255,0.02);
+        }
+        .teacher-login-card p {
+            color: var(--text-secondary);
+            font-size: .9rem;
+            margin: 0 0 16px;
+        }
+        .teacher-login-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            color: #fff;
+            font-weight: 700;
+            font-size: .95rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #1e3a8a, 0 8px 24px rgba(37,99,235,.35);
+            transition: all .25s;
+        }
+        .teacher-login-btn:hover { transform: translateY(-2px); }
+
         /* ─── Grid ─── */
         .lib-container {
             max-width: 1240px;
@@ -671,8 +746,8 @@
     </div>
 </nav>
 
-<section class="upload-shell">
-    <div class="upload-panel">
+<section class="upload-shell" id="uploadShell">
+    <div class="upload-panel" id="uploadPanel">
         <div class="upload-head">
             <p class="upload-title"><i class="fas fa-file-upload"></i> Upload EPUB For Student/Teacher Reading</p>
             <p class="upload-hint">Uploaded books are stored in this browser. No server upload yet.</p>
@@ -699,6 +774,10 @@
             <button class="role-btn" onclick="setRoleFilter('student')">Student View</button>
             <button class="role-btn" onclick="setRoleFilter('teacher')">Teacher View</button>
         </div>
+    </div>
+    <div id="teacherLoginCard" class="teacher-login-card" style="display:none;">
+        <p><i class="fas fa-lock" style="color:#60a5fa;margin-right:6px;"></i> Teacher access is required to upload and manage books.</p>
+        <button class="teacher-login-btn" onclick="openTeacherLogin()"><i class="fas fa-user-shield"></i> Sign in as Teacher</button>
     </div>
 </section>
 
@@ -936,6 +1015,61 @@
         if (master) return true;
         var profile = localStorage.getItem('ryshubTeacherProfile') || sessionStorage.getItem('ryshubTeacherProfile');
         return !!profile;
+    }
+
+    function updateUploadUi() {
+        var panel = document.getElementById('uploadPanel');
+        var loginCard = document.getElementById('teacherLoginCard');
+        if (!panel || !loginCard) return;
+        if (hasTeacherAccess()) {
+            panel.style.display = '';
+            loginCard.style.display = 'none';
+        } else {
+            panel.style.display = 'none';
+            loginCard.style.display = '';
+        }
+    }
+
+    function openTeacherLogin() {
+        if (hasTeacherAccess()) { updateUploadUi(); return; }
+        var overlay = document.getElementById('teacher-login-overlay');
+        if (overlay) overlay.classList.add('open');
+        var emailInput = document.getElementById('teacher-login-email');
+        var profile = localStorage.getItem('ryshubTeacherProfile') || sessionStorage.getItem('ryshubTeacherProfile');
+        if (emailInput && profile) {
+            try { var p = JSON.parse(profile); emailInput.value = p.email || ''; } catch(e) {}
+        }
+        if (emailInput) setTimeout(function() { emailInput.focus(); }, 120);
+    }
+
+    function closeTeacherLogin() {
+        var overlay = document.getElementById('teacher-login-overlay');
+        if (overlay) overlay.classList.remove('open');
+    }
+
+    function teacherLoginSignIn() {
+        var email = ((document.getElementById('teacher-login-email') || {}).value || '').trim().toLowerCase();
+        var code = ((document.getElementById('teacher-login-code') || {}).value || '').trim();
+        if (!email || !email.endsWith('@aii.edu.kh')) {
+            showToast('Email must end with @aii.edu.kh');
+            return;
+        }
+        if (!code) {
+            showToast('Please enter the teacher code.');
+            return;
+        }
+        var validCode = localStorage.getItem('ryshubBlogAdminCode') || 'RYS-BLOG-ADMIN-2026';
+        if (code !== validCode) {
+            showToast('Invalid teacher code.');
+            return;
+        }
+        localStorage.setItem('ryshub_role', 'teacher');
+        sessionStorage.setItem('ryshub_role', 'teacher');
+        localStorage.setItem('ryshubTeacherProfile', JSON.stringify({ name: email.split('@')[0], email: email, verified: true }));
+        sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify({ name: email.split('@')[0], email: email, verified: true }));
+        closeTeacherLogin();
+        updateUploadUi();
+        showToast('Teacher access granted');
     }
 
     function extractEpubCover(epubFile) {
@@ -1339,6 +1473,7 @@
     // ─── Init ─────────────────────────────────────────────────────────────────────
     filterBooks();
     updateStats();
+    updateUploadUi();
 
     function previewCover(input) {
         var file = input && input.files && input.files[0];
@@ -1387,12 +1522,44 @@
         if (e.target === this) closeEpubReader();
     });
 
+    document.getElementById('teacher-login-overlay').addEventListener('click', function(e) {
+        if (e.target === this) closeTeacherLogin();
+    });
+
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeEpubReader(true);
+        if (e.key === 'Escape') {
+            closeEpubReader(true);
+            closeTeacherLogin();
+        }
         if (e.key === 'ArrowRight') epubNextPage();
         if (e.key === 'ArrowLeft') epubPrevPage();
     });
 </script>
+<!-- TEACHER LOGIN MODAL -->
+<div id="teacher-login-overlay" class="login-modal-overlay">
+    <div class="login-card">
+        <button onclick="closeTeacherLogin()" style="position:absolute;top:16px;right:16px;background:#334155;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;color:#94a3b8;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;" onmouseover="this.style.background='#2563eb'; this.style.color='white'" onmouseout="this.style.background='#334155'; this.style.color='#94a3b8'">&#10005;</button>
+        <div style="text-align:center;margin-bottom:22px;">
+            <div style="width:68px;height:68px;margin:0 auto 14px;border-radius:18px;background:linear-gradient(135deg,#1e40af,#3b82f6);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px rgba(37,99,235,.4);">
+                <i class="fas fa-user-shield" style="font-size:1.7rem;color:white;"></i>
+            </div>
+            <h2 style="font-size:1.55rem;font-weight:800;color:var(--white);margin:0 0 6px;">Teacher Login</h2>
+            <p style="color:var(--text-secondary);font-size:.9rem;margin:0;line-height:1.6;">Sign in to upload and manage books.</p>
+        </div>
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">School Email</label>
+            <input id="teacher-login-email" type="email" class="login-input" placeholder="yourname@aii.edu.kh">
+        </div>
+        <div style="margin-bottom:22px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px;">Teacher Code</label>
+            <input id="teacher-login-code" type="password" class="login-input" placeholder="Enter teacher code" autocomplete="off">
+        </div>
+        <button onclick="teacherLoginSignIn()" style="width:100%;padding:15px;background:linear-gradient(135deg,#1e40af,#2563eb);color:white;border:none;border-radius:13px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 #1e3a8a,0 8px 24px rgba(37,99,235,.4);transition:all 0.3s;">
+            <i class="fas fa-right-to-bracket"></i> &nbsp;Sign in as teacher
+        </button>
+    </div>
+</div>
+
 <script src="../../assets/ryshub-global-header.js"></script>
 </body>
 </html>
