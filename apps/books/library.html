@@ -1017,6 +1017,14 @@
         return !!profile;
     }
 
+    function hasAdminAccess() {
+        var master = localStorage.getItem('ryshub_master_access') === 'true' || sessionStorage.getItem('ryshub_master_access') === 'true';
+        if (master) return true;
+        var blogAdmin = sessionStorage.getItem('ryshubBlogAdminSession') === '1';
+        if (blogAdmin) return true;
+        return false;
+    }
+
     function updateUploadUi() {
         var panel = document.getElementById('uploadPanel');
         var loginCard = document.getElementById('teacherLoginCard');
@@ -1413,7 +1421,7 @@
                     ? '<button class="book-btn disabled" disabled><i class="fas fa-clock"></i> Coming Soon</button>'
                     : '<button class="book-btn" onclick="event.stopPropagation();launchBook(\'' + book.id + '\')">' + btnLabel + '</button>';
 
-            var deleteBtnHtml = (isEpub && hasTeacherAccess())
+            var deleteBtnHtml = (isEpub && hasAdminAccess())
                 ? '<button class="book-btn danger" onclick="event.stopPropagation();deleteUploadedEpub(\'' + book.id + '\', \'' + book.title.replace(/'/g, "&#39;") + '\')"><i class="fas fa-trash"></i> Delete</button>'
                 : '';
 
