@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Books Library • RysHub</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -928,6 +929,119 @@
         filterBooks();
     }
 
+    function extractEpubCover(epubFile) {
+        return new Promise(function(resolve) {
+            if (typeof JSZip === 'undefined') { resolve(null); return; }
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                JSZip.loadAsync(e.target.result).then(function(zip) {
+                    var containerFile = zip.file('META-INF/container.xml');
+                    if (!containerFile) { resolve(null); return; }
+                    return containerFile.async('string').then(function(containerXml) {
+                        var parser = new DOMParser();
+                        var containerDoc = parser.parseFromString(containerXml, 'application/xml');
+                        var rootfile = containerDoc.querySelector('rootfile');
+                        if (!rootfile) { resolve(null); return; }
+                        var opfPath = rootfile.getAttribute('full-path');
+                        if (!opfPath) { resolve(null); return; }
+                        var opfFile = zip.file(opfPath);
+                        if (!opfFile) { resolve(null); return; }
+                        return opfFile.async('string').then(function(opfXml) {
+                            var opfDoc = parser.parseFromString(opfXml, 'application/xml');
+                            var manifest = opfDoc.querySelector('manifest');
+                            if (!manifest) { resolve(null); return; }
+
+                            var coverHref = null;
+                            var items = manifest.querySelectorAll('item');
+
+                            // EPUB 3: item with properties="cover-image"
+                            for (var i = 0; i < items.length; i++) {
+                                var props = items[i].getAttribute('properties') || '';
+                                if (props.indexOf('cover-image') !== -1) {
+                                    var mt = items[i].getAttribute('media-type') || '';
+                                    if (mt.indexOf('image/') === 0) {
+                                        coverHref = items[i].getAttribute('href');
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // EPUB 2: meta name="cover"
+                            if (!coverHref) {
+                                var coverMeta = opfDoc.querySelector('meta[name="cover"]');
+                                if (coverMeta) {
+                                    var coverId = coverMeta.getAttribute('content');
+                                    if (coverId) {
+                                        for (var j = 0; j < items.length; j++) {
+                                            if (items[j].getAttribute('id') === coverId) {
+                                                var mt2 = items[j].getAttribute('media-type') || '';
+                                                if (mt2.indexOf('image/') === 0) {
+                                                    coverHref = items[j].getAttribute('href');
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Fallback: common file names
+                            if (!coverHref) {
+                                var opfDir = opfPath.split('/').slice(0, -1).join('/');
+                                if (opfDir) opfDir += '/';
+                                var possibleNames = ['cover.jpg','cover.jpeg','cover.png','Cover.jpg','Cover.jpeg','Cover.png'];
+                                for (var k = 0; k < possibleNames.length; k++) {
+                                    if (zip.file(opfDir + possibleNames[k])) {
+                                        coverHref = possibleNames[k];
+                                        break;
+                                    }
+                                    if (zip.file(possibleNames[k])) {
+                                        coverHref = possibleNames[k];
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!coverHref) { resolve(null); return; }
+
+                            // Resolve relative path against OPF directory
+                            var opfDir = opfPath.split('/').slice(0, -1).join('/');
+                            if (opfDir) opfDir += '/';
+                            var imagePath = coverHref;
+                            if (imagePath.charAt(0) !== '/') {
+                                imagePath = opfDir + imagePath;
+                            }
+                            var parts = imagePath.split('/');
+                            var normalized = [];
+                            for (var p = 0; p < parts.length; p++) {
+                                if (parts[p] === '..') { normalized.pop(); }
+                                else if (parts[p] !== '.' && parts[p] !== '') { normalized.push(parts[p]); }
+                            }
+                            imagePath = normalized.join('/');
+
+                            var imageFile = zip.file(imagePath);
+                            if (!imageFile) { resolve(null); return; }
+
+                            var ext = imagePath.split('.').pop().toLowerCase();
+                            var mime = ext === 'png' ? 'image/png' : 'image/jpeg';
+                            return imageFile.async('blob').then(function(blob) {
+                                var coverFile = new File([blob], 'cover.' + ext, { type: mime });
+                                compressCoverToDataUrl(coverFile, function(dataUrl) {
+                                    resolve(dataUrl);
+                                });
+                            });
+                        });
+                    });
+                }).catch(function(err) {
+                    console.error('extract cover error:', err);
+                    resolve(null);
+                });
+            };
+            reader.onerror = function() { resolve(null); };
+            reader.readAsArrayBuffer(epubFile);
+        });
+    }
+
     function handleEpubUpload() {
         var fileInput = document.getElementById('epubFileInput');
         var titleInput = document.getElementById('epubTitleInput');
@@ -977,7 +1091,10 @@
         if (coverFile) {
             compressCoverToDataUrl(coverFile, finishUpload);
         } else {
-            finishUpload(null);
+            extractEpubCover(file).then(function(coverDataUrl) {
+                if (coverDataUrl) showToast('Cover found inside EPUB.');
+                finishUpload(coverDataUrl);
+            });
         }
     }
 
@@ -1019,11 +1136,14 @@
         });
     }
 
-    var _epubObjectUrl = null;
-
     function openEpubReader(blob, title) {
         if (typeof ePub === 'undefined') {
             showToast('EPUB reader engine is not loaded.');
+            return;
+        }
+
+        if (!blob || blob.size === 0) {
+            showToast('EPUB file is empty or missing.');
             return;
         }
 
@@ -1037,24 +1157,53 @@
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
 
-        // Object URL is the most reliable input for epub.js
-        _epubObjectUrl = URL.createObjectURL(blob);
-        currentEpubBook = ePub(_epubObjectUrl);
+        // Read blob as ArrayBuffer — more reliable than blob URLs for epub.js
+        blob.arrayBuffer().then(function(buffer) {
+            try {
+                currentEpubBook = ePub(buffer);
+            } catch (err) {
+                showToast('Could not parse EPUB — file may be corrupted.');
+                console.error('epub parse error:', err);
+                closeEpubReader(true);
+                return;
+            }
 
-        // Wait one frame so the modal has real pixel dimensions
-        requestAnimationFrame(function() {
-            var w = mount.clientWidth  || window.innerWidth;
-            var h = mount.clientHeight || Math.round(window.innerHeight * 0.75);
-            currentRendition = currentEpubBook.renderTo(mount, {
-                width: w,
-                height: h,
-                spread: 'none',
-                allowScriptedContent: true
-            });
-            currentRendition.display().catch(function(err) {
-                showToast('Could not render EPUB — check file is a valid .epub');
-                console.error('epub render error:', err);
-            });
+            // Allow layout to settle before measuring
+            setTimeout(function() {
+                // Force layout recalculation
+                modal.getBoundingClientRect();
+                mount.getBoundingClientRect();
+
+                var w = mount.clientWidth || window.innerWidth - 80;
+                var h = mount.clientHeight || Math.round(window.innerHeight * 0.75);
+
+                // Ensure non-zero dimensions
+                if (!w || w < 200) w = Math.max(320, window.innerWidth - 80);
+                if (!h || h < 200) h = Math.max(400, Math.round(window.innerHeight * 0.75));
+
+                try {
+                    currentRendition = currentEpubBook.renderTo(mount, {
+                        width: w,
+                        height: h,
+                        spread: 'none',
+                        flow: 'paginated',
+                        allowScriptedContent: true
+                    });
+
+                    currentRendition.display().then(function() {
+                        // rendered successfully
+                    }).catch(function(err) {
+                        showToast('Could not render EPUB — check file is a valid .epub');
+                        console.error('epub render error:', err);
+                    });
+                } catch (err) {
+                    showToast('EPUB render failed.');
+                    console.error('epub render exception:', err);
+                }
+            }, 80);
+        }).catch(function(err) {
+            showToast('Could not read EPUB file.');
+            console.error('blob read error:', err);
         });
     }
 
@@ -1063,18 +1212,13 @@
         var mount = document.getElementById('epubReaderMount');
 
         if (currentRendition && typeof currentRendition.destroy === 'function') {
-            currentRendition.destroy();
+            try { currentRendition.destroy(); } catch (e) {}
         }
         if (currentEpubBook && typeof currentEpubBook.destroy === 'function') {
-            currentEpubBook.destroy();
+            try { currentEpubBook.destroy(); } catch (e) {}
         }
         currentRendition = null;
         currentEpubBook = null;
-
-        if (_epubObjectUrl) {
-            URL.revokeObjectURL(_epubObjectUrl);
-            _epubObjectUrl = null;
-        }
 
         if (mount) mount.innerHTML = '';
         if (modal) {
