@@ -3093,18 +3093,18 @@
         <button class="card-btn" style="background:linear-gradient(135deg,#6366f1,#4338ca);box-shadow:0 4px 0 #312e81,0 8px 24px rgba(99,102,241,.35);"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
     </div>
 
-    <!-- EduGrade -->
-    <div class="tool-card" onclick="showToast('EduGrade Pro coming soon! 📝')">
-        <div class="card-art"><img src="assets/teacher-dashboard.svg?v=20260416" alt="EduGrade preview"></div>
-        <div class="tool-icon bg-gradient-to-br from-emerald-400 to-emerald-600 text-white">🧠</div>
-        <div class="tool-badge text-emerald-300">AI-Powered</div>
-        <h3>EduGrade Pro</h3>
-        <p>AI writing grader for essays, sentences & summaries. Upload handwritten work for instant rubric feedback.</p>
+    <!-- WriteCraft -->
+    <div class="tool-card" onclick="window.open('apps/writing-trainer/index.html','_blank')">
+        <div class="card-art"><img src="assets/teacher-dashboard.svg?v=20260416" alt="WriteCraft preview"></div>
+        <div class="tool-icon bg-gradient-to-br from-blue-500 to-purple-600 text-white">✍️</div>
+        <div class="tool-badge text-blue-300">Writing Trainer</div>
+        <h3>WriteCraft</h3>
+        <p>Practice essays, summaries & creative stories with timed prompts, live stats, and instant feedback on word count, sentence variety & structure.</p>
         <div class="meta-row">
-            <span><i class="fas fa-camera text-emerald-400"></i> Photo Upload</span>
-            <span><i class="fas fa-star text-emerald-400"></i> Rubric AI</span>
+            <span><i class="fas fa-pen-nib text-blue-400"></i> 3 Writing Modes</span>
+            <span><i class="fas fa-chart-line text-blue-400"></i> Live Scoring</span>
         </div>
-        <button class="card-btn" style="background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 4px 0 #047857,0 8px 24px rgba(16,185,129,.3);"><i class="fas fa-arrow-right"></i> Open Grader</button>
+        <button class="card-btn" style="background:linear-gradient(135deg,#3b82f6,#7c3aed);box-shadow:0 4px 0 #4c1d95,0 8px 24px rgba(123,97,255,.35);"><i class="fas fa-pen"></i> Start Writing</button>
     </div>
     
     <!-- Word Practice -->
@@ -4480,6 +4480,18 @@ var MINI_GAMES = [
         launchAction: function() {
             recordGameLaunch('typing-race');
             window.open('apps/games/typing-race/index.html', '_blank');
+        }
+    },
+    {
+        id: 'writecraft',
+        title: 'WriteCraft',
+        status: 'Live',
+        iconClass: 'fas fa-pen-nib',
+        desc: 'Writing trainer for essays, summaries & stories with timed prompts and live scoring.',
+        launchText: 'Launch',
+        launchAction: function() {
+            recordGameLaunch('writecraft');
+            window.open('apps/writing-trainer/index.html', '_blank');
         }
     },
     {
