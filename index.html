@@ -3639,6 +3639,8 @@ function blogAdminSignIn() {
 function blogAdminSignOut() {
     sessionStorage.removeItem(BLOG_ADMIN_SESSION_KEY);
     sessionStorage.removeItem(BLOG_ADMIN_SESSION_KEY + ':email');
+    sessionStorage.removeItem('ryshub_master_access');
+    localStorage.removeItem('ryshub_master_access');
     updateBlogAdminUi();
     showToast('Blog admin signed out');
 }
