@@ -2595,14 +2595,14 @@
         <div class="hero-banner-coded">
             <div class="hb-top">
                 <div class="hb-chip"><i class="fas fa-chalkboard-teacher" aria-hidden="true"></i> ESL Teachers Hub</div>
-                <div class="hb-chip"><i class="fas fa-sparkles" aria-hidden="true"></i> Coded Visual Banner</div>
+                <div class="hb-chip"><i class="fas fa-sparkles" aria-hidden="true"></i> <span id="hbTopChip">Coded Visual Banner</span></div>
             </div>
             <div class="hb-grid">
-                <div class="hb-title">
-                    Teach English with
-                    <span>Artful Digital Experiences</span>
+                <div class="hb-title" id="hbTitle">
+                    <span id="hbTitlePrefix">Teach English with</span>
+                    <span id="hbTitleSpan">Artful Digital Experiences</span>
                 </div>
-                <div class="hb-meta">
+                <div class="hb-meta" id="hbMeta">
                     Designed for teachers who want bold visuals, clear pedagogy, and engaging classroom-ready learning moments.
                 </div>
             </div>
@@ -2612,7 +2612,7 @@
                     <span class="hb-line"></span>
                     <span class="hb-line"></span>
                 </div>
-                <div class="hb-chip"><i class="fas fa-language" aria-hidden="true"></i> Reading · Speaking · Writing · Listening</div>
+                <div class="hb-chip" id="hbBottomChip"><i class="fas fa-language" aria-hidden="true"></i> Reading · Speaking · Writing · Listening</div>
             </div>
         </div>
     </div>
@@ -4178,6 +4178,74 @@ function initHubMode() {
     setHubMode(scopedMode || fallbackMode || 'teacher');
 }
 
+var HERO_TOPICS = [
+    { prefix: 'Teach English with', highlight: 'Artful Digital Experiences', meta: 'Designed for teachers who want bold visuals, clear pedagogy, and engaging classroom-ready learning moments.', chip: 'Reading · Speaking · Writing · Listening', icon: 'fa-language' },
+    { prefix: 'Master', highlight: 'Grammar Through Play', meta: 'Interactive exercises that turn complex rules into intuitive, memorable classroom activities students actually enjoy.', chip: 'Nouns · Verbs · Tenses · Clauses', icon: 'fa-puzzle-piece' },
+    { prefix: 'Build', highlight: 'Vocabulary With Confidence', meta: 'From core word lists to contextual usage — every term becomes a building block for fluent expression.', chip: 'Context · Collocation · Usage · Review', icon: 'fa-book' },
+    { prefix: 'Prepare Students for', highlight: 'TOEFL Success', meta: 'Integrated reading, listening, speaking, and writing drills calibrated to the iBT format and scoring rubrics.', chip: 'iBT Format · Timed Practice · Strategies', icon: 'fa-graduation-cap' },
+    { prefix: 'Spark', highlight: 'Creative Writing', meta: 'Guided prompts, structured frameworks, and peer-review tools that help students find their voice in English.', chip: 'Prompts · Drafts · Feedback · Polish', icon: 'fa-pen-nib' }
+];
+
+function scrambleText(el, finalText, duration) {
+    if (!el) return;
+    duration = duration || 900;
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+    var steps = 16;
+    var stepTime = duration / steps;
+    var currentStep = 0;
+    var interval = setInterval(function() {
+        currentStep++;
+        var progress = currentStep / steps;
+        var revealed = Math.floor(progress * finalText.length);
+        var result = '';
+        for (var i = 0; i < finalText.length; i++) {
+            if (finalText[i] === ' ') {
+                result += ' ';
+            } else if (i < revealed) {
+                result += finalText[i];
+            } else {
+                result += chars[Math.floor(Math.random() * chars.length)];
+            }
+        }
+        el.textContent = result;
+        if (currentStep >= steps) {
+            clearInterval(interval);
+            el.textContent = finalText;
+        }
+    }, stepTime);
+}
+
+var heroTopicIndex = 0;
+var heroBannerTimer = null;
+
+function cycleHeroBanner() {
+    var prefixEl = document.getElementById('hbTitlePrefix');
+    var spanEl = document.getElementById('hbTitleSpan');
+    var metaEl = document.getElementById('hbMeta');
+    var chipEl = document.getElementById('hbBottomChip');
+    var topChipEl = document.getElementById('hbTopChip');
+    if (!prefixEl || !spanEl) return;
+
+    heroTopicIndex = (heroTopicIndex + 1) % HERO_TOPICS.length;
+    var topic = HERO_TOPICS[heroTopicIndex];
+
+    prefixEl.textContent = topic.prefix;
+    scrambleText(spanEl, topic.highlight, 1000);
+    if (metaEl) metaEl.textContent = topic.meta;
+    if (chipEl) {
+        chipEl.innerHTML = '<i class="fas ' + topic.icon + '" aria-hidden="true"></i> ' + topic.chip;
+    }
+    if (topChipEl) {
+        var labels = ['Coded Visual Banner', 'Live Theme Rotation', 'Fresh Every Visit', 'Dynamic Content', 'Adaptive Banner'];
+        topChipEl.textContent = labels[heroTopicIndex % labels.length];
+    }
+}
+
+function initHeroBannerCycle() {
+    if (heroBannerTimer) clearInterval(heroBannerTimer);
+    heroBannerTimer = setInterval(cycleHeroBanner, 8000);
+}
+
 function animateCounter(el) {
     var target = parseInt(el.getAttribute('data-count') || '0', 10);
     var suffix = el.getAttribute('data-suffix') || '';
@@ -4661,6 +4729,7 @@ renderMiniGamesSection();
 initHeaderNavScroll();
 initRandomMiniMention();
 initClassroomLab();
+initHeroBannerCycle();
 renderTeacherBlogPosts();
 updateBlogAdminUi();
 </script>
