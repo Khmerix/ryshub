@@ -633,6 +633,69 @@
     let unlockedAchievements = new Set();
     let isCountdownActive = false;
 
+    const ARCADE_ALIAS_KEY = 'ryshubArcadeAlias';
+    const OVERALL_LEADERBOARD_KEY = 'ryshubOverallLeaderboard';
+
+    function normalizeArcadeName(name) {
+      return (name || '').replace(/\s+/g, ' ').trim().slice(0, 24);
+    }
+
+    function getArcadeAlias() {
+      return normalizeArcadeName(localStorage.getItem(ARCADE_ALIAS_KEY) || '');
+    }
+
+    function setArcadeAlias(name) {
+      const normalized = normalizeArcadeName(name);
+      if (!normalized) return '';
+      localStorage.setItem(ARCADE_ALIAS_KEY, normalized);
+      return normalized;
+    }
+
+    function loadOverallLeaderboard() {
+      try {
+        const rows = JSON.parse(localStorage.getItem(OVERALL_LEADERBOARD_KEY) || '[]');
+        return Array.isArray(rows) ? rows : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveOverallLeaderboard(rows) {
+      localStorage.setItem(OVERALL_LEADERBOARD_KEY, JSON.stringify(rows));
+    }
+
+    function recordOverallLeaderboardEntry(payload) {
+      const playerName = normalizeArcadeName(payload && payload.playerName);
+      if (!playerName) return;
+      setArcadeAlias(playerName);
+
+      const rows = loadOverallLeaderboard();
+      let entry = rows.find(row => (row.playerName || '').toLowerCase() === playerName.toLowerCase());
+      if (!entry) {
+        entry = { playerName, totalPoints: 0, totalPlays: 0, lastPlayed: '', bestGame: '', bestMetric: '', games: {} };
+        rows.push(entry);
+      }
+
+      const gameId = payload.gameId || 'typing-race';
+      const points = Math.max(0, Math.round(payload.points || 0));
+      entry.totalPoints += points;
+      entry.totalPlays += payload.countAsPlay === false ? 0 : 1;
+      entry.lastPlayed = new Date().toISOString();
+      if (!entry.games[gameId]) entry.games[gameId] = { name: payload.gameLabel || 'Typing Race', points: 0, plays: 0, bestMetric: '' };
+      entry.games[gameId].points += points;
+      entry.games[gameId].plays += payload.countAsPlay === false ? 0 : 1;
+      if (payload.metricValue) entry.games[gameId].bestMetric = payload.metricValue;
+
+      const bestGameId = Object.keys(entry.games).sort((a, b) => entry.games[b].points - entry.games[a].points)[0];
+      if (bestGameId) {
+        entry.bestGame = entry.games[bestGameId].name;
+        entry.bestMetric = entry.games[bestGameId].bestMetric || '';
+      }
+
+      rows.sort((a, b) => (b.totalPoints - a.totalPoints) || ((b.totalPlays || 0) - (a.totalPlays || 0)));
+      saveOverallLeaderboard(rows);
+    }
+
     const defaultConfig = {
       game_title: "Type Racer",
       background_color: "#0f172a",
@@ -653,6 +716,11 @@
       const initResult = await window.dataSdk.init(dataHandler);
       if (!initResult.isOk) {
         console.error("Failed to initialize data SDK");
+      }
+      const savedAlias = getArcadeAlias();
+      if (savedAlias) {
+        const playerInput = document.getElementById('player-name');
+        if (playerInput && !playerInput.value.trim()) playerInput.value = savedAlias;
       }
     })();
 
@@ -815,9 +883,8 @@
     }
 
     async function saveScore(playerName, wpm, acc) {
-      if (!playerName.trim()) {
-        playerName = 'Anonymous';
-      }
+      playerName = normalizeArcadeName(playerName) || 'Anonymous';
+      setArcadeAlias(playerName);
       
       const result = await window.dataSdk.create({
         player_name: playerName,
@@ -866,15 +933,27 @@
         if (wpm >= topWPM) unlockAchievement('legend');
       }
 
-      const playerName = document.getElementById('player-name').value;
+      const playerName = normalizeArcadeName(document.getElementById('player-name').value) || 'Anonymous';
+      setArcadeAlias(playerName);
       const achievement = Array.from(unlockedAchievements).join(',');
       await window.dataSdk.create({
-        player_name: playerName || 'Anonymous',
+        player_name: playerName,
         wpm: wpm,
         accuracy: acc,
         difficulty: difficulty,
         timestamp: new Date().toISOString(),
         achievement: achievement
+      });
+
+      const difficultyBonus = difficulty === 'hard' ? 120 : difficulty === 'medium' ? 60 : 0;
+      const leaderboardPoints = (wpm * 8) + (acc * 2) + difficultyBonus;
+      recordOverallLeaderboardEntry({
+        playerName: playerName,
+        gameId: 'typing-race',
+        gameLabel: 'Typing Race',
+        points: leaderboardPoints,
+        metricValue: wpm + ' WPM · ' + acc + '% acc',
+        countAsPlay: true
       });
 
       document.getElementById('r-wpm').textContent = wpm;

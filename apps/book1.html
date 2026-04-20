@@ -989,6 +989,7 @@
         <button class="nav-btn" onclick="showUnit(4, this)">Unit 4</button>
         <button class="nav-btn" onclick="showUnit(5, this)">Unit 5</button>
         <button class="nav-btn" onclick="showUnit(6, this)">Unit 6</button>
+        <button class="nav-btn" onclick="openHomeworkHub(this)">📝 HW Hub</button>
         <button class="theme-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
     </nav>
     
@@ -1006,6 +1007,14 @@
         <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
             <h2 style="text-align: center; font-size: 2rem; margin-bottom: 10px; color: #2C3E50;">🎯 Select a Unit</h2>
             <p style="text-align: center; color: #666; margin-bottom: 40px;">Click on any unit card to begin exploring</p>
+            <div id="book1-homework-hub" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 20px;">
+                <button class="btn-3d btn-sm" onclick="openUnitHomework(1)">📝 Unit 1 Homework</button>
+                <button class="btn-3d btn-sm" onclick="openUnitHomework(2)">📝 Unit 2 Homework</button>
+                <button class="btn-3d btn-sm" onclick="openUnitHomework(3)">📝 Unit 3 Homework</button>
+                <button class="btn-3d btn-sm" onclick="openUnitHomework(4)">📝 Unit 4 Homework</button>
+                <button class="btn-3d btn-sm" onclick="openUnitHomework(5)">📝 Unit 5 Homework</button>
+                <button class="btn-3d btn-sm" onclick="openUnitHomework(6)">📝 Unit 6 Homework</button>
+            </div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
                 
@@ -1017,6 +1026,7 @@
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
                         <span style="font-size: 0.85rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px;">📖 Vocabulary • 🎧 Listening • 🎬 Video</span>
                     </div>
+                    <button class="btn-3d btn-sm" onclick="event.stopPropagation(); openUnitHomework(1)" style="margin-top: 12px; background: linear-gradient(145deg, #e5c76b 0%, #d4af37 100%); color: #722f37;">Open Homework</button>
                 </div>
 
                 <!-- Unit 2 Card -->
@@ -1027,6 +1037,7 @@
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
                         <span style="font-size: 0.85rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px;">📖 Vocabulary • 🎧 Listening • 🎬 Video</span>
                     </div>
+                    <button class="btn-3d btn-sm" onclick="event.stopPropagation(); openUnitHomework(2)" style="margin-top: 12px; background: linear-gradient(145deg, #e5c76b 0%, #d4af37 100%); color: #722f37;">Open Homework</button>
                 </div>
 
                 <!-- Unit 3 Card -->
@@ -1037,6 +1048,7 @@
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
                         <span style="font-size: 0.85rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px;">📖 Vocabulary • 🎧 Listening • 🗺️ Map • 🎬 Video</span>
                     </div>
+                    <button class="btn-3d btn-sm" onclick="event.stopPropagation(); openUnitHomework(3)" style="margin-top: 12px; background: linear-gradient(145deg, #e5c76b 0%, #d4af37 100%); color: #722f37;">Open Homework</button>
                 </div>
 
                 <!-- Unit 4 Card -->
@@ -1047,6 +1059,7 @@
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
                         <span style="font-size: 0.85rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px;">📖 Vocabulary • 🎧 Listening • 🎬 Video</span>
                     </div>
+                    <button class="btn-3d btn-sm" onclick="event.stopPropagation(); openUnitHomework(4)" style="margin-top: 12px; background: linear-gradient(145deg, #e5c76b 0%, #d4af37 100%); color: #722f37;">Open Homework</button>
                 </div>
 
                 <!-- Unit 5 Card -->
@@ -1057,6 +1070,7 @@
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
                         <span style="font-size: 0.85rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px;">📖 Vocabulary • 🎧 Listening • 📰 News • 🎬 Video</span>
                     </div>
+                    <button class="btn-3d btn-sm" onclick="event.stopPropagation(); openUnitHomework(5)" style="margin-top: 12px; background: linear-gradient(145deg, #e5c76b 0%, #d4af37 100%); color: #722f37;">Open Homework</button>
                 </div>
 
                 <!-- Unit 6 Card -->
@@ -1067,6 +1081,7 @@
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
                         <span style="font-size: 0.85rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px;">📖 Vocabulary • 🎧 Listening • 🎬 Video</span>
                     </div>
+                    <button class="btn-3d btn-sm" onclick="event.stopPropagation(); openUnitHomework(6)" style="margin-top: 12px; background: linear-gradient(145deg, #e5c76b 0%, #d4af37 100%); color: #722f37;">Open Homework</button>
                 </div>
 
             </div>
@@ -9846,6 +9861,35 @@
             
             activeUnit.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
             if (btn) btn.classList.add('active');
+        }
+
+        function openUnitHomework(unitNum) {
+            const navBtn = document.querySelector('.main-nav .nav-btn[onclick*="showUnit(' + unitNum + '"]');
+            showUnit(unitNum, navBtn || null);
+
+            const sectionId = 'unit' + unitNum + '-homework';
+            setTimeout(function() {
+                const activeUnit = document.getElementById('unit-' + unitNum);
+                if (!activeUnit) return;
+                const hwTabBtn = activeUnit.querySelector('.nav-tab[onclick*="' + sectionId + '"]');
+                showSection(sectionId, hwTabBtn || null);
+                window.scrollTo(0, 0);
+            }, 120);
+        }
+
+        function openHomeworkHub(btn) {
+            const homeBtn = document.querySelector('.main-nav .nav-btn[onclick*="showUnit(\'home\'"]');
+            showUnit('home', homeBtn || null);
+            if (btn) {
+                document.querySelectorAll('.main-nav .nav-btn').forEach(function(nav) {
+                    nav.classList.remove('active');
+                });
+                btn.classList.add('active');
+            }
+            setTimeout(function() {
+                const hub = document.getElementById('book1-homework-hub');
+                if (hub) hub.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 120);
         }
         
         function toggleDarkMode() {

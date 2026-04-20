@@ -951,7 +951,73 @@ const gameState = {
         };
 
         const STORAGE_KEY = 'solar-system-save-v1';
+        const ARCADE_ALIAS_KEY = 'ryshubArcadeAlias';
+        const OVERALL_LEADERBOARD_KEY = 'ryshubOverallLeaderboard';
         const EVENT_INTERVAL_MS = 40000;
+        
+        function normalizeArcadeName(name) {
+            return (name || '').replace(/\s+/g, ' ').trim().slice(0, 24);
+        }
+
+        function getArcadeAlias() {
+            return normalizeArcadeName(localStorage.getItem(ARCADE_ALIAS_KEY) || '');
+        }
+
+        function setArcadeAlias(name) {
+            const normalized = normalizeArcadeName(name);
+            if (!normalized) return '';
+            localStorage.setItem(ARCADE_ALIAS_KEY, normalized);
+            return normalized;
+        }
+
+        function loadOverallLeaderboard() {
+            try {
+                const rows = JSON.parse(localStorage.getItem(OVERALL_LEADERBOARD_KEY) || '[]');
+                return Array.isArray(rows) ? rows : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveOverallLeaderboard(rows) {
+            localStorage.setItem(OVERALL_LEADERBOARD_KEY, JSON.stringify(rows));
+        }
+
+        function recordOverallLeaderboardEntry(payload) {
+            const playerName = normalizeArcadeName(payload && payload.playerName);
+            if (!playerName) return;
+            const rows = loadOverallLeaderboard();
+            let entry = rows.find(row => (row.playerName || '').toLowerCase() === playerName.toLowerCase());
+            if (!entry) {
+                entry = { playerName, totalPoints: 0, totalPlays: 0, lastPlayed: '', bestGame: '', bestMetric: '', games: {} };
+                rows.push(entry);
+            }
+
+            const gameId = payload.gameId || 'solar';
+            const points = Math.max(0, Math.round(payload.points || 0));
+            entry.totalPoints += points;
+            entry.totalPlays += payload.countAsPlay === false ? 0 : 1;
+            entry.lastPlayed = new Date().toISOString();
+            if (!entry.games[gameId]) entry.games[gameId] = { name: payload.gameLabel || 'Solar System Explorer', points: 0, plays: 0, bestMetric: '' };
+            entry.games[gameId].points += points;
+            entry.games[gameId].plays += payload.countAsPlay === false ? 0 : 1;
+            if (payload.metricValue) entry.games[gameId].bestMetric = payload.metricValue;
+
+            const bestGameId = Object.keys(entry.games).sort((a, b) => entry.games[b].points - entry.games[a].points)[0];
+            if (bestGameId) {
+                entry.bestGame = entry.games[bestGameId].name;
+                entry.bestMetric = entry.games[bestGameId].bestMetric || '';
+            }
+
+            rows.sort((a, b) => (b.totalPoints - a.totalPoints) || ((b.totalPlays || 0) - (a.totalPlays || 0)));
+            saveOverallLeaderboard(rows);
+        }
+
+        const savedArcadeAlias = getArcadeAlias();
+        if (savedArcadeAlias) {
+            gameState.player.name = savedArcadeAlias;
+        }
+
         const achievements = {
             firstDiscovery: { title: 'First Contact', desc: 'Discover your first celestial body', unlocked: false, reward: 10 },
             fiveDiscoveries: { title: 'Scout Route', desc: 'Discover 5 celestial bodies', unlocked: false, reward: 20 },
@@ -1086,6 +1152,7 @@ const gameState = {
             if (!mission || mission.completed) return false;
 
             mission.completed = true;
+            const commander = setArcadeAlias(gameState.player.name) || normalizeArcadeName(gameState.player.name);
             AudioSys.playMission();
             addXP(mission.reward);
             if (message) {
@@ -1093,6 +1160,14 @@ const gameState = {
             }
             triggerCameraShake(0.65, 420);
             addEventFeed('Mission complete: ' + mission.title, 'system');
+            recordOverallLeaderboardEntry({
+                playerName: commander,
+                gameId: 'solar',
+                gameLabel: 'Solar System Explorer',
+                points: mission.reward + (gameState.player.level * 12) + (gameState.missions.filter(m => m.completed).length * 5),
+                metricValue: mission.title + ' · Level ' + gameState.player.level + ' · ' + gameState.missions.filter(m => m.completed).length + '/' + gameState.missions.length + ' missions',
+                countAsPlay: false
+            });
             evaluateAchievements();
             saveProgress();
             return true;
@@ -1139,6 +1214,10 @@ const gameState = {
                         ...data.player,
                         discoveredPlanets: Array.isArray(data.player.discoveredPlanets) ? data.player.discoveredPlanets : []
                     };
+                }
+                const savedAlias = getArcadeAlias();
+                if (savedAlias && (!normalizeArcadeName(gameState.player.name) || gameState.player.name === 'Cadet')) {
+                    gameState.player.name = savedAlias;
                 }
                 if (data.quizProgress && typeof data.quizProgress === 'object') {
                     gameState.quizProgress = data.quizProgress;
@@ -1655,11 +1734,20 @@ const gameState = {
             if (!badge || badge.unlocked) return;
             badge.unlocked = true;
             const reward = badge.reward || 0;
+            const commander = setArcadeAlias(gameState.player.name) || normalizeArcadeName(gameState.player.name);
             showNotification('🏅 Badge Unlocked: ' + badge.title + (reward ? ' (+' + reward + ' XP)' : ''));
             if (reward > 0) {
                 addXP(reward);
             }
             addEventFeed('Badge unlocked: ' + badge.title + (reward ? ' (+' + reward + ' XP)' : ''), 'badge');
+            recordOverallLeaderboardEntry({
+                playerName: commander,
+                gameId: 'solar',
+                gameLabel: 'Solar System Explorer',
+                points: reward + (gameState.player.level * 8),
+                metricValue: badge.title + ' · Level ' + gameState.player.level,
+                countAsPlay: false
+            });
             renderAchievements();
             saveProgress();
         }
@@ -1755,6 +1843,10 @@ const gameState = {
             lastMissionProfile = null;
 
             gameState.player = { name: 'Cadet', level: 1, xp: 0, nextLevelXp: 100, discoveredPlanets: [], completedMissions: [] };
+            const savedAlias = getArcadeAlias();
+            if (savedAlias) {
+                gameState.player.name = savedAlias;
+            }
             gameState.currentCardPlanet = null;
             gameState.quizProgress = {};
             gameState.showOrbits = true;
@@ -2569,6 +2661,7 @@ function init() {
         }
 
         function updateHUD() {
+            document.getElementById('player-name').textContent = normalizeArcadeName(gameState.player.name) || 'Cadet';
             document.getElementById('current-xp').textContent = gameState.player.xp;
             document.getElementById('next-level').textContent = gameState.player.nextLevelXp;
             document.getElementById('xp-bar').style.width = (gameState.player.xp / gameState.player.nextLevelXp) * 100 + '%';

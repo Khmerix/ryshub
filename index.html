@@ -417,6 +417,96 @@
             font-size: 1rem;
         }
 
+        .overall-leaderboard {
+            margin-top: 18px;
+            background: linear-gradient(180deg, rgba(15,23,42,.88), rgba(15,23,42,.72));
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 20px 45px rgba(2,6,23,.24);
+            backdrop-filter: blur(14px);
+        }
+
+        .overall-leaderboard-grid {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 18px;
+        }
+
+        .leaderboard-alias-box {
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.03);
+            padding: 16px;
+        }
+
+        .leaderboard-alias-box p {
+            margin: 0 0 14px;
+            color: var(--gray-300);
+            line-height: 1.65;
+        }
+
+        .leaderboard-alias-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .leaderboard-alias-input {
+            flex: 1;
+            min-inline-size: 0;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.12);
+            background: rgba(2,6,23,.58);
+            color: var(--white);
+            font: inherit;
+            outline: none;
+        }
+
+        .leaderboard-alias-input:focus {
+            border-color: rgba(59,130,246,.7);
+            box-shadow: 0 0 0 3px rgba(59,130,246,.16);
+        }
+
+        .leaderboard-current-player {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            padding: 7px 12px;
+            background: rgba(59,130,246,.12);
+            border: 1px solid rgba(59,130,246,.22);
+            color: #bfdbfe;
+            font-size: .82rem;
+            font-weight: 700;
+        }
+
+        .leaderboard-mini-note {
+            color: var(--gray-400);
+            font-size: .78rem;
+            line-height: 1.55;
+        }
+
+        .overall-board-rows .score-row:first-child .score-rank {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .overall-board-rows .score-row:nth-child(2) .score-rank {
+            background: linear-gradient(135deg, #38bdf8, #2563eb);
+        }
+
+        .overall-board-rows .score-row:nth-child(3) .score-rank {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+        }
+
+        .leaderboard-empty {
+            padding: 14px 0 4px;
+            color: var(--gray-400);
+            line-height: 1.7;
+        }
+
         .mini-games-section {
             position: relative;
             z-index: 10;
@@ -1714,6 +1804,126 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 0 var(--primary-dark), 0 12px 28px rgba(37, 99, 235, 0.35);
         }
+
+        .tool-card-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .tool-card-actions .card-btn,
+        .tool-card-actions .btn-outline {
+            inline-size: auto;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .brickforge-guide-card {
+            inline-size: min(860px, 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(34, 211, 238, 0.22);
+            background: linear-gradient(145deg, rgba(8, 145, 178, 0.14), rgba(15, 23, 42, 0.96));
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255,255,255,0.04) inset;
+            overflow: hidden;
+        }
+
+        .brickforge-guide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 22px 24px 18px;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.22), rgba(14, 116, 144, 0.18));
+            border-block-end: 1px solid rgba(34, 211, 238, 0.16);
+        }
+
+        .brickforge-guide-header h3 {
+            margin: 0 0 4px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--white);
+        }
+
+        .brickforge-guide-header p {
+            margin: 0;
+            color: rgba(207, 250, 254, 0.74);
+            font-size: 0.88rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .brickforge-guide-close {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(34, 211, 238, 0.26);
+            color: var(--white);
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .brickforge-guide-body {
+            padding: 24px;
+            display: grid;
+            gap: 18px;
+        }
+
+        .brickforge-guide-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .brickforge-guide-step {
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(15, 23, 42, 0.55);
+            padding: 16px;
+        }
+
+        .brickforge-guide-step strong {
+            display: block;
+            color: var(--white);
+            font-size: 0.95rem;
+            margin-block-end: 6px;
+        }
+
+        .brickforge-guide-step p {
+            margin: 0;
+            color: var(--gray-400);
+            font-size: 0.86rem;
+            line-height: 1.6;
+        }
+
+        .brickforge-guide-summary {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 14px;
+        }
+
+        .brickforge-guide-panel {
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(2, 6, 23, 0.58);
+            padding: 18px;
+        }
+
+        .brickforge-guide-panel h4 {
+            margin: 0 0 10px;
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .brickforge-guide-panel .lab-step-list {
+            margin-top: 0;
+        }
+
+        .brickforge-guide-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
         
         .card-btn:active {
             transform: translateY(2px);
@@ -1740,6 +1950,91 @@
 
         .tool-card:hover .card-art img {
             transform: scale(1.06);
+        }
+
+        /* Section Viewer */
+        .featured-section-viewer {
+            max-inline-size: 1100px;
+            margin: 0 auto 48px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+            display: none;
+        }
+
+        .featured-section-viewer.active {
+            display: block;
+        }
+
+        .section-viewer-container {
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: linear-gradient(135deg, rgba(15,23,42,0.72), rgba(17,24,39,0.68));
+            box-shadow: 0 18px 48px rgba(2,6,23,0.32);
+            overflow: visible;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-viewer-content {
+            animation: fadeIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Display all content in viewer */
+        .section-viewer-content > * {
+            display: block;
+            margin: 0;
+            border: none;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .section-viewer-content section {
+            padding: 0;
+        }
+
+        .section-viewer-content .section-intro {
+            margin: 0 auto 24px;
+            padding: 24px 24px 0;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .section-viewer-content .section-intro h2 {
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+        }
+
+        .section-viewer-content .cards-grid {
+            max-inline-size: 1100px;
+            margin: 0 auto 24px;
+            padding: 0 18px;
+        }
+
+        .section-viewer-content .command-center-section,
+        .section-viewer-content .classroom-lab-section,
+        .section-viewer-content .games-score-section,
+        .section-viewer-content .mini-games-section {
+            max-inline-size: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
         }
         
         /* Footer */
@@ -1906,6 +2201,23 @@
             backdrop-filter: blur(8px); 
         }
         .login-modal-overlay.open { display: flex; }
+
+        @media (max-width: 860px) {
+            .brickforge-guide-grid,
+            .brickforge-guide-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .tool-card-actions {
+                flex-direction: column;
+            }
+
+            .tool-card-actions .card-btn,
+            .tool-card-actions .btn-outline {
+                inline-size: 100%;
+            }
+        }
+
         .login-card { 
             background: linear-gradient(135deg, var(--gray-800), var(--gray-900));
             border: 1px solid var(--gray-600);
@@ -2431,12 +2743,12 @@
             </button>
             <div class="nav-scroll" id="topNavScroll">
                 <a href="#" class="nav-3d" onclick="scrollToSection('topHome'); return false;">Overview</a>
-                <a href="#" class="nav-3d" onclick="scrollToSection('featuredApps'); return false;">Featured Apps</a>
-                <a href="#" class="nav-3d" onclick="scrollToSection('gamesScores'); return false;">Games &amp; Scores</a>
-                <a href="#" class="nav-3d" onclick="scrollToSection('classroomLabSection'); return false;">Classroom Lab</a>
-                <a href="#" class="nav-3d" onclick="scrollToSection('teacherBlogSection'); return false;">Teacher Blog</a>
-                <a href="#" class="nav-3d" onclick="scrollToSection('miniGamesSection'); return false;">Mini Games</a>
-                <a href="#" class="nav-3d" onclick="scrollToSection('commandCenterSection'); return false;">Command Center</a>
+                <a href="#" class="nav-3d" onclick="displaySection('featuredApps'); return false;">Featured Apps</a>
+                <a href="#" class="nav-3d" onclick="displaySection('gamesScores'); return false;">Games &amp; Scores</a>
+                <a href="#" class="nav-3d" onclick="displaySection('classroomLabSection'); return false;">Classroom Lab</a>
+                <a href="#" class="nav-3d" onclick="displaySection('teacherBlogSection'); return false;">Teacher Blog</a>
+                <a href="#" class="nav-3d" onclick="displaySection('miniGamesSection'); return false;">Mini Games</a>
+                <a href="#" class="nav-3d" onclick="displaySection('commandCenterSection'); return false;">Command Center</a>
                 <a href="apps/books/library.html" class="nav-3d" target="_blank">📖 Story Library</a>
             </div>
             <button class="nav-scroll-btn" onclick="scrollHeaderNav(1)" aria-label="Scroll header navigation right">
@@ -2579,11 +2891,11 @@
                 <div class="hero-highlight"><i class="fas fa-cube"></i> BrickForge synced</div>
             </div>
             <div class="top-section-nav">
-                <button class="section-jump-btn" onclick="scrollToSection('featuredApps')"><i class="fas fa-layer-group"></i> Featured apps</button>
-                <button class="section-jump-btn" onclick="scrollToSection('gamesScores')"><i class="fas fa-trophy"></i> Games &amp; scores</button>
-                <button class="section-jump-btn" onclick="scrollToSection('classroomLabSection')"><i class="fas fa-chalkboard"></i> Classroom lab</button>
-                <button class="section-jump-btn" onclick="scrollToSection('miniGamesSection')"><i class="fas fa-gamepad"></i> Mini games</button>
-                <button class="section-jump-btn" onclick="scrollToSection('commandCenterSection')"><i class="fas fa-bolt"></i> Command center</button>
+                <button class="section-jump-btn" onclick="displaySection('featuredApps')"><i class="fas fa-layer-group"></i> Featured apps</button>
+                <button class="section-jump-btn" onclick="displaySection('gamesScores')"><i class="fas fa-trophy"></i> Games &amp; scores</button>
+                <button class="section-jump-btn" onclick="displaySection('classroomLabSection')"><i class="fas fa-chalkboard"></i> Classroom lab</button>
+                <button class="section-jump-btn" onclick="displaySection('miniGamesSection')"><i class="fas fa-gamepad"></i> Mini games</button>
+                <button class="section-jump-btn" onclick="displaySection('commandCenterSection')"><i class="fas fa-bolt"></i> Command center</button>
                 <button class="section-jump-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Launch Colony</button>
                 <button class="section-jump-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
             </div>
@@ -2610,6 +2922,15 @@
         </div>
     </div>
 </section>
+
+<!-- Section Viewer Container -->
+<div class="featured-section-viewer" id="sectionViewer">
+    <div class="section-viewer-container">
+        <div class="section-viewer-content" id="sectionViewerContent">
+            <!-- Sections will be cloned here -->
+        </div>
+    </div>
+</div>
 
 <section class="command-center-section" id="commandCenterSection">
     <div class="section-intro">
@@ -2823,6 +3144,41 @@
             <div id="gamesScoreRows"></div>
         </div>
     </div>
+
+    <div class="overall-leaderboard">
+        <div class="section-intro" style="margin-bottom: 14px;">
+            <div>
+                <div class="section-kicker">Bragging rights board</div>
+                <h2 style="margin: 0 0 6px; font-size: 1.55rem;">Overall player leaderboard</h2>
+                <p style="margin: 0;">Typing Race, WordMatch Arena, Last Colony, and Solar System now add real score points. Every game launch also adds participation points so all hub games contribute to the same ongoing rivalry.</p>
+            </div>
+            <div class="hb-chip"><i class="fas fa-crown"></i> Shared arcade points</div>
+        </div>
+
+        <div class="overall-leaderboard-grid">
+            <div class="leaderboard-alias-box">
+                <div class="score-kicker"><i class="fas fa-user-tag"></i> Player identity</div>
+                <p>Set one name here and the hub will use it for launch-based points. Games that ask for player names will also write into the same leaderboard.</p>
+                <div class="leaderboard-alias-row">
+                    <input id="arcadePlayerAlias" class="leaderboard-alias-input" type="text" maxlength="24" placeholder="Enter player name for leaderboard">
+                    <button class="card-btn" style="inline-size:auto; padding-inline: 16px;" onclick="saveArcadeAlias()"><i class="fas fa-save"></i> Save</button>
+                </div>
+                <div class="leaderboard-current-player"><i class="fas fa-bolt"></i> Active player: <span id="arcadeCurrentPlayer">Not set</span></div>
+                <div class="leaderboard-mini-note" style="margin-top: 12px;">Launch bonus: +25 points per game. Typing and memory matches add score-based bonuses on top.</div>
+            </div>
+
+            <div class="score-list" style="margin: 0; padding: 16px 18px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 10px; flex-wrap:wrap;">
+                    <div class="score-kicker" style="margin:0;"><i class="fas fa-medal"></i> Top players</div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn-outline" style="padding: 8px 14px;" onclick="exportOverallLeaderboard()"><i class="fas fa-download"></i> Export</button>
+                        <button class="btn-outline" style="padding: 8px 14px; border-color: rgba(239,68,68,.45); color: #fecaca;" onclick="resetOverallLeaderboard()"><i class="fas fa-trash"></i> Reset board</button>
+                    </div>
+                </div>
+                <div id="overallLeaderboardRows" class="overall-board-rows"></div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="teacher-blog-section" id="teacherBlogSection">
@@ -2989,7 +3345,10 @@
             <span><i class="fas fa-cube text-cyan-400"></i> 3D Design</span>
             <span><i class="fas fa-users text-cyan-400"></i> Class Projects</span>
         </div>
-        <button class="card-btn" style="background:linear-gradient(135deg,#06b6d4,#0e7490);box-shadow:0 4px 0 #155e75,0 8px 24px rgba(6,182,212,.35);"><i class="fas fa-cube"></i> Open Builder</button>
+        <div class="tool-card-actions">
+            <button class="card-btn" style="background:linear-gradient(135deg,#06b6d4,#0e7490);box-shadow:0 4px 0 #155e75,0 8px 24px rgba(6,182,212,.35);" onclick="event.stopPropagation(); openBrickForgeModal();"><i class="fas fa-cube"></i> Open Builder</button>
+            <button class="btn-outline" onclick="event.stopPropagation(); openBrickForgeGuideModal();"><i class="fas fa-map"></i> How to play</button>
+        </div>
     </div>
 
     <div class="tool-card" onclick="openColonyModal()">
@@ -3261,9 +3620,68 @@
                 <div style="font-size:.7rem;color:rgba(34,211,238,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">3D Voxel Builder</div>
             </div>
         </div>
-        <button onclick="closeBrickForgeModal()"><i class="fas fa-times"></i> Close</button>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <button onclick="openBrickForgeGuideModal()"><i class="fas fa-map"></i> How to play</button>
+            <button onclick="closeBrickForgeModal()"><i class="fas fa-times"></i> Close</button>
+        </div>
     </div>
     <iframe id="brickforge-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<div id="brickforge-guide-modal" class="login-modal-overlay">
+    <div class="brickforge-guide-card">
+        <div class="brickforge-guide-header">
+            <div>
+                <h3>Brick Forge Pro: How to Play</h3>
+                <p>Quick classroom guide for building challenges, creative tasks, and student demos</p>
+            </div>
+            <button class="brickforge-guide-close" onclick="closeBrickForgeGuideModal()"><i class="fas fa-times"></i> Close</button>
+        </div>
+        <div class="brickforge-guide-body">
+            <div class="brickforge-guide-grid">
+                <div class="brickforge-guide-step">
+                    <strong>1. Start with one clear build goal</strong>
+                    <p>Give students a focused challenge first: build a classroom, a safe city block, a bridge, or a dream house. Specific goals produce stronger builds.</p>
+                </div>
+                <div class="brickforge-guide-step">
+                    <strong>2. Explore the camera before building</strong>
+                    <p>Rotate, zoom, and inspect the grid so students understand space and size before they place blocks.</p>
+                </div>
+                <div class="brickforge-guide-step">
+                    <strong>3. Build the structure in layers</strong>
+                    <p>Place the floor and walls first, then add color, detail, and decoration. This keeps projects organized and easier to revise.</p>
+                </div>
+                <div class="brickforge-guide-step">
+                    <strong>4. Present using target language</strong>
+                    <p>Have students explain their design with phrases like “This area is for...”, “Next to...”, and “I chose this because...”.</p>
+                </div>
+            </div>
+
+            <div class="brickforge-guide-summary">
+                <div class="brickforge-guide-panel">
+                    <h4>Best classroom uses</h4>
+                    <div class="lab-step-list">
+                        <div class="lab-step-item"><span class="lab-pill">•</span><div><strong>Design prompt</strong><span>Run 8 to 12 minute builds such as dream bedrooms, eco houses, future schools, bridges, or landmark scenes.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">•</span><div><strong>Speaking task</strong><span>Students describe shapes, colors, functions, and positions after the build.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">•</span><div><strong>Team challenge</strong><span>Assign roles like planner, builder, decorator, and presenter for smoother collaboration.</span></div></div>
+                    </div>
+                </div>
+                <div class="brickforge-guide-panel">
+                    <h4>Teacher flow</h4>
+                    <div class="lab-step-list">
+                        <div class="lab-step-item"><span class="lab-pill">1</span><div><strong>Demo</strong><span>Show one simple sample in under 2 minutes.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">2</span><div><strong>Build</strong><span>Set one timed objective and one success rule.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">3</span><div><strong>Share</strong><span>Finish with a quick presentation or gallery walk.</span></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="brickforge-guide-actions">
+                <button class="card-btn" style="background:linear-gradient(135deg,#06b6d4,#0e7490);box-shadow:0 4px 0 #155e75,0 8px 24px rgba(6,182,212,.35);" onclick="closeBrickForgeGuideModal(); openBrickForgeModal();"><i class="fas fa-cube"></i> Open Brick Forge</button>
+                <button class="btn-outline" onclick="closeBrickForgeGuideModal()"><i class="fas fa-check"></i> Got it</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- LAST COLONY FULLSCREEN MODAL -->
@@ -3978,6 +4396,14 @@ function closeBook2bModal() {
 
 var brickForgeLoadTimer = null;
 
+function openBrickForgeGuideModal() {
+    document.getElementById('brickforge-guide-modal').classList.add('open');
+}
+
+function closeBrickForgeGuideModal() {
+    document.getElementById('brickforge-guide-modal').classList.remove('open');
+}
+
 function openBrickForgeModal() {
     recordGameLaunch('brickforge');
     showToast('Loading Brick Forge... one moment ⏳');
@@ -4182,6 +4608,65 @@ function scrollToSection(id) {
     window.scrollTo({ top: top, behavior: 'smooth' });
 }
 
+function displaySection(id) {
+    var element = document.getElementById(id);
+    if (!element) return;
+    
+    var viewer = document.getElementById('sectionViewer');
+    var viewerContent = document.getElementById('sectionViewerContent');
+    
+    if (!viewer || !viewerContent) return;
+    
+    // Clear previous content
+    viewerContent.innerHTML = '';
+    
+    // Handle different element types
+    if (element.tagName === 'SECTION') {
+        // If it's a section, just clone it
+        var clone = element.cloneNode(true);
+        clone.removeAttribute('id');
+        clone.querySelectorAll('[id]').forEach(function(el) {
+            el.removeAttribute('id');
+        });
+        viewerContent.appendChild(clone);
+    } else {
+        // If it's a div (like featuredApps), clone it and the next grid if it exists
+        var clone = element.cloneNode(true);
+        clone.removeAttribute('id');
+        clone.querySelectorAll('[id]').forEach(function(el) {
+            el.removeAttribute('id');
+        });
+        viewerContent.appendChild(clone);
+        
+        // Check if next sibling is a cards-grid and include it
+        var next = element.nextElementSibling;
+        if (next && next.classList && next.classList.contains('cards-grid')) {
+            var gridClone = next.cloneNode(true);
+            gridClone.querySelectorAll('[id]').forEach(function(el) {
+                el.removeAttribute('id');
+            });
+            viewerContent.appendChild(gridClone);
+        }
+    }
+    
+    // Show the viewer with active class
+    viewer.classList.add('active');
+    
+    // Scroll to the top of the viewer with a small delay for smooth experience
+    setTimeout(function() {
+        var headerH = (document.getElementById('mainHeader') || {offsetHeight: 80}).offsetHeight;
+        var viewerTop = viewer.getBoundingClientRect().top + window.pageYOffset - headerH - 12;
+        window.scrollTo({ top: viewerTop, behavior: 'smooth' });
+    }, 50);
+}
+
+function hideSection() {
+    var viewer = document.getElementById('sectionViewer');
+    if (viewer) {
+        viewer.classList.remove('active');
+    }
+}
+
 function scrollHeaderNav(direction) {
     var nav = document.getElementById('topNavScroll');
     if (!nav) return;
@@ -4360,12 +4845,15 @@ var MINI_GAMES = [
     },
     {
         id: 'memory-match',
-        title: 'Memory Match',
-        status: 'Coming Soon',
+        title: 'ESL Memory Master',
+        status: 'Live',
         iconClass: 'fas fa-brain',
-        desc: 'Flip and match challenge to strengthen memory and word association.',
-        launchText: 'Coming soon',
-        launchAction: null
+        desc: 'Two-player vocabulary matching game with three difficulty levels. Match English words with their meanings to boost memory and word association.',
+        launchText: 'Launch',
+        launchAction: function() {
+            recordGameLaunch('memory-match');
+            window.open('apps/games/memory-game/index.html', '_blank');
+        }
     },
     {
         id: 'next-slot',
@@ -4436,15 +4924,188 @@ var GAME_META = {
         best: '27m',
         desc: 'Timed test practice becomes a score-style challenge students can return to again and again.',
         cta: 'Start TOEFL'
+    },
+    'memory-match': {
+        name: 'WordMatch Arena',
+        metric: 'Pairs matched (best run)',
+        best: '18',
+        desc: 'Cyberpunk 2-player ESL vocab battle. Match words with meanings, chain combos, and dominate the arena.',
+        cta: 'Enter Arena'
     }
 };
+
+var ARCADE_ALIAS_KEY = 'ryshubArcadeAlias';
+var OVERALL_LEADERBOARD_KEY = 'ryshubOverallLeaderboard';
+
+function normalizeArcadeName(name) {
+    return (name || '').replace(/\s+/g, ' ').trim().slice(0, 24);
+}
+
+function getArcadeAlias() {
+    var alias = normalizeArcadeName(localStorage.getItem(ARCADE_ALIAS_KEY) || '');
+    if (alias) return alias;
+    try {
+        var teacherProfile = JSON.parse(localStorage.getItem('ryshubTeacherProfile') || 'null');
+        if (teacherProfile && teacherProfile.name) return normalizeArcadeName(teacherProfile.name);
+    } catch (e) {}
+    return '';
+}
+
+function setArcadeAlias(name) {
+    var normalized = normalizeArcadeName(name);
+    if (!normalized) return '';
+    localStorage.setItem(ARCADE_ALIAS_KEY, normalized);
+    return normalized;
+}
+
+function saveArcadeAlias() {
+    var input = document.getElementById('arcadePlayerAlias');
+    var name = setArcadeAlias(input && input.value);
+    if (!name) {
+        showToast('Enter a player name first');
+        return;
+    }
+    syncArcadeAliasUi();
+    showToast('Leaderboard player set to ' + name);
+}
+
+function syncArcadeAliasUi() {
+    var alias = getArcadeAlias();
+    var input = document.getElementById('arcadePlayerAlias');
+    var current = document.getElementById('arcadeCurrentPlayer');
+    if (input && alias && input.value !== alias) input.value = alias;
+    if (current) current.textContent = alias || 'Not set';
+}
+
+function loadOverallLeaderboard() {
+    try {
+        var saved = JSON.parse(localStorage.getItem(OVERALL_LEADERBOARD_KEY) || '[]');
+        return Array.isArray(saved) ? saved : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveOverallLeaderboard(rows) {
+    localStorage.setItem(OVERALL_LEADERBOARD_KEY, JSON.stringify(rows));
+}
+
+function exportOverallLeaderboard() {
+    var rows = loadOverallLeaderboard();
+    if (!rows.length) {
+        showToast('No leaderboard data to export yet');
+        return;
+    }
+
+    var payload = {
+        exportedAt: new Date().toISOString(),
+        activeAlias: getArcadeAlias(),
+        leaderboard: rows
+    };
+    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'ryshub-overall-leaderboard.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+    showToast('Overall leaderboard exported');
+}
+
+function resetOverallLeaderboard() {
+    if (!confirm('Reset the overall leaderboard for all games on this browser?')) return;
+    saveOverallLeaderboard([]);
+    renderOverallLeaderboard();
+    showToast('Overall leaderboard reset');
+}
+
+function recordOverallLeaderboardEntry(payload) {
+    if (!payload || !payload.playerName) return;
+    var playerName = normalizeArcadeName(payload.playerName);
+    if (!playerName) return;
+
+    setArcadeAlias(playerName);
+
+    var rows = loadOverallLeaderboard();
+    var existing = rows.find(function(row) { return row.playerName.toLowerCase() === playerName.toLowerCase(); });
+    if (!existing) {
+        existing = {
+            playerName: playerName,
+            totalPoints: 0,
+            totalPlays: 0,
+            lastPlayed: '',
+            bestGame: '',
+            bestMetric: '',
+            games: {}
+        };
+        rows.push(existing);
+    }
+
+    var points = Math.max(0, Math.round(payload.points || 0));
+    var gameId = payload.gameId || 'hub';
+    var gameMeta = GAME_META[gameId] || { name: payload.gameLabel || 'Hub Activity' };
+    var metricValue = payload.metricValue || '';
+
+    existing.totalPoints += points;
+    existing.totalPlays += payload.countAsPlay === false ? 0 : 1;
+    existing.lastPlayed = new Date().toISOString();
+    if (!existing.games[gameId]) {
+        existing.games[gameId] = { name: gameMeta.name, points: 0, plays: 0, bestMetric: '' };
+    }
+
+    existing.games[gameId].points += points;
+    existing.games[gameId].plays += payload.countAsPlay === false ? 0 : 1;
+    if (metricValue) existing.games[gameId].bestMetric = metricValue;
+
+    var bestGameId = Object.keys(existing.games).sort(function(a, b) {
+        return existing.games[b].points - existing.games[a].points;
+    })[0];
+    if (bestGameId) {
+        existing.bestGame = existing.games[bestGameId].name;
+        existing.bestMetric = existing.games[bestGameId].bestMetric || '';
+    }
+
+    rows.sort(function(a, b) {
+        if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+        return (b.totalPlays || 0) - (a.totalPlays || 0);
+    });
+
+    saveOverallLeaderboard(rows);
+    renderOverallLeaderboard();
+}
+
+function renderOverallLeaderboard() {
+    syncArcadeAliasUi();
+    var rows = loadOverallLeaderboard().slice().sort(function(a, b) {
+        if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+        return (b.totalPlays || 0) - (a.totalPlays || 0);
+    }).slice(0, 8);
+    var container = document.getElementById('overallLeaderboardRows');
+    if (!container) return;
+
+    if (!rows.length) {
+        container.innerHTML = '<div class="leaderboard-empty">No player totals yet. Set a name, launch a game, and start stacking points.</div>';
+        return;
+    }
+
+    container.innerHTML = rows.map(function(row, index) {
+        var subtitle = (row.bestGame ? row.bestGame : 'Hub activity') + (row.bestMetric ? ' · ' + row.bestMetric : '');
+        return '<div class="score-row">'
+            + '<span class="score-rank">' + (index + 1) + '</span>'
+            + '<div class="score-game"><strong>' + row.playerName + '</strong><span>' + subtitle + ' · ' + (row.totalPlays || 0) + ' logged plays</span></div>'
+            + '<span class="score-value">' + row.totalPoints + ' pts</span>'
+            + '</div>';
+    }).join('');
+}
 
 function loadGameStats() {
     var defaults = {
         colony: { plays: 18, best: '92%' },
         solar: { plays: 12, best: '88%' },
         brickforge: { plays: 14, best: '148' },
-        toefl: { plays: 11, best: '27m' }
+        toefl: { plays: 11, best: '27m' },
+        'memory-match': { plays: 9, best: '18' }
     };
     try {
         var scoped = localStorage.getItem(getTeacherScopedKey('ryshubGameStats'));
@@ -4471,6 +5132,7 @@ function openGameFromScores(id) {
     else if (id === 'solar') openSolarSystemModal();
     else if (id === 'brickforge') openBrickForgeModal();
     else if (id === 'toefl') openProtectedToefl();
+    else if (id === 'memory-match') { recordGameLaunch('memory-match'); window.open('apps/games/memory-game/index.html', '_blank'); }
 }
 
 function launchFeaturedGame() {
@@ -4483,6 +5145,16 @@ function recordGameLaunch(id) {
     stats[id].plays = (stats[id].plays || 0) + 1;
     stats[id].lastPlayed = Date.now();
     saveGameStats(stats);
+    var activePlayer = getArcadeAlias();
+    if (activePlayer) {
+        recordOverallLeaderboardEntry({
+            playerName: activePlayer,
+            gameId: id,
+            points: 25,
+            metricValue: 'Launch bonus',
+            countAsPlay: true
+        });
+    }
     renderGameScores();
 }
 
@@ -4541,6 +5213,7 @@ function cycleFeaturedGame() {
 
 function initGameScores() {
     renderGameScores();
+    renderOverallLeaderboard();
     if (gameScoreTimer) window.clearInterval(gameScoreTimer);
     gameScoreTimer = window.setInterval(function() {
         featuredGameIndex += 1;
@@ -4561,6 +5234,7 @@ document.addEventListener('keydown', function(e) {
         closeToeflModal(); 
         closeBook1Modal();
         closeBook2bModal(); 
+        closeBrickForgeGuideModal();
         closeToeflLogin();
         closeTeacherRegister();
         closeColonyModal();
@@ -4582,6 +5256,16 @@ document.getElementById('blog-admin-overlay').addEventListener('click', function
     if (e.target === this) closeBlogAdminLogin();
 });
 
+document.getElementById('brickforge-guide-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeBrickForgeGuideModal();
+});
+
+window.addEventListener('storage', function(e) {
+    if (e.key === OVERALL_LEADERBOARD_KEY || e.key === ARCADE_ALIAS_KEY) {
+        renderOverallLeaderboard();
+    }
+});
+
 applySavedTheme();
 updateTeacherStatusUi();
 if (sessionStorage.getItem('ryshubDemoMode') === '1') {
@@ -4598,6 +5282,14 @@ initRandomMiniMention();
 initClassroomLab();
 renderTeacherBlogPosts();
 updateBlogAdminUi();
+syncArcadeAliasUi();
+
+var arcadeAliasInput = document.getElementById('arcadePlayerAlias');
+if (arcadeAliasInput) {
+    arcadeAliasInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') saveArcadeAlias();
+    });
+}
 </script>
 </body>
 </html>
