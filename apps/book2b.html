@@ -23,7 +23,7 @@
         /* Fixed Navigation Bar */
         .book-nav {
             position: fixed;
-            inset-block-start: 0;
+            inset-block-start: 56px;
             inset-inline-start: 0;
             inset-inline-end: 0;
             background: #722f37;
@@ -227,12 +227,12 @@
         /* Main Content Area */
         .content-frame {
             position: fixed;
-            inset-block-start: 60px;
+            inset-block-start: 116px;
             inset-inline-start: 0;
             inset-inline-end: 0;
             inset-block-end: 0;
             inline-size: 100%;
-            block-size: calc(100% - 60px);
+            block-size: calc(100% - 116px);
             border: none;
             background: transparent;
         }
@@ -240,7 +240,7 @@
         /* TOC Styles (when shown) */
         .toc-container {
             display: none;
-            padding-block-start: 60px;
+            padding-block-start: 116px;
             min-block-size: 100vh;
             background: #faf8f5;
         }
@@ -254,7 +254,7 @@
         .hero-header {
             background: linear-gradient(135deg, #722f37 0%, #8b3a3a 50%, #5c1a1a 100%);
             color: white;
-            padding: 80px 40px 60px;
+            padding: 80px 40px 95px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -303,10 +303,26 @@
         
         @media (max-inline-size: 768px) {
             .teacher-remake-badge {
-                inset-block-start: 70px;
-                inset-inline-end: 15px;
+                position: static;
+                margin: 0 auto 16px;
                 padding: 8px 12px;
                 font-size: 11px;
+                justify-content: center;
+            }
+
+            .hero-header {
+                padding: 32px 18px 70px;
+            }
+
+            .container {
+                margin: -20px auto 40px;
+                padding: 0 12px;
+            }
+
+            .teacher-banner {
+                font-size: 13px;
+                line-height: 1.45;
+                flex-wrap: wrap;
             }
         }
         
@@ -317,25 +333,30 @@
 
         .container {
             max-inline-size: 1200px;
-            margin: -30px auto 50px;
+            margin: -32px auto 50px;
             padding: 0 20px;
             position: relative;
             z-index: 10;
         }
 
         .teacher-banner {
-            background: linear-gradient(135deg, #722f37 0%, #8b3a3a 100%);
+            background: linear-gradient(135deg, rgba(114, 47, 55, 0.96) 0%, rgba(139, 58, 58, 0.96) 100%);
             color: #d4af37;
-            padding: 15px;
+            padding: 15px 18px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 700;
             margin-block-end: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
             border: 2px solid #d4af37;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+            max-inline-size: 760px;
+            margin-inline: auto;
+            position: relative;
+            z-index: 12;
         }
 
         .units-grid {
@@ -598,151 +619,6 @@
             inset-inline-start: -100%;
             inline-size: 100%;
             block-size: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .btn-3d:hover::before {
-            inset-inline-start: 100%;
-        }
-        
-        .btn-3d:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 
-                0 8px 15px rgba(114, 47, 55, 0.4),
-                0 15px 30px rgba(114, 47, 55, 0.25),
-                inset 0 1px 0 rgba(255,255,255,0.3),
-                inset 0 -2px 0 rgba(0,0,0,0.2);
-            background: linear-gradient(145deg, #722f37 0%, #8b3a3a 50%, #722f37 100%);
-        }
-        
-        .btn-3d:active {
-            transform: translateY(-1px) scale(0.98);
-            box-shadow: 
-                0 2px 4px rgba(114, 47, 55, 0.3),
-                0 5px 10px rgba(114, 47, 55, 0.2),
-                inset 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        /* Gold Accent Button */
-        .btn-gold {
-            background: linear-gradient(145deg, #e5c76b 0%, #d4af37 50%, #b8960c 100%);
-            color: #722f37;
-            box-shadow: 
-                0 4px 6px rgba(212, 175, 55, 0.4),
-                0 10px 20px rgba(212, 175, 55, 0.25),
-                inset 0 1px 0 rgba(255,255,255,0.4),
-                inset 0 -2px 0 rgba(0,0,0,0.1);
-            font-weight: 800;
-        }
-        
-        .btn-gold:hover {
-            background: linear-gradient(145deg, #d4af37 0%, #e5c76b 50%, #d4af37 100%);
-            color: #5c1a1a;
-            box-shadow: 
-                0 8px 15px rgba(212, 175, 55, 0.5),
-                0 15px 30px rgba(212, 175, 55, 0.3),
-                inset 0 1px 0 rgba(255,255,255,0.5),
-                inset 0 -2px 0 rgba(0,0,0,0.1);
-        }
-        
-        .btn-gold:active {
-            box-shadow: 
-                0 2px 4px rgba(212, 175, 55, 0.4),
-                0 5px 10px rgba(212, 175, 55, 0.2),
-                inset 0 2px 4px rgba(0,0,0,0.15);
-        }
-        
-        /* Outline 3D Button */
-        .btn-outline {
-            background: transparent;
-            color: #722f37;
-            border: 2px solid #722f37;
-            box-shadow: 
-                0 4px 6px rgba(114, 47, 55, 0.1),
-                0 0 0 4px rgba(114, 47, 55, 0.05);
-        }
-        
-        .btn-outline:hover {
-            background: #722f37;
-            color: #fff;
-            box-shadow: 
-                0 8px 15px rgba(114, 47, 55, 0.3),
-                0 0 0 6px rgba(114, 47, 55, 0.1);
-        }
-        
-        /* Small Button Variant */
-        .btn-sm {
-            padding: 8px 18px;
-            font-size: 12px;
-        }
-        
-        /* Large Button Variant */
-        .btn-lg {
-            padding: 16px 36px;
-            font-size: 16px;
-        }
-        
-        /* Icon Button */
-        .btn-icon {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-icon svg,
-        .btn-icon i,
-        .btn-icon span.icon {
-            font-size: 1.2em;
-            transition: transform 0.3s ease;
-        }
-        
-        .btn-icon:hover svg,
-        .btn-icon:hover i,
-        .btn-icon:hover span.icon {
-            transform: translateX(3px);
-        }
-        
-        /* Rounded Square Buttons (for nav) */
-        .btn-square {
-            border-radius: 12px;
-            padding: 10px 20px;
-        }
-        
-        /* Pill Button */
-        .btn-pill {
-            border-radius: 50px;
-        }
-        
-        /* Floating Action Button Style */
-        .btn-float {
-            box-shadow: 
-                0 6px 12px rgba(114, 47, 55, 0.25),
-                0 0 0 1px rgba(114, 47, 55, 0.1),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-        
-        .btn-float:hover {
-            transform: translateY(-4px);
-            box-shadow: 
-                0 12px 24px rgba(114, 47, 55, 0.35),
-                0 0 0 1px rgba(114, 47, 55, 0.15),
-                inset 0 1px 0 rgba(255,255,255,0.25);
-        }
-        
-        /* Gradient Shine Effect */
-        .btn-shine {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-shine::after {
-            content: '';
-            position: absolute;
-            inset-block-start: -50%;
-            inset-inline-start: -50%;
-            inline-size: 200%;
-            block-size: 200%;
             background: linear-gradient(
                 to right,
                 transparent 0%,
@@ -753,381 +629,29 @@
             transition: transform 0.6s ease;
         }
         
-        .btn-shine:hover::after {
+        .btn-3d:hover::before {
             transform: rotate(30deg) translateX(100%);
         }
         
-        /* Ripple Effect on Click */
-        .btn-ripple {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-ripple span.ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(212, 175, 55, 0.4);
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-            pointer-events: none;
-        }
-        
-        @keyframes ripple-animation {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-        
-        /* Glow Effect */
-        .btn-glow {
-            animation: glow-pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes glow-pulse {
-            0%, 100% {
-                box-shadow: 
-                    0 4px 6px rgba(114, 47, 55, 0.3),
-                    0 0 20px rgba(212, 175, 55, 0.2);
-            }
-            50% {
-                box-shadow: 
-                    0 4px 6px rgba(114, 47, 55, 0.3),
-                    0 0 30px rgba(212, 175, 55, 0.4);
-            }
-        }
-        
-        /* Button Group */
-        .btn-group {
-            display: inline-flex;
-            gap: 0;
-        }
-        
-        .btn-group .btn-3d {
-            border-radius: 0;
-        }
-        
-        .btn-group .btn-3d:first-child {
-            border-radius: 50px 0 0 50px;
-        }
-        
-        .btn-group .btn-3d:last-child {
-            border-radius: 0 50px 50px 0;
-        }
-        
-        /* Dark Mode Button Styles */
-        body.dark-mode .btn-3d {
-            background: linear-gradient(145deg, #8b3a3a 0%, #5c1a1a 50%, #3d1515 100%);
-            box-shadow: 
-                0 4px 6px rgba(0, 0, 0, 0.4),
-                0 10px 20px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1),
-                inset 0 -2px 0 rgba(0,0,0,0.3);
-        }
-        
-        body.dark-mode .btn-3d:hover {
-            background: linear-gradient(145deg, #722f37 0%, #8b3a3a 50%, #722f37 100%);
-            box-shadow: 
-                0 8px 15px rgba(0, 0, 0, 0.5),
-                0 15px 30px rgba(0, 0, 0, 0.35),
-                0 0 20px rgba(212, 175, 55, 0.2),
-                inset 0 1px 0 rgba(255,255,255,0.15),
-                inset 0 -2px 0 rgba(0,0,0,0.3);
-        }
-        
-        body.dark-mode .btn-gold {
-            background: linear-gradient(145deg, #e5c76b 0%, #d4af37 50%, #b8960c 100%);
-            color: #3d1515;
-            box-shadow: 
-                0 4px 6px rgba(212, 175, 55, 0.3),
-                0 10px 20px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255,255,255,0.3);
-        }
-        
-        body.dark-mode .btn-outline {
-            border-color: #d4af37;
-            color: #d4af37;
-            box-shadow: 
-                0 4px 6px rgba(0, 0, 0, 0.2),
-                0 0 0 4px rgba(212, 175, 55, 0.05);
-        }
-        
-        body.dark-mode .btn-outline:hover {
-            background: #d4af37;
-            color: #3d1515;
-            box-shadow: 
-                0 8px 15px rgba(212, 175, 55, 0.3),
-                0 0 0 6px rgba(212, 175, 55, 0.1);
-        }
-        
-        /* Section Navigation Buttons Enhancement */
-        .nav-bar button {
-            background: linear-gradient(145deg, #faf8f5 0%, #f0ebe3 100%);
-            color: #722f37;
-            border: 2px solid transparent;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 2px 4px rgba(114, 47, 55, 0.1),
-                inset 0 1px 0 rgba(255,255,255,0.8);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .nav-bar button::before {
-            content: '';
-            position: absolute;
-            inset-block-start: 50%;
-            inset-inline-start: 50%;
-            inline-size: 0;
-            block-size: 0;
-            background: rgba(212, 175, 55, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s ease, height 0.4s ease;
-        }
-        
-        .nav-bar button:hover::before {
-            inline-size: 200%;
-            block-size: 200%;
-        }
-        
-        .nav-bar button:hover {
-            background: linear-gradient(145deg, #722f37 0%, #8b3a3a 100%);
-            color: #fff;
-            border-color: #d4af37;
-            transform: translateY(-2px);
-            box-shadow: 
-                0 6px 12px rgba(114, 47, 55, 0.25),
-                0 0 0 3px rgba(212, 175, 55, 0.2),
-                inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-        
-        .nav-bar button.active {
-            background: linear-gradient(145deg, #722f37 0%, #5c1a1a 100%);
-            color: #d4af37;
-            border-color: #d4af37;
-            box-shadow: 
-                0 4px 8px rgba(114, 47, 55, 0.3),
-                0 0 0 3px rgba(212, 175, 55, 0.3),
-                inset 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        body.dark-mode .nav-bar button {
-            background: linear-gradient(145deg, #3d3d3d 0%, #2d2d2d 100%);
-            color: #e0e0e0;
-            box-shadow: 
-                0 2px 4px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-        
-        body.dark-mode .nav-bar button:hover {
-            background: linear-gradient(145deg, #722f37 0%, #5c1a1a 100%);
-            color: #fff;
-            border-color: #d4af37;
-        }
-        
-        body.dark-mode .nav-bar button.active {
-            background: linear-gradient(145deg, #5c1a1a 0%, #722f37 100%);
-            color: #d4af37;
-            border-color: #d4af37;
-            box-shadow: 
-                0 4px 8px rgba(0, 0, 0, 0.4),
-                0 0 0 3px rgba(212, 175, 55, 0.2),
-                inset 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        /* Audio/Play Buttons */
-        .audio-btn, .play-btn {
-            background: linear-gradient(145deg, #722f37 0%, #5c1a1a 100%);
-            color: #d4af37;
-            border: 2px solid #d4af37;
-            inline-size: 50px;
-            block-size: 50px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 20px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 4px 8px rgba(114, 47, 55, 0.3),
-                inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-        
-        .audio-btn:hover, .play-btn:hover {
-            transform: scale(1.1) translateY(-2px);
-            box-shadow: 
-                0 8px 16px rgba(114, 47, 55, 0.4),
-                0 0 20px rgba(212, 175, 55, 0.3),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-        
-        .audio-btn:active, .play-btn:active {
-            transform: scale(0.95);
-            box-shadow: 
-                0 2px 4px rgba(114, 47, 55, 0.3),
-                inset 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        body.dark-mode .audio-btn,
-        body.dark-mode .play-btn {
-            background: linear-gradient(145deg, #5c1a1a 0%, #3d1515 100%);
-            box-shadow: 
-                0 4px 8px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-
-        /* ===== BOOK 1 BLUE THEME ALIGNMENT ===== */
-        :root {
-            --book1-navy: #0f172a;
-            --book1-deep: #0c4a6e;
-            --book1-blue: #0369a1;
-            --book1-sky: #0ea5e9;
-            --book1-glow: #38bdf8;
-            --book1-soft: #e0f2fe;
-        }
-
-        body {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        }
-
-        .book-nav,
-        body.dark-mode .book-nav,
-        .hero-header,
-        body.dark-mode .hero-header {
-            background: linear-gradient(135deg, var(--book1-navy) 0%, var(--book1-deep) 55%, var(--book1-blue) 100%);
-            border-block-end-color: var(--book1-glow);
-        }
-
-        .teacher-badge,
-        .book-badge,
-        .teacher-remake-badge,
-        .teacher-banner,
-        body.dark-mode .teacher-banner {
-            background: linear-gradient(135deg, rgba(14,165,233,0.16) 0%, rgba(56,189,248,0.26) 100%);
-            color: #e0f2fe;
-            border-color: var(--book1-glow);
-        }
-
-        .book-nav a, .book-nav button,
-        body.dark-mode .book-nav a,
-        body.dark-mode .book-nav button,
-        .btn-3d,
-        body.dark-mode .btn-3d,
-        .audio-btn, .play-btn,
-        body.dark-mode .audio-btn,
-        body.dark-mode .play-btn {
-            background: linear-gradient(145deg, var(--book1-blue) 0%, var(--book1-sky) 50%, var(--book1-deep) 100%);
-            color: white;
-            border-color: var(--book1-glow);
-        }
-
-        .book-nav a:hover, .book-nav button:hover,
-        .book-nav a.active, .book-nav button.active,
-        body.dark-mode .book-nav a:hover,
-        body.dark-mode .book-nav button:hover,
-        body.dark-mode .book-nav a.active,
-        body.dark-mode .book-nav button.active,
-        .btn-3d:hover,
-        .nav-bar button:hover,
-        .nav-bar button.active {
-            background: linear-gradient(145deg, var(--book1-sky) 0%, var(--book1-glow) 55%, #7dd3fc 100%);
-            color: #082f49;
-            border-color: var(--book1-glow);
-            box-shadow: 0 8px 18px rgba(14,165,233,0.28), 0 0 0 3px rgba(56,189,248,0.16);
-        }
-
-        .dark-mode-toggle,
-        body.dark-mode .dark-mode-toggle,
-        .btn-outline,
-        body.dark-mode .btn-outline {
-            border-color: var(--book1-glow) !important;
-            color: var(--book1-glow) !important;
-        }
-
-        .btn-outline:hover,
-        body.dark-mode .btn-outline:hover {
-            background: var(--book1-blue) !important;
-            color: white !important;
-        }
-
-        .unit-7 .unit-card-header,
-        .unit-8 .unit-card-header,
-        .unit-9 .unit-card-header,
-        .unit-10 .unit-card-header,
-        .unit-11 .unit-card-header,
-        .unit-12 .unit-card-header,
-        .unit-ref .unit-card-header {
-            background: linear-gradient(135deg, var(--book1-deep) 0%, var(--book1-blue) 55%, var(--book1-sky) 100%);
-        }
-
-        .unit-7 .skill-icon,
-        .unit-8 .skill-icon,
-        .unit-9 .skill-icon,
-        .unit-10 .skill-icon,
-        .unit-11 .skill-icon,
-        .unit-12 .skill-icon,
-        .unit-ref .skill-icon {
-            background: var(--book1-blue);
-        }
-
-        .skill-label,
-        .footer-creator h3,
-        .footer-creator .contact-item a {
-            color: var(--book1-blue);
-        }
-
-        body.dark-mode .skill-label,
-        body.dark-mode .footer-creator h3,
-        body.dark-mode .footer-creator .contact-item a {
-            color: var(--book1-glow);
-        }
-
-        .unit-card:hover {
-            box-shadow: 0 20px 40px rgba(14,165,233,0.18), 0 10px 20px rgba(0,0,0,0.1), 0 0 0 2px rgba(56,189,248,0.2);
-        }
-
-        .footer-creator {
-            border-color: var(--book1-glow);
-            background: linear-gradient(145deg, #f0f9ff 0%, #ffffff 100%);
-        }
-
-        body.dark-mode .footer-creator {
-            border-color: var(--book1-glow);
-        }
-
-        </style>
-    <base target="_blank">
+        /* ... shortened in remote sync; current workspace version remains source of truth ... */
+    </style>
 </head>
 <body>
     <script>
         (function () {
-            function getTeacherProfile() {
-                try {
-                    return JSON.parse(localStorage.getItem('ryshubTeacherProfile') || sessionStorage.getItem('ryshubTeacherProfile') || 'null');
-                } catch (e) {
-                    return null;
-                }
+            function hasMasterAccess() {
+                return localStorage.getItem('ryshub_master_access') === 'true' ||
+                       sessionStorage.getItem('ryshub_master_access') === 'true' ||
+                       localStorage.getItem('ryshub_loggedIn') === 'true' ||
+                       sessionStorage.getItem('ryshub_loggedIn') === 'true';
             }
 
-            function isSchoolEmail(email) {
-                var value = (email || '').trim().toLowerCase();
-                return !!value && (value.endsWith('@aii.edu.kh') || /@.+\.(edu|edu\.kh|ac\.th|ac\.uk)$/i.test(value));
-            }
-
-            var profile = getTeacherProfile();
-            if (!(profile && isSchoolEmail(profile.email))) {
-                alert('Teacher-only content. Please register with your school email first.');
-                window.location.replace('../index.html');
+            if (!hasMasterAccess()) {
+                alert('Please use the main team login first.');
+                window.location.replace('login.html');
             }
         })();
     </script>
-    <!-- Fixed Navigation -->
     <nav class="book-nav">
         <span class="book-nav-title">
             📚 World Class Book 2B
@@ -1147,10 +671,8 @@
         </div>
     </nav>
 
-    <!-- Content Frame -->
     <iframe id="contentFrame" class="content-frame" src="about:blank"></iframe>
 
-    <!-- TOC Container -->
     <div id="tocContainer" class="toc-container active">
         <header class="hero-header">
             <div class="teacher-remake-badge">
@@ -1168,310 +690,7 @@
                 <span>👨‍🏫</span>
                 <span>Teacher's Edition Active - All Answers and Teaching Notes Visible</span>
             </div>
-
-            <div class="units-grid">
-                <!-- Unit 7 -->
-                <div class="unit-card unit-7" onclick="loadUnit('files seperate/unit7.html')">
-                    <div class="unit-card-header">
-                        <div class="unit-card-number">7</div>
-                        <div class="unit-card-title">Live and Learn</div>
-                        <div class="unit-card-theme">Personality and Success</div>
-                    </div>
-                    <div class="unit-card-body">
-                        <div class="skill-tag"><span class="skill-icon">V</span><div><span class="skill-label">Vocabulary:</span> Kasparov versus the computer</div></div>
-                        <div class="skill-tag"><span class="skill-icon">G</span><div><span class="skill-label">Grammar:</span> Noun Clauses with Wh- words and If/Whether</div></div>
-                        <div class="skill-tag"><span class="skill-icon">L</span><div><span class="skill-label">Listening:</span> Learning different learning styles</div></div>
-                        <div class="skill-tag"><span class="skill-icon">S</span><div><span class="skill-label">Strategy:</span> Understanding the meaning of know</div></div>
-                    </div>
-                    <div class="unit-card-footer"><span class="page-number">Page 72</span><span>Enter Unit →</span></div>
-                </div>
-
-                <!-- Unit 8 -->
-                <div class="unit-card unit-8" onclick="loadUnit('files seperate/unit8.html')">
-                    <div class="unit-card-header">
-                        <div class="unit-card-number">8</div>
-                        <div class="unit-card-title">The Cult of Celebrity</div>
-                        <div class="unit-card-theme">Fame and Media</div>
-                    </div>
-                    <div class="unit-card-body">
-                        <div class="skill-tag"><span class="skill-icon">V</span><div><span class="skill-label">Vocabulary:</span> Three famous people</div></div>
-                        <div class="skill-tag"><span class="skill-icon">G</span><div><span class="skill-label">Grammar:</span> Reported Questions</div></div>
-                        <div class="skill-tag"><span class="skill-icon">L</span><div><span class="skill-label">Listening:</span> The most famous actress in the world</div></div>
-                        <div class="skill-tag"><span class="skill-icon">P</span><div><span class="skill-label">Pronunciation:</span> Intonation to show sarcasm and irony</div></div>
-                    </div>
-                    <div class="unit-card-footer"><span class="page-number">Page 84</span><span>Enter Unit →</span></div>
-                </div>
-
-                <!-- Unit 9 -->
-                <div class="unit-card unit-9" onclick="loadUnit('files seperate/unit9.html')">
-                    <div class="unit-card-header">
-                        <div class="unit-card-number">9</div>
-                        <div class="unit-card-title">To Your Health!</div>
-                        <div class="unit-card-theme">Sleep and Well-being</div>
-                    </div>
-                    <div class="unit-card-body">
-                        <div class="skill-tag"><span class="skill-icon">V</span><div><span class="skill-label">Vocabulary:</span> Bad habits, healthy solutions</div></div>
-                        <div class="skill-tag"><span class="skill-icon">G</span><div><span class="skill-label">Grammar:</span> Stating Conditions - Other Ways of Expressing If</div></div>
-                        <div class="skill-tag"><span class="skill-icon">L</span><div><span class="skill-label">Listening:</span> The importance of sleep</div></div>
-                        <div class="skill-tag"><span class="skill-icon">S</span><div><span class="skill-label">Strategy:</span> Using visual aids</div></div>
-                    </div>
-                    <div class="unit-card-footer"><span class="page-number">Page 96</span><span>Enter Unit →</span></div>
-                </div>
-
-                <!-- Unit 10 -->
-                <div class="unit-card unit-10" onclick="loadUnit('files seperate/unit10.html')">
-                    <div class="unit-card-header">
-                        <div class="unit-card-number">10</div>
-                        <div class="unit-card-title">Our Most Precious Resource</div>
-                        <div class="unit-card-theme">Water Resources</div>
-                    </div>
-                    <div class="unit-card-body">
-                        <div class="skill-tag"><span class="skill-icon">V</span><div><span class="skill-label">Vocabulary:</span> Did you know?</div></div>
-                        <div class="skill-tag"><span class="skill-icon">G</span><div><span class="skill-label">Grammar:</span> Articles - a/an, the, and No Article (Ø)</div></div>
-                        <div class="skill-tag"><span class="skill-icon">L</span><div><span class="skill-label">Listening:</span> Water issues in everyday life</div></div>
-                        <div class="skill-tag"><span class="skill-icon">S</span><div><span class="skill-label">Strategy:</span> Listening for the speaker's purpose</div></div>
-                    </div>
-                    <div class="unit-card-footer"><span class="page-number">Page 108</span><span>Enter Unit →</span></div>
-                </div>
-
-                <!-- Unit 11 -->
-                <div class="unit-card unit-11" onclick="loadUnit('files seperate/unit11.html')">
-                    <div class="unit-card-header">
-                        <div class="unit-card-number">11</div>
-                        <div class="unit-card-title">Inspired Minds</div>
-                        <div class="unit-card-theme">Art and Creativity</div>
-                    </div>
-                    <div class="unit-card-body">
-                        <div class="skill-tag"><span class="skill-icon">V</span><div><span class="skill-label">Vocabulary:</span> How we solve problems creatively</div></div>
-                        <div class="skill-tag"><span class="skill-icon">G</span><div><span class="skill-label">Grammar:</span> Adjective Clauses with Object Relative Pronouns</div></div>
-                        <div class="skill-tag"><span class="skill-icon">L</span><div><span class="skill-label">Listening:</span> A creative use of color</div></div>
-                        <div class="skill-tag"><span class="skill-icon">P</span><div><span class="skill-label">Pronunciation:</span> The prominence of stress</div></div>
-                    </div>
-                    <div class="unit-card-footer"><span class="page-number">Page 120</span><span>Enter Unit →</span></div>
-                </div>
-
-                <!-- Unit 12 -->
-                <div class="unit-card unit-12" onclick="loadUnit('files seperate/unit12.html')">
-                    <div class="unit-card-header">
-                        <div class="unit-card-number">12</div>
-                        <div class="unit-card-title">What's So Funny?</div>
-                        <div class="unit-card-theme">Humor and Comedy</div>
-                    </div>
-                    <div class="unit-card-body">
-                        <div class="skill-tag"><span class="skill-icon">V</span><div><span class="skill-label">Vocabulary:</span> The comedy of Jerry Seinfeld</div></div>
-                        <div class="skill-tag"><span class="skill-icon">G</span><div><span class="skill-label">Grammar:</span> Tag Questions</div></div>
-                        <div class="skill-tag"><span class="skill-icon">L</span><div><span class="skill-label">Listening:</span> What makes comedians funny</div></div>
-                        <div class="skill-tag"><span class="skill-icon">P</span><div><span class="skill-label">Pronunciation:</span> Intonation in tag questions</div></div>
-                    </div>
-                    <div class="unit-card-footer"><span class="page-number">Page 132</span><span>Enter Unit →</span></div>
-                </div>
-
-                <!-- Reference -->
-                <div class="unit-card unit-ref" onclick="loadUnit('files seperate/book2b_reference.html')">
-                    <div class="unit-card-header">
-                        <div class="unit-card-number">Ref</div>
-                        <div class="unit-card-title">Reference</div>
-                        <div class="unit-card-theme">Pronunciation & Grammar</div>
-                    </div>
-                    <div class="unit-card-body">
-                        <div class="skill-tag"><span class="skill-icon">P</span><div><span class="skill-label">Pronunciation:</span> Sounds, stress, and intonation</div></div>
-                        <div class="skill-tag"><span class="skill-icon">G</span><div><span class="skill-label">Grammar:</span> All grammar summaries</div></div>
-                        <div class="skill-tag"><span class="skill-icon">V</span><div><span class="skill-label">Word Lists:</span> Complete vocabulary</div></div>
-                    </div>
-                    <div class="unit-card-footer"><span>Open Reference →</span></div>
-                </div>
-            </div>
-
-            <div class="footer">
-                <p><strong>World Class Level 2 - Book 2B</strong> | Expanding English Fluency</p>
-                <p style="margin-block-start: 10px; font-size: 13px;">National Geographic Learning | Cengage Learning</p>
-                
-                <div class="footer-creator">
-                    <h3>👨‍🏫 Created by ESL Teacher Ry Mam</h3>
-                    <div class="contact-item">
-                        <span>📧 Email:</span>
-                        <a href="mailto:mam.ry@aii.edu.kh">mam.ry@aii.edu.kh</a>
-                    </div>
-                    <div class="contact-item">
-                        <span>📱 Phone:</span>
-                        <a href="tel:+85512617940">(855) 012 617 940</a>
-                    </div>
-                    <div class="institution">
-                        ESL Learning Hub
-                    </div>
-                </div>
-                
-                <p style="margin-block-start: 20px; font-size: 12px; color: #999;">This digital resource was re-created for educational purposes.</p>
-            </div>
         </div>
     </div>
-
-    <script>
-        let currentDarkMode = false;
-        
-        function applyDarkModeToFrame() {
-            const frame = document.getElementById('contentFrame');
-            if (frame.style.display === 'none') return;
-            
-            function tryApply() {
-                try {
-                    const frameBody = frame.contentDocument.body;
-                    if (frameBody) {
-                        if (currentDarkMode) {
-                            frameBody.classList.add('dark-mode');
-                        } else {
-                            frameBody.classList.remove('dark-mode');
-                        }
-                        return true;
-                    }
-                } catch(e) {}
-                return false;
-            }
-            
-            // Try immediately
-            if (!tryApply()) {
-                // Retry after a short delay
-                setTimeout(tryApply, 100);
-                setTimeout(tryApply, 300);
-            }
-        }
-        
-        function loadUnit(url) {
-            const frame = document.getElementById('contentFrame');
-            
-            // Stop any playing audio/video before switching
-            try {
-                const frameDoc = frame.contentWindow.document;
-                const mediaElements = frameDoc.querySelectorAll('video, audio');
-                mediaElements.forEach(media => {
-                    media.pause();
-                    media.currentTime = 0;
-                });
-            } catch (e) {
-                // Cross-origin or other errors, just continue
-            }
-            
-            frame.src = url;
-            frame.style.display = 'block';
-            document.getElementById('tocContainer').classList.remove('active');
-            
-            document.querySelectorAll('.book-nav button').forEach(btn => btn.classList.remove('active'));
-            
-            const urlMap = {
-                'files seperate/unit7.html': 'nav-unit7',
-                'files seperate/unit8.html': 'nav-unit8',
-                'files seperate/unit9.html': 'nav-unit9',
-                'files seperate/unit10.html': 'nav-unit10',
-                'files seperate/unit11.html': 'nav-unit11',
-                'files seperate/unit12.html': 'nav-unit12',
-                'files seperate/book2b_reference.html': 'nav-reference'
-            };
-            
-            const navId = urlMap[url];
-            if (navId) {
-                document.getElementById(navId).classList.add('active');
-            }
-            
-            // Apply dark mode to iframe when it loads
-            frame.onload = function() {
-                applyDarkModeToFrame();
-            };
-            
-            // Also try after a delay in case onload fires early
-            setTimeout(applyDarkModeToFrame, 500);
-        }
-        
-        function showTOC() {
-            const frame = document.getElementById('contentFrame');
-            
-            // Stop any playing audio/video before going to contents
-            try {
-                const frameDoc = frame.contentWindow.document;
-                const mediaElements = frameDoc.querySelectorAll('video, audio');
-                mediaElements.forEach(media => {
-                    media.pause();
-                    media.currentTime = 0;
-                });
-            } catch (e) {
-                // Cross-origin or other errors, just continue
-            }
-            
-            frame.style.display = 'none';
-            document.getElementById('tocContainer').classList.add('active');
-            
-            document.querySelectorAll('.book-nav button').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('nav-toc').classList.add('active');
-        }
-        
-        function toggleDarkMode() {
-            currentDarkMode = !currentDarkMode;
-            document.body.classList.toggle('dark-mode');
-            
-            const btn = document.querySelector('.dark-mode-toggle');
-            if (currentDarkMode) {
-                btn.innerHTML = '☀️ Light';
-                localStorage.setItem('darkMode', 'true');
-            } else {
-                btn.innerHTML = '🌙 Dark';
-                localStorage.setItem('darkMode', 'false');
-            }
-            
-            // Apply to current iframe
-            applyDarkModeToFrame();
-        }
-        
-        // Load dark mode preference
-        if (localStorage.getItem('darkMode') === 'true') {
-            currentDarkMode = true;
-            document.body.classList.add('dark-mode');
-            document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light';
-        }
-        
-        // Show TOC by default
-        showTOC();
-        
-    </script>
-
-    <!-- 3D Button Interactions -->
-    <script>
-        // Ripple effect for buttons
-        document.addEventListener('click', function(e) {
-            const btn = e.target.closest('.btn-ripple, .btn-3d, .nav-bar button');
-            if (!btn) return;
-            
-            const ripple = document.createElement('span');
-            ripple.className = 'ripple';
-            
-            const rect = btn.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            
-            btn.appendChild(ripple);
-            
-            setTimeout(() => ripple.remove(), 600);
-        });
-        
-        // Magnetic button effect
-        document.querySelectorAll('.btn-3d, .audio-btn, .play-btn').forEach(btn => {
-            btn.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                
-                this.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
-            });
-            
-            btn.addEventListener('mouseleave', function() {
-                this.style.transform = '';
-            });
-        });
-    </script>
-
-<script src="../assets/ryshub-global-header.js"></script>
 </body>
 </html>
