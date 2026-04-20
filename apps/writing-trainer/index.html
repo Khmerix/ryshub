@@ -32,19 +32,44 @@
             line-height: 1.6;
         }
 
+        /* Dynamic Background */
+        #wt-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
         /* Header */
         .wt-header {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(2,6,23,0.92);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
+            background: rgba(2,6,23,0.88);
+            backdrop-filter: blur(16px) saturate(1.2);
+            border-bottom: 1px solid rgba(148,163,184,0.12);
             padding: 14px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
+        }
+        .wt-back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            color: var(--text-secondary);
+            font-family: inherit; font-weight: 600; font-size: 0.82rem;
+            text-decoration: none; cursor: pointer;
+            transition: all 0.25s;
+        }
+        .wt-back-btn:hover {
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            border-color: rgba(96,165,250,0.35);
         }
         .wt-brand {
             display: flex;
@@ -345,14 +370,19 @@
 </head>
 <body>
 
+<canvas id="wt-canvas"></canvas>
+
 <header class="wt-header">
-    <a href="../../index.html" class="wt-brand">
-        <div class="wt-brand-icon"><i class="fas fa-pen-nib"></i></div>
-        <div class="wt-brand-text">
-            <h1>WriteCraft</h1>
-            <span>Writing Trainer by Teacher Ry</span>
-        </div>
-    </a>
+    <div style="display:flex;align-items:center;gap:14px;">
+        <a href="../../index.html" class="wt-back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+        <a href="../../index.html" class="wt-brand">
+            <div class="wt-brand-icon"><i class="fas fa-pen-nib"></i></div>
+            <div class="wt-brand-text">
+                <h1>WriteCraft</h1>
+                <span>Writing Trainer by Teacher Ry</span>
+            </div>
+        </a>
+    </div>
     <div class="wt-header-actions">
         <button class="wt-btn wt-btn-ghost wt-btn-sm" onclick="toggleHistory()"><i class="fas fa-history"></i> History</button>
         <button class="wt-btn wt-btn-primary wt-btn-sm" onclick="submitWriting()"><i class="fas fa-check-circle"></i> Submit</button>
@@ -725,6 +755,91 @@
         t.classList.add('show');
         setTimeout(function() { t.classList.remove('show'); }, 3000);
     }
+
+    // ─── Dynamic Background ───────────────────────────────────────────────────────
+    (function(){
+        var canvas = document.getElementById('wt-canvas');
+        var ctx = canvas.getContext('2d');
+        var w, h, particles = [];
+        var count = 55;
+        var connectDist = 150;
+        var maxConn = 3;
+
+        function resize(){
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function Particle(){
+            this.x = Math.random() * w;
+            this.y = Math.random() * h;
+            this.vx = (Math.random() - 0.5) * 0.4;
+            this.vy = (Math.random() - 0.5) * 0.4;
+            this.r = Math.random() * 1.2 + 0.8;
+        }
+        Particle.prototype.update = function(){
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > w) this.vx *= -1;
+            if (this.y < 0 || this.y > h) this.vy *= -1;
+        };
+        Particle.prototype.draw = function(){
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(96, 165, 250, 0.5)';
+            ctx.fill();
+        };
+
+        for (var i = 0; i < count; i++) particles.push(new Particle());
+
+        var mouse = { x: null, y: null };
+        window.addEventListener('mousemove', function(e){
+            mouse.x = e.clientX; mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseleave', function(){ mouse.x = null; mouse.y = null; });
+
+        function animate(){
+            ctx.clearRect(0, 0, w, h);
+            for (var i = 0; i < particles.length; i++){
+                particles[i].update();
+                particles[i].draw();
+            }
+            for (var i = 0; i < particles.length; i++){
+                var connections = 0;
+                for (var j = i + 1; j < particles.length; j++){
+                    var dx = particles[i].x - particles[j].x;
+                    var dy = particles[i].y - particles[j].y;
+                    var dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < connectDist && connections < maxConn){
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'rgba(96, 165, 250, ' + (0.18 * (1 - dist/connectDist)) + ')';
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                        connections++;
+                    }
+                }
+                if (mouse.x !== null){
+                    var dx = particles[i].x - mouse.x;
+                    var dy = particles[i].y - mouse.y;
+                    var dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 180){
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'rgba(37, 99, 235, ' + (0.3 * (1 - dist/180)) + ')';
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    })();
 
     // ─── Start ────────────────────────────────────────────────────────────────────
     init();
