@@ -288,7 +288,7 @@
         .games-score-section {
             position: relative;
             z-index: 10;
-            max-width: 1200px;
+            max-inline-size: 1200px;
             margin: 0 auto 34px;
             padding: 0 16px;
         }
@@ -313,7 +313,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 10px;
+            margin-block-end: 10px;
             font-size: .72rem;
             letter-spacing: .18em;
             text-transform: uppercase;
@@ -337,7 +337,7 @@
             display: grid;
             grid-template-columns: repeat(3, minmax(0,1fr));
             gap: 10px;
-            margin-bottom: 14px;
+            margin-block-end: 14px;
         }
 
         .score-meta-card {
@@ -351,7 +351,7 @@
             display: block;
             color: var(--white);
             font-size: 1rem;
-            margin-bottom: 4px;
+            margin-block-end: 4px;
         }
 
         .score-meta-card span {
@@ -365,17 +365,17 @@
             justify-content: space-between;
             gap: 12px;
             padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,.06);
+            border-block-end: 1px solid rgba(255,255,255,.06);
         }
 
         .score-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
+            border-block-end: none;
+            padding-block-end: 0;
         }
 
         .score-rank {
-            width: 32px;
-            height: 32px;
+            inline-size: 32px;
+            block-size: 32px;
             border-radius: 999px;
             display: inline-flex;
             align-items: center;
@@ -394,7 +394,7 @@
             display: block;
             color: var(--white);
             font-size: .96rem;
-            margin-bottom: 2px;
+            margin-block-end: 2px;
         }
 
         .score-game span {
@@ -408,88 +408,7 @@
             font-size: 1rem;
         }
 
-        .mini-games-section {
-            position: relative;
-            z-index: 10;
-            max-inline-size: 1200px;
-            margin: 0 auto 36px;
-            padding: 0 16px;
-        }
-
-        .mini-game-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 14px;
-        }
-
-        .mini-game-card {
-            background: linear-gradient(180deg, rgba(15,23,42,.9), rgba(15,23,42,.74));
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 14px 28px rgba(2,6,23,.22);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .mini-game-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .mini-game-head strong {
-            color: var(--white);
-            font-size: .98rem;
-        }
-
-        .mini-game-tag {
-            border-radius: 999px;
-            padding: 4px 10px;
-            font-size: .72rem;
-            font-weight: 700;
-            letter-spacing: .03em;
-            border: 1px solid rgba(255,255,255,.16);
-            color: #bfdbfe;
-            background: rgba(30,58,138,.35);
-            white-space: nowrap;
-        }
-
-        .mini-game-tag.coming {
-            color: #fde68a;
-            background: rgba(161,98,7,.25);
-            border-color: rgba(245,158,11,.4);
-        }
-
-        .mini-game-card p {
-            color: var(--gray-300);
-            margin: 0;
-            line-height: 1.6;
-            font-size: .88rem;
-        }
-
-        .mini-game-icon {
-            inline-size: 34px;
-            block-size: 34px;
-            border-radius: 10px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
-            color: #fff;
-            box-shadow: 0 6px 14px rgba(37,99,235,.24);
-            flex-shrink: 0;
-        }
-
-        .mini-game-topline {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .hero-banner {
+                .hero-banner {
             position: relative;
             max-inline-size: 1040px;
             margin: 0 auto 14px;
@@ -641,41 +560,9 @@
             text-align: center;
         }
 
-        .random-mini-mention {
-            position: absolute;
-            z-index: 18;
-            pointer-events: none;
-            padding: 8px 14px;
-            border-radius: 999px;
-            border: 1px solid rgba(125, 211, 252, 0.38);
-            background: rgba(15, 23, 42, 0.78);
-            color: #bfdbfe;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            white-space: nowrap;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 12px 26px rgba(2, 6, 23, 0.28), 0 0 14px rgba(56, 189, 248, 0.25);
-            opacity: 0;
-            transform: translateY(8px) scale(0.98);
-            transition: opacity 0.38s ease, transform 0.38s ease;
-        }
-
-        .random-mini-mention.show {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        @media (max-width: 768px) {
-            .random-mini-mention {
-                font-size: 0.72rem;
-                padding: 7px 11px;
-            }
-        }
-        
-        .hero-banner {
-            width: 100%;
-            max-width: 1200px;
+                .hero-banner {
+            inline-size: 100%;
+            max-inline-size: 1200px;
             margin: 0 auto 36px;
             border-radius: 24px;
             overflow: hidden;
@@ -698,7 +585,7 @@
         }
         .hero-banner-coded {
             position: relative;
-            min-height: 280px;
+            min-block-size: 280px;
             padding: 34px clamp(18px, 4vw, 38px);
             display: flex;
             flex-direction: column;
@@ -794,21 +681,21 @@
             flex-wrap: wrap;
         }
         .hb-line {
-            width: 38px;
-            height: 5px;
+            inline-size: 38px;
+            block-size: 5px;
             border-radius: 999px;
             background: linear-gradient(90deg, #38bdf8, #93c5fd);
             box-shadow: 0 0 16px rgba(56,189,248,0.45);
         }
-        @media (max-width: 900px) {
+        @media (max-inline-size: 900px) {
             .hb-title, .hb-meta { grid-column: 1 / -1; }
         }
-        @media (max-width: 640px) {
-            .hero-banner-coded { min-height: 240px; padding: 22px; }
+        @media (max-inline-size: 640px) {
+            .hero-banner-coded { min-block-size: 240px; padding: 22px; }
             .hb-title { font-size: clamp(1.45rem, 6.2vw, 2rem); }
         }
-        @media (max-width: 768px) {
-            .hero-banner { border-radius: 16px; margin-top: 0; }
+        @media (max-inline-size: 768px) {
+            .hero-banner { border-radius: 16px; margin-block-start: 0; }
         }
         .hero-badge {
             display: inline-flex;
@@ -853,7 +740,7 @@
 
         /* ESL Art Cards */
         .art-cards-section {
-            max-width: 1150px;
+            max-inline-size: 1150px;
             margin: 0 auto 24px;
             padding: 0 24px 24px;
             position: relative;
@@ -866,7 +753,7 @@
         }
         .art-card {
             position: relative;
-            min-height: 260px;
+            min-block-size: 260px;
             padding: 24px;
             border-radius: 24px;
             border: 1px solid rgba(15,23,42,0.08);
@@ -897,7 +784,7 @@
         .art-card-content {
             position: relative;
             z-index: 2;
-            height: 100%;
+            block-size: 100%;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -913,11 +800,11 @@
             color: rgba(241,245,249,0.9);
             font-size: 0.84rem;
             line-height: 1.5;
-            max-width: 95%;
+            max-inline-size: 95%;
         }
         .art-card .art-tag {
             align-self: flex-start;
-            margin-bottom: 12px;
+            margin-block-end: 12px;
             padding: 5px 10px;
             border-radius: 999px;
             font-size: 0.65rem;
@@ -934,7 +821,7 @@
         .art-card.classroom .art-sketch {
             position: absolute;
             inset: 16px 18px auto;
-            height: 82px;
+            block-size: 82px;
             border: 1px dashed rgba(255,255,255,0.28);
             border-radius: 14px;
             display: grid;
@@ -949,10 +836,10 @@
         }
         .art-card.phonics .sound-wave {
             position: absolute;
-            left: 22px;
-            right: 22px;
-            top: 36px;
-            height: 78px;
+            inset-inline-start: 22px;
+            inset-inline-end: 22px;
+            inset-block-start: 36px;
+            block-size: 78px;
             background:
                 repeating-linear-gradient(
                     90deg,
@@ -970,10 +857,10 @@
         }
         .art-card.global .globe-ring {
             position: absolute;
-            top: 18px;
-            right: 20px;
-            width: 96px;
-            height: 96px;
+            inset-block-start: 18px;
+            inset-inline-end: 20px;
+            inline-size: 96px;
+            block-size: 96px;
             border-radius: 50%;
             border: 1px solid rgba(255,255,255,0.35);
             box-shadow: inset 0 0 0 6px rgba(255,255,255,0.07);
@@ -989,8 +876,8 @@
         .art-card.global .globe-ring::after {
             inset: 0;
             border: none;
-            border-top: 1px solid rgba(255,255,255,0.32);
-            border-bottom: 1px solid rgba(255,255,255,0.32);
+            border-block-start: 1px solid rgba(255,255,255,0.32);
+            border-block-end: 1px solid rgba(255,255,255,0.32);
             border-radius: 50%;
             transform: rotate(22deg);
         }
@@ -1267,7 +1154,7 @@
         .lab-step-list {
             display: grid;
             gap: 9px;
-            margin-top: 12px;
+            margin-block-start: 12px;
         }
 
         .lab-step-item {
@@ -1305,14 +1192,14 @@
             color: #e0f2fe;
             background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
             flex-shrink: 0;
-            margin-top: 1px;
+            margin-block-start: 1px;
         }
 
         .lab-tool-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 9px;
-            margin-top: 12px;
+            margin-block-start: 12px;
         }
 
         .lab-tool-btn {
@@ -1341,7 +1228,7 @@
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 8px;
-            margin-top: 12px;
+            margin-block-start: 12px;
         }
 
         .lab-metric {
@@ -1598,6 +1485,254 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
+
+        .teacher-dashboard { display: none; }
+        .teacher-dashboard.active { display: block; }
+        .teacher-dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .teacher-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .teacher-dashboard-header h4 {
+            margin: 0;
+            font-size: 0.98rem;
+            color: var(--white);
+        }
+        .teacher-dashboard-header span {
+            color: var(--gray-400);
+            font-size: 0.78rem;
+        }
+        .dashboard-widget {
+            margin-bottom: 14px;
+        }
+        .dashboard-widget:last-child { margin-bottom: 0; }
+        .widget-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .widget-title strong {
+            font-size: 0.8rem;
+            color: #93c5fd;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .widget-add-btn {
+            background: rgba(37,99,235,0.15);
+            border: 1px solid rgba(37,99,235,0.3);
+            color: #93c5fd;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .widget-add-btn:hover {
+            background: rgba(37,99,235,0.25);
+            color: #bfdbfe;
+        }
+        .schedule-list, .material-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 8px;
+        }
+        .schedule-item, .material-item {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: rgba(15,23,42,0.34);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .schedule-item small, .material-item small {
+            color: var(--gray-400);
+            font-size: 0.72rem;
+        }
+        .schedule-item strong, .material-item strong {
+            display: block;
+            color: var(--white);
+            font-size: 0.82rem;
+            margin-bottom: 2px;
+        }
+        .item-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .item-actions button {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--gray-300);
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.7rem;
+            padding: 0;
+        }
+        .item-actions button:hover {
+            background: rgba(255,255,255,0.12);
+            color: white;
+        }
+        .dashboard-form {
+            display: grid;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(15,23,42,0.5);
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 10px;
+        }
+        .dashboard-form input, .dashboard-form select, .dashboard-form textarea {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--gray-100);
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-family: inherit;
+        }
+        .dashboard-form input::placeholder, .dashboard-form textarea::placeholder {
+            color: var(--gray-500);
+        }
+        .dashboard-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .dashboard-form-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .dashboard-form-actions button {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+        .dashboard-form-actions .btn-save {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: white;
+        }
+        .dashboard-form-actions .btn-cancel {
+            background: rgba(255,255,255,0.06);
+            color: var(--gray-300);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .dashboard-empty {
+            color: var(--gray-500);
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 12px;
+        }
+        .dashboard-signin-prompt {
+            text-align: center;
+            padding: 20px 10px;
+        }
+        .dashboard-signin-prompt p {
+            color: var(--gray-400);
+            font-size: 0.85rem;
+            margin: 0 0 12px;
+        }
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        .quick-link-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: rgba(15,23,42,0.34);
+            border: 1px solid rgba(255,255,255,0.06);
+            text-decoration: none;
+            color: var(--gray-100);
+            transition: all 0.2s ease;
+        }
+        .quick-link-card:hover {
+            background: rgba(15,23,42,0.5);
+            border-color: rgba(255,255,255,0.12);
+            transform: translateY(-2px);
+        }
+        .quick-link-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .quick-link-icon.canvas { background: linear-gradient(135deg, #e13c33, #c0392b); color: white; }
+        .quick-link-icon.google { background: linear-gradient(135deg, #4285f4, #34a853); color: white; }
+        .quick-link-icon.custom { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+        .quick-link-text strong {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--white);
+        }
+        .quick-link-text span {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+        }
+        .saved-links-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 6px;
+        }
+        .saved-link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: rgba(15,23,42,0.34);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .saved-link-item a {
+            color: #93c5fd;
+            text-decoration: none;
+            font-size: 0.82rem;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .saved-link-item a:hover { text-decoration: underline; }
 
         body.light-theme .command-center {
             background:
@@ -2168,7 +2303,7 @@
 
         /* Teacher blog */
         .teacher-blog-section {
-            max-width: 1200px;
+            max-inline-size: 1200px;
             margin: 0 auto 24px;
             padding: 0 24px;
         }
@@ -2205,7 +2340,7 @@
         }
 
         .blog-main-grid {
-            margin-top: 16px;
+            margin-block-start: 16px;
             display: grid;
             gap: 10px;
         }
@@ -2225,7 +2360,7 @@
         .blog-sidebar {
             padding: 14px;
             position: sticky;
-            top: 96px;
+            inset-block-start: 96px;
         }
 
         .blog-sidebar-head {
@@ -2233,7 +2368,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 12px;
+            margin-block-end: 12px;
         }
 
         .blog-sidebar-head h3 {
@@ -2256,7 +2391,7 @@
             background: rgba(15,118,110,.16);
             border-radius: 12px;
             padding: 10px;
-            margin-bottom: 12px;
+            margin-block-end: 12px;
         }
 
         .blog-admin-strip.open {
@@ -2267,7 +2402,7 @@
             display: block;
             font-size: .77rem;
             color: #bae6fd;
-            margin-bottom: 6px;
+            margin-block-end: 6px;
             font-weight: 700;
         }
 
@@ -2402,10 +2537,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .mini-game-grid {
-                grid-template-columns: 1fr;
-            }
-
             .score-meta-grid {
                 grid-template-columns: 1fr;
             }
@@ -2451,6 +2582,153 @@
                 display: none;
             }
         }
+
+        /* Small phone fixes (sub-640px) */
+        @media (max-width: 640px) {
+            .dashboard-form-row {
+                grid-template-columns: 1fr;
+            }
+            .quick-links-grid {
+                grid-template-columns: 1fr;
+            }
+            .teacher-register-meta {
+                grid-template-columns: 1fr;
+            }
+            .hero-preview-launchers {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .section-intro {
+                padding: 0 12px;
+            }
+            .command-grid,
+            .command-stack {
+                padding: 14px;
+            }
+            .command-panel {
+                padding: 14px;
+            }
+            .games-score-grid > div {
+                padding: 14px;
+            }
+            .score-meta-grid {
+                gap: 8px;
+            }
+            .score-meta-card {
+                padding: 10px;
+            }
+            .live-counter-grid {
+                gap: 10px;
+            }
+            .live-counter {
+                padding: 14px;
+            }
+            .lab-panels {
+                padding: 14px;
+            }
+            .lab-card {
+                padding: 16px;
+            }
+            .blog-layout {
+                padding: 0 12px;
+            }
+            .cards-grid {
+                padding: 0 12px;
+                gap: 14px;
+            }
+            .art-cards-section {
+                padding: 0 12px 20px;
+            }
+            .art-grid {
+                gap: 14px;
+            }
+            .hero-section {
+                padding: 88px 12px 30px;
+            }
+            .hero-highlights {
+                justify-content: center;
+            }
+            .top-section-nav {
+                gap: 8px;
+            }
+            .section-jump-btn {
+                padding: 8px 12px;
+                font-size: 0.78rem;
+            }
+            .mini-games-section {
+                padding: 0 12px;
+            }
+            .games-score-section {
+                padding: 0 12px;
+            }
+            .classroom-lab-section {
+                padding: 0 12px;
+            }
+            .command-center-section {
+                padding: 0 12px;
+            }
+            .teacher-blog-section {
+                padding: 0 12px;
+            }
+            .command-actions {
+                flex-wrap: wrap;
+            }
+            .mode-switch {
+                flex-wrap: wrap;
+            }
+            .mode-btn {
+                flex: 1;
+                min-width: 100px;
+            }
+            .widget-title {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .item-actions {
+                gap: 4px;
+            }
+            .schedule-item,
+            .material-item {
+                padding: 10px;
+                gap: 8px;
+            }
+            .quick-link-card {
+                padding: 10px;
+            }
+        }
+
+        /* Extra small phones (sub-400px) */
+        @media (max-width: 400px) {
+            .hero-preview-launchers {
+                grid-template-columns: 1fr;
+            }
+            .quick-links-grid {
+                grid-template-columns: 1fr;
+            }
+            .score-meta-grid {
+                grid-template-columns: 1fr;
+            }
+            .live-counter-grid {
+                grid-template-columns: 1fr;
+            }
+            .lab-tool-grid {
+                grid-template-columns: 1fr;
+            }
+            .lab-metrics {
+                grid-template-columns: 1fr;
+            }
+            .hero-title {
+                font-size: clamp(1.8rem, 8vw, 2.4rem);
+            }
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+            .section-intro h2 {
+                font-size: 1.3rem;
+            }
+            .tool-card h3 {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2492,7 +2770,7 @@
                 <a href="#" class="nav-3d" onclick="scrollToSection('gamesScores'); return false;">Games &amp; Scores</a>
                 <a href="#" class="nav-3d" onclick="scrollToSection('classroomLabSection'); return false;">Classroom Lab</a>
                 <a href="#" class="nav-3d" onclick="scrollToSection('teacherBlogSection'); return false;">Teacher Blog</a>
-                <a href="#" class="nav-3d" onclick="scrollToSection('miniGamesSection'); return false;">Mini Games</a>
+                <a href="apps/games/index.html" class="nav-3d">Game Arcade</a>
                 <a href="#" class="nav-3d" onclick="scrollToSection('commandCenterSection'); return false;">Command Center</a>
                 <a href="apps/books/library.html" class="nav-3d" target="_blank">📖 Story Library</a>
             </div>
@@ -2546,8 +2824,8 @@
         <a href="#" class="menu-item" onclick="openSolarSystemModal(); toggleMenu(); return false;">
             <i class="fas fa-globe-americas"></i><span>Solar System</span>
         </a>
-        <a href="#" class="menu-item" onclick="scrollToSection('miniGamesSection'); toggleMenu(); return false;">
-            <i class="fas fa-gamepad"></i><span>Mini Games Hub</span>
+        <a href="apps/games/index.html" class="menu-item" onclick="toggleMenu();">
+            <i class="fas fa-gamepad"></i><span>Game Arcade</span>
         </a>
         <a href="#" class="menu-item" onclick="openProtectedPage('apps/toefl/index.html', 'TOEFL iBT'); toggleMenu(); return false;">
             <i class="fas fa-external-link-alt"></i><span>TOEFL (Full Page)</span>
@@ -2590,7 +2868,6 @@
 
     <!-- Hero -->
 <section class="hero-section" id="topHome">
-    <div id="randomMiniMention" class="random-mini-mention" aria-hidden="true"></div>
     <div class="hero-banner">
         <div class="hero-banner-coded">
             <div class="hb-top">
@@ -2639,7 +2916,7 @@
                 <button class="section-jump-btn" onclick="scrollToSection('featuredApps')"><i class="fas fa-layer-group"></i> Featured apps</button>
                 <button class="section-jump-btn" onclick="scrollToSection('gamesScores')"><i class="fas fa-trophy"></i> Games &amp; scores</button>
                 <button class="section-jump-btn" onclick="scrollToSection('classroomLabSection')"><i class="fas fa-chalkboard"></i> Classroom lab</button>
-                <button class="section-jump-btn" onclick="scrollToSection('miniGamesSection')"><i class="fas fa-gamepad"></i> Mini games</button>
+                <a href="apps/games/index.html" class="section-jump-btn" style="text-decoration:none;"><i class="fas fa-gamepad"></i> Game Arcade</a>
                 <button class="section-jump-btn" onclick="scrollToSection('commandCenterSection')"><i class="fas fa-bolt"></i> Command center</button>
                 <button class="section-jump-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Launch Colony</button>
                 <button class="section-jump-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
@@ -2676,11 +2953,67 @@
     </div>
 </section>
 
+<section class="teacher-blog-section" id="teacherBlogSection">
+    <div class="section-intro">
+        <div>
+            <div class="section-kicker">Teacher Voice</div>
+            <h2>Class Blog + Admin Publishing</h2>
+            <p>Post short updates for teachers in a right-column feed. Use admin login to publish announcements, reminders, and class highlights.</p>
+        </div>
+        <div class="hb-chip"><i class="fas fa-bullhorn"></i> Staff updates</div>
+    </div>
+
+    <div class="blog-layout">
+        <article class="blog-main-card">
+            <h3>How to use this blog area</h3>
+            <p>
+                This section is designed for teacher-only communication in the hub. Keep posts short and practical: weekly goals, exam reminders,
+                classroom updates, and resource notes.
+            </p>
+            <div class="blog-main-grid">
+                <div class="blog-main-tip"><i class="fas fa-check-circle"></i><span><strong>Post format:</strong> 1 title + 2-4 concise lines + optional priority pin.</span></div>
+                <div class="blog-main-tip"><i class="fas fa-users"></i><span><strong>Visibility:</strong> published posts appear in the right column for staff reference.</span></div>
+                <div class="blog-main-tip"><i class="fas fa-shield-alt"></i><span><strong>Control:</strong> publishing is locked behind admin login.</span></div>
+            </div>
+        </article>
+
+        <aside class="blog-sidebar">
+            <div class="blog-sidebar-head">
+                <div>
+                    <h3>Teacher Posts</h3>
+                    <div class="blog-count"><span id="teacherBlogCount">0</span> posts</div>
+                </div>
+                <button id="blogAdminButton" class="btn-outline" onclick="openBlogAdminLogin()"><i class="fas fa-lock"></i> Admin</button>
+            </div>
+
+            <div id="blogAdminStrip" class="blog-admin-strip" aria-live="polite">
+                <label for="blogPostTitle">Post title</label>
+                <input id="blogPostTitle" type="text" placeholder="e.g., Week 8 writing checkpoints">
+
+                <label for="blogPostBody">Post content</label>
+                <textarea id="blogPostBody" placeholder="Write your teacher update here..."></textarea>
+
+                <label style="display:flex;align-items:center;gap:8px;margin: 0 0 10px;color:#cbd5e1;font-size:.82rem;">
+                    <input id="blogPostPinned" type="checkbox" style="width:auto;margin:0;"> Pin this post
+                </label>
+
+                <div class="blog-admin-actions">
+                    <button class="btn-primary" onclick="publishTeacherBlogPost()"><i class="fas fa-paper-plane"></i> Publish</button>
+                    <button class="btn-outline" onclick="blogAdminSignOut()"><i class="fas fa-right-from-bracket"></i> Sign out</button>
+                </div>
+            </div>
+
+            <div id="teacherBlogList" class="blog-list"></div>
+        </aside>
+    </div>
+</section>
+
+
 <section class="command-center-section" id="commandCenterSection">
     <div class="section-intro">
         <div>
             <div class="section-kicker">Dynamic Experience</div>
-            <h2>RysHub Command Center</h2>
+            <h2>Teachers Command Center</h2>
             <p>A live landing experience with teacher and student focus modes, animated counters, and premium motion.</p>
         </div>
         <div class="hb-chip" id="commandModeBadge"><i class="fas fa-bolt"></i> Teacher focus</div>
@@ -2727,30 +3060,147 @@
                 </div>
 
                 <div class="command-panel">
-                    <div class="command-kicker">Focus stream</div>
-                    <ul class="focus-feed">
-                        <li class="focus-item">
-                            <div class="focus-copy">
-                                <strong id="focusPrimaryTitle">Teacher editions</strong>
-                                <span id="focusPrimaryText">Direct launch for Book 1, Book 2B, and TOEFL resources.</span>
+                    <div class="command-kicker" id="dashboardKicker">Focus stream</div>
+
+                    <!-- Generic focus stream (shown when no teacher is signed in) -->
+                    <div id="genericFocusStream">
+                        <ul class="focus-feed">
+                            <li class="focus-item">
+                                <div class="focus-copy">
+                                    <strong id="focusPrimaryTitle">Teacher editions</strong>
+                                    <span id="focusPrimaryText">Direct launch for Book 1, Book 2B, and TOEFL resources.</span>
+                                </div>
+                                <span class="focus-badge">Live</span>
+                            </li>
+                            <li class="focus-item">
+                                <div class="focus-copy">
+                                    <strong id="focusSecondaryTitle">Assessment flow</strong>
+                                    <span id="focusSecondaryText">Fast access to guided testing and classroom-ready practice.</span>
+                                </div>
+                                <span class="focus-badge">Ready</span>
+                            </li>
+                            <li class="focus-item">
+                                <div class="focus-copy">
+                                    <strong id="focusTertiaryTitle">Creative lab</strong>
+                                    <span id="focusTertiaryText">Use BrickForge and AI tools to make lessons more memorable.</span>
+                                </div>
+                                <span class="focus-badge">New</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Personal Teacher Dashboard (shown when teacher is signed in) -->
+                    <div id="teacherDashboard" class="teacher-dashboard">
+                        <div class="teacher-dashboard-header">
+                            <div class="teacher-avatar" id="teacherDashboardAvatar">T</div>
+                            <div>
+                                <h4 id="teacherDashboardName">Teacher</h4>
+                                <span id="teacherDashboardEmail">teacher@aii.edu.kh</span>
                             </div>
-                            <span class="focus-badge">Live</span>
-                        </li>
-                        <li class="focus-item">
-                            <div class="focus-copy">
-                                <strong id="focusSecondaryTitle">Assessment flow</strong>
-                                <span id="focusSecondaryText">Fast access to guided testing and classroom-ready practice.</span>
+                        </div>
+
+                        <!-- Schedule Widget -->
+                        <div class="dashboard-widget">
+                            <div class="widget-title">
+                                <strong><i class="fas fa-calendar-week"></i> My Schedule</strong>
+                                <button class="widget-add-btn" onclick="toggleScheduleForm()">+ Add</button>
                             </div>
-                            <span class="focus-badge">Ready</span>
-                        </li>
-                        <li class="focus-item">
-                            <div class="focus-copy">
-                                <strong id="focusTertiaryTitle">Creative lab</strong>
-                                <span id="focusTertiaryText">Use BrickForge and AI tools to make lessons more memorable.</span>
+                            <div id="scheduleForm" class="dashboard-form" style="display:none;">
+                                <div class="dashboard-form-row">
+                                    <select id="scheduleDay">
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                        <option value="Saturday">Saturday</option>
+                                        <option value="Sunday">Sunday</option>
+                                    </select>
+                                    <input id="scheduleTime" type="time" value="08:00">
+                                </div>
+                                <input id="scheduleActivity" type="text" placeholder="Activity / Class name">
+                                <input id="scheduleRoom" type="text" placeholder="Room / Location">
+                                <div class="dashboard-form-actions">
+                                    <button class="btn-cancel" onclick="toggleScheduleForm()">Cancel</button>
+                                    <button class="btn-save" onclick="saveScheduleItem()">Save</button>
+                                </div>
                             </div>
-                            <span class="focus-badge">New</span>
-                        </li>
-                    </ul>
+                            <ul class="schedule-list" id="teacherScheduleList">
+                                <li class="dashboard-empty">No schedule items yet.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Materials Widget -->
+                        <div class="dashboard-widget">
+                            <div class="widget-title">
+                                <strong><i class="fas fa-folder-open"></i> My Materials</strong>
+                                <button class="widget-add-btn" onclick="toggleMaterialForm()">+ Add</button>
+                            </div>
+                            <div id="materialForm" class="dashboard-form" style="display:none;">
+                                <input id="materialTitle" type="text" placeholder="Material title">
+                                <div class="dashboard-form-row">
+                                    <select id="materialCategory">
+                                        <option value="Vocabulary">Vocabulary</option>
+                                        <option value="Grammar">Grammar</option>
+                                        <option value="Reading">Reading</option>
+                                        <option value="Writing">Writing</option>
+                                        <option value="Speaking">Speaking</option>
+                                        <option value="Listening">Listening</option>
+                                        <option value="TOEFL">TOEFL</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <input id="materialUrl" type="text" placeholder="URL (optional)">
+                                </div>
+                                <textarea id="materialNotes" rows="2" placeholder="Notes (optional)"></textarea>
+                                <div class="dashboard-form-actions">
+                                    <button class="btn-cancel" onclick="toggleMaterialForm()">Cancel</button>
+                                    <button class="btn-save" onclick="saveMaterialItem()">Save</button>
+                                </div>
+                            </div>
+                            <ul class="material-list" id="teacherMaterialList">
+                                <li class="dashboard-empty">No materials saved yet.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Connected Tools Widget -->
+                        <div class="dashboard-widget">
+                            <div class="widget-title">
+                                <strong><i class="fas fa-plug"></i> Connected Tools</strong>
+                                <button class="widget-add-btn" onclick="toggleQuickLinkForm()">+ Add Link</button>
+                            </div>
+                            <div id="quickLinkForm" class="dashboard-form" style="display:none;">
+                                <input id="quickLinkTitle" type="text" placeholder="Link title (e.g. Google Classroom)">
+                                <input id="quickLinkUrl" type="text" placeholder="URL (e.g. https://classroom.google.com)">
+                                <div class="dashboard-form-actions">
+                                    <button class="btn-cancel" onclick="toggleQuickLinkForm()">Cancel</button>
+                                    <button class="btn-save" onclick="saveQuickLink()">Save</button>
+                                </div>
+                            </div>
+                            <div class="quick-links-grid" id="quickLinksGrid">
+                                <a href="https://classroom.google.com" target="_blank" rel="noopener noreferrer" class="quick-link-card">
+                                    <span class="quick-link-icon google"><i class="fab fa-google"></i></span>
+                                    <div class="quick-link-text">
+                                        <strong>Google Classroom</strong>
+                                        <span>Launch Classroom</span>
+                                    </div>
+                                </a>
+                                <a href="https://canvas.instructure.com" target="_blank" rel="noopener noreferrer" class="quick-link-card">
+                                    <span class="quick-link-icon canvas"><i class="fas fa-graduation-cap"></i></span>
+                                    <div class="quick-link-text">
+                                        <strong>Canvas LMS</strong>
+                                        <span>Launch Canvas</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <ul class="saved-links-list" id="savedLinksList" style="margin-top:10px;"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Sign-in prompt for non-logged-in users in teacher mode -->
+                    <div id="teacherSigninPrompt" class="dashboard-signin-prompt" style="display:none;">
+                        <p>Sign in with your school email to unlock your personal schedule and teaching materials.</p>
+                        <button class="mini-action" onclick="openTeacherRegister('teacher resources')"><i class="fas fa-user-shield"></i> Sign in as Teacher</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2890,72 +3340,6 @@
     </div>
 </section>
 
-<section class="teacher-blog-section" id="teacherBlogSection">
-    <div class="section-intro">
-        <div>
-            <div class="section-kicker">Teacher Voice</div>
-            <h2>Class Blog + Admin Publishing</h2>
-            <p>Post short updates for teachers in a right-column feed. Use admin login to publish announcements, reminders, and class highlights.</p>
-        </div>
-        <div class="hb-chip"><i class="fas fa-bullhorn"></i> Staff updates</div>
-    </div>
-
-    <div class="blog-layout">
-        <article class="blog-main-card">
-            <h3>How to use this blog area</h3>
-            <p>
-                This section is designed for teacher-only communication in the hub. Keep posts short and practical: weekly goals, exam reminders,
-                classroom updates, and resource notes.
-            </p>
-            <div class="blog-main-grid">
-                <div class="blog-main-tip"><i class="fas fa-check-circle"></i><span><strong>Post format:</strong> 1 title + 2-4 concise lines + optional priority pin.</span></div>
-                <div class="blog-main-tip"><i class="fas fa-users"></i><span><strong>Visibility:</strong> published posts appear in the right column for staff reference.</span></div>
-                <div class="blog-main-tip"><i class="fas fa-shield-alt"></i><span><strong>Control:</strong> publishing is locked behind admin login.</span></div>
-            </div>
-        </article>
-
-        <aside class="blog-sidebar">
-            <div class="blog-sidebar-head">
-                <div>
-                    <h3>Teacher Posts</h3>
-                    <div class="blog-count"><span id="teacherBlogCount">0</span> posts</div>
-                </div>
-                <button id="blogAdminButton" class="btn-outline" onclick="openBlogAdminLogin()"><i class="fas fa-lock"></i> Admin</button>
-            </div>
-
-            <div id="blogAdminStrip" class="blog-admin-strip" aria-live="polite">
-                <label for="blogPostTitle">Post title</label>
-                <input id="blogPostTitle" type="text" placeholder="e.g., Week 8 writing checkpoints">
-
-                <label for="blogPostBody">Post content</label>
-                <textarea id="blogPostBody" placeholder="Write your teacher update here..."></textarea>
-
-                <label style="display:flex;align-items:center;gap:8px;margin: 0 0 10px;color:#cbd5e1;font-size:.82rem;">
-                    <input id="blogPostPinned" type="checkbox" style="width:auto;margin:0;"> Pin this post
-                </label>
-
-                <div class="blog-admin-actions">
-                    <button class="btn-primary" onclick="publishTeacherBlogPost()"><i class="fas fa-paper-plane"></i> Publish</button>
-                    <button class="btn-outline" onclick="blogAdminSignOut()"><i class="fas fa-right-from-bracket"></i> Sign out</button>
-                </div>
-            </div>
-
-            <div id="teacherBlogList" class="blog-list"></div>
-        </aside>
-    </div>
-</section>
-
-<section class="mini-games-section" id="miniGamesSection">
-    <div class="section-intro">
-        <div>
-            <div class="section-kicker">Mini Games Hub</div>
-            <h2>All mini games in one section</h2>
-            <p>This section is now your single home for every new mini game you build next. Add each new game in the Mini Games list in the script and it appears here automatically.</p>
-        </div>
-        <div class="hb-chip"><i class="fas fa-gamepad"></i> Future-ready list</div>
-    </div>
-    <div id="miniGamesGrid" class="mini-game-grid"></div>
-</section>
 
 <!-- ESL Art Cards -->
 <section class="art-cards-section">
@@ -3750,6 +4134,252 @@ function getTeacherProfile() {
     }
 }
 
+function getTeacherCommandData() {
+    try {
+        var key = getTeacherScopedKey('ryshubCommandData');
+        return JSON.parse(localStorage.getItem(key) || '{"schedule":[],"materials":[]}');
+    } catch (e) {
+        return { schedule: [], materials: [] };
+    }
+}
+
+function saveTeacherCommandData(data) {
+    var key = getTeacherScopedKey('ryshubCommandData');
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+function generateId() {
+    return 'id_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+}
+
+function toggleScheduleForm() {
+    var form = document.getElementById('scheduleForm');
+    if (!form) return;
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    if (form.style.display === 'block') {
+        document.getElementById('scheduleActivity').focus();
+    }
+}
+
+function toggleMaterialForm() {
+    var form = document.getElementById('materialForm');
+    if (!form) return;
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    if (form.style.display === 'block') {
+        document.getElementById('materialTitle').focus();
+    }
+}
+
+function saveScheduleItem() {
+    var day = document.getElementById('scheduleDay').value;
+    var time = document.getElementById('scheduleTime').value;
+    var activity = document.getElementById('scheduleActivity').value.trim();
+    var room = document.getElementById('scheduleRoom').value.trim();
+
+    if (!activity) {
+        showToast('Please enter an activity name');
+        return;
+    }
+
+    var data = getTeacherCommandData();
+    data.schedule.push({ id: generateId(), day: day, time: time, activity: activity, room: room });
+    data.schedule.sort(function(a, b) {
+        var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+        var d = days.indexOf(a.day) - days.indexOf(b.day);
+        if (d !== 0) return d;
+        return (a.time || '').localeCompare(b.time || '');
+    });
+    saveTeacherCommandData(data);
+    renderTeacherDashboard();
+    toggleScheduleForm();
+    document.getElementById('scheduleActivity').value = '';
+    document.getElementById('scheduleRoom').value = '';
+    showToast('Schedule item saved');
+}
+
+function deleteScheduleItem(id) {
+    var data = getTeacherCommandData();
+    data.schedule = data.schedule.filter(function(item) { return item.id !== id; });
+    saveTeacherCommandData(data);
+    renderTeacherDashboard();
+    showToast('Schedule item removed');
+}
+
+function saveMaterialItem() {
+    var title = document.getElementById('materialTitle').value.trim();
+    var category = document.getElementById('materialCategory').value;
+    var url = document.getElementById('materialUrl').value.trim();
+    var notes = document.getElementById('materialNotes').value.trim();
+
+    if (!title) {
+        showToast('Please enter a material title');
+        return;
+    }
+
+    var data = getTeacherCommandData();
+    data.materials.push({ id: generateId(), title: title, category: category, url: url, notes: notes });
+    saveTeacherCommandData(data);
+    renderTeacherDashboard();
+    toggleMaterialForm();
+    document.getElementById('materialTitle').value = '';
+    document.getElementById('materialUrl').value = '';
+    document.getElementById('materialNotes').value = '';
+    showToast('Material saved');
+}
+
+function deleteMaterialItem(id) {
+    var data = getTeacherCommandData();
+    data.materials = data.materials.filter(function(item) { return item.id !== id; });
+    saveTeacherCommandData(data);
+    renderTeacherDashboard();
+    showToast('Material removed');
+}
+
+function getTeacherQuickLinks() {
+    try {
+        var key = getTeacherScopedKey('ryshubQuickLinks');
+        return JSON.parse(localStorage.getItem(key) || '[]');
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveTeacherQuickLinks(links) {
+    var key = getTeacherScopedKey('ryshubQuickLinks');
+    localStorage.setItem(key, JSON.stringify(links));
+}
+
+function toggleQuickLinkForm() {
+    var form = document.getElementById('quickLinkForm');
+    if (!form) return;
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    if (form.style.display === 'block') {
+        document.getElementById('quickLinkTitle').focus();
+    }
+}
+
+function saveQuickLink() {
+    var title = document.getElementById('quickLinkTitle').value.trim();
+    var url = document.getElementById('quickLinkUrl').value.trim();
+
+    if (!title || !url) {
+        showToast('Please enter both a title and URL');
+        return;
+    }
+
+    if (!/^https?:\/\//.test(url)) {
+        url = 'https://' + url;
+    }
+
+    var links = getTeacherQuickLinks();
+    links.push({ id: generateId(), title: title, url: url });
+    saveTeacherQuickLinks(links);
+    renderTeacherDashboard();
+    toggleQuickLinkForm();
+    document.getElementById('quickLinkTitle').value = '';
+    document.getElementById('quickLinkUrl').value = '';
+    showToast('Quick link saved');
+}
+
+function deleteQuickLink(id) {
+    var links = getTeacherQuickLinks();
+    links = links.filter(function(item) { return item.id !== id; });
+    saveTeacherQuickLinks(links);
+    renderTeacherDashboard();
+    showToast('Link removed');
+}
+
+function renderTeacherDashboard() {
+    var profile = getTeacherProfile();
+    var dashboard = document.getElementById('teacherDashboard');
+    var genericStream = document.getElementById('genericFocusStream');
+    var signinPrompt = document.getElementById('teacherSigninPrompt');
+    var kicker = document.getElementById('dashboardKicker');
+
+    if (!dashboard || !genericStream || !signinPrompt) return;
+
+    // Student mode: always show generic focus stream, never show teacher dashboard or sign-in prompt
+    if (currentHubMode === 'student') {
+        dashboard.classList.remove('active');
+        genericStream.style.display = 'block';
+        signinPrompt.style.display = 'none';
+        if (kicker) kicker.textContent = 'Focus stream';
+        return;
+    }
+
+    // Teacher mode: show personal dashboard if a teacher is signed in
+    if (profile && profile.name && isSchoolEmail(profile.email)) {
+        dashboard.classList.add('active');
+        genericStream.style.display = 'none';
+        signinPrompt.style.display = 'none';
+        if (kicker) kicker.innerHTML = '<i class="fas fa-user-circle"></i> Personal Dashboard';
+
+        document.getElementById('teacherDashboardName').textContent = profile.name;
+        document.getElementById('teacherDashboardEmail').textContent = profile.email;
+        document.getElementById('teacherDashboardAvatar').textContent = (profile.name || 'T').charAt(0).toUpperCase();
+
+        var data = getTeacherCommandData();
+
+        // Render schedule
+        var scheduleList = document.getElementById('teacherScheduleList');
+        if (scheduleList) {
+            if (data.schedule.length === 0) {
+                scheduleList.innerHTML = '<li class="dashboard-empty">No schedule items yet.</li>';
+            } else {
+                scheduleList.innerHTML = data.schedule.map(function(item) {
+                    var roomText = item.room ? ' · ' + escapeHtml(item.room) : '';
+                    return '<li class="schedule-item">'
+                        + '<div><strong>' + escapeHtml(item.activity) + '</strong><small>' + escapeHtml(item.day) + ' at ' + escapeHtml(item.time) + roomText + '</small></div>'
+                        + '<div class="item-actions"><button onclick="deleteScheduleItem(\'' + item.id + '\')" title="Remove"><i class="fas fa-trash"></i></button></div>'
+                        + '</li>';
+                }).join('');
+            }
+        }
+
+        // Render materials
+        var materialList = document.getElementById('teacherMaterialList');
+        if (materialList) {
+            if (data.materials.length === 0) {
+                materialList.innerHTML = '<li class="dashboard-empty">No materials saved yet.</li>';
+            } else {
+                materialList.innerHTML = data.materials.map(function(item) {
+                    var titleHtml = item.url
+                        ? '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer" style="color:#93c5fd;text-decoration:none;">' + escapeHtml(item.title) + '</a>'
+                        : escapeHtml(item.title);
+                    var notesText = item.notes ? ' · ' + escapeHtml(item.notes) : '';
+                    return '<li class="material-item">'
+                        + '<div><strong>' + titleHtml + '</strong><small>' + escapeHtml(item.category) + notesText + '</small></div>'
+                        + '<div class="item-actions"><button onclick="deleteMaterialItem(\'' + item.id + '\')" title="Remove"><i class="fas fa-trash"></i></button></div>'
+                        + '</li>';
+                }).join('');
+            }
+        }
+
+        // Render quick links
+        var savedLinksList = document.getElementById('savedLinksList');
+        if (savedLinksList) {
+            var links = getTeacherQuickLinks();
+            if (links.length === 0) {
+                savedLinksList.style.display = 'none';
+            } else {
+                savedLinksList.style.display = 'grid';
+                savedLinksList.innerHTML = links.map(function(item) {
+                    return '<li class="saved-link-item">'
+                        + '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.title) + '</a>'
+                        + '<div class="item-actions"><button onclick="deleteQuickLink(\'' + item.id + '\')" title="Remove"><i class="fas fa-trash"></i></button></div>'
+                        + '</li>';
+                }).join('');
+            }
+        }
+    } else {
+        // Teacher mode but no teacher signed in: show generic focus stream + sign-in prompt
+        dashboard.classList.remove('active');
+        genericStream.style.display = 'block';
+        signinPrompt.style.display = 'block';
+        if (kicker) kicker.textContent = 'Focus stream';
+    }
+}
+
 function hasTeacherAccess() {
     var profile = getTeacherProfile();
     var masterAccess = localStorage.getItem('ryshub_master_access') === 'true' || sessionStorage.getItem('ryshub_master_access') === 'true' || localStorage.getItem('ryshub_loggedIn') === 'true' || sessionStorage.getItem('ryshub_loggedIn') === 'true';
@@ -3806,6 +4436,7 @@ function signOutTeacher() {
     initHubMode();
     renderGameScores();
     renderClassroomLabMetrics();
+    renderTeacherDashboard();
     showToast('Signed out. Returning to the team login page.');
     setTimeout(function() {
         window.location.href = 'apps/login.html';
@@ -3869,10 +4500,16 @@ function registerTeacherAccess() {
     localStorage.setItem('ryshub_role', 'teacher');
     sessionStorage.setItem('ryshub_role', 'teacher');
 
+    var commandKey = getTeacherScopedKey('ryshubCommandData');
+    if (!localStorage.getItem(commandKey)) {
+        localStorage.setItem(commandKey, JSON.stringify({ schedule: [], materials: [] }));
+    }
+
     updateTeacherStatusUi();
     initHubMode();
     renderGameScores();
     renderClassroomLabMetrics();
+    renderTeacherDashboard();
     closeTeacherRegister();
     showToast('Teacher profile saved for ' + name);
 
@@ -3907,10 +4544,34 @@ function enterDemoMode() {
     setCurrentTeacherEmail(DEMO_PROFILE.email);
     localStorage.setItem('ryshub_role', 'teacher');
     sessionStorage.setItem('ryshub_role', 'teacher');
+    var demoCommandKey = getTeacherScopedKey('ryshubCommandData', DEMO_PROFILE.email);
+    if (!localStorage.getItem(demoCommandKey)) {
+        localStorage.setItem(demoCommandKey, JSON.stringify({
+            schedule: [
+                { id: generateId(), day: 'Monday', time: '08:00', activity: 'World Class Book 1 - Unit 5', room: 'Room 301' },
+                { id: generateId(), day: 'Wednesday', time: '10:00', activity: 'TOEFL Prep Session', room: 'Lab 2' },
+                { id: generateId(), day: 'Friday', time: '13:00', activity: 'Grammar Workshop', room: 'Room 205' }
+            ],
+            materials: [
+                { id: generateId(), title: 'Unit 5 Vocabulary List', category: 'Vocabulary', url: '', notes: 'Print before Monday class' },
+                { id: generateId(), title: 'TOEFL Writing Rubric', category: 'TOEFL', url: 'https://www.ets.org/toefl/test-takers/ibt/scores/understand/', notes: 'Share with students' }
+            ]
+        }));
+    }
+
+    var demoLinksKey = getTeacherScopedKey('ryshubQuickLinks', DEMO_PROFILE.email);
+    if (!localStorage.getItem(demoLinksKey)) {
+        localStorage.setItem(demoLinksKey, JSON.stringify([
+            { id: generateId(), title: 'Level 11 Writing Folder', url: 'https://drive.google.com/drive/folders/example' },
+            { id: generateId(), title: 'TOEFL Practice Materials', url: 'https://www.ets.org/toefl/test-takers/ibt/prepare/' }
+        ]));
+    }
+
     updateTeacherStatusUi();
     initHubMode();
     renderGameScores();
     renderClassroomLabMetrics();
+    renderTeacherDashboard();
     closeTeacherRegister();
     document.getElementById('demo-banner').style.display = 'block';
     document.getElementById('mainHeader').style.marginTop = '44px';
@@ -3935,6 +4596,7 @@ function exitDemoMode() {
     document.getElementById('demo-banner').style.display = 'none';
     document.getElementById('mainHeader').style.marginTop = '';
     updateTeacherStatusUi();
+    renderTeacherDashboard();
     showToast('Demo mode ended.');
 }
 
@@ -4145,6 +4807,7 @@ function setHubMode(mode) {
     };
 
     var state = presets[mode] || presets.teacher;
+    currentHubMode = mode;
     localStorage.setItem(getTeacherScopedKey('ryshubHubMode'), mode);
 
     document.querySelectorAll('.mode-btn').forEach(function(btn) {
@@ -4170,12 +4833,14 @@ function setHubMode(mode) {
     if (secondaryText) secondaryText.textContent = state.secondaryText;
     if (tertiaryTitle) tertiaryTitle.textContent = state.tertiaryTitle;
     if (tertiaryText) tertiaryText.textContent = state.tertiaryText;
+    renderTeacherDashboard();
 }
 
 function initHubMode() {
     var scopedMode = localStorage.getItem(getTeacherScopedKey('ryshubHubMode'));
     var fallbackMode = localStorage.getItem('ryshubHubMode');
     setHubMode(scopedMode || fallbackMode || 'teacher');
+    renderTeacherDashboard();
 }
 
 var HERO_TOPICS = [
@@ -4362,45 +5027,6 @@ function initHeaderNavScroll() {
     nav.addEventListener('mouseleave', stopPointerDrag);
 }
 
-function initRandomMiniMention() {
-    var mention = document.getElementById('randomMiniMention');
-    var host = document.getElementById('topHome');
-    if (!mention || !host) return;
-
-    var messages = [
-        'Typing Race mini game is now live',
-        'Try Typing Race for quick speed practice',
-        'Typing Race: accuracy + speed training',
-        'New mini game mention: Typing Race'
-    ];
-
-    function placeMention() {
-        var hostWidth = host.clientWidth || window.innerWidth;
-        var hostHeight = Math.max(host.clientHeight, 560);
-
-        mention.textContent = messages[Math.floor(Math.random() * messages.length)];
-
-        var minX = 22;
-        var maxX = Math.max(minX + 1, hostWidth - 320);
-        var minY = 110;
-        var maxY = Math.max(minY + 1, Math.min(hostHeight - 80, 620));
-
-        var x = Math.floor(minX + Math.random() * (maxX - minX));
-        var y = Math.floor(minY + Math.random() * (maxY - minY));
-
-        mention.style.left = x + 'px';
-        mention.style.top = y + 'px';
-
-        mention.classList.remove('show');
-        void mention.offsetWidth;
-        mention.classList.add('show');
-    }
-
-    placeMention();
-    window.setInterval(placeMention, 5200);
-    window.addEventListener('resize', placeMention);
-}
-
 function setClassroomLabMode(mode) {
     document.querySelectorAll('.lab-mode-btn').forEach(function(btn) {
         btn.classList.toggle('active', btn.getAttribute('data-lab-mode') === mode);
@@ -4451,108 +5077,7 @@ function initClassroomLab() {
 var featuredGameIndex = 0;
 var currentFeaturedGameId = 'colony';
 var gameScoreTimer = null;
-var MINI_GAMES = [
-    {
-        id: 'colony',
-        title: 'Last Colony',
-        status: 'Live',
-        iconClass: 'fas fa-rocket',
-        desc: 'Strategy survival RPG set on Mars with missions, choices, and colony management.',
-        launchText: 'Launch',
-        launchAction: function() { openColonyModal(); }
-    },
-    {
-        id: 'solar',
-        title: 'Solar System',
-        status: 'Live',
-        iconClass: 'fas fa-globe-americas',
-        desc: 'Interactive space missions that teach planets, orbits, and exploration concepts.',
-        launchText: 'Launch',
-        launchAction: function() { openSolarSystemModal(); }
-    },
-    {
-        id: 'typing-race',
-        title: 'Typing Race',
-        status: 'Live',
-        iconClass: 'fas fa-keyboard',
-        desc: 'Fast keyboard challenge for sentence accuracy and speed practice.',
-        launchText: 'Launch',
-        launchAction: function() {
-            recordGameLaunch('typing-race');
-            window.open('apps/games/typing-race/index.html', '_blank');
-        }
-    },
-    {
-        id: 'writecraft',
-        title: 'WriteCraft',
-        status: 'Live',
-        iconClass: 'fas fa-pen-nib',
-        desc: 'Writing trainer for essays, summaries & stories with timed prompts and live scoring.',
-        launchText: 'Launch',
-        launchAction: function() {
-            recordGameLaunch('writecraft');
-            window.open('apps/writing-trainer/index.html', '_blank');
-        }
-    },
-    {
-        id: 'word-scramble',
-        title: 'Word Scramble',
-        status: 'Coming Soon',
-        iconClass: 'fas fa-puzzle-piece',
-        desc: 'Vocabulary scramble game focused on world-class units and core review words.',
-        launchText: 'Coming soon',
-        launchAction: null
-    },
-    {
-        id: 'memory-match',
-        title: 'Memory Match',
-        status: 'Coming Soon',
-        iconClass: 'fas fa-brain',
-        desc: 'Flip and match challenge to strengthen memory and word association.',
-        launchText: 'Coming soon',
-        launchAction: null
-    },
-    {
-        id: 'next-slot',
-        title: 'Next Mini Game Slot',
-        status: 'Future Slot',
-        iconClass: 'fas fa-plus',
-        desc: 'Reserve this card for the next mini game you create.',
-        launchText: 'Add next game',
-        launchAction: null
-    }
-];
-
-function renderMiniGamesSection() {
-    var grid = document.getElementById('miniGamesGrid');
-    if (!grid) return;
-
-    grid.innerHTML = MINI_GAMES.map(function(game) {
-        var isComing = !game.launchAction;
-        var buttonClass = isComing ? 'btn-outline' : 'card-btn';
-        var clickAction = isComing ? "showToast('" + game.title + " will be added here soon')" : "launchMiniGame('" + game.id + "')";
-        var safeTagClass = isComing ? 'mini-game-tag coming' : 'mini-game-tag';
-
-        return '<article class="mini-game-card">'
-            + '<div class="mini-game-head">'
-            + '<div class="mini-game-topline"><span class="mini-game-icon"><i class="' + game.iconClass + '"></i></span><strong>' + game.title + '</strong></div>'
-            + '<span class="' + safeTagClass + '">' + game.status + '</span>'
-            + '</div>'
-            + '<p>' + game.desc + '</p>'
-            + '<div><button class="' + buttonClass + '" onclick="' + clickAction + '">' + game.launchText + '</button></div>'
-            + '</article>';
-    }).join('');
-}
-
-function launchMiniGame(id) {
-    var game = MINI_GAMES.find(function(item) { return item.id === id; });
-    if (!game || !game.launchAction) {
-        showToast('This mini game is coming soon');
-        return;
-    }
-    game.launchAction();
-}
-
+var currentHubMode = 'teacher';
 var GAME_META = {
     colony: {
         name: 'Last Colony',
@@ -4737,9 +5262,7 @@ initHubMode();
 initLiveCounters();
 initParallaxTilt();
 initGameScores();
-renderMiniGamesSection();
 initHeaderNavScroll();
-initRandomMiniMention();
 initClassroomLab();
 initHeroBannerCycle();
 renderTeacherBlogPosts();

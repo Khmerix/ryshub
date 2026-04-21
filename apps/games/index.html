@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Arcade • RysHub Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --gray-900: #0b0f19;
+            --gray-800: #111827;
+            --gray-700: #1f2937;
+            --gray-600: #374151;
+            --gray-500: #6b7280;
+            --gray-400: #9ca3af;
+            --gray-300: #d1d5db;
+            --gray-100: #f3f4f6;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            min-block-size: 100vh;
+            overflow-x: hidden;
+            background: var(--gray-900);
+            color: var(--gray-100);
+        }
+
+        /* Glass Header */
+        .glass-header {
+            position: fixed;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            z-index: 100;
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(16px);
+            border-block-end: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-3d {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--gray-300);
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2);
+            text-decoration: none;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .nav-3d:hover {
+            color: var(--white);
+            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+            border-color: rgba(255,255,255,0.18);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .nav-3d:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.2);
+        }
+
+        .brand-lockup {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.05;
+        }
+        .brand-overline {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--primary-light);
+            margin-block-end: 4px;
+        }
+        .brand-title {
+            font-size: 1.12rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.03em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: white;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.25);
+        }
+        .card-btn {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: white;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 var(--primary-dark), 0 6px 16px rgba(37,99,235,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 var(--primary-dark), 0 8px 20px rgba(37,99,235,0.4);
+        }
+        .card-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--primary-dark), 0 2px 8px rgba(37,99,235,0.25);
+        }
+
+        /* Hero */
+        .hero-section {
+            position: relative;
+            z-index: 10;
+            padding: 110px 16px 40px;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(37, 99, 235, 0.12);
+            border: 1px solid rgba(37, 99, 235, 0.25);
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-block-end: 20px;
+        }
+        .hero-title {
+            font-size: clamp(2.4rem, 5vw, 4.2rem);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.02;
+            margin: 0 0 14px;
+            letter-spacing: -2px;
+            max-inline-size: 680px;
+            margin-inline: auto;
+        }
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary-blue), #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-subtitle {
+            color: var(--gray-400);
+            font-size: 1rem;
+            max-inline-size: 540px;
+            margin: 0 auto 28px;
+            line-height: 1.65;
+        }
+
+        /* Sections */
+        .section-intro {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-block-end: 22px;
+        }
+        .section-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #93c5fd;
+            margin-block-end: 8px;
+        }
+        .section-intro h2 {
+            margin: 0 0 6px;
+            font-size: 1.6rem;
+            color: var(--white);
+            letter-spacing: -0.5px;
+        }
+        .section-intro p {
+            margin: 0;
+            color: var(--gray-400);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            max-inline-size: 560px;
+        }
+        .hb-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.24);
+            background: rgba(255,255,255,0.1);
+            color: rgba(248,250,252,0.95);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+            backdrop-filter: blur(8px);
+        }
+
+        /* Games Score Section */
+        .games-score-section {
+            position: relative;
+            z-index: 10;
+            max-inline-size: 1200px;
+            margin: 0 auto 34px;
+            padding: 0 16px;
+        }
+        .games-score-grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 18px;
+        }
+        .score-spotlight, .score-list {
+            background: linear-gradient(180deg, rgba(15,23,42,.88), rgba(15,23,42,.72));
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 20px 45px rgba(2,6,23,.24);
+            backdrop-filter: blur(14px);
+        }
+        .score-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-block-end: 10px;
+            font-size: .72rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: #93c5fd;
+            font-weight: 800;
+        }
+        .score-spotlight h3 { margin: 0 0 8px; font-size: 1.4rem; color: var(--white); }
+        .score-spotlight p { margin: 0 0 16px; color: var(--gray-300); line-height: 1.7; }
+        .score-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0,1fr));
+            gap: 10px;
+            margin-block-end: 14px;
+        }
+        .score-meta-card {
+            padding: 12px;
+            border-radius: 16px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.06);
+        }
+        .score-meta-card strong { display: block; color: var(--white); font-size: 1rem; margin-block-end: 4px; }
+        .score-meta-card span { color: var(--gray-400); font-size: .78rem; }
+        .score-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 0;
+            border-block-end: 1px solid rgba(255,255,255,.06);
+        }
+        .score-row:last-child { border-block-end: none; padding-block-end: 0; }
+        .score-rank {
+            inline-size: 32px;
+            block-size: 32px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+            color: white;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .score-game { flex: 1; }
+        .score-game strong { display: block; color: var(--white); font-size: .96rem; margin-block-end: 2px; }
+        .score-game span { color: var(--gray-400); font-size: .8rem; }
+        .score-value { color: #fbbf24; font-weight: 800; font-size: 1rem; }
+
+        /* Mini Games Section */
+        .mini-games-section {
+            position: relative;
+            z-index: 10;
+            max-inline-size: 1200px;
+            margin: 0 auto 36px;
+            padding: 0 16px;
+        }
+        .mini-game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+        .mini-game-card {
+            background: linear-gradient(180deg, rgba(15,23,42,.9), rgba(15,23,42,.74));
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 14px 28px rgba(2,6,23,.22);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .mini-game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(2,6,23,.35);
+            border-color: rgba(255,255,255,.14);
+        }
+        .mini-game-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .mini-game-head strong { color: var(--white); font-size: .98rem; }
+        .mini-game-tag {
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .03em;
+            border: 1px solid rgba(255,255,255,.16);
+            color: #bfdbfe;
+            background: rgba(30,58,138,.35);
+            white-space: nowrap;
+        }
+        .mini-game-tag.coming {
+            color: #fde68a;
+            background: rgba(161,98,7,.25);
+            border-color: rgba(245,158,11,.4);
+        }
+        .mini-game-card p {
+            color: var(--gray-300);
+            margin: 0;
+            line-height: 1.6;
+            font-size: .88rem;
+            flex: 1;
+        }
+        .mini-game-icon {
+            inline-size: 34px;
+            block-size: 34px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+            color: #fff;
+            box-shadow: 0 6px 14px rgba(37,99,235,.24);
+            flex-shrink: 0;
+        }
+        .mini-game-topline { display: flex; align-items: center; gap: 10px; }
+
+        /* Toast */
+        .hub-toast {
+            position: fixed;
+            inset-block-end: 24px;
+            inset-inline-start: 50%;
+            transform: translateX(-50%) translateY(120px);
+            background: rgba(15,23,42,.95);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: .9rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,.4);
+            z-index: 2000;
+            opacity: 0;
+            transition: all .35s cubic-bezier(.34,1.56,.64,1);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .hub-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Modal */
+        .fs-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(2,6,23,.92);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .35s ease;
+        }
+        .fs-modal.open { opacity: 1; pointer-events: auto; }
+        .fs-modal-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            border-block-end: 1px solid rgba(255,255,255,.08);
+        }
+        .fs-modal-bar h3 { margin: 0; color: #fff; font-size: .95rem; }
+        .fs-modal-bar button {
+            background: rgba(255,255,255,.1);
+            border: 1px solid rgba(255,255,255,.16);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: .8rem;
+        }
+        .fs-iframe { flex: 1; border: none; inline-size: 100%; background: #000; }
+
+        @media (max-inline-size: 900px) {
+            .games-score-grid { grid-template-columns: 1fr; }
+            .mini-game-grid { grid-template-columns: 1fr; }
+            .score-meta-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-inline-size: 640px) {
+            .hero-section { padding-block-start: 100px; }
+            .section-intro h2 { font-size: 1.35rem; }
+        }
+        @media (max-width: 640px) {
+            .hero-section { padding-top: 100px; }
+            .section-intro h2 { font-size: 1.35rem; }
+            .games-score-grid { grid-template-columns: 1fr; }
+            .mini-game-grid { grid-template-columns: 1fr; }
+            .score-meta-grid { grid-template-columns: 1fr; }
+            .score-meta-card { padding: 10px; }
+            .mini-game-card { padding: 14px; }
+            .quick-links-grid { grid-template-columns: 1fr; }
+            .dashboard-form-row { grid-template-columns: 1fr; }
+            .command-grid { padding: 14px; }
+            .command-panel { padding: 14px; }
+            .live-counter-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 400px) {
+            .hero-title { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+            .score-meta-grid { grid-template-columns: 1fr; }
+            .live-counter-grid { grid-template-columns: 1fr; }
+            .mini-game-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="glass-header">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between" style="min-block-size:68px;gap:18px;">
+        <a href="../../index.html" class="flex items-center gap-3" style="text-decoration:none;">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-lg shadow-lg shadow-blue-500/20">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <div class="brand-lockup">
+                <span class="brand-overline">RysHub Studio</span>
+                <span class="brand-title">Game Arcade</span>
+            </div>
+        </a>
+
+        <div class="flex items-center gap-3">
+            <a href="../../index.html" class="nav-3d">
+                <i class="fas fa-arrow-left"></i> Back to Hub
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Hero -->
+<section class="hero-section">
+    <div class="hero-badge">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse"></span>
+        Arcade &amp; Mini Games
+    </div>
+    <h1 class="hero-title">
+        Play, practice,<br>
+        <span>and compete</span>
+    </h1>
+    <p class="hero-subtitle">
+        Every mini game and classroom challenge in one place. Track your scores, rotate the spotlight, and launch your next session.
+    </p>
+</section>
+
+<!-- Games & Scores -->
+<section class="games-score-section" id="gamesScores">
+    <div class="section-intro">
+        <div>
+            <div class="section-kicker"><i class="fas fa-trophy"></i> Popular games showcase</div>
+            <h2>Most played games and score highlights</h2>
+            <p>A dedicated section for spotlighting the games students return to most and the best runs worth showing off.</p>
+        </div>
+        <div class="hb-chip"><i class="fas fa-trophy"></i> Arcade leaderboard</div>
+    </div>
+
+    <div class="games-score-grid">
+        <div class="score-spotlight">
+            <div class="score-kicker"><i class="fas fa-fire"></i> Live featured game</div>
+            <h3 id="featuredGameTitle">Last Colony is leading the hub</h3>
+            <p id="featuredGameDesc">Use this area to highlight your most-played game, best classroom challenge, and standout performance numbers in one premium block.</p>
+            <div class="score-meta-grid">
+                <div class="score-meta-card">
+                    <strong id="featuredGameBest">92%</strong>
+                    <span id="featuredGameMetric">Top colony readiness</span>
+                </div>
+                <div class="score-meta-card">
+                    <strong id="featuredGamePlays">18</strong>
+                    <span>Total launches</span>
+                </div>
+                <div class="score-meta-card">
+                    <strong id="featuredGameTrend">Hot</strong>
+                    <span>Current trend</span>
+                </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+                <button id="featuredGameButton" class="card-btn" style="background:linear-gradient(135deg,#f97316,#b91c1c);box-shadow:0 4px 0 #7f1d1d,0 8px 24px rgba(249,115,22,.35);" onclick="launchFeaturedGame()"><i class="fas fa-trophy"></i> Open top game</button>
+                <button class="btn-outline" onclick="cycleFeaturedGame()"><i class="fas fa-rotate"></i> Rotate spotlight</button>
+            </div>
+        </div>
+
+        <div class="score-list">
+            <div class="score-kicker"><i class="fas fa-ranking-star"></i> Popular now</div>
+            <div id="gamesScoreRows"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Mini Games Hub -->
+<section class="mini-games-section" id="miniGamesSection">
+    <div class="section-intro">
+        <div>
+            <div class="section-kicker"><i class="fas fa-gamepad"></i> Mini Games Hub</div>
+            <h2>All mini games in one section</h2>
+            <p>Launch any game directly. New games are added here automatically as they go live.</p>
+        </div>
+        <div class="hb-chip"><i class="fas fa-gamepad"></i> Future-ready list</div>
+    </div>
+    <div id="miniGamesGrid" class="mini-game-grid"></div>
+</section>
+
+<!-- Modals -->
+<div id="colony-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #9a3412, #7f1d1d);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <i class="fas fa-rocket" style="color:#fb923c;"></i>
+            <h3>Last Colony — Mars Strategy RPG</h3>
+        </div>
+        <button onclick="closeColonyModal()"><i class="fas fa-xmark"></i> Close</button>
+    </div>
+    <iframe id="colony-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<div id="solar-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #3730a3, #1e1b4b);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <i class="fas fa-globe-americas" style="color:#a5b4fc;"></i>
+            <h3>Solar System — Space Missions</h3>
+        </div>
+        <button onclick="closeSolarSystemModal()"><i class="fas fa-xmark"></i> Close</button>
+    </div>
+    <iframe id="solar-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- Toast -->
+<div id="hub-toast" class="hub-toast"><span id="hub-toast-msg"></span></div>
+
+<script>
+function showToast(msg) {
+    var t = document.getElementById('hub-toast');
+    document.getElementById('hub-toast-msg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window.toastTimer);
+    window.toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+function recordGameLaunch(id) {
+    var stats = loadGameStats();
+    if (!stats[id]) stats[id] = { plays: 0, best: (GAME_META[id] && GAME_META[id].best) || '0' };
+    stats[id].plays = (stats[id].plays || 0) + 1;
+    stats[id].lastPlayed = Date.now();
+    saveGameStats(stats);
+    renderGameScores();
+}
+
+function loadGameStats() {
+    var defaults = {
+        colony: { plays: 18, best: '92%' },
+        solar: { plays: 12, best: '88%' },
+        brickforge: { plays: 14, best: '148' },
+        toefl: { plays: 11, best: '27m' },
+        'typing-race': { plays: 9, best: '45 WPM' },
+        writecraft: { plays: 7, best: '92' }
+    };
+    try {
+        var saved = JSON.parse(localStorage.getItem('ryshubGameStats') || '{}');
+        return Object.assign({}, defaults, saved);
+    } catch (e) {
+        return defaults;
+    }
+}
+
+function saveGameStats(stats) {
+    localStorage.setItem('ryshubGameStats', JSON.stringify(stats));
+}
+
+var GAME_META = {
+    colony: { name: 'Last Colony', metric: 'Top colony readiness', best: '92%', desc: 'Lead Mars survival missions and keep the colony alive through high-pressure strategy and story choices.', cta: 'Launch Colony' },
+    solar: { name: 'Solar System', metric: 'Mission completion rate', best: '88%', desc: 'Explore planets with guided mission challenges and interactive space-learning objectives.', cta: 'Launch Solar System' },
+    brickforge: { name: 'Brick Forge Pro', metric: 'Creative build points', best: '148', desc: 'Fast visual building challenges make this one of the most replayed creative experiences on the hub.', cta: 'Open Builder' },
+    toefl: { name: 'TOEFL Challenge', metric: 'Fastest completed mock', best: '27m', desc: 'Timed test practice becomes a score-style challenge students can return to again and again.', cta: 'Start TOEFL' },
+    writecraft: { name: 'WriteCraft', metric: 'Best writing score', best: '92', desc: 'Writing trainer for essays, summaries and stories with timed prompts and live scoring.', cta: 'Launch WriteCraft' }
+};
+
+var MINI_GAMES = [
+    { id: 'colony', title: 'Last Colony', status: 'Live', iconClass: 'fas fa-rocket', desc: 'Strategy survival RPG set on Mars with missions, choices, and colony management.', launchText: 'Launch', launchAction: function() { openColonyModal(); } },
+    { id: 'solar', title: 'Solar System', status: 'Live', iconClass: 'fas fa-globe-americas', desc: 'Interactive space missions that teach planets, orbits, and exploration concepts.', launchText: 'Launch', launchAction: function() { openSolarSystemModal(); } },
+    { id: 'typing-race', title: 'Typing Race', status: 'Live', iconClass: 'fas fa-keyboard', desc: 'Fast keyboard challenge for sentence accuracy and speed practice.', launchText: 'Launch', launchAction: function() { recordGameLaunch('typing-race'); window.open('typing-race/index.html', '_blank'); } },
+    { id: 'writecraft', title: 'WriteCraft', status: 'Live', iconClass: 'fas fa-pen-nib', desc: 'Writing trainer for essays, summaries & stories with timed prompts and live scoring.', launchText: 'Launch', launchAction: function() { recordGameLaunch('writecraft'); window.open('../writing-trainer/index.html', '_blank'); } },
+    { id: 'memory-match', title: 'Memory Match', status: 'Coming Soon', iconClass: 'fas fa-brain', desc: 'Flip and match challenge to strengthen memory and word association.', launchText: 'Coming soon', launchAction: null },
+    { id: 'word-scramble', title: 'Word Scramble', status: 'Coming Soon', iconClass: 'fas fa-puzzle-piece', desc: 'Vocabulary scramble game focused on world-class units and core review words.', launchText: 'Coming soon', launchAction: null },
+    { id: 'next-slot', title: 'Next Mini Game Slot', status: 'Future Slot', iconClass: 'fas fa-plus', desc: 'Reserve this card for the next mini game you create.', launchText: 'Add next game', launchAction: null }
+];
+
+function renderMiniGamesSection() {
+    var grid = document.getElementById('miniGamesGrid');
+    if (!grid) return;
+    grid.innerHTML = MINI_GAMES.map(function(game) {
+        var isComing = !game.launchAction;
+        var buttonClass = isComing ? 'btn-outline' : 'card-btn';
+        var clickAction = isComing ? "showToast('" + game.title + " will be added here soon')" : "launchMiniGame('" + game.id + "')";
+        var safeTagClass = isComing ? 'mini-game-tag coming' : 'mini-game-tag';
+        return '<article class="mini-game-card">'
+            + '<div class="mini-game-head">'
+            + '<div class="mini-game-topline"><span class="mini-game-icon"><i class="' + game.iconClass + '"></i></span><strong>' + game.title + '</strong></div>'
+            + '<span class="' + safeTagClass + '">' + game.status + '</span>'
+            + '</div>'
+            + '<p>' + game.desc + '</p>'
+            + '<div><button class="' + buttonClass + '" onclick="' + clickAction + '">' + game.launchText + '</button></div>'
+            + '</article>';
+    }).join('');
+}
+
+function launchMiniGame(id) {
+    var game = MINI_GAMES.find(function(item) { return item.id === id; });
+    if (!game || !game.launchAction) { showToast('This mini game is coming soon'); return; }
+    game.launchAction();
+}
+
+function openColonyModal() {
+    recordGameLaunch('colony');
+    showToast('Launching Last Colony... stand by 🚀');
+    document.getElementById('colony-frame').src = 'colony/';
+    document.getElementById('colony-modal').classList.add('open');
+}
+function closeColonyModal() {
+    document.getElementById('colony-modal').classList.remove('open');
+}
+
+function openSolarSystemModal() {
+    recordGameLaunch('solar');
+    showToast('Launching Solar System... stand by 🪐');
+    document.getElementById('solar-frame').src = 'solar-system/index.html';
+    document.getElementById('solar-modal').classList.add('open');
+}
+function closeSolarSystemModal() {
+    document.getElementById('solar-modal').classList.remove('open');
+}
+
+var featuredGameIndex = 0;
+var currentFeaturedGameId = 'colony';
+var gameScoreTimer = null;
+
+function getTrendLabel(plays) {
+    if (plays >= 18) return 'Hot';
+    if (plays >= 12) return 'Trending';
+    return 'Rising';
+}
+
+function openGameFromScores(id) {
+    if (id === 'colony') openColonyModal();
+    else if (id === 'solar') openSolarSystemModal();
+    else if (id === 'typing-race') { recordGameLaunch('typing-race'); window.open('typing-race/index.html', '_blank'); }
+    else if (id === 'writecraft') { recordGameLaunch('writecraft'); window.open('../writing-trainer/index.html', '_blank'); }
+    else showToast('Launch from the main hub for this game');
+}
+
+function launchFeaturedGame() {
+    openGameFromScores(currentFeaturedGameId);
+}
+
+function renderGameScores() {
+    var stats = loadGameStats();
+    var ranking = Object.keys(GAME_META).map(function(id) {
+        return { id: id, name: GAME_META[id].name, metric: GAME_META[id].metric, desc: GAME_META[id].desc, cta: GAME_META[id].cta, plays: (stats[id] && stats[id].plays) || 0, best: (stats[id] && stats[id].best) || GAME_META[id].best };
+    }).sort(function(a, b) { return b.plays - a.plays; });
+
+    if (!ranking.length) return;
+    var featured = ranking[featuredGameIndex % ranking.length];
+    currentFeaturedGameId = featured.id;
+
+    var title = document.getElementById('featuredGameTitle');
+    var desc = document.getElementById('featuredGameDesc');
+    var best = document.getElementById('featuredGameBest');
+    var metric = document.getElementById('featuredGameMetric');
+    var plays = document.getElementById('featuredGamePlays');
+    var trend = document.getElementById('featuredGameTrend');
+    var button = document.getElementById('featuredGameButton');
+    var rows = document.getElementById('gamesScoreRows');
+
+    if (title) title.textContent = featured.name + ' is leading the hub';
+    if (desc) desc.textContent = featured.desc;
+    if (best) best.textContent = featured.best;
+    if (metric) metric.textContent = featured.metric;
+    if (plays) plays.textContent = featured.plays;
+    if (trend) trend.textContent = getTrendLabel(featured.plays);
+    if (button) button.innerHTML = '<i class="fas fa-trophy"></i> ' + featured.cta;
+
+    if (rows) {
+        rows.innerHTML = ranking.map(function(game, index) {
+            return '<div class="score-row">'
+                + '<span class="score-rank">' + (index + 1) + '</span>'
+                + '<div class="score-game"><strong>' + game.name + '</strong><span>' + game.metric + ' · ' + game.plays + ' plays</span></div>'
+                + '<span class="score-value">' + game.best + '</span>'
+                + '</div>';
+        }).join('');
+    }
+}
+
+function cycleFeaturedGame() {
+    featuredGameIndex += 1;
+    renderGameScores();
+}
+
+function initGameScores() {
+    renderGameScores();
+    if (gameScoreTimer) window.clearInterval(gameScoreTimer);
+    gameScoreTimer = window.setInterval(function() { featuredGameIndex += 1; renderGameScores(); }, 6000);
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeColonyModal();
+        closeSolarSystemModal();
+    }
+});
+
+initGameScores();
+renderMiniGamesSection();
+</script>
+</body>
+</html>

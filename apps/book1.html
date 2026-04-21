@@ -948,6 +948,26 @@
             .card { padding: 22px; }
             .unit-container { padding: 18px; }
         }
+            @media (max-width: 640px) {
+            .main-header h1 { font-size: 1.6rem; }
+            .main-header p { font-size: 0.9rem; }
+            .nav-tab { min-width: auto; padding: 8px 12px; font-size: 0.8rem; }
+            .unit-card { min-height: auto; }
+            .content-frame { height: 60vh; }
+            .teacher-tools-bar { flex-wrap: wrap; gap: 8px; }
+            .control-group { flex-wrap: wrap; }
+            .floating-tools { bottom: 10px; right: 10px; }
+            .floating-btn { width: 40px; height: 40px; }
+            .modal-content { width: 95%; margin: 10px auto; max-height: 90vh; }
+            .worksheet-table th, .worksheet-table td { padding: 8px; font-size: 0.85rem; }
+        }
+        @media (max-width: 480px) {
+            .nav-tabs { gap: 6px; }
+            .nav-tab { padding: 6px 10px; font-size: 0.75rem; }
+            .unit-cards { grid-template-columns: 1fr; }
+            .modal-grid { grid-template-columns: 1fr; }
+            .floating-tools { flex-direction: row; gap: 6px; }
+        }
     </style>
 
 </head>
@@ -981,7 +1001,7 @@
         </div>
 
         <!-- Unit Preview Cards -->
-        <div style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+        <div style="max-max-width:1200px;width:100%; margin: 0 auto; padding: 40px 20px;">
             <h2 style="text-align: center; font-size: 2rem; margin-bottom: 10px; color: #2C3E50;">🎯 Select a Unit</h2>
             <p style="text-align: center; color: #666; margin-bottom: 40px;">Click on any unit card to begin exploring</p>
             
@@ -2862,11 +2882,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Match the Communication Words (20 points)</div>
                             <p style="margin-bottom: 1rem;">Match each word with its correct definition.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.2;">
-                                <li>gesture <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) spoken communication</li>
-                                <li>verbal <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) body movement expressing meaning</li>
-                                <li>eye contact <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) looking at someone's eyes</li>
-                                <li>non-verbal <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) communication without words</li>
-                                <li>facial expression <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) showing emotion on your face</li>
+                                <li>gesture <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) spoken communication</li>
+                                <li>verbal <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) body movement expressing meaning</li>
+                                <li>eye contact <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) looking at someone's eyes</li>
+                                <li>non-verbal <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) communication without words</li>
+                                <li>facial expression <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) showing emotion on your face</li>
                             </ol>
                         </div>
 
@@ -2874,11 +2894,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Formal vs. Informal (20 points)</div>
                             <p style="margin-bottom: 1rem;">Label each as Formal (F) or Informal (I).</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.2;">
-                                <li>"Hey, what's up?" <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
-                                <li>"Good morning, how are you?" <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
-                                <li>Texting abbreviations (LOL, OMG) <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
-                                <li>Handshake <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
-                                <li>Bowing <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
+                                <li>"Hey, what's up?" <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
+                                <li>"Good morning, how are you?" <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
+                                <li>Texting abbreviations (LOL, OMG) <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
+                                <li>Handshake <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
+                                <li>Bowing <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin-left: 0.5rem;"></li>
                             </ol>
                         </div>
 
@@ -2886,10 +2906,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">3</span> Sentence Completion (20 points)</div>
                             <p style="margin-bottom: 1rem;">Complete the sentences with vocabulary words.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>In some cultures, direct <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> is considered rude.</li>
-                                <li>He communicated his anger through his <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
-                                <li>She prefers <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> communication like texting over phone calls.</li>
-                                <li>A thumbs-up <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> means "good job" in many countries.</li>
+                                <li>In some cultures, direct <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> is considered rude.</li>
+                                <li>He communicated his anger through his <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>She prefers <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> communication like texting over phone calls.</li>
+                                <li>A thumbs-up <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> means "good job" in many countries.</li>
                             </ol>
                         </div>
 
@@ -2911,16 +2931,16 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Fill in the Blanks (30 points)</div>
                             <p style="margin-bottom: 1rem;">Complete with <strong>all</strong>, <strong>both</strong>, <strong>each</strong>, <strong>every</strong>, <strong>a lot of</strong>, <strong>much</strong>, <strong>many</strong>, <strong>few</strong>, or <strong>little</strong>.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>In <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> families, both parents work.</li>
-                                <li>How <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> time do you have?</li>
-                                <li>Not <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> students use the library.</li>
-                                <li><input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> of the students prefer online classes.</li>
-                                <li>Very <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> parents visit the school.</li>
-                                <li><input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> student has a cell phone.</li>
-                                <li>There isn't <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> water in the bottle.</li>
-                                <li>Quite <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> people speak English here.</li>
-                                <li>My <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> parents work full-time.</li>
-                                <li>I have <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> free time this weekend.</li>
+                                <li>In <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> families, both parents work.</li>
+                                <li>How <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> time do you have?</li>
+                                <li>Not <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> students use the library.</li>
+                                <li><input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> of the students prefer online classes.</li>
+                                <li>Very <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> parents visit the school.</li>
+                                <li><input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> student has a cell phone.</li>
+                                <li>There isn't <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> water in the bottle.</li>
+                                <li>Quite <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> people speak English here.</li>
+                                <li>My <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> parents work full-time.</li>
+                                <li>I have <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> free time this weekend.</li>
                             </ol>
                         </div>
 
@@ -2928,11 +2948,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Error Correction (20 points)</div>
                             <p style="margin-bottom: 1rem;">Find and correct the mistake in each sentence.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>Each students have a book. → <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Both of answer are correct. → <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Every people like music. → <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>All student passed the test. → <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>There are much cars on the road. → <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Each students have a book. → <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Both of answer are correct. → <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Every people like music. → <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>All student passed the test. → <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>There are much cars on the road. → <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -2953,10 +2973,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Research Questions (20 points)</div>
                             <p style="margin-bottom: 1rem;">Research an endangered language and answer:</p>
                             <ol style="padding-left: 1.5rem; line-height: 2;">
-                                <li>Name of language: <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Country/Region: <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Number of speakers: <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Why is it endangered? <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Name of language: <input type="text" style="max-width:250px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Country/Region: <input type="text" style="max-width:250px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Number of speakers: <input type="text" style="max-width:250px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Why is it endangered? <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -2970,10 +2990,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">3</span> Family Interview (20 points)</div>
                             <p style="margin-bottom: 1rem;">Interview a family member about their language learning experience:</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>Who did you interview? <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>What languages do they speak? <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>How did they learn English? <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>What challenges did they face? <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Who did you interview? <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>What languages do they speak? <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>How did they learn English? <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>What challenges did they face? <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -3710,11 +3730,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Match the Money Words (20 points)</div>
                             <p style="margin-bottom: 1rem;">Match each word with its correct definition.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.2;">
-                                <li>afford <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) money you owe</li>
-                                <li>budget <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) have enough money to buy</li>
-                                <li>debt <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) plan for spending money</li>
-                                <li>invest <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) use money to make more money</li>
-                                <li>thrifty <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) careful with money</li>
+                                <li>afford <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) money you owe</li>
+                                <li>budget <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) have enough money to buy</li>
+                                <li>debt <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) plan for spending money</li>
+                                <li>invest <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) use money to make more money</li>
+                                <li>thrifty <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) careful with money</li>
                             </ol>
                         </div>
 
@@ -3722,12 +3742,12 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Fill in the Blanks (20 points)</div>
                             <p style="margin-bottom: 1rem;">Complete with: afford, borrow, debt, invest, loan, owe, save, spend, waste, budget</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>I need to <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> money from the bank to buy a house.</li>
-                                <li>My grandmother is very <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> - she never wastes money.</li>
-                                <li>Students graduate with a lot of student <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
-                                <li>I <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> $50 to my brother.</li>
-                                <li>It's important to <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> money for emergencies.</li>
-                                <li>Don't <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> money on things you don't need.</li>
+                                <li>I need to <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> money from the bank to buy a house.</li>
+                                <li>My grandmother is very <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> - she never wastes money.</li>
+                                <li>Students graduate with a lot of student <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>I <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> $50 to my brother.</li>
+                                <li>It's important to <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> money for emergencies.</li>
+                                <li>Don't <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> money on things you don't need.</li>
                             </ol>
                         </div>
 
@@ -3735,10 +3755,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">3</span> Money Idioms (20 points)</div>
                             <p style="margin-bottom: 1rem;">Match the idiom with its meaning.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.2;">
-                                <li>cost a fortune <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) very cheap</li>
-                                <li>on a budget <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) spending limits</li>
-                                <li>a steal <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) very expensive</li>
-                                <li>break the bank <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) cost all your money</li>
+                                <li>cost a fortune <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) very cheap</li>
+                                <li>on a budget <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) spending limits</li>
+                                <li>a steal <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) very expensive</li>
+                                <li>break the bank <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) cost all your money</li>
                             </ol>
                         </div>
 
@@ -3760,11 +3780,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Combine with Noun Clauses (30 points)</div>
                             <p style="margin-bottom: 1rem;">Combine each pair into one sentence using a noun clause with "that".</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>"Prices will increase." → I think <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
-                                <li>"She has a good job." → I know <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
-                                <li>"We need to save more." → I realize <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
-                                <li>"He spent all his money." → I'm worried <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
-                                <li>"They can't afford a car." → I heard <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>"Prices will increase." → I think <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>"She has a good job." → I know <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>"We need to save more." → I realize <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>"He spent all his money." → I'm worried <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>"They can't afford a car." → I heard <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
                             </ol>
                         </div>
 
@@ -3772,10 +3792,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Reported Speech (20 points)</div>
                             <p style="margin-bottom: 1rem;">Report what someone said using noun clauses.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>"I will pay you back." → He promised <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
-                                <li>"The bank is closed." → She explained <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
-                                <li>"I made a mistake." → He admitted <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
-                                <li>"You should invest." → She suggested <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>"I will pay you back." → He promised <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>"The bank is closed." → She explained <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>"I made a mistake." → He admitted <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
+                                <li>"You should invest." → She suggested <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">.</li>
                             </ol>
                         </div>
 
@@ -3795,10 +3815,10 @@
                         <div class="exercise" style="background: var(--card-bg); margin-bottom: 1.5rem; padding: 1.5rem; border-radius: 8px;">
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Personal Budget Survey (20 points)</div>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>How much do you spend per week? $<input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>What do you spend most on? <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Do you save money? <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>What's something you can't afford? <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>How much do you spend per week? $<input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>What do you spend most on? <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Do you save money? <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>What's something you can't afford? <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -3818,9 +3838,9 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">3</span> Noun Clause Practice (30 points)</div>
                             <p style="margin-bottom: 1rem;">Write 3 sentences about money using noun clauses with "that":</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>I think that <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>My parents believe that <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I hope that <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I think that <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>My parents believe that <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I hope that <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -4188,7 +4208,7 @@
                     
                     <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         <!-- SVG City Map -->
-                        <svg viewBox="0 0 800 600" style="width: 100%; height: auto; max-width: 800px; display: block; margin: 0 auto;">
+                        <svg viewBox="0 0 800 600" style="width: 100%; height: auto; max-max-width:800px;width:100%; display: block; margin: 0 auto;">
                             <!-- Background -->
                             <rect width="800" height="600" fill="#e8f5e9"/>
                             
@@ -5035,11 +5055,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> City Places Matching (20 points)</div>
                             <p style="margin-bottom: 1rem;">Match each place with its description.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.2;">
-                                <li>intersection <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) where you buy medicine</li>
-                                <li>pharmacy <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) where two streets cross</li>
-                                <li>sidewalk <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) path for walking</li>
-                                <li>landmark <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) famous building/monument</li>
-                                <li>neighborhood <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) area where people live</li>
+                                <li>intersection <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) where you buy medicine</li>
+                                <li>pharmacy <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) where two streets cross</li>
+                                <li>sidewalk <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) path for walking</li>
+                                <li>landmark <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) famous building/monument</li>
+                                <li>neighborhood <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) area where people live</li>
                             </ol>
                         </div>
 
@@ -5047,11 +5067,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Direction Words (20 points)</div>
                             <p style="margin-bottom: 1rem;">Fill in the missing direction words.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>Go <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (straight) for two blocks.</li>
-                                <li>Turn <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (right) at the traffic light.</li>
-                                <li>It's <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (next to) the bank.</li>
-                                <li>Walk <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (past) the post office.</li>
-                                <li>It's <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (between) the cafe and the library.</li>
+                                <li>Go <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (straight) for two blocks.</li>
+                                <li>Turn <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (right) at the traffic light.</li>
+                                <li>It's <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (next to) the bank.</li>
+                                <li>Walk <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (past) the post office.</li>
+                                <li>It's <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (between) the cafe and the library.</li>
                             </ol>
                         </div>
 
@@ -5059,10 +5079,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">3</span> Transportation Vocabulary (20 points)</div>
                             <p style="margin-bottom: 1rem;">Match the transportation with the description.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.2;">
-                                <li>subway <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) travels on tracks above ground</li>
-                                <li>commuter train <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) underground train</li>
-                                <li>tram <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) bus that uses electricity</li>
-                                <li> trolleybus <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) train for people going to work</li>
+                                <li>subway <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) travels on tracks above ground</li>
+                                <li>commuter train <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) underground train</li>
+                                <li>tram <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) bus that uses electricity</li>
+                                <li> trolleybus <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) train for people going to work</li>
                             </ol>
                         </div>
 
@@ -5084,11 +5104,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Polite Offers (25 points)</div>
                             <p style="margin-bottom: 1rem;">Write polite offers using "Would you like...?" or "Could I...?"</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>Offer a tourist a map. → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Ask if someone needs directions. → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Offer to carry someone's bag. → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Ask if you can help find a place. → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Offer a cup of coffee. → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Offer a tourist a map. → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Ask if someone needs directions. → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Offer to carry someone's bag. → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Ask if you can help find a place. → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Offer a cup of coffee. → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -5096,10 +5116,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Polite Responses (25 points)</div>
                             <p style="margin-bottom: 1rem;">Write appropriate responses.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>"Would you like some help?" (Accept) → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>"Could I borrow your map?" (Refuse politely) → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>"Would you like to join us?" (Accept) → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>"Could I ask you a question?" (Accept) → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>"Would you like some help?" (Accept) → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>"Could I borrow your map?" (Refuse politely) → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>"Would you like to join us?" (Accept) → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>"Could I ask you a question?" (Accept) → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -5120,14 +5140,14 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Map Drawing Activity (20 points)</div>
                             <p style="margin-bottom: 1rem;">Draw a simple map of your neighborhood on paper and label 8 places. List them below:</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li><input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 1"></li>
-                                <li><input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 2"></li>
-                                <li><input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 3"></li>
-                                <li><input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 4"></li>
-                                <li><input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 5"></li>
-                                <li><input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 6"></li>
-                                <li><input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 7"></li>
-                                <li><input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 8"></li>
+                                <li><input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 1"></li>
+                                <li><input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 2"></li>
+                                <li><input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 3"></li>
+                                <li><input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 4"></li>
+                                <li><input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 5"></li>
+                                <li><input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 6"></li>
+                                <li><input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 7"></li>
+                                <li><input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="Place 8"></li>
                             </ol>
                         </div>
 
@@ -5744,9 +5764,9 @@
                     <p style="margin-top: 1rem;">Complete sentences 1–5 with the correct form of the verb in parentheses.</p>
 
                     <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; margin: 1rem 0; border: 1px solid var(--border-color);">
-                        <p><strong>@JustMagical</strong> I was kind of a shy, reserved kid. I wish this foundation (1. be) <input type="text" class="worksheet-input" style="width: 120px;" placeholder="had been"> around when I was in high school!</p>
-                        <p style="margin-top: 1rem;"><strong>@tumtumtree72</strong> Lady Gaga is being a little idealistic. I wish people (2. be) <input type="text" class="worksheet-input" style="width: 120px;" placeholder="were"> kinder to each other, but usually they're not. It's human nature.</p>
-                        <p style="margin-top: 1rem;"><strong>@dudberry</strong> I love her idea. I wish more people (3. think) <input type="text" class="worksheet-input" style="width: 120px;" placeholder="thought"> like Lady Gaga! And I wish she (4. create) <input type="text" class="worksheet-input" style="width: 120px;" placeholder="had created"> this foundation sooner! I wish more parents (5. teach) <input type="text" class="worksheet-input" style="width: 120px;" placeholder="would teach"> their kids to be respectful and tolerant of others.</p>
+                        <p><strong>@JustMagical</strong> I was kind of a shy, reserved kid. I wish this foundation (1. be) <input type="text" class="worksheet-input" style="max-width:120px;width:100%;" placeholder="had been"> around when I was in high school!</p>
+                        <p style="margin-top: 1rem;"><strong>@tumtumtree72</strong> Lady Gaga is being a little idealistic. I wish people (2. be) <input type="text" class="worksheet-input" style="max-width:120px;width:100%;" placeholder="were"> kinder to each other, but usually they're not. It's human nature.</p>
+                        <p style="margin-top: 1rem;"><strong>@dudberry</strong> I love her idea. I wish more people (3. think) <input type="text" class="worksheet-input" style="max-width:120px;width:100%;" placeholder="thought"> like Lady Gaga! And I wish she (4. create) <input type="text" class="worksheet-input" style="max-width:120px;width:100%;" placeholder="had created"> this foundation sooner! I wish more parents (5. teach) <input type="text" class="worksheet-input" style="max-width:120px;width:100%;" placeholder="would teach"> their kids to be respectful and tolerant of others.</p>
                     </div>
 
                     <div class="teacher-only">
@@ -7097,11 +7117,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Personality Matching (20 points)</div>
                             <p style="margin-bottom: 1rem;">Match each personality word with its meaning.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.2;">
-                                <li>ambitious <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) likes to achieve goals</li>
-                                <li>outgoing <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) doesn't change opinion easily</li>
-                                <li>reserved <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) quiet and shy</li>
-                                <li>stubborn <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) friendly and sociable</li>
-                                <li>creative <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) good at making new things</li>
+                                <li>ambitious <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) likes to achieve goals</li>
+                                <li>outgoing <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) doesn't change opinion easily</li>
+                                <li>reserved <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) quiet and shy</li>
+                                <li>stubborn <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) friendly and sociable</li>
+                                <li>creative <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) good at making new things</li>
                             </ol>
                         </div>
 
@@ -7109,9 +7129,9 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Describing People (20 points)</div>
                             <p style="margin-bottom: 1rem;">Describe 3 people using personality words with modifiers (kind of, pretty, really, somewhat).</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>My best friend is <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>My parent is <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>My teacher is <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>My best friend is <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>My parent is <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>My teacher is <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -7119,10 +7139,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">3</span> Positive and Negative Traits (20 points)</div>
                             <p style="margin-bottom: 1rem;">Write the opposite personality trait.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>optimistic ↔ <input type="text" style="width: 200px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>generous ↔ <input type="text" style="width: 200px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>patient ↔ <input type="text" style="width: 200px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>confident ↔ <input type="text" style="width: 200px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>optimistic ↔ <input type="text" style="max-width:200px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>generous ↔ <input type="text" style="max-width:200px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>patient ↔ <input type="text" style="max-width:200px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>confident ↔ <input type="text" style="max-width:200px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -7144,11 +7164,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Present Wishes (25 points)</div>
                             <p style="margin-bottom: 1rem;">Write wishes for these present situations using "I wish (that) I..."</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>I don't have enough money. → I wish <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I'm not very confident. → I wish <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I live far from my friends. → I wish <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I don't speak French. → I wish <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I'm too shy. → I wish <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I don't have enough money. → I wish <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I'm not very confident. → I wish <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I live far from my friends. → I wish <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I don't speak French. → I wish <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I'm too shy. → I wish <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -7156,10 +7176,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Past Regrets (25 points)</div>
                             <p style="margin-bottom: 1rem;">Write regrets about the past using "I wish I had/hadn't..."</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>I didn't study for the test. → I wish <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I said something rude. → I wish <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I bought an expensive phone. → I wish <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I didn't go to the party. → I wish <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I didn't study for the test. → I wish <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I said something rude. → I wish <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I bought an expensive phone. → I wish <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I didn't go to the party. → I wish <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -7180,11 +7200,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Self-Assessment (20 points)</div>
                             <p style="margin-bottom: 1rem;">Describe yourself using 5 personality adjectives.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>I am <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I am <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I am <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I am <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I am <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I am <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I am <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I am <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I am <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I am <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -7192,9 +7212,9 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Three Wishes (30 points)</div>
                             <p style="margin-bottom: 1rem;">Write 3 wishes for your future self. Explain why.</p>
                             <ol style="padding-left: 1.5rem; line-height: 3;">
-                                <li>I wish <input type="text" style="width: 500px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I wish <input type="text" style="width: 500px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>I wish <input type="text" style="width: 500px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I wish <input type="text" style="max-width:500px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I wish <input type="text" style="max-width:500px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>I wish <input type="text" style="max-width:500px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -7443,10 +7463,10 @@
                     </div>
                     <p>Complete the sentences using the vocabulary words.</p>
                     <ol style="margin-top: 1rem; padding-left: 1.5rem; line-height: 2;">
-                        <li>The detective found a <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 100px;"></span> that helped solve the case.</li>
-                        <li style="margin-top: 0.5rem;">Scientists have a <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 100px;"></span> about why the animals disappeared.</li>
-                        <li style="margin-top: 0.5rem;">The child was found <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 100px;"></span> after being lost in the woods.</li>
-                        <li style="margin-top: 0.5rem;">The sponge can <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 100px;"></span> a lot of water.</li>
+                        <li>The detective found a <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:100px;width:100%;"></span> that helped solve the case.</li>
+                        <li style="margin-top: 0.5rem;">Scientists have a <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:100px;width:100%;"></span> about why the animals disappeared.</li>
+                        <li style="margin-top: 0.5rem;">The child was found <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:100px;width:100%;"></span> after being lost in the woods.</li>
+                        <li style="margin-top: 0.5rem;">The sponge can <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:100px;width:100%;"></span> a lot of water.</li>
                     </ol>
                     
                     <div class="teacher-only">
@@ -7533,12 +7553,12 @@
                     </div>
                     <p>Complete the sentences with the correct modal verb: <strong>must</strong>, <strong>might</strong>, <strong>could</strong>, <strong>may</strong>, <strong>can't</strong>, or <strong>couldn't</strong>.</p>
                     <ol style="margin-top: 1rem; padding-left: 1.5rem; line-height: 2.2;">
-                        <li>The door is open. Someone <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> have forgotten to lock it.</li>
-                        <li style="margin-top: 0.5rem;">She <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> be at home. Her car isn't in the driveway.</li>
-                        <li style="margin-top: 0.5rem;">It <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> rain later. The sky is getting dark.</li>
-                        <li style="margin-top: 0.5rem;">You <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> be serious! That's impossible!</li>
-                        <li style="margin-top: 0.5rem;">He <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> have seen the movie before. He knew all the lines.</li>
-                        <li style="margin-top: 0.5rem;">The ancient people <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> have built these monuments alone. They needed help.</li>
+                        <li>The door is open. Someone <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> have forgotten to lock it.</li>
+                        <li style="margin-top: 0.5rem;">She <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> be at home. Her car isn't in the driveway.</li>
+                        <li style="margin-top: 0.5rem;">It <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> rain later. The sky is getting dark.</li>
+                        <li style="margin-top: 0.5rem;">You <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> be serious! That's impossible!</li>
+                        <li style="margin-top: 0.5rem;">He <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> have seen the movie before. He knew all the lines.</li>
+                        <li style="margin-top: 0.5rem;">The ancient people <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> have built these monuments alone. They needed help.</li>
                     </ol>
                     
                     <div class="teacher-only">
@@ -7561,11 +7581,11 @@
                     </div>
                     <p>Find and correct the mistakes in these sentences.</p>
                     <ol style="margin-top: 1rem; padding-left: 1.5rem; line-height: 2.2;">
-                        <li>It might rains tomorrow. → It <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 200px;"></span></li>
-                        <li style="margin-top: 0.5rem;">She must has left already. → She <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 200px;"></span></li>
-                        <li style="margin-top: 0.5rem;">They couldn't survived the crash. → They <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 200px;"></span></li>
-                        <li style="margin-top: 0.5rem;">He can be at work now. → He <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 200px;"></span></li>
-                        <li style="margin-top: 0.5rem;">We might to go to the party. → We <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 200px;"></span></li>
+                        <li>It might rains tomorrow. → It <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:200px;width:100%;"></span></li>
+                        <li style="margin-top: 0.5rem;">She must has left already. → She <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:200px;width:100%;"></span></li>
+                        <li style="margin-top: 0.5rem;">They couldn't survived the crash. → They <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:200px;width:100%;"></span></li>
+                        <li style="margin-top: 0.5rem;">He can be at work now. → He <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:200px;width:100%;"></span></li>
+                        <li style="margin-top: 0.5rem;">We might to go to the party. → We <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:200px;width:100%;"></span></li>
                     </ol>
                     
                     <div class="teacher-only">
@@ -7711,7 +7731,7 @@
                     </div>
                     <p>Listen to Track 09 and mark each statement as True (T) or False (F).</p>
                     <div style="margin-top: 1rem;">
-                        <div style="display: grid; grid-template-columns: 3fr 1fr 1fr; gap: 0.5rem; max-width: 500px;">
+                        <div style="display: grid; grid-template-columns: 3fr 1fr 1fr; gap: 0.5rem; max-max-width:500px;width:100%;">
                             <div style="font-weight: bold; border-bottom: 2px solid var(--text); padding-bottom: 0.5rem;">Statement</div>
                             <div style="font-weight: bold; border-bottom: 2px solid var(--text); padding-bottom: 0.5rem;">T</div>
                             <div style="font-weight: bold; border-bottom: 2px solid var(--text); padding-bottom: 0.5rem;">F</div>
@@ -7943,19 +7963,19 @@
                     <div style="margin-top: 1rem; line-height: 2;">
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center; padding: 0.5rem; background: rgba(0,0,0,0.05); border-radius: 6px;">
                             <span>1. a person who studies ancient societies</span>
-                            <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 150px;"></span>
+                            <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:150px;width:100%;"></span>
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center; padding: 0.5rem; background: rgba(0,0,0,0.02); border-radius: 6px;">
                             <span>2. unusual and from a faraway place</span>
-                            <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 150px;"></span>
+                            <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:150px;width:100%;"></span>
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center; padding: 0.5rem; background: rgba(0,0,0,0.05); border-radius: 6px;">
                             <span>3. movement from one place to another</span>
-                            <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 150px;"></span>
+                            <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:150px;width:100%;"></span>
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center; padding: 0.5rem; background: rgba(0,0,0,0.02); border-radius: 6px;">
                             <span>4. to form opinions without knowing all facts</span>
-                            <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 150px;"></span>
+                            <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:150px;width:100%;"></span>
                         </div>
                     </div>
                     
@@ -8611,10 +8631,10 @@
                     </div>
                     <p>Complete each sentence with the correct form of the word in parentheses.</p>
                     <ol style="margin-top: 1rem; padding-left: 1.5rem; line-height: 2;">
-                        <li>The detective found an important <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span>. (clue)</li>
-                        <li style="margin-top: 0.5rem;">Scientists hope to <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> the truth. (uncover)</li>
-                        <li style="margin-top: 0.5rem;">The mystery has an unexpected <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span>. (twist)</li>
-                        <li style="margin-top: 0.5rem;">Be careful of your <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span>. (surroundings)</li>
+                        <li>The detective found an important <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span>. (clue)</li>
+                        <li style="margin-top: 0.5rem;">Scientists hope to <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> the truth. (uncover)</li>
+                        <li style="margin-top: 0.5rem;">The mystery has an unexpected <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span>. (twist)</li>
+                        <li style="margin-top: 0.5rem;">Be careful of your <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span>. (surroundings)</li>
                     </ol>
                     
                     <div class="teacher-only">
@@ -8629,9 +8649,9 @@
                     </div>
                     <p>Complete the sentences with an appropriate modal verb.</p>
                     <ol style="margin-top: 1rem; padding-left: 1.5rem; line-height: 2;">
-                        <li>The ancient people <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> have used simple tools to build the monument. (possibility)</li>
-                        <li style="margin-top: 0.5rem;">She <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> be tired. She worked all night. (strong certainty)</li>
-                        <li style="margin-top: 0.5rem;">It <span style="border-bottom: 1px solid var(--text); display: inline-block; min-width: 80px;"></span> have been aliens. That's impossible! (impossibility)</li>
+                        <li>The ancient people <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> have used simple tools to build the monument. (possibility)</li>
+                        <li style="margin-top: 0.5rem;">She <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> be tired. She worked all night. (strong certainty)</li>
+                        <li style="margin-top: 0.5rem;">It <span style="border-bottom: 1px solid var(--text); display: inline-block; min-max-width:80px;width:100%;"></span> have been aliens. That's impossible! (impossibility)</li>
                     </ol>
                     
                     <div class="teacher-only">
@@ -8801,11 +8821,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Mystery Words Matching (20 points)</div>
                             <p style="margin-bottom: 1rem;">Match each word with its definition.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.2;">
-                                <li>evidence <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) someone who saw a crime</li>
-                                <li>suspect <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) proof that something happened</li>
-                                <li>clue <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) person who might be guilty</li>
-                                <li>witness <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) information that helps solve a mystery</li>
-                                <li>investigate <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) look for information</li>
+                                <li>evidence <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) someone who saw a crime</li>
+                                <li>suspect <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) proof that something happened</li>
+                                <li>clue <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) person who might be guilty</li>
+                                <li>witness <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) information that helps solve a mystery</li>
+                                <li>investigate <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) look for information</li>
                             </ol>
                         </div>
 
@@ -8813,10 +8833,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Crime Scene Vocabulary (20 points)</div>
                             <p style="margin-bottom: 1rem;">Fill in the blanks with mystery words.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>The <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> examined the fingerprints at the crime scene.</li>
-                                <li>The police found a <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> that led them to the thief.</li>
-                                <li>His <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> was that he was at home all night.</li>
-                                <li>They need more <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> before they can arrest anyone.</li>
+                                <li>The <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> examined the fingerprints at the crime scene.</li>
+                                <li>The police found a <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> that led them to the thief.</li>
+                                <li>His <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> was that he was at home all night.</li>
+                                <li>They need more <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> before they can arrest anyone.</li>
                             </ol>
                         </div>
 
@@ -8824,9 +8844,9 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">3</span> Mystery Story Words (20 points)</div>
                             <p style="margin-bottom: 1rem;">Write a sentence using each word.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>solve → <input type="text" style="width: 450px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>mystery → <input type="text" style="width: 450px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>theory → <input type="text" style="width: 450px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>solve → <input type="text" style="max-width:450px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>mystery → <input type="text" style="max-width:450px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>theory → <input type="text" style="max-width:450px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -8848,12 +8868,12 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Making Deductions (30 points)</div>
                             <p style="margin-bottom: 1rem;">Complete the sentences with must, might, could, may, or can't.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>She knows all the answers. She <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be very smart.</li>
-                                <li>It's 3 AM and the lights are on. They <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> still be awake.</li>
-                                <li>He hasn't arrived yet. He <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be stuck in traffic.</li>
-                                <li>That's impossible! It <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be true!</li>
-                                <li>Look at those clouds. It <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> rain later.</li>
-                                <li>She's wearing a coat. It <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be cold outside.</li>
+                                <li>She knows all the answers. She <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be very smart.</li>
+                                <li>It's 3 AM and the lights are on. They <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> still be awake.</li>
+                                <li>He hasn't arrived yet. He <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be stuck in traffic.</li>
+                                <li>That's impossible! It <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be true!</li>
+                                <li>Look at those clouds. It <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> rain later.</li>
+                                <li>She's wearing a coat. It <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be cold outside.</li>
                             </ol>
                         </div>
 
@@ -8861,10 +8881,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Past Modals (20 points)</div>
                             <p style="margin-bottom: 1rem;">Write sentences about the past using past modals.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>The door was open. Someone <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (forget to lock it).</li>
-                                <li>She didn't answer. She <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (not hear) the phone.</li>
-                                <li>The window is broken. A ball <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (hit) it.</li>
-                                <li>He had the key. It <input type="text" style="width: 350px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (be) him.</li>
+                                <li>The door was open. Someone <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (forget to lock it).</li>
+                                <li>She didn't answer. She <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (not hear) the phone.</li>
+                                <li>The window is broken. A ball <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (hit) it.</li>
+                                <li>He had the key. It <input type="text" style="max-width:350px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> (be) him.</li>
                             </ol>
                         </div>
 
@@ -8885,10 +8905,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Detective Character Profile (20 points)</div>
                             <p style="margin-bottom: 1rem;">Create a detective character:</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>Name: <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Age: <input type="text" style="width: 100px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Personality (3 traits): <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Special skill: <input type="text" style="width: 300px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Name: <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Age: <input type="text" style="max-width:100px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Personality (3 traits): <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Special skill: <input type="text" style="max-width:300px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -9660,11 +9680,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Technology Words Matching (20 points)</div>
                             <p style="margin-bottom: 1rem;">Match each word with its definition.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.2;">
-                                <li>artificial intelligence <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) computer-generated environment</li>
-                                <li>virtual reality <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) computers that can think and learn</li>
-                                <li>innovation <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) copy data to your computer</li>
-                                <li>download <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) new idea or method</li>
-                                <li>device <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) piece of electronic equipment</li>
+                                <li>artificial intelligence <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (a) computer-generated environment</li>
+                                <li>virtual reality <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (b) computers that can think and learn</li>
+                                <li>innovation <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (c) copy data to your computer</li>
+                                <li>download <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (d) new idea or method</li>
+                                <li>device <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; margin: 0 0.5rem;"> (e) piece of electronic equipment</li>
                             </ol>
                         </div>
 
@@ -9672,10 +9692,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Internet & Tech Phrases (20 points)</div>
                             <p style="margin-bottom: 1rem;">Complete the sentences with technology words.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>I need to <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> my phone to get the new app.</li>
-                                <li>Let me <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> this video to YouTube.</li>
-                                <li>The <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> is very slow today.</li>
-                                <li>I use a <input type="text" style="width: 150px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> to protect my computer.</li>
+                                <li>I need to <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> my phone to get the new app.</li>
+                                <li>Let me <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> this video to YouTube.</li>
+                                <li>The <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> is very slow today.</li>
+                                <li>I use a <input type="text" style="max-width:150px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> to protect my computer.</li>
                             </ol>
                         </div>
 
@@ -9683,11 +9703,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">3</span> Technology Timeline (20 points)</div>
                             <p style="margin-bottom: 1rem;">Put these inventions in order (1-5):</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>Smartphone <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Television <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Computer <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Internet <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Radio <input type="text" style="width: 80px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Smartphone <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Television <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Computer <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Internet <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Radio <input type="text" style="max-width:80px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -9709,12 +9729,12 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Will vs. Going To (30 points)</div>
                             <p style="margin-bottom: 1rem;">Complete with will or going to.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>Look at those black clouds. It <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> rain.</li>
-                                <li>I think robots <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> do all our housework one day.</li>
-                                <li>I've decided. I <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> study computer science.</li>
-                                <li>"The phone is ringing!" "I <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> answer it."</li>
-                                <li>We <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> have a test tomorrow. (announced)</li>
-                                <li>I promise I <input type="text" style="width: 120px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be careful with your laptop.</li>
+                                <li>Look at those black clouds. It <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> rain.</li>
+                                <li>I think robots <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> do all our housework one day.</li>
+                                <li>I've decided. I <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> study computer science.</li>
+                                <li>"The phone is ringing!" "I <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> answer it."</li>
+                                <li>We <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> have a test tomorrow. (announced)</li>
+                                <li>I promise I <input type="text" style="max-width:120px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"> be careful with your laptop.</li>
                             </ol>
                         </div>
 
@@ -9722,10 +9742,10 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> Present Continuous for Future (20 points)</div>
                             <p style="margin-bottom: 1rem;">Write sentences using present continuous for future arrangements.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>Tomorrow / I / meet / my friend → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Next week / we / visit / grandparents → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Tonight / they / watch / movie → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>On Sunday / she / fly / to Paris → <input type="text" style="width: 400px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Tomorrow / I / meet / my friend → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Next week / we / visit / grandparents → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Tonight / they / watch / movie → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>On Sunday / she / fly / to Paris → <input type="text" style="max-width:400px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -9746,11 +9766,11 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">1</span> Future Predictions (20 points)</div>
                             <p style="margin-bottom: 1rem;">Write 5 predictions about technology in 2050 using will or going to.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>By 2050, <input type="text" style="width: 500px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>People <input type="text" style="width: 500px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Cars <input type="text" style="width: 500px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Schools <input type="text" style="width: 500px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>We <input type="text" style="width: 500px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>By 2050, <input type="text" style="max-width:500px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>People <input type="text" style="max-width:500px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Cars <input type="text" style="max-width:500px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Schools <input type="text" style="max-width:500px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>We <input type="text" style="max-width:500px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
@@ -9758,9 +9778,9 @@
                             <div class="exercise-title" style="font-weight: bold; color: var(--primary); margin-bottom: 1rem;"><span style="background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 50%; margin-right: 0.5rem;">2</span> My Future Plans (30 points)</div>
                             <p style="margin-bottom: 1rem;">Write about your plans using going to or present continuous.</p>
                             <ol style="padding-left: 1.5rem; line-height: 2.5;">
-                                <li>Next year: <input type="text" style="width: 450px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>In 5 years: <input type="text" style="width: 450px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
-                                <li>Next weekend: <input type="text" style="width: 450px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Next year: <input type="text" style="max-width:450px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>In 5 years: <input type="text" style="max-width:450px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
+                                <li>Next weekend: <input type="text" style="max-width:450px;width:100%; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;"></li>
                             </ol>
                         </div>
 
