@@ -3166,11 +3166,22 @@
                         <div class="dashboard-widget">
                             <div class="widget-title">
                                 <strong><i class="fas fa-chalkboard"></i> My Canvas Links</strong>
-                                <button class="widget-add-btn" onclick="toggleQuickLinkForm()">+ Add Course</button>
+                                <button class="widget-add-btn" onclick="toggleQuickLinkForm()">+ Add Link</button>
                             </div>
+                            <p style="color:var(--gray-400);font-size:0.78rem;margin:0 0 10px;">Paste any Canvas course, worksheet, assignment, or live website URL you have created.</p>
                             <div id="quickLinkForm" class="dashboard-form" style="display:none;">
-                                <input id="quickLinkTitle" type="text" placeholder="Course or module name (e.g. Level 11 Writing)">
-                                <input id="quickLinkUrl" type="text" placeholder="Canvas URL (e.g. https://aii.instructure.com/courses/123)">
+                                <input id="quickLinkTitle" type="text" placeholder="Name (e.g. Level 11 Writing Worksheet)">
+                                <div class="dashboard-form-row">
+                                    <select id="quickLinkType">
+                                        <option value="Course">Course</option>
+                                        <option value="Worksheet">Worksheet</option>
+                                        <option value="Assignment">Assignment</option>
+                                        <option value="Quiz">Quiz</option>
+                                        <option value="Live Site">Live Site</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <input id="quickLinkUrl" type="text" placeholder="Paste your Canvas or website URL here">
+                                </div>
                                 <div class="dashboard-form-actions">
                                     <button class="btn-cancel" onclick="toggleQuickLinkForm()">Cancel</button>
                                     <button class="btn-save" onclick="saveQuickLink()">Save</button>
@@ -4260,6 +4271,7 @@ function toggleQuickLinkForm() {
 function saveQuickLink() {
     var title = document.getElementById('quickLinkTitle').value.trim();
     var url = document.getElementById('quickLinkUrl').value.trim();
+    var type = document.getElementById('quickLinkType').value;
 
     if (!title || !url) {
         showToast('Please enter both a title and URL');
@@ -4271,13 +4283,14 @@ function saveQuickLink() {
     }
 
     var links = getTeacherQuickLinks();
-    links.push({ id: generateId(), title: title, url: url });
+    links.push({ id: generateId(), title: title, url: url, type: type });
     saveTeacherQuickLinks(links);
     renderTeacherDashboard();
     toggleQuickLinkForm();
     document.getElementById('quickLinkTitle').value = '';
     document.getElementById('quickLinkUrl').value = '';
-    showToast('Quick link saved');
+    document.getElementById('quickLinkType').value = 'Course';
+    showToast(type + ' link saved');
 }
 
 function deleteQuickLink(id) {
@@ -4370,7 +4383,7 @@ function renderTeacherDashboard() {
                 return '<div class="quick-link-card" style="position:relative;">'
                     + '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:1;">'
                     + '<span class="quick-link-icon custom"><i class="fas fa-link"></i></span>'
-                    + '<div class="quick-link-text"><strong>' + escapeHtml(item.title) + '</strong><span>My Canvas Link</span></div>'
+                    + '<div class="quick-link-text"><strong>' + escapeHtml(item.title) + '</strong><span>' + escapeHtml(item.type || 'Link') + '</span></div>'
                     + '</a>'
                     + '<button onclick="deleteQuickLink(\'' + item.id + '\')" title="Remove" style="position:absolute;top:4px;right:4px;background:rgba(255,255,255,0.08);border:none;border-radius:6px;color:var(--gray-400);width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.6rem;padding:0;"><i class="fas fa-times"></i></button>'
                     + '</div>';
@@ -4568,9 +4581,11 @@ function enterDemoMode() {
     var demoLinksKey = getTeacherScopedKey('ryshubQuickLinks', DEMO_PROFILE.email);
     if (!localStorage.getItem(demoLinksKey)) {
         localStorage.setItem(demoLinksKey, JSON.stringify([
-            { id: generateId(), title: 'Level 11 Writing', url: 'https://aii.instructure.com/courses/101' },
-            { id: generateId(), title: 'TOEFL Prep Module', url: 'https://aii.instructure.com/courses/205' },
-            { id: generateId(), title: 'Grammar Workshop', url: 'https://aii.instructure.com/courses/312' }
+            { id: generateId(), title: 'Level 11 Writing', url: 'https://aii.instructure.com/courses/101', type: 'Course' },
+            { id: generateId(), title: 'TOEFL Prep Module', url: 'https://aii.instructure.com/courses/205', type: 'Course' },
+            { id: generateId(), title: 'Grammar Workshop', url: 'https://aii.instructure.com/courses/312', type: 'Course' },
+            { id: generateId(), title: 'Unit 7 Vocab Worksheet', url: 'https://aii.instructure.com/courses/101/assignments/501', type: 'Worksheet' },
+            { id: generateId(), title: 'Midterm Quiz', url: 'https://aii.instructure.com/courses/205/quizzes/88', type: 'Quiz' }
         ]));
     }
 
