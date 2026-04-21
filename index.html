@@ -3162,15 +3162,15 @@
                             </ul>
                         </div>
 
-                        <!-- Connected Tools Widget -->
+                        <!-- My Canvas Links Widget -->
                         <div class="dashboard-widget">
                             <div class="widget-title">
-                                <strong><i class="fas fa-plug"></i> Connected Tools</strong>
-                                <button class="widget-add-btn" onclick="toggleQuickLinkForm()">+ Add Link</button>
+                                <strong><i class="fas fa-chalkboard"></i> My Canvas Links</strong>
+                                <button class="widget-add-btn" onclick="toggleQuickLinkForm()">+ Add Course</button>
                             </div>
                             <div id="quickLinkForm" class="dashboard-form" style="display:none;">
-                                <input id="quickLinkTitle" type="text" placeholder="Link title (e.g. Google Classroom)">
-                                <input id="quickLinkUrl" type="text" placeholder="URL (e.g. https://classroom.google.com)">
+                                <input id="quickLinkTitle" type="text" placeholder="Course or module name (e.g. Level 11 Writing)">
+                                <input id="quickLinkUrl" type="text" placeholder="Canvas URL (e.g. https://aii.instructure.com/courses/123)">
                                 <div class="dashboard-form-actions">
                                     <button class="btn-cancel" onclick="toggleQuickLinkForm()">Cancel</button>
                                     <button class="btn-save" onclick="saveQuickLink()">Save</button>
@@ -3187,12 +3187,11 @@
                                 <a href="https://canvas.instructure.com" target="_blank" rel="noopener noreferrer" class="quick-link-card">
                                     <span class="quick-link-icon canvas"><i class="fas fa-graduation-cap"></i></span>
                                     <div class="quick-link-text">
-                                        <strong>Canvas LMS</strong>
+                                        <strong>Canvas Home</strong>
                                         <span>Launch Canvas</span>
                                     </div>
                                 </a>
                             </div>
-                            <ul class="saved-links-list" id="savedLinksList" style="margin-top:10px;"></ul>
                         </div>
                     </div>
 
@@ -4355,21 +4354,28 @@ function renderTeacherDashboard() {
             }
         }
 
-        // Render quick links
-        var savedLinksList = document.getElementById('savedLinksList');
-        if (savedLinksList) {
+        // Render quick links as cards in the grid
+        var quickLinksGrid = document.getElementById('quickLinksGrid');
+        if (quickLinksGrid) {
             var links = getTeacherQuickLinks();
-            if (links.length === 0) {
-                savedLinksList.style.display = 'none';
-            } else {
-                savedLinksList.style.display = 'grid';
-                savedLinksList.innerHTML = links.map(function(item) {
-                    return '<li class="saved-link-item">'
-                        + '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.title) + '</a>'
-                        + '<div class="item-actions"><button onclick="deleteQuickLink(\'' + item.id + '\')" title="Remove"><i class="fas fa-trash"></i></button></div>'
-                        + '</li>';
-                }).join('');
-            }
+            var baseCards = '<a href="https://classroom.google.com" target="_blank" rel="noopener noreferrer" class="quick-link-card">'
+                + '<span class="quick-link-icon google"><i class="fab fa-google"></i></span>'
+                + '<div class="quick-link-text"><strong>Google Classroom</strong><span>Launch Classroom</span></div>'
+                + '</a>'
+                + '<a href="https://canvas.instructure.com" target="_blank" rel="noopener noreferrer" class="quick-link-card">'
+                + '<span class="quick-link-icon canvas"><i class="fas fa-graduation-cap"></i></span>'
+                + '<div class="quick-link-text"><strong>Canvas Home</strong><span>Launch Canvas</span></div>'
+                + '</a>';
+            var customCards = links.map(function(item) {
+                return '<div class="quick-link-card" style="position:relative;">'
+                    + '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:1;">'
+                    + '<span class="quick-link-icon custom"><i class="fas fa-link"></i></span>'
+                    + '<div class="quick-link-text"><strong>' + escapeHtml(item.title) + '</strong><span>My Canvas Link</span></div>'
+                    + '</a>'
+                    + '<button onclick="deleteQuickLink(\'' + item.id + '\')" title="Remove" style="position:absolute;top:4px;right:4px;background:rgba(255,255,255,0.08);border:none;border-radius:6px;color:var(--gray-400);width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.6rem;padding:0;"><i class="fas fa-times"></i></button>'
+                    + '</div>';
+            }).join('');
+            quickLinksGrid.innerHTML = baseCards + customCards;
         }
     } else {
         // Teacher mode but no teacher signed in: show generic focus stream + sign-in prompt
@@ -4562,8 +4568,9 @@ function enterDemoMode() {
     var demoLinksKey = getTeacherScopedKey('ryshubQuickLinks', DEMO_PROFILE.email);
     if (!localStorage.getItem(demoLinksKey)) {
         localStorage.setItem(demoLinksKey, JSON.stringify([
-            { id: generateId(), title: 'Level 11 Writing Folder', url: 'https://drive.google.com/drive/folders/example' },
-            { id: generateId(), title: 'TOEFL Practice Materials', url: 'https://www.ets.org/toefl/test-takers/ibt/prepare/' }
+            { id: generateId(), title: 'Level 11 Writing', url: 'https://aii.instructure.com/courses/101' },
+            { id: generateId(), title: 'TOEFL Prep Module', url: 'https://aii.instructure.com/courses/205' },
+            { id: generateId(), title: 'Grammar Workshop', url: 'https://aii.instructure.com/courses/312' }
         ]));
     }
 
