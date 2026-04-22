@@ -46,6 +46,18 @@
             color: var(--gray-100);
         }
         
+        /* Full-page background image */
+        .page-bg-image {
+            position: fixed;
+            inset: 0;
+            inline-size: 100%;
+            block-size: 100%;
+            background: url('AI.jpg') center center / cover no-repeat;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
         /* Static Overlay */
         #static-overlay {
             position: fixed;
@@ -596,6 +608,14 @@
                 radial-gradient(circle at 86% 24%, rgba(6,182,212,0.2), transparent 42%),
                 linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #0e7490 100%);
             overflow: hidden;
+        }
+        .hb-bg-image {
+            position: absolute;
+            inset: 0;
+            background: url('AI.jpg') center center / cover no-repeat;
+            opacity: 0.18;
+            z-index: 0;
+            pointer-events: none;
         }
         .hero-banner-coded::before {
             content: '';
@@ -2287,6 +2307,101 @@
         .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999; }
         .menu-overlay.open { opacity: 1; visibility: visible; }
 
+        /* Right Slide Panel */
+        .slide-panel-right {
+            position: fixed;
+            inset-inline-end: 0;
+            inset-block-start: 92px;
+            block-size: calc(100vh - 92px);
+            inline-size: 220px;
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+            background: linear-gradient(180deg, var(--gray-900) 0%, var(--gray-800) 100%);
+            border-inline-start: 1px solid var(--gray-700);
+            transform: translateX(186px);
+            transition: transform 0.28s ease;
+            z-index: 1000;
+            box-shadow: -4px 0 24px rgba(0,0,0,.4);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(59,130,246,.55) rgba(255,255,255,.05);
+        }
+        .slide-panel-right.open { transform: translateX(0); }
+        .panel-tab-right {
+            position: absolute;
+            inset-inline-start: -34px;
+            inset-block-start: 0;
+            transform: none;
+            inline-size: 34px;
+            block-size: 72px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            border-radius: 10px 0 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: -4px 0 18px rgba(37,99,235,.35);
+            transition: all 0.2s ease;
+        }
+        .panel-tab-right:hover { box-shadow: -6px 0 24px rgba(37,99,235,.5); filter: brightness(1.05); }
+        .panel-tab-right i { color: white; font-size: 1rem; animation: pulse 2s infinite; transition: transform 0.2s ease; }
+        .panel-header { padding: 20px 14px; border-block-end: 1px solid var(--gray-700); background: linear-gradient(225deg, rgba(37,99,235,.2), transparent); }
+        .panel-header h3 { margin: 0; color: var(--white); font-size: 1rem; font-weight: 700; }
+        .panel-header p { margin: 4px 0 0; color: var(--gray-400); font-size: 0.78rem; }
+        .panel-nav { flex: 1 1 auto; padding: 10px 10px 14px; overflow-y: auto; min-block-size: 0; display: flex; flex-direction: column; gap: 8px; }
+        .panel-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            color: #f8fbff;
+            text-decoration: none;
+            transition: all 0.18s ease;
+            border: 1px solid rgba(125, 211, 252, 0.16);
+            border-radius: 10px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            background: linear-gradient(180deg, rgba(18,38,74,0.96) 0%, rgba(9,20,43,0.98) 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 3px 0 rgba(2,6,23,0.8), 0 8px 14px rgba(2,6,23,0.28);
+            cursor: pointer;
+        }
+        .panel-item:hover {
+            background: linear-gradient(180deg, rgba(29,78,216,0.92) 0%, rgba(15,23,42,0.98) 100%);
+            border-color: rgba(96,165,250,0.5);
+            transform: translateY(-1px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 0 rgba(2,6,23,0.78), 0 10px 18px rgba(37,99,235,0.24);
+        }
+        .panel-item:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 1px 0 rgba(2,6,23,0.8), 0 4px 10px rgba(2,6,23,0.24);
+        }
+        .panel-item i {
+            inline-size: 18px;
+            text-align: center;
+            color: #9bd7ff;
+            filter: drop-shadow(0 0 6px rgba(37,99,235,0.4));
+            font-size: 0.82rem;
+        }
+        .panel-item span {
+            flex: 1;
+            color: #ffffff;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.14), 0 0 10px rgba(37,99,235,0.45);
+            transform: translateY(1px);
+        }
+        .panel-item.active {
+            background: linear-gradient(180deg, rgba(37,99,235,0.92) 0%, rgba(15,23,42,1) 100%);
+            border-color: rgba(147,197,253,0.62);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 3px 0 rgba(2,6,23,0.8), 0 12px 18px rgba(37,99,235,0.28);
+        }
+        .panel-footer { position: sticky; inset-block-end: 0; margin-block-start: auto; padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px)); border-block-start: 1px solid var(--gray-700); background: linear-gradient(180deg, rgba(17,24,39,.96), rgba(11,15,25,.98)); }
+        .slide-panel-right::-webkit-scrollbar { inline-size: 8px; }
+        .slide-panel-right::-webkit-scrollbar-track { background: rgba(255,255,255,.04); }
+        .slide-panel-right::-webkit-scrollbar-thumb { background: rgba(59,130,246,.55); border-radius: 999px; }
+        .panel-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999; }
+        .panel-overlay.open { opacity: 1; visibility: visible; }
+
         /* Nav active state - Light */
         .nav-3d.active-nav {
             background: linear-gradient(180deg, rgba(37,99,235,.12) 0%, rgba(37,99,235,.04) 100%);
@@ -2547,10 +2662,12 @@
 
             body {
                 padding-inline-start: 0;
+                padding-inline-end: 0;
             }
 
             .glass-header {
                 inset-inline-start: 0;
+                inset-inline-end: 0;
             }
 
             .slide-menu {
@@ -2562,6 +2679,18 @@
             }
 
             .menu-tab {
+                display: flex;
+            }
+
+            .slide-panel-right {
+                transform: translateX(100%);
+            }
+
+            .slide-panel-right.open {
+                transform: translateX(0);
+            }
+
+            .panel-tab-right {
                 display: flex;
             }
 
@@ -2732,6 +2861,7 @@
     </style>
 </head>
 <body>
+<div class="page-bg-image" aria-hidden="true"></div>
 <canvas id="neuron-canvas"></canvas>
 <div id="static-overlay" aria-hidden="true"></div>
 
@@ -2866,10 +2996,66 @@
 </div>
 <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 
+<!-- Right Slide Panel -->
+<div class="slide-panel-right" id="slidePanelRight">
+    <div class="panel-tab-right" onclick="toggleRightPanel()" title="Quick Tools">
+        <i class="fas fa-chevron-left"></i>
+    </div>
+    <div class="panel-header">
+        <h3><i class="fas fa-toolbox" style="color: var(--primary-light); margin-inline-end: 10px;"></i>Quick Tools</h3>
+        <p>Teacher utilities &amp; links</p>
+    </div>
+    <nav class="panel-nav">
+        <a href="#" class="panel-item" onclick="showToast('Timer tool coming soon!'); toggleRightPanel(); return false;">
+            <i class="fas fa-stopwatch"></i><span>Class Timer</span>
+        </a>
+        <a href="#" class="panel-item" onclick="showToast('Random picker coming soon!'); toggleRightPanel(); return false;">
+            <i class="fas fa-random"></i><span>Student Picker</span>
+        </a>
+        <a href="#" class="panel-item" onclick="showToast('Score tracker coming soon!'); toggleRightPanel(); return false;">
+            <i class="fas fa-chart-line"></i><span>Score Tracker</span>
+        </a>
+        <a href="#" class="panel-item" onclick="showToast('Whiteboard coming soon!'); toggleRightPanel(); return false;">
+            <i class="fas fa-pen-square"></i><span>Quick Whiteboard</span>
+        </a>
+        <a href="#" class="panel-item" onclick="openProtectedPage('apps/toefl/index.html', 'TOEFL iBT'); toggleRightPanel(); return false;">
+            <i class="fas fa-graduation-cap"></i><span>TOEFL iBT</span>
+        </a>
+        <a href="#" class="panel-item" onclick="openProtectedBook2b(); toggleRightPanel(); return false;">
+            <i class="fas fa-book-open"></i><span>World Class 2B</span>
+        </a>
+        <a href="apps/games/index.html" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-gamepad"></i><span>Game Arcade</span>
+        </a>
+        <a href="https://app.box.com/s/izbnvr08d4vxmt1bp3np99oceowpywpf" target="_blank" rel="noopener noreferrer" class="panel-item">
+            <i class="fas fa-box-open"></i><span>Shared Files</span>
+        </a>
+        <a href="#" class="panel-item" onclick="showToast('EduGrade Pro coming soon!'); toggleRightPanel(); return false;">
+            <i class="fas fa-brain"></i><span>EduGrade Pro</span>
+        </a>
+        <a href="#" class="panel-item" onclick="showToast('Word Practice coming soon!'); toggleRightPanel(); return false;">
+            <i class="fas fa-pencil-alt"></i><span>Word Practice</span>
+        </a>
+    </nav>
+    <div class="panel-footer">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="inline-size: 36px; block-size: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark)); display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-bolt" style="color: white; font-size: 0.9rem;"></i>
+            </div>
+            <div>
+                <div style="font-weight: 600; color: var(--white); font-size: 0.9rem;">Teacher Tools</div>
+                <div style="color: var(--gray-400); font-size: 0.75rem;">Quick access utilities</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-overlay" id="panelOverlayRight" onclick="toggleRightPanel()"></div>
+
     <!-- Hero -->
 <section class="hero-section" id="topHome">
     <div class="hero-banner">
         <div class="hero-banner-coded">
+            <div class="hb-bg-image"></div>
             <div class="hb-top">
                 <div class="hb-chip"><i class="fas fa-chalkboard-teacher" aria-hidden="true"></i> ESL Teachers Hub</div>
                 <div class="hb-chip"><i class="fas fa-sparkles" aria-hidden="true"></i> <span id="hbTopChip">Coded Visual Banner</span></div>
@@ -4660,6 +4846,17 @@ function toggleMenu() {
     overlay.classList.toggle('open', isOpen);
     if (icon) {
         icon.className = isOpen ? 'fas fa-chevron-left' : 'fas fa-chevron-right';
+    }
+}
+
+function toggleRightPanel() {
+    const panel = document.getElementById('slidePanelRight');
+    const overlay = document.getElementById('panelOverlayRight');
+    const icon = panel.querySelector('.panel-tab-right i');
+    const isOpen = panel.classList.toggle('open');
+    overlay.classList.toggle('open', isOpen);
+    if (icon) {
+        icon.className = isOpen ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
     }
 }
 
