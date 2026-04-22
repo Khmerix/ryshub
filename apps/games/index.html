@@ -528,6 +528,115 @@
             .live-counter-grid { grid-template-columns: 1fr; }
             .mini-game-grid { grid-template-columns: 1fr; }
         }
+
+        /* Theme Toggle */
+        .theme-toggle-mini {
+            position: fixed;
+            inset-inline-end: 24px;
+            inset-block-end: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(15, 23, 42, 0.88);
+            color: #fff;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.24);
+            backdrop-filter: blur(12px);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 200;
+        }
+        .theme-toggle-mini:hover {
+            transform: translateY(-1px);
+            border-color: rgba(96,165,250,0.45);
+            box-shadow: 0 10px 22px rgba(37,99,235,0.18);
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            background: linear-gradient(180deg, #eef4ff 0%, #f8fbff 100%);
+            color: #0f172a;
+        }
+        body.light-theme .glass-header {
+            background: rgba(255,255,255,0.82);
+            border-block-end-color: rgba(37,99,235,0.12);
+        }
+        body.light-theme .brand-title,
+        body.light-theme .hero-title,
+        body.light-theme .section-intro h2 {
+            color: #0f172a;
+        }
+        body.light-theme .hero-subtitle,
+        body.light-theme .section-intro p {
+            color: #475569;
+        }
+        body.light-theme .hero-badge {
+            background: rgba(37,99,235,0.08);
+            border-color: rgba(37,99,235,0.18);
+        }
+        body.light-theme .score-spotlight,
+        body.light-theme .score-list {
+            background: rgba(255,255,255,0.82);
+            border-color: rgba(15,23,42,0.08);
+            box-shadow: 0 14px 28px rgba(15,23,42,0.08);
+        }
+        body.light-theme .score-spotlight p,
+        body.light-theme .score-game span,
+        body.light-theme .mini-game-card p {
+            color: #475569;
+        }
+        body.light-theme .score-game strong,
+        body.light-theme .score-spotlight h3,
+        body.light-theme .mini-game-head strong {
+            color: #0f172a;
+        }
+        body.light-theme .score-meta-card {
+            background: rgba(15,23,42,0.04);
+            border-color: rgba(15,23,42,0.08);
+        }
+        body.light-theme .score-meta-card strong {
+            color: #0f172a;
+        }
+        body.light-theme .score-meta-card span {
+            color: #64748b;
+        }
+        body.light-theme .mini-game-card {
+            background: rgba(255,255,255,0.85);
+            border-color: rgba(15,23,42,0.08);
+            box-shadow: 0 14px 28px rgba(15,23,42,0.08);
+        }
+        body.light-theme .mini-game-card:hover {
+            border-color: rgba(37,99,235,0.2);
+            box-shadow: 0 20px 40px rgba(15,23,42,0.14);
+        }
+        body.light-theme .mini-game-tag {
+            background: rgba(37,99,235,0.08);
+            border-color: rgba(37,99,235,0.18);
+            color: #1d4ed8;
+        }
+        body.light-theme .mini-game-tag.coming {
+            background: rgba(245,158,11,0.1);
+            border-color: rgba(245,158,11,0.3);
+            color: #b45309;
+        }
+        body.light-theme .hb-chip {
+            background: rgba(255,255,255,0.7);
+            border-color: rgba(15,23,42,0.12);
+            color: #0f172a;
+        }
+        body.light-theme .page-bg-image {
+            opacity: 0.06;
+        }
+        body.light-theme .theme-toggle-mini {
+            background: rgba(255,255,255,0.92);
+            color: #0f172a;
+            border-color: rgba(37,99,235,0.14);
+        }
     </style>
 </head>
 <body>
@@ -552,6 +661,10 @@
             <a href="../../index.html" class="nav-3d">
                 <i class="fas fa-arrow-left"></i> Back to Hub
             </a>
+            <button class="theme-toggle-mini" onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle dark and light mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+                <span id="themeLabel">Dark</span>
+            </button>
         </div>
     </div>
 </header>
@@ -919,6 +1032,29 @@ document.addEventListener('keydown', function(e) {
     }
     animate();
 })();
+
+/* ===== Theme Toggle ===== */
+(function(){
+    var saved = localStorage.getItem('ryshubTheme');
+    if (saved === 'light') {
+        document.body.classList.add('light-theme');
+        updateThemeUI(true);
+    }
+})();
+
+function updateThemeUI(isLight) {
+    var icon = document.getElementById('themeIcon');
+    var label = document.getElementById('themeLabel');
+    if (!icon || !label) return;
+    icon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+    label.textContent = isLight ? 'Light' : 'Dark';
+}
+
+function toggleTheme() {
+    var isLight = document.body.classList.toggle('light-theme');
+    updateThemeUI(isLight);
+    localStorage.setItem('ryshubTheme', isLight ? 'light' : 'dark');
+}
 
 initGameScores();
 renderMiniGamesSection();
