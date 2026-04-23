@@ -1079,14 +1079,6 @@
             line-height: 1.65;
         }
 
-        .command-center-section {
-            max-inline-size: 1100px;
-            margin: 0 auto 28px;
-            padding: 0 24px 24px;
-            position: relative;
-            z-index: 10;
-        }
-
         .classroom-lab-section {
             max-inline-size: 1100px;
             margin: 0 auto 32px;
@@ -1281,527 +1273,6 @@
             }
         }
 
-        .command-center {
-            position: relative;
-            overflow: hidden;
-            border-radius: 26px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background:
-                radial-gradient(circle at 12% 18%, rgba(59,130,246,0.18), transparent 36%),
-                radial-gradient(circle at 84% 22%, rgba(34,211,238,0.14), transparent 32%),
-                linear-gradient(135deg, rgba(15,23,42,0.96), rgba(8,47,73,0.92));
-            box-shadow: 0 24px 60px rgba(2,6,23,0.34);
-            transition: transform 0.22s ease, box-shadow 0.22s ease;
-        }
-
-        .command-center:hover {
-            box-shadow: 0 28px 70px rgba(37,99,235,0.18);
-        }
-
-        .command-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(6px);
-            opacity: 0.4;
-            pointer-events: none;
-            animation: orbFloat 7s ease-in-out infinite;
-        }
-
-        .command-orb.one {
-            inset-inline-end: -28px;
-            inset-block-start: -24px;
-            inline-size: 140px;
-            block-size: 140px;
-            background: rgba(59,130,246,0.28);
-        }
-
-        .command-orb.two {
-            inset-inline-start: 22%;
-            inset-block-end: -38px;
-            inline-size: 120px;
-            block-size: 120px;
-            background: rgba(34,211,238,0.22);
-            animation-delay: -2s;
-        }
-
-        @keyframes orbFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-10px) scale(1.04); }
-        }
-
-        .command-grid {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
-            gap: 16px;
-            padding: 20px;
-        }
-
-        .command-stack {
-            display: grid;
-            gap: 16px;
-        }
-
-        .command-panel {
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.05);
-            padding: 18px;
-            backdrop-filter: blur(10px);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-
-        .command-kicker {
-            color: #93c5fd;
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin: 0 0 10px;
-        }
-
-        .command-title {
-            color: var(--white);
-            font-size: clamp(1.2rem, 2vw, 1.7rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin: 0 0 10px;
-        }
-
-        .command-copy {
-            color: var(--gray-300);
-            font-size: 0.92rem;
-            line-height: 1.7;
-            margin: 0;
-            max-inline-size: 58ch;
-        }
-
-        .mode-switch {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-block-start: 16px;
-            padding: 4px;
-            background: rgba(15,23,42,0.65);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 999px;
-        }
-
-        .mode-btn {
-            border: none;
-            border-radius: 999px;
-            padding: 8px 14px;
-            background: transparent;
-            color: var(--gray-300);
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .mode-btn.active {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
-            color: var(--white);
-            box-shadow: 0 6px 18px rgba(37,99,235,0.32);
-        }
-
-        .command-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-block-start: 16px;
-        }
-
-        .mini-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 10px 12px;
-            background: rgba(255,255,255,0.05);
-            color: var(--white);
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .mini-action:hover {
-            transform: translateY(-1px);
-            border-color: rgba(96,165,250,0.4);
-            background: rgba(37,99,235,0.12);
-        }
-
-        .live-counter-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .live-counter {
-            border-radius: 16px;
-            padding: 12px;
-            background: rgba(15,23,42,0.42);
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .counter-value {
-            display: block;
-            color: var(--white);
-            font-size: 1.35rem;
-            font-weight: 800;
-            margin-block-end: 4px;
-        }
-
-        .counter-label {
-            color: var(--gray-400);
-            font-size: 0.72rem;
-            line-height: 1.55;
-        }
-
-        .focus-feed {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            gap: 10px;
-        }
-
-        .focus-item {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 12px 13px;
-            border-radius: 14px;
-            background: rgba(15,23,42,0.34);
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .focus-copy strong {
-            display: block;
-            color: var(--white);
-            font-size: 0.84rem;
-            margin-block-end: 3px;
-        }
-
-        .focus-copy span {
-            color: var(--gray-400);
-            font-size: 0.75rem;
-            line-height: 1.55;
-        }
-
-        .focus-badge {
-            flex-shrink: 0;
-            padding: 5px 8px;
-            border-radius: 999px;
-            background: rgba(16,185,129,0.14);
-            color: #86efac;
-            border: 1px solid rgba(16,185,129,0.24);
-            font-size: 0.66rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .teacher-dashboard { display: none; }
-        .teacher-dashboard.active { display: block; }
-        .teacher-dashboard-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 14px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-        .teacher-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 800;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-        .teacher-dashboard-header h4 {
-            margin: 0;
-            font-size: 0.98rem;
-            color: var(--white);
-        }
-        .teacher-dashboard-header span {
-            color: var(--gray-400);
-            font-size: 0.78rem;
-        }
-        .dashboard-widget {
-            margin-bottom: 14px;
-        }
-        .dashboard-widget:last-child { margin-bottom: 0; }
-        .widget-title {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        .widget-title strong {
-            font-size: 0.8rem;
-            color: #93c5fd;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-        .widget-add-btn {
-            background: rgba(37,99,235,0.15);
-            border: 1px solid rgba(37,99,235,0.3);
-            color: #93c5fd;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .widget-add-btn:hover {
-            background: rgba(37,99,235,0.25);
-            color: #bfdbfe;
-        }
-        .schedule-list, .material-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            gap: 8px;
-        }
-        .schedule-item, .material-item {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 12px;
-            background: rgba(15,23,42,0.34);
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .schedule-item small, .material-item small {
-            color: var(--gray-400);
-            font-size: 0.72rem;
-        }
-        .schedule-item strong, .material-item strong {
-            display: block;
-            color: var(--white);
-            font-size: 0.82rem;
-            margin-bottom: 2px;
-        }
-        .item-actions {
-            display: flex;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-        .item-actions button {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--gray-300);
-            width: 26px;
-            height: 26px;
-            border-radius: 7px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 0.7rem;
-            padding: 0;
-        }
-        .item-actions button:hover {
-            background: rgba(255,255,255,0.12);
-            color: white;
-        }
-        .dashboard-form {
-            display: grid;
-            gap: 8px;
-            padding: 12px;
-            border-radius: 12px;
-            background: rgba(15,23,42,0.5);
-            border: 1px solid rgba(255,255,255,0.08);
-            margin-bottom: 10px;
-        }
-        .dashboard-form input, .dashboard-form select, .dashboard-form textarea {
-            background: rgba(0,0,0,0.25);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--gray-100);
-            padding: 8px 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-family: inherit;
-        }
-        .dashboard-form input::placeholder, .dashboard-form textarea::placeholder {
-            color: var(--gray-500);
-        }
-        .dashboard-form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        .dashboard-form-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-        .dashboard-form-actions button {
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-            border: none;
-        }
-        .dashboard-form-actions .btn-save {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
-            color: white;
-        }
-        .dashboard-form-actions .btn-cancel {
-            background: rgba(255,255,255,0.06);
-            color: var(--gray-300);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .dashboard-empty {
-            color: var(--gray-500);
-            font-size: 0.8rem;
-            text-align: center;
-            padding: 12px;
-        }
-        .dashboard-signin-prompt {
-            text-align: center;
-            padding: 20px 10px;
-        }
-        .dashboard-signin-prompt p {
-            color: var(--gray-400);
-            font-size: 0.85rem;
-            margin: 0 0 12px;
-        }
-        .quick-links-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-        .quick-link-card {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 12px;
-            background: rgba(15,23,42,0.34);
-            border: 1px solid rgba(255,255,255,0.06);
-            text-decoration: none;
-            color: var(--gray-100);
-            transition: all 0.2s ease;
-        }
-        .quick-link-card:hover {
-            background: rgba(15,23,42,0.5);
-            border-color: rgba(255,255,255,0.12);
-            transform: translateY(-2px);
-        }
-        .quick-link-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 9px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-        .quick-link-icon.canvas { background: linear-gradient(135deg, #e13c33, #c0392b); color: white; }
-        .quick-link-icon.google { background: linear-gradient(135deg, #4285f4, #34a853); color: white; }
-        .quick-link-icon.custom { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
-        .quick-link-text strong {
-            display: block;
-            font-size: 0.82rem;
-            color: var(--white);
-        }
-        .quick-link-text span {
-            font-size: 0.7rem;
-            color: var(--gray-400);
-        }
-        .saved-links-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            gap: 6px;
-        }
-        .saved-link-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            padding: 8px 10px;
-            border-radius: 10px;
-            background: rgba(15,23,42,0.34);
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .saved-link-item a {
-            color: #93c5fd;
-            text-decoration: none;
-            font-size: 0.82rem;
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .saved-link-item a:hover { text-decoration: underline; }
-
-        body.light-theme .command-center {
-            background:
-                radial-gradient(circle at 12% 18%, rgba(59,130,246,0.12), transparent 36%),
-                radial-gradient(circle at 84% 22%, rgba(34,211,238,0.12), transparent 32%),
-                linear-gradient(135deg, rgba(255,255,255,0.94), rgba(239,246,255,0.96));
-            border-color: rgba(15,23,42,0.08);
-            box-shadow: 0 18px 36px rgba(15,23,42,0.08);
-        }
-
-        body.light-theme .command-panel,
-        body.light-theme .live-counter,
-        body.light-theme .focus-item {
-            background: rgba(255,255,255,0.78);
-            border-color: rgba(15,23,42,0.08);
-        }
-
-        body.light-theme .command-title,
-        body.light-theme .focus-copy strong {
-            color: #0f172a;
-        }
-
-        body.light-theme .command-copy,
-        body.light-theme .counter-label,
-        body.light-theme .focus-copy span {
-            color: #475569;
-        }
-
-        body.light-theme .counter-value,
-        body.light-theme .mini-action {
-            color: #0f172a;
-        }
-
-        body.light-theme .mode-switch {
-            background: rgba(226,232,240,0.75);
-            border-color: rgba(37,99,235,0.12);
-        }
-
-        body.light-theme .mini-action {
-            background: rgba(255,255,255,0.82);
-            border-color: rgba(15,23,42,0.08);
-        }
-
-        @media (max-inline-size: 900px) {
-            .command-grid,
-            .live-counter-grid {
-                grid-template-columns: 1fr;
-            }
-        }
         
         /* Cards */
         .cards-grid {
@@ -2785,12 +2256,6 @@
 
         /* Small phone fixes (sub-640px) */
         @media (max-width: 640px) {
-            .dashboard-form-row {
-                grid-template-columns: 1fr;
-            }
-            .quick-links-grid {
-                grid-template-columns: 1fr;
-            }
             .teacher-register-meta {
                 grid-template-columns: 1fr;
             }
@@ -2800,13 +2265,6 @@
             .section-intro {
                 padding: 0 12px;
             }
-            .command-grid,
-            .command-stack {
-                padding: 14px;
-            }
-            .command-panel {
-                padding: 14px;
-            }
             .games-score-grid > div {
                 padding: 14px;
             }
@@ -2815,12 +2273,6 @@
             }
             .score-meta-card {
                 padding: 10px;
-            }
-            .live-counter-grid {
-                gap: 10px;
-            }
-            .live-counter {
-                padding: 14px;
             }
             .lab-panels {
                 padding: 14px;
@@ -2863,36 +2315,13 @@
             .classroom-lab-section {
                 padding: 0 12px;
             }
-            .command-center-section {
-                padding: 0 12px;
-            }
             .teacher-blog-section {
                 padding: 0 12px;
-            }
-            .command-actions {
-                flex-wrap: wrap;
-            }
-            .mode-switch {
-                flex-wrap: wrap;
-            }
-            .mode-btn {
-                flex: 1;
-                min-width: 100px;
-            }
-            .widget-title {
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-            .item-actions {
-                gap: 4px;
             }
             .schedule-item,
             .material-item {
                 padding: 10px;
                 gap: 8px;
-            }
-            .quick-link-card {
-                padding: 10px;
             }
         }
 
@@ -2901,13 +2330,7 @@
             .hero-preview-launchers {
                 grid-template-columns: 1fr;
             }
-            .quick-links-grid {
-                grid-template-columns: 1fr;
-            }
             .score-meta-grid {
-                grid-template-columns: 1fr;
-            }
-            .live-counter-grid {
                 grid-template-columns: 1fr;
             }
             .lab-tool-grid {
@@ -2972,7 +2395,7 @@
                 <a href="#" class="nav-3d" onclick="scrollToSection('classroomLabSection'); return false;">Classroom Lab</a>
                 <a href="#" class="nav-3d" onclick="scrollToSection('teacherBlogSection'); return false;">Teacher Blog</a>
                 <a href="apps/games/index.html" class="nav-3d">Game Arcade</a>
-                <a href="#" class="nav-3d" onclick="scrollToSection('commandCenterSection'); return false;">Command Center</a>
+                <a href="apps/command-center.html" class="nav-3d">Command Center</a>
                 <a href="apps/books/library.html" class="nav-3d" target="_blank">📖 Story Library</a>
             </div>
             <button class="nav-scroll-btn" onclick="scrollHeaderNav(1)" aria-label="Scroll header navigation right">
@@ -3174,7 +2597,7 @@
                 <button class="section-jump-btn" onclick="scrollToSection('gamesScores')"><i class="fas fa-trophy"></i> Games &amp; scores</button>
                 <button class="section-jump-btn" onclick="scrollToSection('classroomLabSection')"><i class="fas fa-chalkboard"></i> Classroom lab</button>
                 <a href="apps/games/index.html" class="section-jump-btn" style="text-decoration:none;"><i class="fas fa-gamepad"></i> Game Arcade</a>
-                <button class="section-jump-btn" onclick="scrollToSection('commandCenterSection')"><i class="fas fa-bolt"></i> Command center</button>
+                <a href="apps/command-center.html" class="section-jump-btn"><i class="fas fa-bolt"></i> Command center</a>
                 <button class="section-jump-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Launch Colony</button>
                 <button class="section-jump-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
             </div>
@@ -3266,220 +2689,6 @@
 </section>
 
 
-<section class="command-center-section" id="commandCenterSection">
-    <div class="section-intro">
-        <div>
-            <div class="section-kicker">Dynamic Experience</div>
-            <h2>Teachers Command Center</h2>
-            <p>A live landing experience with teacher and student focus modes, animated counters, and premium motion.</p>
-        </div>
-        <div class="hb-chip" id="commandModeBadge"><i class="fas fa-bolt"></i> Teacher focus</div>
-    </div>
-
-    <div class="command-center" id="commandCenter">
-        <span class="command-orb one" aria-hidden="true"></span>
-        <span class="command-orb two" aria-hidden="true"></span>
-
-        <div class="command-grid">
-            <div class="command-panel">
-                <div class="command-kicker">Smart mode control</div>
-                <h3 class="command-title" id="modeHeading">Teacher mode is active</h3>
-                <p class="command-copy" id="modeDescription">Put protected books, TOEFL iBT, and classroom launch tools first for faster lesson prep.</p>
-
-                <div class="mode-switch" aria-label="Choose hub mode">
-                    <button type="button" class="mode-btn active" data-mode="teacher" onclick="setHubMode('teacher')">Teacher</button>
-                    <button type="button" class="mode-btn" data-mode="student" onclick="setHubMode('student')">Student</button>
-                </div>
-
-                <div class="command-actions">
-                    <button class="mini-action" onclick="openTeacherRegister('teacher resources')"><i class="fas fa-user-shield"></i> Verify access</button>
-                    <button class="mini-action" onclick="openBrickForgeModal()"><i class="fas fa-cube"></i> Open BrickForge</button>
-                </div>
-            </div>
-
-            <div class="command-stack">
-                <div class="command-panel">
-                    <div class="command-kicker">Live counters</div>
-                    <div class="live-counter-grid">
-                        <div class="live-counter">
-                            <strong class="counter-value" data-count="4" data-suffix="+">0</strong>
-                            <span class="counter-label">Live learning tools</span>
-                        </div>
-                        <div class="live-counter">
-                            <strong class="counter-value" data-count="3" data-suffix="+">0</strong>
-                            <span class="counter-label">Protected teacher resources</span>
-                        </div>
-                        <div class="live-counter">
-                            <strong class="counter-value" data-count="24" data-suffix="/7">0</strong>
-                            <span class="counter-label">Premium hub feel</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="command-panel">
-                    <div class="command-kicker" id="dashboardKicker">Focus stream</div>
-
-                    <!-- Generic focus stream (shown when no teacher is signed in) -->
-                    <div id="genericFocusStream">
-                        <ul class="focus-feed">
-                            <li class="focus-item">
-                                <div class="focus-copy">
-                                    <strong id="focusPrimaryTitle">Teacher editions</strong>
-                                    <span id="focusPrimaryText">Direct launch for Book 1, Book 2B, and TOEFL resources.</span>
-                                </div>
-                                <span class="focus-badge">Live</span>
-                            </li>
-                            <li class="focus-item">
-                                <div class="focus-copy">
-                                    <strong id="focusSecondaryTitle">Assessment flow</strong>
-                                    <span id="focusSecondaryText">Fast access to guided testing and classroom-ready practice.</span>
-                                </div>
-                                <span class="focus-badge">Ready</span>
-                            </li>
-                            <li class="focus-item">
-                                <div class="focus-copy">
-                                    <strong id="focusTertiaryTitle">Creative lab</strong>
-                                    <span id="focusTertiaryText">Use BrickForge and AI tools to make lessons more memorable.</span>
-                                </div>
-                                <span class="focus-badge">New</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Personal Teacher Dashboard (shown when teacher is signed in) -->
-                    <div id="teacherDashboard" class="teacher-dashboard">
-                        <div class="teacher-dashboard-header">
-                            <div class="teacher-avatar" id="teacherDashboardAvatar">T</div>
-                            <div>
-                                <h4 id="teacherDashboardName">Teacher</h4>
-                                <span id="teacherDashboardEmail">teacher@aii.edu.kh</span>
-                            </div>
-                        </div>
-
-                        <!-- Schedule Widget -->
-                        <div class="dashboard-widget">
-                            <div class="widget-title">
-                                <strong><i class="fas fa-calendar-week"></i> My Schedule</strong>
-                                <button class="widget-add-btn" onclick="toggleScheduleForm()">+ Add</button>
-                            </div>
-                            <div id="scheduleForm" class="dashboard-form" style="display:none;">
-                                <div class="dashboard-form-row">
-                                    <select id="scheduleDay">
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday">Saturday</option>
-                                        <option value="Sunday">Sunday</option>
-                                    </select>
-                                    <input id="scheduleTime" type="time" value="08:00">
-                                </div>
-                                <input id="scheduleActivity" type="text" placeholder="Activity / Class name">
-                                <input id="scheduleRoom" type="text" placeholder="Room / Location">
-                                <div class="dashboard-form-actions">
-                                    <button class="btn-cancel" onclick="toggleScheduleForm()">Cancel</button>
-                                    <button class="btn-save" onclick="saveScheduleItem()">Save</button>
-                                </div>
-                            </div>
-                            <ul class="schedule-list" id="teacherScheduleList">
-                                <li class="dashboard-empty">No schedule items yet.</li>
-                            </ul>
-                        </div>
-
-                        <!-- Materials Widget -->
-                        <div class="dashboard-widget">
-                            <div class="widget-title">
-                                <strong><i class="fas fa-folder-open"></i> My Materials</strong>
-                                <button class="widget-add-btn" onclick="toggleMaterialForm()">+ Add</button>
-                            </div>
-                            <div id="materialForm" class="dashboard-form" style="display:none;">
-                                <input id="materialTitle" type="text" placeholder="Material title">
-                                <div class="dashboard-form-row">
-                                    <select id="materialCategory">
-                                        <option value="Vocabulary">Vocabulary</option>
-                                        <option value="Grammar">Grammar</option>
-                                        <option value="Reading">Reading</option>
-                                        <option value="Writing">Writing</option>
-                                        <option value="Speaking">Speaking</option>
-                                        <option value="Listening">Listening</option>
-                                        <option value="TOEFL">TOEFL</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                    <input id="materialUrl" type="text" placeholder="URL (optional)">
-                                </div>
-                                <textarea id="materialNotes" rows="2" placeholder="Notes (optional)"></textarea>
-                                <div class="dashboard-form-actions">
-                                    <button class="btn-cancel" onclick="toggleMaterialForm()">Cancel</button>
-                                    <button class="btn-save" onclick="saveMaterialItem()">Save</button>
-                                </div>
-                            </div>
-                            <ul class="material-list" id="teacherMaterialList">
-                                <li class="dashboard-empty">No materials saved yet.</li>
-                            </ul>
-                        </div>
-
-                        <!-- My Canvas Links Widget -->
-                        <div class="dashboard-widget">
-                            <div class="widget-title">
-                                <strong><i class="fas fa-chalkboard"></i> My Canvas Links</strong>
-                                <button class="widget-add-btn" onclick="toggleQuickLinkForm()">+ Add Link</button>
-                            </div>
-                            <p style="color:var(--gray-400);font-size:0.78rem;margin:0 0 10px;">Paste any Canvas course, worksheet, assignment, or live website URL you have created.</p>
-                            <div id="quickLinkForm" class="dashboard-form" style="display:none;">
-                                <input id="quickLinkTitle" type="text" placeholder="Name (e.g. Level 11 Writing Worksheet)">
-                                <div class="dashboard-form-row">
-                                    <select id="quickLinkType">
-                                        <option value="Course">Course</option>
-                                        <option value="Worksheet">Worksheet</option>
-                                        <option value="Assignment">Assignment</option>
-                                        <option value="Quiz">Quiz</option>
-                                        <option value="Live Site">Live Site</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                    <input id="quickLinkUrl" type="text" placeholder="Paste your Canvas or website URL here">
-                                </div>
-                                <div class="dashboard-form-actions">
-                                    <button class="btn-cancel" onclick="toggleQuickLinkForm()">Cancel</button>
-                                    <button class="btn-save" onclick="saveQuickLink()">Save</button>
-                                </div>
-                            </div>
-                            <div class="quick-links-grid" id="quickLinksGrid">
-                                <a href="https://classroom.google.com" target="_blank" rel="noopener noreferrer" class="quick-link-card">
-                                    <span class="quick-link-icon google"><i class="fab fa-google"></i></span>
-                                    <div class="quick-link-text">
-                                        <strong>Google Classroom</strong>
-                                        <span>Launch Classroom</span>
-                                    </div>
-                                </a>
-                                <a href="https://canvas.instructure.com" target="_blank" rel="noopener noreferrer" class="quick-link-card">
-                                    <span class="quick-link-icon canvas"><i class="fas fa-graduation-cap"></i></span>
-                                    <div class="quick-link-text">
-                                        <strong>Canvas Home</strong>
-                                        <span>Launch Canvas</span>
-                                    </div>
-                                </a>
-                                <a href="https://www.canva.com/?success=true&continue_in_browser=true" target="_blank" rel="noopener noreferrer" class="quick-link-card">
-                                    <span class="quick-link-icon canva" style="background: linear-gradient(135deg, #00c4cc, #7b2cbf); color: white;"><i class="fas fa-palette"></i></span>
-                                    <div class="quick-link-text">
-                                        <strong>Canva</strong>
-                                        <span>Design &amp; Create</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sign-in prompt for non-logged-in users in teacher mode -->
-                    <div id="teacherSigninPrompt" class="dashboard-signin-prompt" style="display:none;">
-                        <p>Sign in with your school email to unlock your personal schedule and teaching materials.</p>
-                        <button class="mini-action" onclick="openTeacherRegister('teacher resources')"><i class="fas fa-user-shield"></i> Sign in as Teacher</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <section class="classroom-lab-section" id="classroomLabSection">
     <div class="section-intro">
@@ -4164,6 +3373,10 @@ function isBlogAdminCodeValid(code) {
     return (code || '').trim() === getBlogAdminCode();
 }
 
+function generateId() {
+    return 'id_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+}
+
 function escapeHtml(value) {
     return String(value || '')
         .replace(/&/g, '&amp;')
@@ -4408,271 +3621,6 @@ function getTeacherProfile() {
     }
 }
 
-function getTeacherCommandData() {
-    try {
-        var key = getTeacherScopedKey('ryshubCommandData');
-        return JSON.parse(localStorage.getItem(key) || '{"schedule":[],"materials":[]}');
-    } catch (e) {
-        return { schedule: [], materials: [] };
-    }
-}
-
-function saveTeacherCommandData(data) {
-    var key = getTeacherScopedKey('ryshubCommandData');
-    localStorage.setItem(key, JSON.stringify(data));
-}
-
-function generateId() {
-    return 'id_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-}
-
-function toggleScheduleForm() {
-    var form = document.getElementById('scheduleForm');
-    if (!form) return;
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    if (form.style.display === 'block') {
-        document.getElementById('scheduleActivity').focus();
-    }
-}
-
-function toggleMaterialForm() {
-    var form = document.getElementById('materialForm');
-    if (!form) return;
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    if (form.style.display === 'block') {
-        document.getElementById('materialTitle').focus();
-    }
-}
-
-function saveScheduleItem() {
-    var day = document.getElementById('scheduleDay').value;
-    var time = document.getElementById('scheduleTime').value;
-    var activity = document.getElementById('scheduleActivity').value.trim();
-    var room = document.getElementById('scheduleRoom').value.trim();
-
-    if (!activity) {
-        showToast('Please enter an activity name');
-        return;
-    }
-
-    var data = getTeacherCommandData();
-    data.schedule.push({ id: generateId(), day: day, time: time, activity: activity, room: room });
-    data.schedule.sort(function(a, b) {
-        var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-        var d = days.indexOf(a.day) - days.indexOf(b.day);
-        if (d !== 0) return d;
-        return (a.time || '').localeCompare(b.time || '');
-    });
-    saveTeacherCommandData(data);
-    renderTeacherDashboard();
-    toggleScheduleForm();
-    document.getElementById('scheduleActivity').value = '';
-    document.getElementById('scheduleRoom').value = '';
-    showToast('Schedule item saved');
-}
-
-function deleteScheduleItem(id) {
-    var data = getTeacherCommandData();
-    data.schedule = data.schedule.filter(function(item) { return item.id !== id; });
-    saveTeacherCommandData(data);
-    renderTeacherDashboard();
-    showToast('Schedule item removed');
-}
-
-function saveMaterialItem() {
-    var title = document.getElementById('materialTitle').value.trim();
-    var category = document.getElementById('materialCategory').value;
-    var url = document.getElementById('materialUrl').value.trim();
-    var notes = document.getElementById('materialNotes').value.trim();
-
-    if (!title) {
-        showToast('Please enter a material title');
-        return;
-    }
-
-    var data = getTeacherCommandData();
-    data.materials.push({ id: generateId(), title: title, category: category, url: url, notes: notes });
-    saveTeacherCommandData(data);
-    renderTeacherDashboard();
-    toggleMaterialForm();
-    document.getElementById('materialTitle').value = '';
-    document.getElementById('materialUrl').value = '';
-    document.getElementById('materialNotes').value = '';
-    showToast('Material saved');
-}
-
-function deleteMaterialItem(id) {
-    var data = getTeacherCommandData();
-    data.materials = data.materials.filter(function(item) { return item.id !== id; });
-    saveTeacherCommandData(data);
-    renderTeacherDashboard();
-    showToast('Material removed');
-}
-
-function getTeacherQuickLinks() {
-    try {
-        var key = getTeacherScopedKey('ryshubQuickLinks');
-        return JSON.parse(localStorage.getItem(key) || '[]');
-    } catch (e) {
-        return [];
-    }
-}
-
-function saveTeacherQuickLinks(links) {
-    var key = getTeacherScopedKey('ryshubQuickLinks');
-    localStorage.setItem(key, JSON.stringify(links));
-}
-
-function toggleQuickLinkForm() {
-    var form = document.getElementById('quickLinkForm');
-    if (!form) return;
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    if (form.style.display === 'block') {
-        document.getElementById('quickLinkTitle').focus();
-    }
-}
-
-function saveQuickLink() {
-    var title = document.getElementById('quickLinkTitle').value.trim();
-    var url = document.getElementById('quickLinkUrl').value.trim();
-    var type = document.getElementById('quickLinkType').value;
-
-    if (!title || !url) {
-        showToast('Please enter both a title and URL');
-        return;
-    }
-
-    if (!/^https?:\/\//.test(url)) {
-        url = 'https://' + url;
-    }
-
-    var links = getTeacherQuickLinks();
-    links.push({ id: generateId(), title: title, url: url, type: type });
-    saveTeacherQuickLinks(links);
-    renderTeacherDashboard();
-    toggleQuickLinkForm();
-    document.getElementById('quickLinkTitle').value = '';
-    document.getElementById('quickLinkUrl').value = '';
-    document.getElementById('quickLinkType').value = 'Course';
-    showToast(type + ' link saved');
-}
-
-function deleteQuickLink(id) {
-    var links = getTeacherQuickLinks();
-    links = links.filter(function(item) { return item.id !== id; });
-    saveTeacherQuickLinks(links);
-    renderTeacherDashboard();
-    showToast('Link removed');
-}
-
-function renderTeacherDashboard() {
-    var profile = getTeacherProfile();
-    var dashboard = document.getElementById('teacherDashboard');
-    var genericStream = document.getElementById('genericFocusStream');
-    var signinPrompt = document.getElementById('teacherSigninPrompt');
-    var kicker = document.getElementById('dashboardKicker');
-
-    if (!dashboard || !genericStream || !signinPrompt) return;
-
-    // Student mode: always show generic focus stream, never show teacher dashboard or sign-in prompt
-    if (currentHubMode === 'student') {
-        dashboard.classList.remove('active');
-        genericStream.style.display = 'block';
-        signinPrompt.style.display = 'none';
-        if (kicker) kicker.textContent = 'Focus stream';
-        return;
-    }
-
-    // Teacher mode: show personal dashboard if a teacher is signed in
-    if (profile && profile.name && isSchoolEmail(profile.email)) {
-        dashboard.classList.add('active');
-        genericStream.style.display = 'none';
-        signinPrompt.style.display = 'none';
-        if (kicker) kicker.innerHTML = '<i class="fas fa-user-circle"></i> Personal Dashboard';
-
-        document.getElementById('teacherDashboardName').textContent = profile.name;
-        document.getElementById('teacherDashboardEmail').textContent = profile.email;
-        document.getElementById('teacherDashboardAvatar').textContent = (profile.name || 'T').charAt(0).toUpperCase();
-
-        var data = getTeacherCommandData();
-
-        // Render schedule
-        var scheduleList = document.getElementById('teacherScheduleList');
-        if (scheduleList) {
-            if (data.schedule.length === 0) {
-                scheduleList.innerHTML = '<li class="dashboard-empty">No schedule items yet.</li>';
-            } else {
-                scheduleList.innerHTML = data.schedule.map(function(item) {
-                    var roomText = item.room ? ' · ' + escapeHtml(item.room) : '';
-                    return '<li class="schedule-item">'
-                        + '<div><strong>' + escapeHtml(item.activity) + '</strong><small>' + escapeHtml(item.day) + ' at ' + escapeHtml(item.time) + roomText + '</small></div>'
-                        + '<div class="item-actions"><button onclick="deleteScheduleItem(\'' + item.id + '\')" title="Remove"><i class="fas fa-trash"></i></button></div>'
-                        + '</li>';
-                }).join('');
-            }
-        }
-
-        // Render materials
-        var materialList = document.getElementById('teacherMaterialList');
-        if (materialList) {
-            if (data.materials.length === 0) {
-                materialList.innerHTML = '<li class="dashboard-empty">No materials saved yet.</li>';
-            } else {
-                materialList.innerHTML = data.materials.map(function(item) {
-                    var titleHtml = item.url
-                        ? '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer" style="color:#93c5fd;text-decoration:none;">' + escapeHtml(item.title) + '</a>'
-                        : escapeHtml(item.title);
-                    var notesText = item.notes ? ' · ' + escapeHtml(item.notes) : '';
-                    return '<li class="material-item">'
-                        + '<div><strong>' + titleHtml + '</strong><small>' + escapeHtml(item.category) + notesText + '</small></div>'
-                        + '<div class="item-actions"><button onclick="deleteMaterialItem(\'' + item.id + '\')" title="Remove"><i class="fas fa-trash"></i></button></div>'
-                        + '</li>';
-                }).join('');
-            }
-        }
-
-        // Render quick links as cards in the grid
-        var quickLinksGrid = document.getElementById('quickLinksGrid');
-        if (quickLinksGrid) {
-            var links = getTeacherQuickLinks();
-            var baseCards = '<a href="https://classroom.google.com" target="_blank" rel="noopener noreferrer" class="quick-link-card">'
-                + '<span class="quick-link-icon google"><i class="fab fa-google"></i></span>'
-                + '<div class="quick-link-text"><strong>Google Classroom</strong><span>Launch Classroom</span></div>'
-                + '</a>'
-                + '<a href="https://canvas.instructure.com" target="_blank" rel="noopener noreferrer" class="quick-link-card">'
-                + '<span class="quick-link-icon canvas"><i class="fas fa-graduation-cap"></i></span>'
-                + '<div class="quick-link-text"><strong>Canvas Home</strong><span>Launch Canvas</span></div>'
-                + '</a>'
-                + '<a href="https://www.canva.com/?success=true&continue_in_browser=true" target="_blank" rel="noopener noreferrer" class="quick-link-card">'
-                + '<span class="quick-link-icon canva" style="background: linear-gradient(135deg, #00c4cc, #7b2cbf); color: white;"><i class="fas fa-palette"></i></span>'
-                + '<div class="quick-link-text"><strong>Canva</strong><span>Design &amp; Create</span></div>'
-                + '</a>';
-            var customCards = links.map(function(item) {
-                return '<div class="quick-link-card" style="position:relative;">'
-                    + '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:1;">'
-                    + '<span class="quick-link-icon custom"><i class="fas fa-link"></i></span>'
-                    + '<div class="quick-link-text"><strong>' + escapeHtml(item.title) + '</strong><span>' + escapeHtml(item.type || 'Link') + '</span></div>'
-                    + '</a>'
-                    + '<button onclick="deleteQuickLink(\'' + item.id + '\')" title="Remove" style="position:absolute;top:4px;right:4px;background:rgba(255,255,255,0.08);border:none;border-radius:6px;color:var(--gray-400);width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.6rem;padding:0;"><i class="fas fa-times"></i></button>'
-                    + '</div>';
-            }).join('');
-            quickLinksGrid.innerHTML = baseCards + customCards;
-        }
-    } else {
-        // Teacher mode but no teacher signed in: show generic focus stream + sign-in prompt
-        dashboard.classList.remove('active');
-        genericStream.style.display = 'block';
-        signinPrompt.style.display = 'block';
-        if (kicker) kicker.textContent = 'Focus stream';
-    }
-}
-
-function hasTeacherAccess() {
-    var profile = getTeacherProfile();
-    var masterAccess = localStorage.getItem('ryshub_master_access') === 'true' || sessionStorage.getItem('ryshub_master_access') === 'true' || localStorage.getItem('ryshub_loggedIn') === 'true' || sessionStorage.getItem('ryshub_loggedIn') === 'true';
-    return !!masterAccess || !!(profile && profile.name && isSchoolEmail(profile.email) && isTeacherVerified(profile));
-}
-
 function updateTeacherStatusUi() {
     var status = document.querySelector('.header-status strong');
     var statusText = document.querySelector('.header-status span:last-child');
@@ -4720,10 +3668,8 @@ function signOutTeacher() {
     localStorage.removeItem('ryshub_loggedIn');
     localStorage.removeItem('ryshub_master_access');
     updateTeacherStatusUi();
-    initHubMode();
     renderGameScores();
     renderClassroomLabMetrics();
-    renderTeacherDashboard();
     showToast('Signed out. Returning to the team login page.');
     setTimeout(function() {
         window.location.href = 'apps/login.html';
@@ -4787,16 +3733,10 @@ function registerTeacherAccess() {
     localStorage.setItem('ryshub_role', 'teacher');
     sessionStorage.setItem('ryshub_role', 'teacher');
 
-    var commandKey = getTeacherScopedKey('ryshubCommandData');
-    if (!localStorage.getItem(commandKey)) {
-        localStorage.setItem(commandKey, JSON.stringify({ schedule: [], materials: [] }));
-    }
 
     updateTeacherStatusUi();
-    initHubMode();
     renderGameScores();
     renderClassroomLabMetrics();
-    renderTeacherDashboard();
     closeTeacherRegister();
     showToast('Teacher profile saved for ' + name);
 
@@ -4858,10 +3798,8 @@ function enterDemoMode() {
     }
 
     updateTeacherStatusUi();
-    initHubMode();
     renderGameScores();
     renderClassroomLabMetrics();
-    renderTeacherDashboard();
     closeTeacherRegister();
     document.getElementById('demo-banner').style.display = 'block';
     document.getElementById('mainHeader').style.marginTop = '44px';
@@ -4886,7 +3824,6 @@ function exitDemoMode() {
     document.getElementById('demo-banner').style.display = 'none';
     document.getElementById('mainHeader').style.marginTop = '';
     updateTeacherStatusUi();
-    renderTeacherDashboard();
     showToast('Demo mode ended.');
 }
 
@@ -5081,71 +4018,7 @@ function toggleTheme() {
     updateThemeToggleUi();
 }
 
-function setHubMode(mode) {
-    var presets = {
-        teacher: {
-            badge: 'Teacher focus',
-            heading: 'Teacher mode is active',
-            description: 'Put protected books, TOEFL iBT, and classroom launch tools first for faster lesson prep.',
-            primaryTitle: 'Teacher editions',
-            primaryText: 'Direct launch for Book 1, Book 2B, and TOEFL resources.',
-            secondaryTitle: 'Assessment flow',
-            secondaryText: 'Fast access to guided testing and classroom-ready practice.',
-            tertiaryTitle: 'Creative lab',
-            tertiaryText: 'Use BrickForge and AI tools to make lessons more memorable.'
-        },
-        student: {
-            badge: 'Student focus',
-            heading: 'Student mode is active',
-            description: 'Shift the homepage toward practice, confidence, creative learning, and easy exploration.',
-            primaryTitle: 'Learning path',
-            primaryText: 'Start with TOEFL practice, reading, and guided progress.',
-            secondaryTitle: 'Creative confidence',
-            secondaryText: 'Make speaking and vocabulary practice feel more interactive.',
-            tertiaryTitle: 'Explore safely',
-            tertiaryText: 'A cleaner layout helps learners find the right activity faster.'
-        }
-    };
-
-    var state = presets[mode] || presets.teacher;
-    currentHubMode = mode;
-    localStorage.setItem(getTeacherScopedKey('ryshubHubMode'), mode);
-
-    document.querySelectorAll('.mode-btn').forEach(function(btn) {
-        btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
-    });
-
-    var badge = document.getElementById('commandModeBadge');
-    var heading = document.getElementById('modeHeading');
-    var description = document.getElementById('modeDescription');
-    var primaryTitle = document.getElementById('focusPrimaryTitle');
-    var primaryText = document.getElementById('focusPrimaryText');
-    var secondaryTitle = document.getElementById('focusSecondaryTitle');
-    var secondaryText = document.getElementById('focusSecondaryText');
-    var tertiaryTitle = document.getElementById('focusTertiaryTitle');
-    var tertiaryText = document.getElementById('focusTertiaryText');
-
-    if (badge) badge.innerHTML = '<i class="fas fa-bolt"></i> ' + state.badge;
-    if (heading) heading.textContent = state.heading;
-    if (description) description.textContent = state.description;
-    if (primaryTitle) primaryTitle.textContent = state.primaryTitle;
-    if (primaryText) primaryText.textContent = state.primaryText;
-    if (secondaryTitle) secondaryTitle.textContent = state.secondaryTitle;
-    if (secondaryText) secondaryText.textContent = state.secondaryText;
-    if (tertiaryTitle) tertiaryTitle.textContent = state.tertiaryTitle;
-    if (tertiaryText) tertiaryText.textContent = state.tertiaryText;
-    renderTeacherDashboard();
-}
-
-function initHubMode() {
-    var scopedMode = localStorage.getItem(getTeacherScopedKey('ryshubHubMode'));
-    var fallbackMode = localStorage.getItem('ryshubHubMode');
-    setHubMode(scopedMode || fallbackMode || 'teacher');
-    renderTeacherDashboard();
-}
-
 var HERO_TOPICS = [
-    { prefix: 'Teach English with', highlight: 'Artful Digital Experiences', meta: 'Designed for teachers who want bold visuals, clear pedagogy, and engaging classroom-ready learning moments.', chip: 'Reading · Speaking · Writing · Listening', icon: 'fa-language' },
     { prefix: 'Master', highlight: 'Grammar Through Play', meta: 'Interactive exercises that turn complex rules into intuitive, memorable classroom activities students actually enjoy.', chip: 'Nouns · Verbs · Tenses · Clauses', icon: 'fa-puzzle-piece' },
     { prefix: 'Build', highlight: 'Vocabulary With Confidence', meta: 'From core word lists to contextual usage — every term becomes a building block for fluent expression.', chip: 'Context · Collocation · Usage · Review', icon: 'fa-book' },
     { prefix: 'Prepare Students for', highlight: 'TOEFL Success', meta: 'Integrated reading, listening, speaking, and writing drills calibrated to the iBT format and scoring rubrics.', chip: 'iBT Format · Timed Practice · Strategies', icon: 'fa-graduation-cap' },
@@ -5257,7 +4130,7 @@ function initLiveCounters() {
 }
 
 function initParallaxTilt() {
-    ['.hero-banner', '.hero-preview-card', '.command-center'].forEach(function(selector) {
+    ['.hero-banner', '.hero-preview-card'].forEach(function(selector) {
         var elements = document.querySelectorAll(selector);
         elements.forEach(function(el) {
             el.addEventListener('mousemove', function(e) {
@@ -5378,7 +4251,6 @@ function initClassroomLab() {
 var featuredGameIndex = 0;
 var currentFeaturedGameId = 'colony';
 var gameScoreTimer = null;
-var currentHubMode = 'teacher';
 var GAME_META = {
     colony: {
         name: 'Last Colony',
@@ -5559,7 +4431,6 @@ if (sessionStorage.getItem('ryshubDemoMode') === '1') {
     document.getElementById('demo-banner').style.display = 'block';
     document.getElementById('mainHeader').style.marginTop = '44px';
 }
-initHubMode();
 initLiveCounters();
 initParallaxTilt();
 initGameScores();
