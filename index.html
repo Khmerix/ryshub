@@ -4181,7 +4181,6 @@ function initHeaderNavScroll() {
         isPointerDown = true;
         startX = e.clientX;
         startScroll = nav.scrollLeft;
-        nav.setPointerCapture(e.pointerId);
         nav.style.cursor = 'grabbing';
     });
 
@@ -4194,9 +4193,6 @@ function initHeaderNavScroll() {
         if (!isPointerDown) return;
         isPointerDown = false;
         nav.style.cursor = '';
-        if (e && typeof e.pointerId === 'number' && nav.hasPointerCapture(e.pointerId)) {
-            nav.releasePointerCapture(e.pointerId);
-        }
     }
 
     nav.addEventListener('pointerup', stopPointerDrag);
