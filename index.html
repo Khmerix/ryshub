@@ -3695,6 +3695,12 @@ function closeTeacherRegister() {
     document.getElementById('teacher-register-overlay').classList.remove('open');
 }
 
+function hasTeacherAccess() {
+    var profile = getTeacherProfile();
+    var masterAccess = localStorage.getItem('ryshub_master_access') === 'true' || sessionStorage.getItem('ryshub_master_access') === 'true' || localStorage.getItem('ryshub_loggedIn') === 'true' || sessionStorage.getItem('ryshub_loggedIn') === 'true';
+    return !!masterAccess || !!(profile && profile.name && isSchoolEmail(profile.email) && isTeacherVerified(profile));
+}
+
 function withTeacherAccess(featureName, callback) {
     if (hasTeacherAccess()) {
         if (typeof callback === 'function') callback();
