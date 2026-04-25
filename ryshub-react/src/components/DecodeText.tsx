@@ -6,7 +6,7 @@ interface DecodeTextProps {
   delay?: number;
   speed?: number;
   trigger?: 'mount' | 'hover' | 'in-view';
-  tag?: keyof JSX.IntrinsicElements;
+  tag?: keyof React.JSX.IntrinsicElements;
 }
 
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';

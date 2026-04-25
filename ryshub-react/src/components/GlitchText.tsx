@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 interface GlitchTextProps {
   text: string;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
 }
 
 export default function GlitchText({

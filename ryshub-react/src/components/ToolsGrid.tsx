@@ -1,5 +1,5 @@
 import ToolCard from './ToolCard';
-import { GraduationCap, BookOpen, Cube, Brain, Zap } from 'lucide-react';
+import { GraduationCap, BookOpen, Brain, Zap } from 'lucide-react';
 
 const tools = [
   {

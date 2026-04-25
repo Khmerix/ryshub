@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 interface GlassPanelProps {
@@ -13,7 +13,6 @@ export default function GlassPanel({
   intensity = 15,
 }: GlassPanelProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
   const sheenRef = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0.5);
@@ -44,7 +43,6 @@ export default function GlassPanel({
   const handleMouseLeave = () => {
     x.set(0.5);
     y.set(0.5);
-    setIsHovered(false);
     if (sheenRef.current) {
       sheenRef.current.style.background = 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 60%)';
     }
@@ -54,7 +52,7 @@ export default function GlassPanel({
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => {}}
       onMouseLeave={handleMouseLeave}
       style={{
         rotateX,

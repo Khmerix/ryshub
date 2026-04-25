@@ -79,7 +79,7 @@ export default function GameCard({
       )}
 
       <h3 className="text-lg font-bold text-slate-900 mb-1">
-        <GlitchText text={title} tag="span" />
+        <GlitchText text={title} as="span" />
       </h3>
 
       <p className="text-sm text-slate-600 mb-4 line-clamp-2">{description}</p>

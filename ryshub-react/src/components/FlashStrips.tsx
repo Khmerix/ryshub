@@ -1,11 +1,10 @@
-import { motion } from 'framer-motion';
-import { GraduationCap, BookOpen, Rocket, Cube, Brain, Puzzle, Zap, Gamepad2 } from 'lucide-react';
+import { GraduationCap, BookOpen, Rocket, Box, Brain, Puzzle, Zap, Gamepad2 } from 'lucide-react';
 
 const strip1 = [
   { icon: <GraduationCap size={16} />, label: 'TOEFL iBT', color: 'bg-blue-500' },
   { icon: <BookOpen size={16} />, label: 'World Class 2-1', color: 'bg-sky-500' },
   { icon: <BookOpen size={16} />, label: 'World Class 2-2', color: 'bg-emerald-500' },
-  { icon: <Cube size={16} />, label: 'Brick Forge', color: 'bg-purple-500' },
+  { icon: <Box size={16} />, label: 'Brick Forge', color: 'bg-purple-500' },
   { icon: <Brain size={16} />, label: 'EduGrade Pro', color: 'bg-indigo-500' },
   { icon: <Zap size={16} />, label: 'Word Practice', color: 'bg-amber-500' },
   { icon: <Rocket size={16} />, label: 'Last Colony', color: 'bg-slate-600' },
@@ -17,7 +16,7 @@ const strip2 = [
   { icon: <Brain size={16} />, label: 'Memory Match', color: 'bg-violet-500' },
   { icon: <GraduationCap size={16} />, label: 'TOEFL iBT', color: 'bg-blue-500' },
   { icon: <BookOpen size={16} />, label: 'World Class 2-1', color: 'bg-sky-500' },
-  { icon: <Cube size={16} />, label: 'Brick Forge', color: 'bg-purple-500' },
+  { icon: <Box size={16} />, label: 'Brick Forge', color: 'bg-purple-500' },
   { icon: <Rocket size={16} />, label: 'Last Colony', color: 'bg-slate-600' },
   { icon: <Zap size={16} />, label: 'Word Practice', color: 'bg-amber-500' },
   { icon: <Puzzle size={16} />, label: 'Word Scramble', color: 'bg-blue-600' },

@@ -54,6 +54,16 @@ export default function Globe() {
     <div
       className={`relative transition-opacity duration-1000 ${isReady ? 'opacity-100' : 'opacity-0'}`}
       style={{ width: size, height: size }}
+      onMouseEnter={() => {
+        if (globeRef.current) {
+          globeRef.current.controls().autoRotate = false;
+        }
+      }}
+      onMouseLeave={() => {
+        if (globeRef.current) {
+          globeRef.current.controls().autoRotate = true;
+        }
+      }}
     >
       <GlobeGl
         ref={globeRef}
@@ -64,16 +74,6 @@ export default function Globe() {
         atmosphereAltitude={0.2}
         width={size}
         height={size}
-        onGlobeHover={() => {
-          if (globeRef.current) {
-            globeRef.current.controls().autoRotate = false;
-          }
-        }}
-        onGlobeHoverOut={() => {
-          if (globeRef.current) {
-            globeRef.current.controls().autoRotate = true;
-          }
-        }}
       />
     </div>
   );
