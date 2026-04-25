@@ -604,6 +604,11 @@
             flex: 1;
         }
 
+        .lib-header, .lib-nav, .upload-shell, .lib-container {
+            position: relative;
+            z-index: 2;
+        }
+
         .book-btn.danger {
             background: linear-gradient(135deg, #b91c1c, #dc2626);
             box-shadow: 0 4px 0 #7f1d1d, 0 6px 18px rgba(220,38,38,0.35);
@@ -818,6 +823,22 @@
             words: 4200,
             status: 'live',
             path: 'the-secret-cave/index.html'
+        },
+        {
+            id: 'blackwood-manor',
+            title: 'Blackwood Manor',
+            author: 'Teacher Ry',
+            desc: 'Lord Blackwood lies dead in his locked study. The storm has washed out all roads. Interrogate suspects, uncover clues, and name the killer before dawn breaks.',
+            icon: '🕯️',
+            cover: 'city-theme',
+            coverDataUrl: '../../../../../Blackwood/images/cover.png',
+            level: 'Advanced',
+            levelClass: 'level-advanced',
+            chapters: 6,
+            choices: 12,
+            words: 2100,
+            status: 'live',
+            path: '../../../../../Blackwood/Qwen_html_20260425_acq79a7nt.html'
         },
         {
             id: 'lost-island',
@@ -1568,6 +1589,7 @@
     </div>
 </div>
 
+<script src="../../assets/ryshub-dynamic-background.js"></script>
 <script src="../../assets/ryshub-global-header.js"></script>
 </body>
 </html>
