@@ -884,7 +884,7 @@
             <div>
                 <div class="section-kicker">Dynamic Experience</div>
                 <h2>Teachers Command Center</h2>
-                <p>A live landing experience with teacher and student focus modes, animated counters, and premium motion.</p>
+                <p>A live landing experience with teacher focus mode, animated counters, and premium motion.</p>
             </div>
             <div class="hb-chip" id="commandModeBadge"><i class="fas fa-bolt"></i> Teacher focus</div>
         </div>
@@ -899,15 +899,9 @@
                     <h3 class="command-title" id="modeHeading">Teacher mode is active</h3>
                     <p class="command-copy" id="modeDescription">Put protected books, TOEFL iBT, and classroom launch tools first for faster lesson prep.</p>
 
-                    <div class="mode-switch" aria-label="Choose hub mode">
-                        <button type="button" class="mode-btn active" data-mode="teacher" onclick="setHubMode('teacher')">Teacher</button>
-                        <button type="button" class="mode-btn" data-mode="student" onclick="setHubMode('student')">Student</button>
-                    </div>
-
                     <div class="command-actions">
                         <button class="mini-action" onclick="openTeacherRegister('teacher resources')"><i class="fas fa-user-shield"></i> Verify access</button>
                         <button class="mini-action" onclick="window.open('brickforge.html','_blank')"><i class="fas fa-cube"></i> Open BrickForge</button>
-                        <button class="mini-action" onclick="window.open('student-tracker.html','_blank')" title="Launch Creative Minds Student Tracker"><i class="fas fa-brain"></i> Student Tracker</button>
                     </div>
                 </div>
 
@@ -1078,13 +1072,6 @@
                                         <div class="quick-link-text">
                                             <strong>Canva</strong>
                                             <span>Design &amp; Create</span>
-                                        </div>
-                                    </a>
-                                    <a href="student-tracker.html" target="_blank" rel="noopener noreferrer" class="quick-link-card">
-                                        <span class="quick-link-icon custom" style="background: linear-gradient(135deg, #00D9FF, #B829DD); color: white;"><i class="fas fa-brain"></i></span>
-                                        <div class="quick-link-text">
-                                            <strong>Student Tracker</strong>
-                                            <span>Track classes &amp; scores</span>
                                         </div>
                                     </a>
                                 </div>
@@ -1438,16 +1425,7 @@ function renderTeacherDashboard() {
 
     if (!dashboard || !genericStream || !signinPrompt) return;
 
-    // Student mode: always show generic focus stream
-    if (currentHubMode === 'student') {
-        dashboard.classList.remove('active');
-        genericStream.style.display = 'block';
-        signinPrompt.style.display = 'none';
-        if (kicker) kicker.textContent = 'Focus stream';
-        return;
-    }
-
-    // Teacher mode: show personal dashboard if a teacher is signed in
+    // Show personal dashboard if a teacher is signed in
     if (profile && profile.name && isSchoolEmail(profile.email)) {
         dashboard.classList.add('active');
         genericStream.style.display = 'none';
@@ -1544,17 +1522,6 @@ function setHubMode(mode) {
             tertiaryTitle: 'Creative lab',
             tertiaryText: 'Use BrickForge and AI tools to make lessons more memorable.'
         },
-        student: {
-            badge: 'Student focus',
-            heading: 'Student mode is active',
-            description: 'Shift the homepage toward practice, confidence, creative learning, and easy exploration.',
-            primaryTitle: 'Learning path',
-            primaryText: 'Start with TOEFL practice, reading, and guided progress.',
-            secondaryTitle: 'Creative confidence',
-            secondaryText: 'Make speaking and vocabulary practice feel more interactive.',
-            tertiaryTitle: 'Explore safely',
-            tertiaryText: 'A cleaner layout helps learners find the right activity faster.'
-        }
     };
 
     var state = presets[mode] || presets.teacher;
