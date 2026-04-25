@@ -713,6 +713,136 @@
             .dashboard-form-row { grid-template-columns: 1fr; }
             .quick-links-grid { grid-template-columns: 1fr; }
         }
+
+        /* Right Slide Panel */
+        .slide-panel-right {
+            position: fixed;
+            inset-inline-end: 0;
+            inset-block-start: 92px;
+            block-size: calc(100vh - 92px);
+            inline-size: 220px;
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+            background: linear-gradient(180deg, var(--gray-900) 0%, var(--gray-800) 100%);
+            border-inline-start: 1px solid var(--gray-700);
+            transform: translateX(186px);
+            transition: transform 0.28s ease;
+            z-index: 1000;
+            box-shadow: -4px 0 24px rgba(0,0,0,.4);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(59,130,246,.55) rgba(255,255,255,.05);
+        }
+        .slide-panel-right.open { transform: translateX(0); }
+        .panel-tab-right {
+            position: absolute;
+            inset-inline-start: -34px;
+            inset-block-start: 0;
+            transform: none;
+            inline-size: 34px;
+            block-size: 72px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            border-radius: 10px 0 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: -4px 0 18px rgba(37,99,235,.35);
+            transition: all 0.2s ease;
+        }
+        .panel-tab-right:hover { box-shadow: -6px 0 24px rgba(37,99,235,.5); filter: brightness(1.05); }
+        .panel-tab-right i { color: white; font-size: 1rem; animation: pulse 2s infinite; transition: transform 0.2s ease; }
+        .panel-header { padding: 20px 14px; border-block-end: 1px solid var(--gray-700); background: linear-gradient(225deg, rgba(37,99,235,.2), transparent); }
+        .panel-header h3 { margin: 0; color: var(--white); font-size: 1rem; font-weight: 700; }
+        .panel-header p { margin: 4px 0 0; color: var(--gray-400); font-size: 0.78rem; }
+        .panel-nav { flex: 1 1 auto; padding: 10px 10px 14px; overflow-y: auto; min-block-size: 0; display: flex; flex-direction: column; gap: 8px; }
+        .panel-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            color: #f8fbff;
+            text-decoration: none;
+            transition: all 0.18s ease;
+            border: 1px solid rgba(125, 211, 252, 0.16);
+            border-radius: 10px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            background: linear-gradient(180deg, rgba(18,38,74,0.96) 0%, rgba(9,20,43,0.98) 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 3px 0 rgba(2,6,23,0.8), 0 8px 14px rgba(2,6,23,0.28);
+            cursor: pointer;
+        }
+        .panel-item:hover {
+            background: linear-gradient(180deg, rgba(29,78,216,0.92) 0%, rgba(15,23,42,0.98) 100%);
+            border-color: rgba(96,165,250,0.5);
+            transform: translateY(-1px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 0 rgba(2,6,23,0.78), 0 10px 18px rgba(37,99,235,0.24);
+        }
+        .panel-item:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 1px 0 rgba(2,6,23,0.8), 0 4px 10px rgba(2,6,23,0.24);
+        }
+        .panel-item i {
+            inline-size: 18px;
+            text-align: center;
+            color: #9bd7ff;
+            filter: drop-shadow(0 0 6px rgba(37,99,235,0.4));
+            font-size: 0.82rem;
+        }
+        .panel-item span {
+            flex: 1;
+            color: #ffffff;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.14), 0 0 10px rgba(37,99,235,0.45);
+            transform: translateY(1px);
+        }
+        .panel-item.active {
+            background: linear-gradient(180deg, rgba(37,99,235,0.92) 0%, rgba(15,23,42,1) 100%);
+            border-color: rgba(147,197,253,0.62);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 3px 0 rgba(2,6,23,0.8), 0 12px 18px rgba(37,99,235,0.28);
+        }
+        .panel-footer { position: sticky; inset-block-end: 0; margin-block-start: auto; padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px)); border-block-start: 1px solid var(--gray-700); background: linear-gradient(180deg, rgba(17,24,39,.96), rgba(11,15,25,.98)); }
+        .slide-panel-right::-webkit-scrollbar { inline-size: 8px; }
+        .slide-panel-right::-webkit-scrollbar-track { background: rgba(255,255,255,.04); }
+        .slide-panel-right::-webkit-scrollbar-thumb { background: rgba(59,130,246,.55); border-radius: 999px; }
+        .panel-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999; }
+        .panel-overlay.open { opacity: 1; visibility: visible; }
+
+        body.light-theme .slide-panel-right {
+            background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(226,232,240,0.98) 100%);
+            border-inline-start-color: rgba(15,23,42,0.12);
+        }
+        body.light-theme .panel-item {
+            background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.96) 100%);
+            color: #0f172a;
+            border-color: rgba(37,99,235,0.12);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 3px 0 rgba(148,163,184,0.4), 0 8px 14px rgba(148,163,184,0.15);
+        }
+        body.light-theme .panel-item:hover {
+            background: linear-gradient(180deg, rgba(37,99,235,0.18) 0%, rgba(226,232,240,0.96) 100%);
+            border-color: rgba(37,99,235,0.35);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 0 rgba(148,163,184,0.38), 0 10px 18px rgba(37,99,235,0.15);
+        }
+        body.light-theme .panel-item span,
+        body.light-theme .panel-header h3 {
+            color: #0f172a;
+            text-shadow: none;
+        }
+        body.light-theme .panel-item i {
+            color: #2563eb;
+            filter: drop-shadow(0 0 6px rgba(37,99,235,0.25));
+        }
+        body.light-theme .panel-footer {
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(226,232,240,0.98));
+            border-block-start-color: rgba(15,23,42,0.12);
+        }
+
+        @media (max-width: 768px) {
+            .slide-panel-right { transform: translateX(100%); }
+            .slide-panel-right.open { transform: translateX(0); }
+            .panel-tab-right { display: flex; }
+        }
     </style>
 </head>
 <body>
@@ -1585,9 +1715,85 @@ window.addEventListener('scroll', function() {
 })();
 
 /* Init */
+function toggleRightPanel() {
+    const panel = document.getElementById('slidePanelRight');
+    const overlay = document.getElementById('panelOverlayRight');
+    const icon = panel.querySelector('.panel-tab-right i');
+    const isOpen = panel.classList.toggle('open');
+    overlay.classList.toggle('open', isOpen);
+    if (icon) {
+        icon.className = isOpen ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
+    }
+}
+
 applySavedTheme();
 initHubMode();
 initLiveCounters();
 </script>
+
+<!-- Right Slide Panel -->
+<div class="slide-panel-right" id="slidePanelRight">
+    <div class="panel-tab-right" onclick="toggleRightPanel()" title="Quick Tools">
+        <i class="fas fa-chevron-left"></i>
+    </div>
+    <div class="panel-header">
+        <h3><i class="fas fa-toolbox" style="color: var(--primary-light); margin-inline-end: 10px;"></i>Quick Tools</h3>
+        <p>Teacher utilities &amp; links</p>
+    </div>
+    <nav class="panel-nav">
+        <a href="timer.html" target="_blank" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-stopwatch"></i><span>Class Timer</span>
+        </a>
+        <a href="../../calender/Aii_2026_Interactive_Calendar.html" target="_blank" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-calendar-alt"></i><span>Calendar</span>
+        </a>
+        <a href="../../rule%20book/Aii_Teachers_Handbook_6th_Edition_Complete.html" target="_blank" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-book"></i><span>Rule Book</span>
+        </a>
+        <a href="file:///I:/Shared%20drives/Teacher%20Resource%20Center/8.%20Kid%20Standardization%20Curriculum" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-child"></i><span>Kid Standardization Curriculum</span>
+        </a>
+        <a href="file:///I:/Shared%20drives/Teacher%20Resource%20Center/1.%20COURSE%20BOOKS%20AND%20READER%20RESOURCES/1.%20COURSE%20BOOKS" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-book-reader"></i><span>Course Books</span>
+        </a>
+        <a href="file:///I:/Shared%20drives/Teacher%20Resource%20Center/13.%20Library%20of%20Resources" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-university"></i><span>Library and Resources</span>
+        </a>
+        <a href="#" class="panel-item" onclick="showToast('Whiteboard coming soon!'); toggleRightPanel(); return false;">
+            <i class="fas fa-pen-square"></i><span>Quick Whiteboard</span>
+        </a>
+        <a href="toefl/index.html" target="_blank" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-graduation-cap"></i><span>TOEFL iBT</span>
+        </a>
+        <a href="book2b.html" target="_blank" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-book-open"></i><span>World Class 2B</span>
+        </a>
+        <a href="games/index.html" class="panel-item" onclick="toggleRightPanel();">
+            <i class="fas fa-gamepad"></i><span>Game Arcade</span>
+        </a>
+        <a href="https://app.box.com/s/izbnvr08d4vxmt1bp3np99oceowpywpf" target="_blank" rel="noopener noreferrer" class="panel-item">
+            <i class="fas fa-box-open"></i><span>Shared Files</span>
+        </a>
+        <a href="#" class="panel-item" onclick="showToast('EduGrade Pro coming soon!'); toggleRightPanel(); return false;">
+            <i class="fas fa-brain"></i><span>EduGrade Pro</span>
+        </a>
+        <a href="#" class="panel-item" onclick="showToast('Word Practice coming soon!'); toggleRightPanel(); return false;">
+            <i class="fas fa-pencil-alt"></i><span>Word Practice</span>
+        </a>
+    </nav>
+    <div class="panel-footer">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="inline-size: 36px; block-size: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark)); display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-bolt" style="color: white; font-size: 0.9rem;"></i>
+            </div>
+            <div>
+                <div style="font-weight: 600; color: var(--white); font-size: 0.9rem;">Teacher Tools</div>
+                <div style="color: var(--gray-400); font-size: 0.75rem;">Quick access utilities</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel-overlay" id="panelOverlayRight" onclick="toggleRightPanel()"></div>
+
 </body>
 </html>

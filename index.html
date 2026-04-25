@@ -638,6 +638,31 @@
             background: linear-gradient(180deg, rgba(15,23,42,0.08) 0%, rgba(15,23,42,0.45) 100%);
             pointer-events: none;
         }
+        .hb-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(147,197,253,0.25);
+            pointer-events: none;
+            z-index: 1;
+            animation: hbFloat 6s ease-in-out infinite;
+        }
+        @keyframes hbFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 0.6; }
+        }
+        .hb-sweep {
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            animation: hbSweep 5s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        @keyframes hbSweep {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
         .hb-top, .hb-bottom {
             position: relative;
             z-index: 2;
@@ -680,7 +705,41 @@
         }
         .hb-title span {
             display: block;
-            color: #93c5fd;
+            background: linear-gradient(90deg, #93c5fd 0%, #bfdbfe 25%, #93c5fd 50%, #60a5fa 75%, #93c5fd 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: hbShimmer 3s linear infinite;
+        }
+        @keyframes hbShimmer {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+        .hb-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 0.85em;
+            background: #60a5fa;
+            margin-left: 4px;
+            animation: hbBlink 0.8s step-end infinite;
+            vertical-align: text-bottom;
+            box-shadow: 0 0 8px rgba(96,165,250,0.8);
+        }
+        @keyframes hbBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .hb-glitch {
+            animation: hbGlitch 0.3s ease-in-out;
+        }
+        @keyframes hbGlitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
         }
         .hb-meta {
             grid-column: span 4;
@@ -1569,40 +1628,6 @@
             border-block-start-color: rgba(15,23,42,0.12);
         }
 
-        body.light-theme .slide-panel-right {
-            background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(226,232,240,0.98) 100%);
-            border-inline-start-color: rgba(15,23,42,0.12);
-        }
-
-        body.light-theme .panel-item {
-            background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.96) 100%);
-            color: #0f172a;
-            border-color: rgba(37,99,235,0.12);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 3px 0 rgba(148,163,184,0.4), 0 8px 14px rgba(148,163,184,0.15);
-        }
-
-        body.light-theme .panel-item:hover {
-            background: linear-gradient(180deg, rgba(37,99,235,0.18) 0%, rgba(226,232,240,0.96) 100%);
-            border-color: rgba(37,99,235,0.35);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 0 rgba(148,163,184,0.38), 0 10px 18px rgba(37,99,235,0.15);
-        }
-
-        body.light-theme .panel-item span,
-        body.light-theme .panel-header h3 {
-            color: #0f172a;
-            text-shadow: none;
-        }
-
-        body.light-theme .panel-item i {
-            color: #2563eb;
-            filter: drop-shadow(0 0 6px rgba(37,99,235,0.25));
-        }
-
-        body.light-theme .panel-footer {
-            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(226,232,240,0.98));
-            border-block-start-color: rgba(15,23,42,0.12);
-        }
-
         body.light-theme .theme-toggle-mini {
             background: rgba(255,255,255,0.92);
             color: #0f172a;
@@ -1848,101 +1873,6 @@
         .slide-menu::-webkit-scrollbar-thumb { background: rgba(59,130,246,.55); border-radius: 999px; }
         .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999; }
         .menu-overlay.open { opacity: 1; visibility: visible; }
-
-        /* Right Slide Panel */
-        .slide-panel-right {
-            position: fixed;
-            inset-inline-end: 0;
-            inset-block-start: 92px;
-            block-size: calc(100vh - 92px);
-            inline-size: 220px;
-            display: flex;
-            flex-direction: column;
-            overflow: visible;
-            background: linear-gradient(180deg, var(--gray-900) 0%, var(--gray-800) 100%);
-            border-inline-start: 1px solid var(--gray-700);
-            transform: translateX(186px);
-            transition: transform 0.28s ease;
-            z-index: 1000;
-            box-shadow: -4px 0 24px rgba(0,0,0,.4);
-            scrollbar-width: thin;
-            scrollbar-color: rgba(59,130,246,.55) rgba(255,255,255,.05);
-        }
-        .slide-panel-right.open { transform: translateX(0); }
-        .panel-tab-right {
-            position: absolute;
-            inset-inline-start: -34px;
-            inset-block-start: 0;
-            transform: none;
-            inline-size: 34px;
-            block-size: 72px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
-            border-radius: 10px 0 0 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 2;
-            box-shadow: -4px 0 18px rgba(37,99,235,.35);
-            transition: all 0.2s ease;
-        }
-        .panel-tab-right:hover { box-shadow: -6px 0 24px rgba(37,99,235,.5); filter: brightness(1.05); }
-        .panel-tab-right i { color: white; font-size: 1rem; animation: pulse 2s infinite; transition: transform 0.2s ease; }
-        .panel-header { padding: 20px 14px; border-block-end: 1px solid var(--gray-700); background: linear-gradient(225deg, rgba(37,99,235,.2), transparent); }
-        .panel-header h3 { margin: 0; color: var(--white); font-size: 1rem; font-weight: 700; }
-        .panel-header p { margin: 4px 0 0; color: var(--gray-400); font-size: 0.78rem; }
-        .panel-nav { flex: 1 1 auto; padding: 10px 10px 14px; overflow-y: auto; min-block-size: 0; display: flex; flex-direction: column; gap: 8px; }
-        .panel-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 10px;
-            color: #f8fbff;
-            text-decoration: none;
-            transition: all 0.18s ease;
-            border: 1px solid rgba(125, 211, 252, 0.16);
-            border-radius: 10px;
-            font-size: 0.76rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            background: linear-gradient(180deg, rgba(18,38,74,0.96) 0%, rgba(9,20,43,0.98) 100%);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 3px 0 rgba(2,6,23,0.8), 0 8px 14px rgba(2,6,23,0.28);
-            cursor: pointer;
-        }
-        .panel-item:hover {
-            background: linear-gradient(180deg, rgba(29,78,216,0.92) 0%, rgba(15,23,42,0.98) 100%);
-            border-color: rgba(96,165,250,0.5);
-            transform: translateY(-1px);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 0 rgba(2,6,23,0.78), 0 10px 18px rgba(37,99,235,0.24);
-        }
-        .panel-item:active {
-            transform: translateY(2px);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 1px 0 rgba(2,6,23,0.8), 0 4px 10px rgba(2,6,23,0.24);
-        }
-        .panel-item i {
-            inline-size: 18px;
-            text-align: center;
-            color: #9bd7ff;
-            filter: drop-shadow(0 0 6px rgba(37,99,235,0.4));
-            font-size: 0.82rem;
-        }
-        .panel-item span {
-            flex: 1;
-            color: #ffffff;
-            text-shadow: 0 1px 0 rgba(255,255,255,0.14), 0 0 10px rgba(37,99,235,0.45);
-            transform: translateY(1px);
-        }
-        .panel-item.active {
-            background: linear-gradient(180deg, rgba(37,99,235,0.92) 0%, rgba(15,23,42,1) 100%);
-            border-color: rgba(147,197,253,0.62);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 3px 0 rgba(2,6,23,0.8), 0 12px 18px rgba(37,99,235,0.28);
-        }
-        .panel-footer { position: sticky; inset-block-end: 0; margin-block-start: auto; padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px)); border-block-start: 1px solid var(--gray-700); background: linear-gradient(180deg, rgba(17,24,39,.96), rgba(11,15,25,.98)); }
-        .slide-panel-right::-webkit-scrollbar { inline-size: 8px; }
-        .slide-panel-right::-webkit-scrollbar-track { background: rgba(255,255,255,.04); }
-        .slide-panel-right::-webkit-scrollbar-thumb { background: rgba(59,130,246,.55); border-radius: 999px; }
-        .panel-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999; }
-        .panel-overlay.open { opacity: 1; visibility: visible; }
 
         /* Nav active state - Light */
         .nav-3d.active-nav {
@@ -2224,18 +2154,6 @@
                 display: flex;
             }
 
-            .slide-panel-right {
-                transform: translateX(100%);
-            }
-
-            .slide-panel-right.open {
-                transform: translateX(0);
-            }
-
-            .panel-tab-right {
-                display: flex;
-            }
-
             .hero-shell {
                 grid-template-columns: 1fr;
             }
@@ -2496,66 +2414,17 @@
 </div>
 <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 
-<!-- Right Slide Panel -->
-<div class="slide-panel-right" id="slidePanelRight">
-    <div class="panel-tab-right" onclick="toggleRightPanel()" title="Quick Tools">
-        <i class="fas fa-chevron-left"></i>
-    </div>
-    <div class="panel-header">
-        <h3><i class="fas fa-toolbox" style="color: var(--primary-light); margin-inline-end: 10px;"></i>Quick Tools</h3>
-        <p>Teacher utilities &amp; links</p>
-    </div>
-    <nav class="panel-nav">
-        <a href="apps/timer.html" target="_blank" class="panel-item" onclick="toggleRightPanel();">
-            <i class="fas fa-stopwatch"></i><span>Class Timer</span>
-        </a>
-        <a href="#" class="panel-item" onclick="showToast('Random picker coming soon!'); toggleRightPanel(); return false;">
-            <i class="fas fa-random"></i><span>Student Picker</span>
-        </a>
-        <a href="#" class="panel-item" onclick="showToast('Score tracker coming soon!'); toggleRightPanel(); return false;">
-            <i class="fas fa-chart-line"></i><span>Score Tracker</span>
-        </a>
-        <a href="#" class="panel-item" onclick="showToast('Whiteboard coming soon!'); toggleRightPanel(); return false;">
-            <i class="fas fa-pen-square"></i><span>Quick Whiteboard</span>
-        </a>
-        <a href="#" class="panel-item" onclick="openProtectedPage('apps/toefl/index.html', 'TOEFL iBT'); toggleRightPanel(); return false;">
-            <i class="fas fa-graduation-cap"></i><span>TOEFL iBT</span>
-        </a>
-        <a href="#" class="panel-item" onclick="openProtectedBook2b(); toggleRightPanel(); return false;">
-            <i class="fas fa-book-open"></i><span>World Class 2B</span>
-        </a>
-        <a href="apps/games/index.html" class="panel-item" onclick="toggleRightPanel();">
-            <i class="fas fa-gamepad"></i><span>Game Arcade</span>
-        </a>
-        <a href="https://app.box.com/s/izbnvr08d4vxmt1bp3np99oceowpywpf" target="_blank" rel="noopener noreferrer" class="panel-item">
-            <i class="fas fa-box-open"></i><span>Shared Files</span>
-        </a>
-        <a href="#" class="panel-item" onclick="showToast('EduGrade Pro coming soon!'); toggleRightPanel(); return false;">
-            <i class="fas fa-brain"></i><span>EduGrade Pro</span>
-        </a>
-        <a href="#" class="panel-item" onclick="showToast('Word Practice coming soon!'); toggleRightPanel(); return false;">
-            <i class="fas fa-pencil-alt"></i><span>Word Practice</span>
-        </a>
-    </nav>
-    <div class="panel-footer">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="inline-size: 36px; block-size: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark)); display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-bolt" style="color: white; font-size: 0.9rem;"></i>
-            </div>
-            <div>
-                <div style="font-weight: 600; color: var(--white); font-size: 0.9rem;">Teacher Tools</div>
-                <div style="color: var(--gray-400); font-size: 0.75rem;">Quick access utilities</div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="panel-overlay" id="panelOverlayRight" onclick="toggleRightPanel()"></div>
-
     <!-- Hero -->
 <section class="hero-section" id="topHome">
     <div class="hero-banner">
         <div class="hero-banner-coded">
             <div class="hb-bg-image"></div>
+            <div class="hb-particle" style="width:5px;height:5px;top:15%;left:10%;animation-duration:5s;"></div>
+            <div class="hb-particle" style="width:3px;height:3px;top:25%;left:85%;animation-duration:7s;animation-delay:1s;"></div>
+            <div class="hb-particle" style="width:7px;height:7px;top:60%;left:20%;animation-duration:6s;animation-delay:0.5s;"></div>
+            <div class="hb-particle" style="width:4px;height:4px;top:45%;left:75%;animation-duration:8s;animation-delay:2s;"></div>
+            <div class="hb-particle" style="width:6px;height:6px;top:80%;left:50%;animation-duration:5.5s;animation-delay:1.5s;"></div>
+            <div class="hb-sweep"></div>
             <div class="hb-top">
                 <div class="hb-chip"><i class="fas fa-chalkboard-teacher" aria-hidden="true"></i> ESL Teachers Hub</div>
                 <div class="hb-chip"><i class="fas fa-sparkles" aria-hidden="true"></i> <span id="hbTopChip">Coded Visual Banner</span></div>
@@ -2563,7 +2432,7 @@
             <div class="hb-grid">
                 <div class="hb-title" id="hbTitle">
                     <span id="hbTitlePrefix">Teach English with</span>
-                    <span id="hbTitleSpan">Artful Digital Experiences</span>
+                    <span id="hbTitleSpan">Artful Digital Experiences</span><span class="hb-cursor" id="hbCursor"></span>
                 </div>
                 <div class="hb-meta" id="hbMeta">
                     Designed for teachers who want bold visuals, clear pedagogy, and engaging classroom-ready learning moments.
@@ -3869,17 +3738,6 @@ function toggleMenu() {
     }
 }
 
-function toggleRightPanel() {
-    const panel = document.getElementById('slidePanelRight');
-    const overlay = document.getElementById('panelOverlayRight');
-    const icon = panel.querySelector('.panel-tab-right i');
-    const isOpen = panel.classList.toggle('open');
-    overlay.classList.toggle('open', isOpen);
-    if (icon) {
-        icon.className = isOpen ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
-    }
-}
-
 function openToeflLogin() {
     document.getElementById('toefl-login-overlay').classList.add('open');
     setTimeout(function(){ document.getElementById('toefl-name').focus(); }, 200);
@@ -4039,11 +3897,12 @@ var HERO_TOPICS = [
 
 function scrambleText(el, finalText, duration) {
     if (!el) return;
-    duration = duration || 900;
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
-    var steps = 16;
+    duration = duration || 1200;
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*<>/=+-_';
+    var steps = 22;
     var stepTime = duration / steps;
     var currentStep = 0;
+    el.classList.add('hb-glitch');
     var interval = setInterval(function() {
         currentStep++;
         var progress = currentStep / steps;
@@ -4062,6 +3921,7 @@ function scrambleText(el, finalText, duration) {
         if (currentStep >= steps) {
             clearInterval(interval);
             el.textContent = finalText;
+            setTimeout(function() { el.classList.remove('hb-glitch'); }, 300);
         }
     }, stepTime);
 }
