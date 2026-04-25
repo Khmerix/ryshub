@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ArrowRight, Gamepad2 } from 'lucide-react';
+import GlitchText from './GlitchText';
 
 interface GameCardProps {
   title: string;
@@ -77,7 +78,10 @@ export default function GameCard({
         </div>
       )}
 
-      <h3 className="text-lg font-bold text-slate-900 mb-1">{title}</h3>
+      <h3 className="text-lg font-bold text-slate-900 mb-1">
+        <GlitchText text={title} tag="span" />
+      </h3>
+
       <p className="text-sm text-slate-600 mb-4 line-clamp-2">{description}</p>
 
       <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 bg-slate-100 group-hover:bg-slate-800 group-hover:text-white transition-colors">
