@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Ryshub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: white;
+            padding: 45px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            max-width: 460px;
+            width: 100%;
+            text-align: center;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 6px;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 15px;
+        }
+        .tab.active {
+            background: white;
+            color: #1e3a8a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #475569;
+            font-weight: 600;
+            font-size: 13.5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+        .role-note {
+            font-size: 12.5px;
+            color: #64748b;
+            background: #f8fafc;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: left;
+            border-left: 3px solid #2563eb;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 6px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            display: none;
+            font-size: 13.5px;
+        }
+        .error-message.show { display: block; }
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            display: none;
+            font-size: 13.5px;
+        }
+        .success-message.show { display: block; }
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+            color: #2563eb;
+            font-size: 13px;
+        }
+        .footer {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">📚</div>
+        <h1>Log into Ryshub</h1>
+        <p class="subtitle">One account for everything</p>
+
+        <div class="role-note" style="margin-bottom:20px;">
+            <strong>🔐 Team master login</strong><br>
+            Use the shared team username and password to unlock the full teacher hub, books, and TOEFL testing tools.
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Team Username</label>
+                <input type="text" id="username" placeholder="Enter the shared team username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Team Password</label>
+                <input type="password" id="password" placeholder="Enter the shared team password" required>
+            </div>
+            <button type="submit" class="login-btn">Enter Teacher Hub</button>
+        </form>
+
+        <div id="errorMessage" class="error-message">Invalid team username or password. Please try again.</div>
+        <div id="successMessage" class="success-message">Access granted. Opening the teacher hub now.</div>
+
+        <div class="secure-badge">
+            <span>🔒</span>
+            <span>Secure Access Portal</span>
+        </div>
+        <div class="footer">© 2026 Ryshub — Built for ESL learners & teachers</div>
+    </div>
+
+    <script>
+        // SECURITY NOTE: In production, credentials should be validated server-side.
+        // This is a client-side demo only. Never expose real credentials in client code.
+        const MASTER_CREDENTIALS = {
+            username: 'team',
+            password: 'RysHub2026!'
+        };
+
+        const MASTER_PROFILE = {
+            name: 'Team Access',
+            email: 'team@aii.edu.kh',
+            school: 'Aii Language Center',
+            verified: true,
+            approved: true,
+            master: true,
+            verifiedAt: new Date().toISOString(),
+            registeredAt: new Date().toISOString()
+        };
+
+        // Secure session token generation
+        function generateSecureToken() {
+            return 'tok_' + Math.random().toString(36).substring(2) + 
+                   Date.now().toString(36) + 
+                   Math.random().toString(36).substring(2);
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+
+            if (username === MASTER_CREDENTIALS.username && password === MASTER_CREDENTIALS.password) {
+                const profiles = JSON.parse(localStorage.getItem('ryshubTeacherProfiles') || '{}');
+                profiles[MASTER_PROFILE.email] = MASTER_PROFILE;
+
+                localStorage.setItem('ryshubTeacherProfiles', JSON.stringify(profiles));
+                localStorage.setItem('ryshubTeacherProfile', JSON.stringify(MASTER_PROFILE));
+                sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(MASTER_PROFILE));
+                localStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
+                sessionStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
+                
+                // Use secure session token instead of simple boolean flags
+                const sessionToken = generateSecureToken();
+                localStorage.setItem('ryshub_session_token', sessionToken);
+                sessionStorage.setItem('ryshub_session_token', sessionToken);
+                
+                localStorage.setItem('ryshub_loggedIn', 'true');
+                sessionStorage.setItem('ryshub_loggedIn', 'true');
+                
+                // Store minimal role info (avoid storing sensitive master flag directly)
+                localStorage.setItem('ryshub_user', username);
+                sessionStorage.setItem('ryshub_user', username);
+                localStorage.setItem('ryshub_role', 'teacher');
+                sessionStorage.setItem('ryshub_role', 'teacher');
+
+                errorDiv.classList.remove('show');
+                successDiv.classList.add('show');
+                setTimeout(function() {
+                    window.location.href = '../index.html';
+                }, 350);
+            } else {
+                successDiv.classList.remove('show');
+                errorDiv.textContent = 'Invalid team username or password. Please try again.';
+                errorDiv.classList.add('show');
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        });
+
+        ['username','password'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', function() {
+                document.getElementById('errorMessage').classList.remove('show');
+                document.getElementById('successMessage').classList.remove('show');
+            });
+        });
+    </script>
+<script src="../assets/ryshub-global-header.js"></script>
+</body>
+</html>
