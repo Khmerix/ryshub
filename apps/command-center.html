@@ -1204,6 +1204,21 @@ function showToast(msg) {
     toastTimer = setTimeout(function(){ t.style.transform='translateY(120px)'; t.style.opacity='0'; }, 3000);
 }
 
+function openSharedFolder(path, name) {
+    toggleRightPanel();
+    // Try to open the folder
+    var link = document.createElement('a');
+    link.href = 'file:///' + path.replace(/\\/g, '/');
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    // Show toast with path in case browser blocks it
+    setTimeout(function() {
+        showToast('Opening ' + name + '... If blocked, navigate to: ' + path);
+    }, 200);
+}
+
 function openTeacherRegister(featureName, callback) {
     pendingTeacherAction = typeof callback === 'function' ? callback : null;
     showToast('Use the main team login to access ' + (featureName || 'teacher resources'));
@@ -1750,13 +1765,13 @@ initLiveCounters();
         <a href="../rule%20book/Aii_Teachers_Handbook_6th_Edition_Complete.html" target="_blank" class="panel-item" onclick="toggleRightPanel();">
             <i class="fas fa-book"></i><span>Rule Book</span>
         </a>
-        <a href="file:///I:/Shared%20drives/Teacher%20Resource%20Center/8.%20Kid%20Standardization%20Curriculum" class="panel-item" onclick="toggleRightPanel();">
+        <a href="#" class="panel-item" onclick="openSharedFolder('I:/Shared drives/Teacher Resource Center/8. Kid Standardization Curriculum', 'Kid Standardization Curriculum'); return false;">
             <i class="fas fa-child"></i><span>Kid Standardization Curriculum</span>
         </a>
-        <a href="file:///I:/Shared%20drives/Teacher%20Resource%20Center/1.%20COURSE%20BOOKS%20AND%20READER%20RESOURCES/1.%20COURSE%20BOOKS" class="panel-item" onclick="toggleRightPanel();">
+        <a href="#" class="panel-item" onclick="openSharedFolder('I:/Shared drives/Teacher Resource Center/1. COURSE BOOKS AND READER RESOURCES/1. COURSE BOOKS', 'Course Books'); return false;">
             <i class="fas fa-book-reader"></i><span>Course Books</span>
         </a>
-        <a href="file:///I:/Shared%20drives/Teacher%20Resource%20Center/13.%20Library%20of%20Resources" class="panel-item" onclick="toggleRightPanel();">
+        <a href="#" class="panel-item" onclick="openSharedFolder('I:/Shared drives/Teacher Resource Center/13. Library of Resources', 'Library and Resources'); return false;">
             <i class="fas fa-university"></i><span>Library and Resources</span>
         </a>
         <a href="#" class="panel-item" onclick="showToast('Whiteboard coming soon!'); toggleRightPanel(); return false;">
