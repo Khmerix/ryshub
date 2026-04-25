@@ -763,6 +763,17 @@
     <iframe id="solar-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
+<div id="earth-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #0f766e, #134e4a);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <i class="fas fa-earth-asia" style="color:#5eead4;"></i>
+            <h3>Earth Globe — Layers &amp; Atmosphere</h3>
+        </div>
+        <button onclick="closeEarthModal()"><i class="fas fa-xmark"></i> Close</button>
+    </div>
+    <iframe id="earth-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
 <!-- Toast -->
 <div id="hub-toast" class="hub-toast"><span id="hub-toast-msg"></span></div>
 
@@ -816,6 +827,7 @@ var GAME_META = {
 var MINI_GAMES = [
     { id: 'colony', title: 'Last Colony', status: 'Live', iconClass: 'fas fa-rocket', desc: 'Strategy survival RPG set on Mars with missions, choices, and colony management.', launchText: 'Launch', launchAction: function() { openColonyModal(); } },
     { id: 'solar', title: 'Solar System', status: 'Live', iconClass: 'fas fa-globe-americas', desc: 'Interactive space missions that teach planets, orbits, and exploration concepts.', launchText: 'Launch', launchAction: function() { openSolarSystemModal(); } },
+    { id: 'earth', title: 'Earth Globe', status: 'Live', iconClass: 'fas fa-earth-asia', desc: '3D interactive globe with atmospheric layers, internal structure, and city markers.', launchText: 'Launch', launchAction: function() { openEarthModal(); } },
     { id: 'typing-race', title: 'Typing Race', status: 'Live', iconClass: 'fas fa-keyboard', desc: 'Fast keyboard challenge for sentence accuracy and speed practice.', launchText: 'Launch', launchAction: function() { recordGameLaunch('typing-race'); window.open('typing-race/index.html', '_blank'); } },
     { id: 'writecraft', title: 'WriteCraft', status: 'Live', iconClass: 'fas fa-pen-nib', desc: 'Writing trainer for essays, summaries & stories with timed prompts and live scoring.', launchText: 'Launch', launchAction: function() { recordGameLaunch('writecraft'); window.open('../writing-trainer/index.html', '_blank'); } },
     { id: 'memory-match', title: 'Memory Match', status: 'Coming Soon', iconClass: 'fas fa-brain', desc: 'Flip and match challenge to strengthen memory and word association.', launchText: 'Coming soon', launchAction: null },
@@ -868,6 +880,16 @@ function closeSolarSystemModal() {
     document.getElementById('solar-modal').classList.remove('open');
 }
 
+function openEarthModal() {
+    recordGameLaunch('earth');
+    showToast('Launching Earth Globe... stand by 🌍');
+    document.getElementById('earth-frame').src = 'earth/index.html';
+    document.getElementById('earth-modal').classList.add('open');
+}
+function closeEarthModal() {
+    document.getElementById('earth-modal').classList.remove('open');
+}
+
 var featuredGameIndex = 0;
 var currentFeaturedGameId = 'colony';
 var gameScoreTimer = null;
@@ -881,6 +903,7 @@ function getTrendLabel(plays) {
 function openGameFromScores(id) {
     if (id === 'colony') openColonyModal();
     else if (id === 'solar') openSolarSystemModal();
+    else if (id === 'earth') openEarthModal();
     else if (id === 'typing-race') { recordGameLaunch('typing-race'); window.open('typing-race/index.html', '_blank'); }
     else if (id === 'writecraft') { recordGameLaunch('writecraft'); window.open('../writing-trainer/index.html', '_blank'); }
     else showToast('Launch from the main hub for this game');

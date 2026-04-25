@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Educational Earth Globe - Layers & Atmosphere</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+    }
+    
+    #canvas-container {
+      width: 100vw;
+      height: 100vh;
+    }
+    
+    /* Control Panel */
+    .control-panel {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 20, 40, 0.9);
+      padding: 20px;
+      border-radius: 15px;
+      border: 1px solid rgba(100, 200, 255, 0.3);
+      max-width: 300px;
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .control-panel h2 {
+      margin-bottom: 15px;
+      color: #64c8ff;
+      font-size: 1.3em;
+      border-bottom: 2px solid rgba(100, 200, 255, 0.3);
+      padding-bottom: 10px;
+    }
+    
+    .toggle-group {
+      margin-bottom: 15px;
+    }
+    
+    .toggle-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      background: rgba(100, 200, 255, 0.2);
+      border: 1px solid rgba(100, 200, 255, 0.4);
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.95em;
+    }
+    
+    .toggle-btn:hover {
+      background: rgba(100, 200, 255, 0.4);
+    }
+    
+    .toggle-btn.active {
+      background: rgba(100, 200, 255, 0.6);
+      border-color: #64c8ff;
+    }
+    
+    .slider-group {
+      margin: 15px 0;
+      padding-top: 10px;
+      border-top: 1px solid rgba(100, 200, 255, 0.2);
+    }
+    
+    .slider-group label {
+      font-size: 0.85em;
+      color: #ccc;
+      display: block;
+      margin-bottom: 8px;
+    }
+    
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(100, 200, 255, 0.2);
+      outline: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #64c8ff;
+      cursor: pointer;
+      border: none;
+    }
+    
+    input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #64c8ff;
+      cursor: pointer;
+      border: none;
+    }
+    
+    /* Info Panel */
+    .info-panel {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 20, 40, 0.95);
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid rgba(100, 200, 255, 0.3);
+      max-width: 350px;
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: none;
+    }
+    
+    .info-panel.active {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .info-panel h3 {
+      color: #64c8ff;
+      margin-bottom: 15px;
+      font-size: 1.4em;
+    }
+    
+    .info-panel .layer-info {
+      margin: 10px 0;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      border-left: 4px solid #64c8ff;
+    }
+    
+    .info-panel .layer-name {
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 5px;
+    }
+    
+    .info-panel .layer-detail {
+      font-size: 0.9em;
+      line-height: 1.5;
+      color: #ccc;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5em;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    
+    .close-btn:hover {
+      opacity: 1;
+    }
+    
+    /* Legend */
+    .legend {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 20, 40, 0.9);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(100, 200, 255, 0.3);
+      font-size: 0.85em;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+    }
+    
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      border-radius: 4px;
+    }
+    
+    /* Earth Layers Visualization */
+    .layers-viz {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 20, 40, 0.9);
+      padding: 20px;
+      border-radius: 15px;
+      border: 1px solid rgba(100, 200, 255, 0.3);
+      z-index: 100;
+      transition: all 0.3s ease;
+      min-width: 240px;
+    }
+    
+    .layers-viz.collapsed {
+      padding: 10px 15px;
+      min-width: auto;
+      cursor: pointer;
+    }
+    
+    .layers-viz.collapsed .earth-cross-section,
+    .layers-viz.collapsed .layer-label {
+      display: none;
+    }
+    
+    .layers-viz.collapsed h4 {
+      margin-bottom: 0;
+    }
+    
+    .layers-viz.glow {
+      box-shadow: 0 0 20px rgba(100, 200, 255, 0.4);
+      border-color: #64c8ff;
+    }
+    
+    .layers-viz h4 {
+      color: #64c8ff;
+      margin-bottom: 15px;
+      text-align: center;
+      padding-right: 20px;
+    }
+    
+    .collapse-btn {
+      position: absolute;
+      top: 15px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #64c8ff;
+      font-size: 1.3em;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+    
+    .collapse-btn:hover {
+      color: #fff;
+    }
+    
+    .earth-cross-section {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      margin: 0 auto;
+    }
+    
+    .layer-circle {
+      position: absolute;
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: box-shadow 0.5s;
+    }
+    
+    .layer-circle.pulse {
+      animation: layerPulse 2s infinite;
+    }
+    
+    @keyframes layerPulse {
+      0%, 100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
+      50% { box-shadow: 0 0 15px rgba(255, 200, 100, 0.5); }
+    }
+    
+    .inner-core {
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle, #ffd700, #ff8c00);
+    }
+    
+    .outer-core {
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #ff8c00, #ff4500);
+    }
+    
+    .mantle {
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, #ff4500, #8b4513);
+    }
+    
+    .crust {
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, #4169e1, #228b22);
+    }
+    
+    .layer-label {
+      position: absolute;
+      font-size: 0.75em;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    
+    /* Loading indicator */
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5em;
+      color: #64c8ff;
+      z-index: 1000;
+      text-align: center;
+      pointer-events: none;
+      transition: opacity 0.5s;
+    }
+    
+    .loading.hidden {
+      opacity: 0;
+    }
+    
+    .loading::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 40px;
+      margin: 15px auto 0;
+      border: 3px solid rgba(100, 200, 255, 0.3);
+      border-top-color: #64c8ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* City label */
+    .city-label {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75em;
+      pointer-events: none;
+      display: none;
+      z-index: 200;
+      white-space: nowrap;
+      border: 1px solid #ff4444;
+    }
+
+    @media (max-width: 768px) {
+      .control-panel {
+        max-width: 220px;
+        padding: 12px;
+        font-size: 0.85em;
+      }
+      .info-panel {
+        max-width: 220px;
+        padding: 15px;
+        top: auto;
+        bottom: 240px;
+        right: 10px;
+      }
+      .layers-viz {
+        transform: scale(0.7);
+        transform-origin: bottom right;
+        right: 10px;
+        bottom: 10px;
+      }
+      .legend {
+        font-size: 0.75em;
+        padding: 10px;
+        left: 10px;
+        bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="canvas-container"></div>
+  
+  <div class="loading" id="loading">Loading Earth Data...</div>
+  <div class="city-label" id="cityLabel"></div>
+  
+  <!-- Control Panel -->
+  <div class="control-panel">
+    <a href="../../../index.html" class="toggle-btn" style="margin-bottom: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+      ← Back to Hub
+    </a>
+    <h2>🌍 Earth Controls</h2>
+    
+    <div class="toggle-group">
+      <button class="toggle-btn" onclick="toggleLayer('atmosphere', this)">
+        ☁️ Atmosphere Layers
+      </button>
+      <button class="toggle-btn active" onclick="toggleLayer('elevation', this)">
+        ⛰️ Elevation/Terrain
+      </button>
+      <button class="toggle-btn" onclick="toggleLayer('clouds', this)">
+        💨 Cloud Cover
+      </button>
+      <button class="toggle-btn" onclick="toggleLayer('earthStructure', this)">
+        🔬 Earth's Internal Structure
+      </button>
+      <button class="toggle-btn" onclick="toggleLayer('cityMarkers', this)">
+        📍 City Markers
+      </button>
+    </div>
+    
+    <div class="slider-group">
+      <label for="speedSlider">🔄 Rotation Speed: <span id="speedValue">1x</span></label>
+      <input type="range" id="speedSlider" min="0" max="5" step="0.1" value="1">
+    </div>
+    
+    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(100,200,255,0.3);">
+      <button class="toggle-btn" onclick="showInfo('atmosphere')">
+        📚 Learn About Atmosphere
+      </button>
+      <button class="toggle-btn" onclick="showInfo('layers')">
+        📚 Learn About Earth's Layers
+      </button>
+      <button class="toggle-btn" onclick="resetView()">
+        🎯 Reset View
+      </button>
+    </div>
+  </div>
+  
+  <!-- Info Panel -->
+  <div class="info-panel" id="infoPanel">
+    <button class="close-btn" onclick="closeInfo()">&times;</button>
+    <h3 id="infoTitle">Information</h3>
+    <div id="infoContent"></div>
+  </div>
+  
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-color" style="background: #87CEEB; opacity: 0.6;"></div>
+      <span>Troposphere (0-12 km)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background: #FFD700; opacity: 0.6;"></div>
+      <span>Stratosphere (12-50 km)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background: #FF6347; opacity: 0.6;"></div>
+      <span>Mesosphere (50-85 km)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color" style="background: #9370DB; opacity: 0.6;"></div>
+      <span>Thermosphere (85+ km)</span>
+    </div>
+  </div>
+  
+  <!-- Earth Structure Visualization -->
+  <div class="layers-viz" id="layersViz">
+    <button class="collapse-btn" onclick="toggleLayersPanel()" title="Collapse/Expand">−</button>
+    <h4>Earth's Internal Structure</h4>
+    <div class="earth-cross-section">
+      <div class="layer-circle crust" id="cssCrust"></div>
+      <div class="layer-circle mantle" id="cssMantle"></div>
+      <div class="layer-circle outer-core" id="cssOuterCore"></div>
+      <div class="layer-circle inner-core" id="cssInnerCore"></div>
+      <span class="layer-label" style="top: 5px; left: 50%; transform: translateX(-50%);">Crust</span>
+      <span class="layer-label" style="top: 35px; left: 50%; transform: translateX(-50%);">Mantle</span>
+      <span class="layer-label" style="top: 70px; left: 50%; transform: translateX(-50%);">Outer Core</span>
+      <span class="layer-label" style="top: 95px; left: 50%; transform: translateX(-50%);">Inner Core</span>
+    </div>
+  </div>
+
+  <script src="./three.min.js"></script>
+  <script src="./OrbitControls.global.js"></script>
+  <script>
+
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 3.5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    // Controls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 2;
+    controls.maxDistance = 10;
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+    scene.add(ambientLight);
+
+    const sunLight = new THREE.DirectionalLight(0xffffff, 2);
+    sunLight.position.set(5, 3, 5);
+    scene.add(sunLight);
+
+    const backLight = new THREE.DirectionalLight(0x445566, 0.5);
+    backLight.position.set(-5, -3, -5);
+    scene.add(backLight);
+
+    // Texture loader with tracking
+    const textureLoader = new THREE.TextureLoader();
+    let texturesLoaded = 0;
+    const totalTextures = 3; // earth, normal, clouds
+    
+    function onTextureLoad() {
+      texturesLoaded++;
+      if (texturesLoaded >= totalTextures) {
+        hideLoading();
+      }
+    }
+    
+    function onTextureError(url) {
+      console.warn('Failed to load texture:', url);
+      texturesLoaded++;
+      if (texturesLoaded >= totalTextures) {
+        hideLoading();
+      }
+    }
+    
+    function hideLoading() {
+      const el = document.getElementById('loading');
+      el.classList.add('hidden');
+      setTimeout(() => { el.style.display = 'none'; }, 500);
+    }
+    
+    // Safety: hide loading after 4 seconds no matter what
+    setTimeout(hideLoading, 4000);
+
+    // Earth group with axial tilt
+    const earthGroup = new THREE.Group();
+    earthGroup.rotation.z = 23.44 * Math.PI / 180;
+    scene.add(earthGroup);
+
+    // Earth sphere
+    const earthGeometry = new THREE.SphereGeometry(1, 64, 64);
+    const earthMaterial = new THREE.MeshStandardMaterial({
+      map: textureLoader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg', onTextureLoad, undefined, () => onTextureError('earth')),
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+    earthGroup.add(earth);
+
+    // Elevation/Bump map
+    const bumpMap = textureLoader.load('https://threejs.org/examples/textures/planets/earth_normal_2048.jpg', onTextureLoad, undefined, () => onTextureError('normal'));
+    earthMaterial.normalMap = bumpMap;
+    earthMaterial.normalScale = new THREE.Vector2(0.05, 0.05);
+
+    // Cloud layer
+    const cloudGeometry = new THREE.SphereGeometry(1.02, 64, 64);
+    const cloudMaterial = new THREE.MeshStandardMaterial({
+      map: textureLoader.load('https://threejs.org/examples/textures/planets/earth_clouds_1024.png', onTextureLoad, undefined, () => onTextureError('clouds')),
+      transparent: true,
+      opacity: 0,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    });
+    const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
+    earthGroup.add(clouds);
+
+    // Atmosphere layers
+    const atmosphereLayers = {};
+    
+    // Troposphere (0-12km) - light blue
+    const troposphereGeometry = new THREE.SphereGeometry(1.03, 64, 64);
+    const troposphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0x87CEEB,
+      transparent: true,
+      opacity: 0,
+      side: THREE.BackSide
+    });
+    const troposphere = new THREE.Mesh(troposphereGeometry, troposphereMaterial);
+    earthGroup.add(troposphere);
+    atmosphereLayers.troposphere = troposphere;
+
+    // Stratosphere (12-50km) - yellowish
+    const stratosphereGeometry = new THREE.SphereGeometry(1.08, 64, 64);
+    const stratosphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0xFFD700,
+      transparent: true,
+      opacity: 0,
+      side: THREE.BackSide
+    });
+    const stratosphere = new THREE.Mesh(stratosphereGeometry, stratosphereMaterial);
+    earthGroup.add(stratosphere);
+    atmosphereLayers.stratosphere = stratosphere;
+
+    // Mesosphere (50-85km) - reddish
+    const mesosphereGeometry = new THREE.SphereGeometry(1.12, 64, 64);
+    const mesosphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0xFF6347,
+      transparent: true,
+      opacity: 0,
+      side: THREE.BackSide
+    });
+    const mesosphere = new THREE.Mesh(mesosphereGeometry, mesosphereMaterial);
+    earthGroup.add(mesosphere);
+    atmosphereLayers.mesosphere = mesosphere;
+
+    // Thermosphere (85+ km) - purple
+    const thermosphereGeometry = new THREE.SphereGeometry(1.18, 64, 64);
+    const thermosphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0x9370DB,
+      transparent: true,
+      opacity: 0,
+      side: THREE.BackSide
+    });
+    const thermosphere = new THREE.Mesh(thermosphereGeometry, thermosphereMaterial);
+    earthGroup.add(thermosphere);
+    atmosphereLayers.thermosphere = thermosphere;
+
+    // Atmosphere glow effect with opacity uniform
+    const atmosphereGlowGeometry = new THREE.SphereGeometry(1.15, 64, 64);
+    const atmosphereGlowMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        opacity: { value: 0.0 }
+      },
+      vertexShader: `
+        varying vec3 vNormal;
+        void main() {
+          vNormal = normalize(normalMatrix * normal);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float opacity;
+        varying vec3 vNormal;
+        void main() {
+          float intensity = pow(0.65 - dot(vNormal, vec3(0, 0, 1.0)), 2.0);
+          gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity * opacity;
+        }
+      `,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
+      transparent: true
+    });
+    const atmosphereGlow = new THREE.Mesh(atmosphereGlowGeometry, atmosphereGlowMaterial);
+    scene.add(atmosphereGlow);
+
+    // Earth's internal structure (3D)
+    const structureGroup = new THREE.Group();
+    earthGroup.add(structureGroup);
+
+    const innerCoreGeo = new THREE.SphereGeometry(0.22, 32, 32);
+    const innerCoreMat = new THREE.MeshStandardMaterial({
+      color: 0xffd700,
+      emissive: 0xff8c00,
+      emissiveIntensity: 0.8,
+      transparent: true,
+      opacity: 0
+    });
+    const innerCoreMesh = new THREE.Mesh(innerCoreGeo, innerCoreMat);
+    structureGroup.add(innerCoreMesh);
+
+    const outerCoreGeo = new THREE.SphereGeometry(0.40, 32, 32);
+    const outerCoreMat = new THREE.MeshStandardMaterial({
+      color: 0xff4500,
+      emissive: 0xff2200,
+      emissiveIntensity: 0.5,
+      transparent: true,
+      opacity: 0
+    });
+    const outerCoreMesh = new THREE.Mesh(outerCoreGeo, outerCoreMat);
+    structureGroup.add(outerCoreMesh);
+
+    const mantleGeo = new THREE.SphereGeometry(0.75, 32, 32);
+    const mantleMat = new THREE.MeshStandardMaterial({
+      color: 0x8b4513,
+      emissive: 0x553311,
+      emissiveIntensity: 0.2,
+      transparent: true,
+      opacity: 0
+    });
+    const mantleMesh = new THREE.Mesh(mantleGeo, mantleMat);
+    structureGroup.add(mantleMesh);
+
+    // Stars background
+    const starsGeometry = new THREE.BufferGeometry();
+    const starsCount = 8000;
+    const positions = new Float32Array(starsCount * 3);
+    const colors = new Float32Array(starsCount * 3);
+    
+    for (let i = 0; i < starsCount; i++) {
+      const i3 = i * 3;
+      positions[i3] = (Math.random() - 0.5) * 300;
+      positions[i3 + 1] = (Math.random() - 0.5) * 300;
+      positions[i3 + 2] = (Math.random() - 0.5) * 300;
+      
+      const color = new THREE.Color();
+      color.setHSL(Math.random() * 0.2 + 0.5, 0.3, Math.random() * 0.5 + 0.5);
+      colors[i3] = color.r;
+      colors[i3 + 1] = color.g;
+      colors[i3 + 2] = color.b;
+    }
+    starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    const starsMaterial = new THREE.PointsMaterial({ size: 0.15, vertexColors: true, sizeAttenuation: true });
+    const stars = new THREE.Points(starsGeometry, starsMaterial);
+    scene.add(stars);
+
+    // City markers
+    const cities = [
+      { name: 'New York', lat: 40.7128, lon: -74.0060 },
+      { name: 'London', lat: 51.5074, lon: -0.1278 },
+      { name: 'Tokyo', lat: 35.6762, lon: 139.6503 },
+      { name: 'Sydney', lat: -33.8688, lon: 151.2093 },
+      { name: 'Phnom Penh', lat: 11.5564, lon: 104.9282 }
+    ];
+
+    function latLonToVector3(lat, lon, radius) {
+      const phi = (90 - lat) * (Math.PI / 180);
+      const theta = (lon + 180) * (Math.PI / 180);
+      return new THREE.Vector3(
+        -radius * Math.sin(phi) * Math.cos(theta),
+        radius * Math.cos(phi),
+        radius * Math.sin(phi) * Math.sin(theta)
+      );
+    }
+
+    const cityMarkersGroup = new THREE.Group();
+    earthGroup.add(cityMarkersGroup);
+    const cityMeshes = [];
+
+    cities.forEach(city => {
+      const pos = latLonToVector3(city.lat, city.lon, 1.015);
+      const markerGeo = new THREE.SphereGeometry(0.015, 8, 8);
+      const markerMat = new THREE.MeshBasicMaterial({ color: 0xff3333, transparent: true, opacity: 0 });
+      const marker = new THREE.Mesh(markerGeo, markerMat);
+      marker.position.copy(pos);
+      marker.userData = { city: city.name };
+      cityMarkersGroup.add(marker);
+      cityMeshes.push(marker);
+    });
+
+    // Raycaster for city hover
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    const cityLabel = document.getElementById('cityLabel');
+
+    // Layer visibility states
+    const layerStates = {
+      atmosphere: false,
+      elevation: true,
+      clouds: false,
+      earthStructure: false,
+      cityMarkers: false
+    };
+
+    // Rotation speed
+    let baseRotationSpeed = 0.001;
+    let rotationSpeedMultiplier = 1;
+
+    // Toggle layer function
+    window.toggleLayer = function(layerName, btn) {
+      layerStates[layerName] = !layerStates[layerName];
+      
+      switch(layerName) {
+        case 'atmosphere':
+          const aOpacity = layerStates.atmosphere ? 0.3 : 0;
+          Object.values(atmosphereLayers).forEach(layer => {
+            layer.material.opacity = aOpacity;
+          });
+          atmosphereGlow.material.uniforms.opacity.value = layerStates.atmosphere ? 1.0 : 0.0;
+          break;
+          
+        case 'elevation':
+          earthMaterial.normalScale = layerStates.elevation ? 
+            new THREE.Vector2(0.05, 0.05) : new THREE.Vector2(0, 0);
+          break;
+          
+        case 'clouds':
+          clouds.material.opacity = layerStates.clouds ? 0.8 : 0;
+          break;
+          
+        case 'earthStructure':
+          if (layerStates.earthStructure) {
+            earthMaterial.transparent = true;
+            earthMaterial.opacity = 0.3;
+            innerCoreMat.opacity = 0.95;
+            outerCoreMat.opacity = 0.75;
+            mantleMat.opacity = 0.55;
+            document.getElementById('layersViz').classList.add('glow');
+            ['cssCrust','cssMantle','cssOuterCore','cssInnerCore'].forEach(id => {
+              document.getElementById(id).classList.add('pulse');
+            });
+          } else {
+            earthMaterial.transparent = false;
+            earthMaterial.opacity = 1;
+            innerCoreMat.opacity = 0;
+            outerCoreMat.opacity = 0;
+            mantleMat.opacity = 0;
+            document.getElementById('layersViz').classList.remove('glow');
+            ['cssCrust','cssMantle','cssOuterCore','cssInnerCore'].forEach(id => {
+              document.getElementById(id).classList.remove('pulse');
+            });
+          }
+          break;
+
+        case 'cityMarkers':
+          cityMeshes.forEach(m => {
+            m.material.opacity = layerStates.cityMarkers ? 1 : 0;
+          });
+          break;
+      }
+      
+      btn.classList.toggle('active');
+    };
+
+    // Speed slider
+    const speedSlider = document.getElementById('speedSlider');
+    const speedValue = document.getElementById('speedValue');
+    speedSlider.addEventListener('input', (e) => {
+      rotationSpeedMultiplier = parseFloat(e.target.value);
+      speedValue.textContent = rotationSpeedMultiplier.toFixed(1) + 'x';
+    });
+
+    // Reset view
+    window.resetView = function() {
+      camera.position.set(0, 0, 3.5);
+      camera.lookAt(0, 0, 0);
+      controls.reset();
+    };
+
+    // Layers panel toggle
+    window.toggleLayersPanel = function() {
+      const panel = document.getElementById('layersViz');
+      const btn = panel.querySelector('.collapse-btn');
+      panel.classList.toggle('collapsed');
+      btn.textContent = panel.classList.contains('collapsed') ? '+' : '−';
+    };
+    
+    // Allow clicking the header to expand when collapsed
+    document.getElementById('layersViz').addEventListener('click', function(e) {
+      if (this.classList.contains('collapsed') && e.target.closest('h4')) {
+        toggleLayersPanel();
+      }
+    });
+
+    // Mouse move for city labels
+    window.addEventListener('mousemove', (event) => {
+      if (!layerStates.cityMarkers) {
+        cityLabel.style.display = 'none';
+        return;
+      }
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(cityMeshes);
+      
+      if (intersects.length > 0) {
+        const cityName = intersects[0].object.userData.city;
+        cityLabel.textContent = cityName;
+        cityLabel.style.display = 'block';
+        cityLabel.style.left = (event.clientX + 15) + 'px';
+        cityLabel.style.top = (event.clientY - 10) + 'px';
+      } else {
+        cityLabel.style.display = 'none';
+      }
+    });
+
+    // Educational content
+    const educationalData = {
+      atmosphere: {
+        title: "🌍 Earth's Atmosphere Layers",
+        content: `
+          <div class="layer-info">
+            <div class="layer-name">Troposphere (0-12 km)</div>
+            <div class="layer-detail">
+              • Where weather occurs<br>
+              • Contains 75% of atmosphere's mass<br>
+              • Temperature decreases with altitude<br>
+              • Home to all living creatures
+            </div>
+          </div>
+          <div class="layer-info">
+            <div class="layer-name">Stratosphere (12-50 km)</div>
+            <div class="layer-detail">
+              • Contains the ozone layer<br>
+              • Temperature increases with altitude<br>
+              • Jets fly in lower stratosphere<br>
+              • Protects from UV radiation
+            </div>
+          </div>
+          <div class="layer-info">
+            <div class="layer-name">Mesosphere (50-85 km)</div>
+            <div class="layer-detail">
+              • Coldest layer (-90°C)<br>
+              • Meteors burn up here<br>
+              • Temperature decreases with altitude<br>
+              • Noctilucent clouds form here
+            </div>
+          </div>
+          <div class="layer-info">
+            <div class="layer-name">Thermosphere (85-600 km)</div>
+            <div class="layer-detail">
+              • Temperature increases dramatically<br>
+              • Aurora borealis occurs here<br>
+              • ISS orbits in this layer<br>
+              • Absorbs high-energy radiation
+            </div>
+          </div>
+        `
+      },
+      layers: {
+        title: "🪨 Earth's Internal Structure",
+        content: `
+          <div class="layer-info">
+            <div class="layer-name">Crust (5-70 km thick)</div>
+            <div class="layer-detail">
+              • Outermost solid layer<br>
+              • Continental crust: 30-70 km<br>
+              • Oceanic crust: 5-10 km<br>
+              • Made of rocks and minerals<br>
+              • Temperature: 20-400°C
+            </div>
+          </div>
+          <div class="layer-info">
+            <div class="layer-name">Mantle (2,900 km thick)</div>
+            <div class="layer-detail">
+              • Largest layer (84% of Earth's volume)<br>
+              • Semi-solid rock that flows slowly<br>
+              • Convection currents drive plate tectonics<br>
+              • Temperature: 500-9,000°C
+            </div>
+          </div>
+          <div class="layer-info">
+            <div class="layer-name">Outer Core (2,200 km thick)</div>
+            <div class="layer-detail">
+              • Liquid iron and nickel<br>
+              • Creates Earth's magnetic field<br>
+              • Temperature: 4,000-5,000°C<br>
+              • Flows due to heat from inner core
+            </div>
+          </div>
+          <div class="layer-info">
+            <div class="layer-name">Inner Core (1,220 km radius)</div>
+            <div class="layer-detail">
+              • Solid iron and nickel<br>
+              • As hot as the Sun's surface<br>
+              • Temperature: 5,000-6,000°C<br>
+              • Pressure keeps it solid
+            </div>
+          </div>
+        `
+      }
+    };
+
+    // Show info panel
+    window.showInfo = function(type) {
+      const panel = document.getElementById('infoPanel');
+      const title = document.getElementById('infoTitle');
+      const content = document.getElementById('infoContent');
+      
+      if (educationalData[type]) {
+        title.textContent = educationalData[type].title;
+        content.innerHTML = educationalData[type].content;
+        panel.classList.add('active');
+      }
+    };
+
+    // Close info panel
+    window.closeInfo = function() {
+      document.getElementById('infoPanel').classList.remove('active');
+    };
+
+    // Animation
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      const speed = baseRotationSpeed * rotationSpeedMultiplier;
+      earth.rotation.y += speed;
+      clouds.rotation.y += speed * 1.1;
+      
+      // Rotate atmosphere layers slightly
+      if (layerStates.atmosphere) {
+        Object.values(atmosphereLayers).forEach((layer, index) => {
+          layer.rotation.y += speed * (1 + index * 0.1);
+        });
+      }
+      
+      // Pulse structure layers
+      if (layerStates.earthStructure) {
+        const time = Date.now() * 0.002;
+        innerCoreMat.emissiveIntensity = 0.8 + Math.sin(time) * 0.2;
+        outerCoreMat.emissiveIntensity = 0.5 + Math.sin(time * 0.8) * 0.15;
+      }
+      
+      // Subtle star movement
+      stars.rotation.y += 0.0001;
+      
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    animate();
+  </script>
+</body>
+</html>
