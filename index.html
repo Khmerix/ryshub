@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-src 'self' https://www.youtube.com https://drive.google.com; connect-src 'self';">
     <title>RysHub Studio • Teacher Ry</title>
+    <script src="assets/ryshub-auth.js"></script>
     <script>
         (function () {
-            var hasMasterAccess = localStorage.getItem('ryshub_master_access') === 'true' ||
-                                  sessionStorage.getItem('ryshub_master_access') === 'true' ||
-                                  localStorage.getItem('ryshub_loggedIn') === 'true' ||
-                                  sessionStorage.getItem('ryshub_loggedIn') === 'true';
+            var hasMasterAccess = RysHubAuth.checkCompat();
             var isLoginPage = window.location.pathname.replace(/\\/g, '/').endsWith('/apps/login.html');
             if (!hasMasterAccess && !isLoginPage) {
                 window.location.replace('apps/login.html');
@@ -3202,11 +3201,13 @@ var pendingTeacherAction = null;
 var TEACHER_PROFILE_MAP_KEY = 'ryshubTeacherProfiles';
 var TEACHER_CURRENT_EMAIL_KEY = 'ryshubCurrentTeacherEmail';
 var TEACHER_APPROVAL_CODE_KEY = 'ryshubTeacherApprovalCode';
-var DEFAULT_TEACHER_APPROVAL_CODE = 'AII-VERIFY-2026';
+// SECURITY: Precomputed hash of 'AII-VERIFY-2026:Ry$Hub_S3cur3_S4lt_v2026'
+var EXPECTED_TEACHER_APPROVAL_HASH = '00000000188fce20';
 var BLOG_POSTS_KEY = 'ryshubTeacherBlogPosts';
 var BLOG_ADMIN_SESSION_KEY = 'ryshubBlogAdminSession';
 var BLOG_ADMIN_CODE_KEY = 'ryshubBlogAdminCode';
-var DEFAULT_BLOG_ADMIN_CODE = 'RYS-BLOG-ADMIN-2026';
+// SECURITY: Precomputed hash of 'RYS-BLOG-ADMIN-2026:Ry$Hub_S3cur3_S4lt_v2026'
+var EXPECTED_BLOG_ADMIN_HASH = '00000000f3e2d830';
 
 function normalizeTeacherEmail(email) {
     return (email || '').trim().toLowerCase();
@@ -3241,11 +3242,17 @@ function hasBlogAdminSession() {
 }
 
 function getBlogAdminCode() {
-    return (localStorage.getItem(BLOG_ADMIN_CODE_KEY) || DEFAULT_BLOG_ADMIN_CODE).trim();
+    var stored = localStorage.getItem(BLOG_ADMIN_CODE_KEY);
+    return stored ? stored.trim() : '';
 }
 
 function isBlogAdminCodeValid(code) {
-    return (code || '').trim() === getBlogAdminCode();
+    var input = (code || '').trim();
+    if (!input) return false;
+    // Validate against stored override first, then fallback to expected hash
+    var stored = getBlogAdminCode();
+    if (stored) return input === stored;
+    return RysHubAuth.hash(input + ':Ry$Hub_S3cur3_S4lt_v2026') === EXPECTED_BLOG_ADMIN_HASH;
 }
 
 function generateId() {
@@ -3432,7 +3439,8 @@ function publishTeacherBlogPost() {
 }
 
 function getTeacherApprovalCode() {
-    return (localStorage.getItem(TEACHER_APPROVAL_CODE_KEY) || DEFAULT_TEACHER_APPROVAL_CODE).trim();
+    var stored = localStorage.getItem(TEACHER_APPROVAL_CODE_KEY);
+    return stored ? stored.trim() : '';
 }
 
 function isTeacherVerified(profile) {
@@ -3440,7 +3448,12 @@ function isTeacherVerified(profile) {
 }
 
 function isTeacherVerificationCodeValid(code) {
-    return (code || '').trim() === getTeacherApprovalCode();
+    var input = (code || '').trim();
+    if (!input) return false;
+    // Validate against stored override first, then fallback to expected hash
+    var stored = getTeacherApprovalCode();
+    if (stored) return input === stored;
+    return RysHubAuth.hash(input + ':Ry$Hub_S3cur3_S4lt_v2026') === EXPECTED_TEACHER_APPROVAL_HASH;
 }
 
 function isSchoolEmail(email) {
@@ -3532,16 +3545,11 @@ function updateTeacherStatusUi() {
 }
 
 function signOutTeacher() {
+    RysHubAuth.clear();
     sessionStorage.removeItem('ryshubTeacherProfile');
-    sessionStorage.removeItem('ryshub_role');
-    sessionStorage.removeItem('ryshub_loggedIn');
-    sessionStorage.removeItem('ryshub_master_access');
     sessionStorage.removeItem(TEACHER_CURRENT_EMAIL_KEY);
-    localStorage.removeItem(TEACHER_CURRENT_EMAIL_KEY);
     localStorage.removeItem('ryshubTeacherProfile');
-    localStorage.removeItem('ryshub_role');
-    localStorage.removeItem('ryshub_loggedIn');
-    localStorage.removeItem('ryshub_master_access');
+    localStorage.removeItem(TEACHER_CURRENT_EMAIL_KEY);
     updateTeacherStatusUi();
     renderGameScores();
     renderClassroomLabMetrics();

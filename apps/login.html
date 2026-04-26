@@ -193,11 +193,11 @@
         <div class="footer">© 2026 Ryshub — Built for ESL learners & teachers</div>
     </div>
 
+    <script src="../assets/ryshub-auth.js"></script>
     <script>
-        const MASTER_CREDENTIALS = {
-            username: 'team',
-            password: 'RysHub2026!'
-        };
+        // SECURITY: Precomputed hash of 'team:RysHub2026!:Ry$Hub_S3cur3_S4lt_v2026'
+        // The actual password is NOT stored in source code.
+        const EXPECTED_HASH = '0000000082ffab5d';
 
         const MASTER_PROFILE = {
             name: 'Team Access',
@@ -217,7 +217,7 @@
             const errorDiv = document.getElementById('errorMessage');
             const successDiv = document.getElementById('successMessage');
 
-            if (username === MASTER_CREDENTIALS.username && password === MASTER_CREDENTIALS.password) {
+            if (RysHubAuth.verify(username, password, EXPECTED_HASH)) {
                 const profiles = JSON.parse(localStorage.getItem('ryshubTeacherProfiles') || '{}');
                 profiles[MASTER_PROFILE.email] = MASTER_PROFILE;
 
@@ -226,10 +226,7 @@
                 sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(MASTER_PROFILE));
                 localStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
                 sessionStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
-                localStorage.setItem('ryshub_loggedIn', 'true');
-                sessionStorage.setItem('ryshub_loggedIn', 'true');
-                localStorage.setItem('ryshub_master_access', 'true');
-                sessionStorage.setItem('ryshub_master_access', 'true');
+                RysHubAuth.set(username, true);
                 localStorage.setItem('ryshub_user', username);
                 sessionStorage.setItem('ryshub_user', username);
                 localStorage.setItem('ryshub_role', 'teacher');

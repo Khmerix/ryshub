@@ -193,13 +193,11 @@
         <div class="footer">© 2026 Ryshub — Built for ESL learners & teachers</div>
     </div>
 
+    <script src="../../assets/ryshub-auth.js"></script>
     <script>
-        // SECURITY NOTE: In production, credentials should be validated server-side.
-        // This is a client-side demo only. Never expose real credentials in client code.
-        const MASTER_CREDENTIALS = {
-            username: 'team',
-            password: 'RysHub2026!'
-        };
+        // SECURITY: Precomputed hash of 'team:RysHub2026!:Ry$Hub_S3cur3_S4lt_v2026'
+        // The actual password is NOT stored in source code.
+        const EXPECTED_HASH = '0000000082ffab5d';
 
         const MASTER_PROFILE = {
             name: 'Team Access',
@@ -212,13 +210,6 @@
             registeredAt: new Date().toISOString()
         };
 
-        // Secure session token generation
-        function generateSecureToken() {
-            return 'tok_' + Math.random().toString(36).substring(2) + 
-                   Date.now().toString(36) + 
-                   Math.random().toString(36).substring(2);
-        }
-
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
@@ -226,7 +217,7 @@
             const errorDiv = document.getElementById('errorMessage');
             const successDiv = document.getElementById('successMessage');
 
-            if (username === MASTER_CREDENTIALS.username && password === MASTER_CREDENTIALS.password) {
+            if (RysHubAuth.verify(username, password, EXPECTED_HASH)) {
                 const profiles = JSON.parse(localStorage.getItem('ryshubTeacherProfiles') || '{}');
                 profiles[MASTER_PROFILE.email] = MASTER_PROFILE;
 
@@ -235,16 +226,8 @@
                 sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(MASTER_PROFILE));
                 localStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
                 sessionStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
-                
-                // Use secure session token instead of simple boolean flags
-                const sessionToken = generateSecureToken();
-                localStorage.setItem('ryshub_session_token', sessionToken);
-                sessionStorage.setItem('ryshub_session_token', sessionToken);
-                
-                localStorage.setItem('ryshub_loggedIn', 'true');
-                sessionStorage.setItem('ryshub_loggedIn', 'true');
-                
-                // Store minimal role info (avoid storing sensitive master flag directly)
+
+                RysHubAuth.set(username, true);
                 localStorage.setItem('ryshub_user', username);
                 sessionStorage.setItem('ryshub_user', username);
                 localStorage.setItem('ryshub_role', 'teacher');

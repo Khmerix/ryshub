@@ -1446,7 +1446,22 @@
         
         function loadUnit(url) {
             const frame = document.getElementById('contentFrame');
-            
+
+            // SECURITY: validate URL against allowlist to prevent iframe injection
+            var allowedUrls = [
+                'files seperate/unit7.html',
+                'files seperate/unit8.html',
+                'files seperate/unit9.html',
+                'files seperate/unit10.html',
+                'files seperate/unit11.html',
+                'files seperate/unit12.html',
+                'book2b_reference.html'
+            ];
+            if (!allowedUrls.includes(url)) {
+                console.warn('Blocked invalid unit URL:', url);
+                return;
+            }
+
             // Stop any playing audio/video before switching
             try {
                 const frameDoc = frame.contentWindow.document;
@@ -1458,7 +1473,7 @@
             } catch (e) {
                 // Cross-origin or other errors, just continue
             }
-            
+
             frame.src = url;
             frame.style.display = 'block';
             document.getElementById('tocContainer').classList.remove('active');

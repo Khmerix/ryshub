@@ -3494,6 +3494,8 @@ buildTemplateGrid();
     }
   }
   window.addEventListener('message',function(e){
+    // SECURITY: validate origin to prevent cross-origin message spoofing
+    if(e.origin!==window.location.origin)return;
     if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
     var scrollX=window.scrollX||window.pageXOffset||0;
     var scrollY=window.scrollY||window.pageYOffset||0;
@@ -3515,14 +3517,14 @@ buildTemplateGrid();
       img.onload=function(){
         var c=document.createElement('canvas');c.width=w;c.height=h;
         c.getContext('2d').drawImage(img,0,0);
-        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},window.location.origin);
       };
       img.onerror=function(){
-        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},window.location.origin);
       };
       img.src=svgUrl;
     }catch(err){
-      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},window.location.origin);
     }
   });
 })();
