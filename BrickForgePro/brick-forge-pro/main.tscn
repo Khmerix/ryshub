@@ -1,0 +1,574 @@
+[gd_scene load_steps=10 format=3 uid="uid://c8yvxg3ulq3a"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_abc123"]
+[ext_resource type="Script" path="res://camera_controller.gd" id="2_def456"]
+[ext_resource type="Script" path="res://ui_manager.gd" id="3_ui789"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.1, 0.12, 0.14, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.2, 0.25, 0.3, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(0.3, 0.4, 0.5, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_active"]
+bg_color = Color(0.0, 0.7, 1.0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_active"]
+bg_color = Color(0.0, 0.7, 1.0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_inactive"]
+bg_color = Color(0.15, 0.18, 0.22, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 1
+background_color = Color(0.53, 0.81, 0.92, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.53, 0.81, 0.92, 1)
+ambient_light_energy = 0.6
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_abc123")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 25, 25, 25)
+current = true
+script = ExtResource("2_def456")
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("3_ui789")
+
+[node name="TopBar" type="Panel" parent="UI"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 56.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Title" type="Label" parent="UI/TopBar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -12.0
+offset_right = 120.0
+offset_bottom = 12.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "BrickForge Pro"
+vertical_alignment = 1
+
+[node name="ToolContainer" type="HBoxContainer" parent="UI/TopBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -16.0
+offset_right = 200.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="BuildBtn" type="Button" parent="UI/TopBar/ToolContainer"]
+custom_minimum_size = Vector2(80, 32)
+layout_mode = 2
+tooltip_text = "Build Mode (1)"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+text = "Build"
+
+[node name="PaintBtn" type="Button" parent="UI/TopBar/ToolContainer"]
+custom_minimum_size = Vector2(80, 32)
+layout_mode = 2
+tooltip_text = "Paint Mode (2)"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+text = "Paint"
+
+[node name="EraseBtn" type="Button" parent="UI/TopBar/ToolContainer"]
+custom_minimum_size = Vector2(80, 32)
+layout_mode = 2
+tooltip_text = "Erase Mode (3)"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+text = "Erase"
+
+[node name="SelectBtn" type="Button" parent="UI/TopBar/ToolContainer"]
+custom_minimum_size = Vector2(80, 32)
+layout_mode = 2
+tooltip_text = "Select Mode (4)"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_active")
+text = "Select"
+
+[node name="Stats" type="Label" parent="UI/TopBar"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -12.0
+offset_right = -16.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 12
+text = "Blocks: 0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BlockPanel" type="Panel" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -420.0
+offset_right = -10.0
+offset_bottom = -70.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="TabContainer" type="VBoxContainer" parent="UI/BlockPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="Tabs" type="HBoxContainer" parent="UI/BlockPanel/TabContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TabBlocks" type="Button" parent="UI/BlockPanel/TabContainer/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_tab_active")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tab_active")
+text = "Blocks"
+
+[node name="TabArch" type="Button" parent="UI/BlockPanel/TabContainer/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_tab_inactive")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tab_active")
+text = "Arch"
+
+[node name="TabNature" type="Button" parent="UI/BlockPanel/TabContainer/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_tab_inactive")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tab_active")
+text = "Nature"
+
+[node name="TabMat" type="Button" parent="UI/BlockPanel/TabContainer/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_tab_inactive")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tab_active")
+text = "Mat"
+
+[node name="TabSpecial" type="Button" parent="UI/BlockPanel/TabContainer/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_tab_inactive")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tab_active")
+text = "FX"
+
+[node name="BlockPages" type="MarginContainer" parent="UI/BlockPanel/TabContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="PageBlocks" type="ScrollContainer" parent="UI/BlockPanel/TabContainer/BlockPages"]
+layout_mode = 2
+
+[node name="Grid" type="GridContainer" parent="UI/BlockPanel/TabContainer/BlockPages/PageBlocks"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+
+[node name="PageArch" type="ScrollContainer" parent="UI/BlockPanel/TabContainer/BlockPages"]
+visible = false
+layout_mode = 2
+
+[node name="Grid" type="GridContainer" parent="UI/BlockPanel/TabContainer/BlockPages/PageArch"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+
+[node name="PageNature" type="ScrollContainer" parent="UI/BlockPanel/TabContainer/BlockPages"]
+visible = false
+layout_mode = 2
+
+[node name="Grid" type="GridContainer" parent="UI/BlockPanel/TabContainer/BlockPages/PageNature"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+
+[node name="PageMat" type="ScrollContainer" parent="UI/BlockPanel/TabContainer/BlockPages"]
+visible = false
+layout_mode = 2
+
+[node name="Grid" type="GridContainer" parent="UI/BlockPanel/TabContainer/BlockPages/PageMat"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+
+[node name="PageFX" type="ScrollContainer" parent="UI/BlockPanel/TabContainer/BlockPages"]
+visible = false
+layout_mode = 2
+
+[node name="Grid" type="GridContainer" parent="UI/BlockPanel/TabContainer/BlockPages/PageFX"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+
+[node name="ColorPanel" type="Panel" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -280.0
+offset_top = 70.0
+offset_right = -10.0
+offset_bottom = 160.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Label" type="Label" parent="UI/ColorPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = 24.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 12
+text = "Color Palette"
+horizontal_alignment = 1
+
+[node name="ColorGrid" type="GridContainer" parent="UI/ColorPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 28.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 8
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="BottomBar" type="Panel" parent="UI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -60.0
+offset_right = 400.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Controls" type="HBoxContainer" parent="UI/BottomBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 8.0
+offset_right = -16.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="SizeSection" type="HBoxContainer" parent="UI/BottomBar/Controls"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="UI/BottomBar/Controls/SizeSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Size:"
+vertical_alignment = 1
+
+[node name="Size05" type="Button" parent="UI/BottomBar/Controls/SizeSection"]
+custom_minimum_size = Vector2(36, 32)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "S"
+
+[node name="Size1" type="Button" parent="UI/BottomBar/Controls/SizeSection"]
+custom_minimum_size = Vector2(36, 32)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "M"
+
+[node name="Size2" type="Button" parent="UI/BottomBar/Controls/SizeSection"]
+custom_minimum_size = Vector2(36, 32)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "L"
+
+[node name="Size4" type="Button" parent="UI/BottomBar/Controls/SizeSection"]
+custom_minimum_size = Vector2(36, 32)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "XL"
+
+[node name="VSeparator" type="VSeparator" parent="UI/BottomBar/Controls"]
+layout_mode = 2
+
+[node name="ToggleSection" type="HBoxContainer" parent="UI/BottomBar/Controls"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="GridBtn" type="Button" parent="UI/BottomBar/Controls/ToggleSection"]
+custom_minimum_size = Vector2(60, 32)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Grid"
+
+[node name="SnapBtn" type="Button" parent="UI/BottomBar/Controls/ToggleSection"]
+custom_minimum_size = Vector2(60, 32)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_active")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Snap"
+
+[node name="VSeparator2" type="VSeparator" parent="UI/BottomBar/Controls"]
+layout_mode = 2
+
+[node name="ActionSection" type="HBoxContainer" parent="UI/BottomBar/Controls"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RotateBtn" type="Button" parent="UI/BottomBar/Controls/ActionSection"]
+custom_minimum_size = Vector2(70, 32)
+layout_mode = 2
+tooltip_text = "Rotate (R)"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Rotate"
+
+[node name="UndoBtn" type="Button" parent="UI/BottomBar/Controls/ActionSection"]
+custom_minimum_size = Vector2(50, 32)
+layout_mode = 2
+tooltip_text = "Undo (Ctrl+Z)"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "<"
+
+[node name="RedoBtn" type="Button" parent="UI/BottomBar/Controls/ActionSection"]
+custom_minimum_size = Vector2(50, 32)
+layout_mode = 2
+tooltip_text = "Redo (Ctrl+Y)"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = ">"
+
+[node name="VSeparator3" type="VSeparator" parent="UI/BottomBar/Controls"]
+layout_mode = 2
+
+[node name="EnvSection" type="HBoxContainer" parent="UI/BottomBar/Controls"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="EnvLabel" type="Label" parent="UI/BottomBar/Controls/EnvSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "World:"
+vertical_alignment = 1
+
+[node name="EnvDropdown" type="OptionButton" parent="UI/BottomBar/Controls/EnvSection"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_font_sizes/font_size = 11
+item_count = 8
+selected = 0
+popup/item_0/text = "Earth"
+popup/item_1/text = "Mars"
+popup/item_2/text = "Moon"
+popup/item_3/text = "Desert"
+popup/item_4/text = "Jungle"
+popup/item_5/text = "Island"
+popup/item_6/text = "Arctic"
+popup/item_7/text = "Volcanic"
+
+[node name="FileSection" type="HBoxContainer" parent="UI/BottomBar/Controls"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/separation = 6
+alignment = 2
+
+[node name="SaveBtn" type="Button" parent="UI/BottomBar/Controls/FileSection"]
+custom_minimum_size = Vector2(70, 32)
+layout_mode = 2
+tooltip_text = "Save Build"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Save"
+
+[node name="LoadBtn" type="Button" parent="UI/BottomBar/Controls/FileSection"]
+custom_minimum_size = Vector2(70, 32)
+layout_mode = 2
+tooltip_text = "Load Build"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Load"
+
+[node name="ClearBtn" type="Button" parent="UI/BottomBar/Controls/FileSection"]
+custom_minimum_size = Vector2(70, 32)
+layout_mode = 2
+tooltip_text = "Clear All"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "Clear"
+
+[node name="HelpBtn" type="Button" parent="UI/BottomBar/Controls/FileSection"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Help (F1)"
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "?"
+
+[node name="HelpPanel" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -180.0
+offset_right = 220.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="UI/HelpPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI/HelpPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "BrickForge Pro - Help"
+horizontal_alignment = 1
+
+[node name="HSep" type="HSeparator" parent="UI/HelpPanel/VBox"]
+layout_mode = 2
+
+[node name="Content" type="RichTextLabel" parent="UI/HelpPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 12
+text = "[b]Tools:[/b]
+• Build (1) - Place blocks
+• Paint (2) - Change block colors  
+• Erase (3) - Remove blocks
+• Select (4) - Select blocks (Delete to remove)
+
+[b]Controls:[/b]
+• Left Click - Use current tool
+• Right Click + Drag - Pan camera
+• Middle Click + Drag - Rotate camera
+• Scroll - Zoom in/out
+• R - Rotate ghost block
+• Ctrl+Z / Ctrl+Y - Undo / Redo
+
+[b]Tips:[/b]
+• Use Grid/Snap for precise building
+• Try different environments for unique looks
+• Save your builds regularly!"
+
+[node name="CloseBtn" type="Button" parent="UI/HelpPanel/VBox"]
+custom_minimum_size = Vector2(100, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Close"
