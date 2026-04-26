@@ -6,7 +6,7 @@
     <title>Game Arcade • RysHub Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; }
 
@@ -818,7 +818,7 @@ var MINI_GAMES = [
     { id: 'solar', title: 'Solar System', status: 'Live', iconClass: 'fas fa-globe-americas', desc: 'Interactive space missions that teach planets, orbits, and exploration concepts.', launchText: 'Launch', launchAction: function() { openSolarSystemModal(); } },
     { id: 'typing-race', title: 'Typing Race', status: 'Live', iconClass: 'fas fa-keyboard', desc: 'Fast keyboard challenge for sentence accuracy and speed practice.', launchText: 'Launch', launchAction: function() { recordGameLaunch('typing-race'); window.open('typing-race/index.html', '_blank'); } },
     { id: 'writecraft', title: 'WriteCraft', status: 'Live', iconClass: 'fas fa-pen-nib', desc: 'Writing trainer for essays, summaries & stories with timed prompts and live scoring.', launchText: 'Launch', launchAction: function() { recordGameLaunch('writecraft'); window.open('../writing-trainer/index.html', '_blank'); } },
-    { id: 'memory-match', title: 'Memory Match', status: 'Coming Soon', iconClass: 'fas fa-brain', desc: 'Flip and match challenge to strengthen memory and word association.', launchText: 'Coming soon', launchAction: null },
+    { id: 'memory-game', title: 'Memory Match', status: 'Live', iconClass: 'fas fa-brain', desc: 'Flip and match challenge to strengthen memory and word association.', launchText: 'Launch', launchAction: function() { recordGameLaunch('memory-game'); window.open('memory-game/index.html', '_blank'); } },
     { id: 'word-scramble', title: 'Word Scramble', status: 'Coming Soon', iconClass: 'fas fa-puzzle-piece', desc: 'Vocabulary scramble game focused on world-class units and core review words.', launchText: 'Coming soon', launchAction: null },
     { id: 'next-slot', title: 'Next Mini Game Slot', status: 'Future Slot', iconClass: 'fas fa-plus', desc: 'Reserve this card for the next mini game you create.', launchText: 'Add next game', launchAction: null }
 ];
