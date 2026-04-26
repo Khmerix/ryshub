@@ -5,10 +5,24 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { label: 'Home', href: '#home' },
-    { label: 'TOEFL', href: 'apps/toefl/index.html' },
-    { label: 'Books', href: '#tools' },
-    { label: 'Arcade', href: '#games' },
+    { label: 'Home',            href: '#home' },
+    { label: 'TOEFL',           href: 'apps/toefl/index.html' },
+    { label: 'Books',           href: '#tools' },
+    { label: 'Arcade',          href: '#games' },
+    { label: 'Game Arcade',     href: 'apps/games/index.html' },
+    { label: 'Command Center',  href: 'apps/command-center.html' },
+    { label: 'Story Library',   href: 'apps/books/library.html' },
+    { label: 'Timer',           href: 'apps/timer.html' },
+  ];
+
+  const mobileLinks = [
+    { label: '🏠 Home',            href: '#home',                         onClick: () => setIsOpen(false) },
+    { label: '🎓 TOEFL Test',       href: 'apps/toefl/index.html',         onClick: () => setIsOpen(false) },
+    { label: '📖 World Class 2-1',  href: 'apps/book1.html',               onClick: () => setIsOpen(false) },
+    { label: '📗 World Class 2-2',  href: 'apps/book2b.html',              onClick: () => setIsOpen(false) },
+    { label: '🧊 BrickForge',       href: 'apps/brickforge.html',          onClick: () => setIsOpen(false) },
+    { label: '🚀 Last Colony',      href: 'apps/games/colony/index.html',  onClick: () => setIsOpen(false) },
+    { label: '🌌 Solar System',     href: 'apps/games/solar-system/index.html', onClick: () => setIsOpen(false) },
   ];
 
   return (
@@ -58,11 +72,11 @@ export default function Navbar() {
         }`}
       >
         <div className="p-6 pt-20 flex flex-col gap-2">
-          {navLinks.map((link) => (
+          {mobileLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              onClick={() => setIsOpen(false)}
+              onClick={link.onClick}
               className="px-4 py-3 text-base font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-colors"
             >
               {link.label}

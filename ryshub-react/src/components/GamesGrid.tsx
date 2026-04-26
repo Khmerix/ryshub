@@ -1,10 +1,10 @@
 import GameCard from './GameCard';
-import { Rocket, Puzzle, Zap, Brain, Globe } from 'lucide-react';
+import { Rocket, Zap, Brain, Globe, Boxes } from 'lucide-react';
 
 const games = [
   {
     title: 'Last Colony',
-    description: 'Real-time strategy game with base building and resource management.',
+    description: 'Real-time strategy game with base building and resource management on Mars.',
     icon: <Rocket size={22} />,
     tag: 'Strategy',
     href: 'apps/games/colony/index.html',
@@ -21,13 +21,13 @@ const games = [
     glow: 'shadow-indigo-500/20',
   },
   {
-    title: 'Word Scramble',
-    description: 'Unscramble words under the clock. Great for vocabulary retention.',
-    icon: <Puzzle size={22} />,
-    tag: 'Vocabulary',
-    href: '#',
-    gradient: 'from-blue-500 to-blue-700',
-    glow: 'shadow-blue-500/20',
+    title: 'BrickForge',
+    description: 'Build anything in a 3D voxel sandbox. Place, paint, and sculpt block by block.',
+    icon: <Boxes size={22} />,
+    tag: 'Creative',
+    href: 'apps/brickforge.html',
+    gradient: 'from-cyan-500 to-cyan-700',
+    glow: 'shadow-cyan-500/20',
   },
   {
     title: 'Typing Race',

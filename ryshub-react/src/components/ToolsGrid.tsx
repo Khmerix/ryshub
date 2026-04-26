@@ -1,5 +1,5 @@
 import ToolCard from './ToolCard';
-import { GraduationCap, BookOpen, Brain, Zap } from 'lucide-react';
+import { GraduationCap, BookOpen, Brain, Zap, Timer, Library } from 'lucide-react';
 
 const tools = [
   {
@@ -56,6 +56,28 @@ const tools = [
     href: '#',
     gradient: 'from-amber-400 to-amber-600',
     glow: 'shadow-amber-500/20',
+  },
+  {
+    title: 'Class Timer',
+    description: 'Countdown and stopwatch tool for timed activities and classroom sessions.',
+    icon: <Timer size={22} />,
+    badge: 'Classroom',
+    meta: 'Live Timer',
+    dots: { active: 4, total: 5, color: '#ef4444' },
+    href: 'apps/timer.html',
+    gradient: 'from-rose-400 to-rose-600',
+    glow: 'shadow-rose-500/20',
+  },
+  {
+    title: 'Story Library',
+    description: 'Interactive reading stories — Blackwood Manor, The Secret Cave, and more.',
+    icon: <Library size={22} />,
+    badge: 'Interactive Fiction',
+    meta: '6 Stories',
+    dots: { active: 2, total: 6, color: '#a855f7' },
+    href: 'apps/books/library.html',
+    gradient: 'from-purple-400 to-purple-600',
+    glow: 'shadow-purple-500/20',
   },
 ];
 
