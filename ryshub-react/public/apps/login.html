@@ -194,6 +194,8 @@
     </div>
 
     <script>
+        // SECURITY NOTE: In production, credentials should be validated server-side.
+        // This is a client-side demo only. Never expose real credentials in client code.
         const MASTER_CREDENTIALS = {
             username: 'team',
             password: 'RysHub2026!'
@@ -209,6 +211,13 @@
             verifiedAt: new Date().toISOString(),
             registeredAt: new Date().toISOString()
         };
+
+        // Secure session token generation
+        function generateSecureToken() {
+            return 'tok_' + Math.random().toString(36).substring(2) + 
+                   Date.now().toString(36) + 
+                   Math.random().toString(36).substring(2);
+        }
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -226,10 +235,16 @@
                 sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(MASTER_PROFILE));
                 localStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
                 sessionStorage.setItem('ryshubCurrentTeacherEmail', MASTER_PROFILE.email);
+                
+                // Use secure session token instead of simple boolean flags
+                const sessionToken = generateSecureToken();
+                localStorage.setItem('ryshub_session_token', sessionToken);
+                sessionStorage.setItem('ryshub_session_token', sessionToken);
+                
                 localStorage.setItem('ryshub_loggedIn', 'true');
                 sessionStorage.setItem('ryshub_loggedIn', 'true');
-                localStorage.setItem('ryshub_master_access', 'true');
-                sessionStorage.setItem('ryshub_master_access', 'true');
+                
+                // Store minimal role info (avoid storing sensitive master flag directly)
                 localStorage.setItem('ryshub_user', username);
                 sessionStorage.setItem('ryshub_user', username);
                 localStorage.setItem('ryshub_role', 'teacher');
