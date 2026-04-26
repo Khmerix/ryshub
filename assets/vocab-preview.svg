@@ -1,0 +1,25 @@
+<svg width="800" height="480" viewBox="0 0 800 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="480">
+      <stop stop-color="#1E1B4B"/>
+      <stop offset="0.6" stop-color="#7C3AED"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="480" rx="28" fill="url(#bg)"/>
+  <rect x="84" y="66" width="632" height="348" rx="24" fill="#0F172A" fill-opacity="0.82" stroke="#C4B5FD" stroke-opacity="0.35"/>
+  <text x="116" y="114" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="700">Vocabulary Practice</text>
+  <rect x="570" y="92" width="116" height="26" rx="13" fill="#5B21B6"/>
+  <text x="605" y="109" fill="#F5F3FF" font-family="Arial, sans-serif" font-size="12" font-weight="700">Level 11</text>
+  <rect x="116" y="142" width="568" height="78" rx="16" fill="#1B133A" stroke="#8B5CF6"/>
+  <text x="142" y="174" fill="#E9D5FF" font-family="Arial, sans-serif" font-size="16">Choose the correct word to complete the sentence.</text>
+  <text x="142" y="202" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="22" font-weight="700">The student was very __________ before the test.</text>
+  <rect x="116" y="246" width="260" height="42" rx="12" fill="#2A1A55" stroke="#A78BFA"/>
+  <rect x="424" y="246" width="260" height="42" rx="12" fill="#4C1D95" stroke="#C4B5FD"/>
+  <rect x="116" y="304" width="260" height="42" rx="12" fill="#2A1A55" stroke="#A78BFA"/>
+  <rect x="424" y="304" width="260" height="42" rx="12" fill="#2A1A55" stroke="#A78BFA"/>
+  <text x="156" y="272" fill="#F5F3FF" font-family="Arial, sans-serif" font-size="16" font-weight="700">excited</text>
+  <text x="466" y="272" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="16" font-weight="700">nervous</text>
+  <text x="156" y="330" fill="#F5F3FF" font-family="Arial, sans-serif" font-size="16" font-weight="700">hungry</text>
+  <text x="466" y="330" fill="#F5F3FF" font-family="Arial, sans-serif" font-size="16" font-weight="700">quiet</text>
+</svg>

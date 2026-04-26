@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Tracker | RysHub Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        * { 
+            font-family: 'Inter', sans-serif;
+            transform-style: preserve-3d;
+        }
+
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #60a5fa;
+            --accent-cyan: #22d3ee;
+            --deep-space: #0b0f19;
+            --panel-bg: rgba(11, 15, 25, 0.85);
+            --gold: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --gray-100: #f3f4f6;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --electric-glow: 0 0 20px rgba(37, 99, 235, 0.5), 0 0 40px rgba(37, 99, 235, 0.3);
+        }
+
+        body.light-theme {
+            --deep-space: #f8fafc;
+            --panel-bg: rgba(255, 255, 255, 0.85);
+            --electric-glow: 0 0 20px rgba(37, 99, 235, 0.25), 0 0 40px rgba(37, 99, 235, 0.15);
+        }
+
+        body.light-theme {
+            background: #f8fafc;
+            color: #1f2937;
+        }
+
+        body.light-theme .neural-panel {
+            background: rgba(255,255,255,0.9);
+            border-color: rgba(37,99,235,0.15);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.8), 0 0 30px rgba(37,99,235,0.08);
+        }
+        body.light-theme .neural-panel:hover {
+            border-color: rgba(37,99,235,0.3);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 0 40px rgba(37,99,235,0.15), inset 0 1px 0 rgba(255,255,255,1);
+        }
+        body.light-theme .card-neural {
+            background: linear-gradient(145deg, rgba(37,99,235,0.05) 0%, rgba(255,255,255,0.95) 100%);
+            border-color: rgba(37,99,235,0.12);
+        }
+        body.light-theme .card-neural.active {
+            background: linear-gradient(145deg, rgba(37,99,235,0.08) 0%, rgba(59,130,246,0.08) 100%);
+            border-color: var(--primary-blue);
+        }
+        body.light-theme .input-neural {
+            background: rgba(255,255,255,0.8);
+            border-color: rgba(37,99,235,0.15);
+            color: #111827;
+        }
+        body.light-theme .input-neural:focus {
+            border-color: var(--primary-blue);
+            background: rgba(255,255,255,0.95);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), 0 0 20px rgba(37,99,235,0.15), 0 0 0 3px rgba(37,99,235,0.08);
+        }
+        body.light-theme .table-neural td {
+            background: rgba(15,23,42,0.02);
+            border-bottom-color: rgba(37,99,235,0.08);
+            color: #374151;
+        }
+        body.light-theme .table-neural tr:hover td {
+            background: rgba(37,99,235,0.06);
+        }
+        body.light-theme .tab-neural {
+            background: rgba(255,255,255,0.6);
+            border-color: rgba(37,99,235,0.12);
+            color: #6b7280;
+        }
+        body.light-theme .tab-neural.active {
+            background: linear-gradient(135deg, rgba(37,99,235,0.15) 0%, rgba(59,130,246,0.15) 100%);
+            color: #1e40af;
+            border-color: var(--primary-blue);
+        }
+        body.light-theme .calendar-day-neural {
+            background: rgba(255,255,255,0.6);
+            border-color: rgba(37,99,235,0.08);
+            color: #374151;
+        }
+        body.light-theme .calendar-day-neural.today {
+            color: var(--primary-blue);
+        }
+        body.light-theme .stat-pill-neural {
+            background: linear-gradient(145deg, rgba(37,99,235,0.06) 0%, rgba(255,255,255,0.9) 100%);
+            border-left-color: var(--primary-blue);
+        }
+        body.light-theme .modal-neural {
+            background: rgba(248,250,252,0.98);
+            border-color: rgba(37,99,235,0.2);
+        }
+        body.light-theme .upload-neural {
+            background: linear-gradient(145deg, rgba(37,99,235,0.03) 0%, rgba(255,255,255,0.8) 100%);
+            border-color: rgba(37,99,235,0.2);
+        }
+        body.light-theme .header-neural {
+            background: linear-gradient(180deg, rgba(37,99,235,0.08) 0%, rgba(248,250,252,0.98) 100%);
+            border-bottom-color: rgba(37,99,235,0.12);
+        }
+        body.light-theme .btn-neural {
+            background: linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(59,130,246,0.08) 100%);
+            border-color: rgba(37,99,235,0.3);
+            color: var(--primary-blue);
+        }
+        body.light-theme .btn-neural:hover {
+            background: linear-gradient(135deg, rgba(37,99,235,0.15) 0%, rgba(59,130,246,0.15) 100%);
+            color: #1e40af;
+            border-color: var(--primary-blue);
+        }
+        body.light-theme ::-webkit-scrollbar-track { background: #f1f5f9; }
+        body.light-theme ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+        }
+        body.light-theme .neural-panel .text-white,
+        body.light-theme .card-neural .text-white,
+        body.light-theme .stat-pill-neural .text-white,
+        body.light-theme .modal-neural .text-white,
+        body.light-theme .table-neural .text-white {
+            color: #111827 !important;
+        }
+        body.light-theme .neural-panel .text-gray-400,
+        body.light-theme .card-neural .text-gray-400,
+        body.light-theme .modal-neural .text-gray-400 {
+            color: #6b7280 !important;
+        }
+        body.light-theme .neural-panel .text-gray-500,
+        body.light-theme .card-neural .text-gray-500,
+        body.light-theme .modal-neural .text-gray-500 {
+            color: #6b7280 !important;
+        }
+        body.light-theme .text-[#60a5fa] {
+            color: #2563eb !important;
+        }
+        body.light-theme .text-cyber-gold {
+            filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.3));
+        }
+        body.light-theme #attendanceStudentList > div[style],
+        body.light-theme #dailyStudentsList > div[style],
+        body.light-theme #historyTimeline div[style*="background: rgba(0,0,0,0.4)"] {
+            background: rgba(241,245,249,0.8) !important;
+            border-color: rgba(37,99,235,0.12) !important;
+        }
+        body.light-theme #startScreen {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%) !important;
+        }
+
+        body { 
+            background: var(--deep-space);
+            color: #E0E0E0;
+            font-size: 13px;
+            min-height: 100vh;
+            perspective: 1000px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Neural Network Canvas Background */
+        #neuralCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Glowing Text Effects */
+        .text-neural {
+            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 50%, #60a5fa 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+            filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.5));
+        }
+
+        .text-cyber-gold {
+            background: linear-gradient(180deg, #f59e0b 0%, #d97706 50%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+            text-shadow: none;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Neural Glass Panels */
+        .neural-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 0 30px rgba(96, 165, 250, 0.1);
+            transform: translateZ(0);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .neural-panel::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, rgba(96, 165, 250, 0.3), transparent, rgba(37, 99, 235, 0.3), transparent);
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+            animation: borderRotate 4s linear infinite;
+        }
+
+        .neural-panel:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .neural-panel:hover {
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.8),
+                0 0 40px rgba(96, 165, 250, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: rgba(96, 165, 250, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Neural Buttons with Electric Effects */
+        .btn-neural {
+            position: relative;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+            border: 1px solid rgba(96, 165, 250, 0.4);
+            color: var(--primary-light);
+            font-weight: 700;
+            font-size: 12px;
+            border-radius: 10px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transform: translateZ(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(96, 165, 250, 0.2);
+        }
+
+        .btn-neural::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-neural:hover {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+            color: white;
+            transform: translateY(-2px) translateZ(10px);
+            box-shadow: 
+                0 8px 25px rgba(96, 165, 250, 0.4),
+                0 0 30px rgba(96, 165, 250, 0.3),
+                inset 0 0 10px rgba(96, 165, 250, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        .btn-neural:hover::before {
+            left: 100%;
+        }
+
+        .btn-neural:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(96, 165, 250, 0.2);
+        }
+
+        .btn-neural-sm {
+            padding: 6px 12px;
+            font-size: 11px;
+            border-radius: 8px;
+        }
+
+        .btn-gold-neural {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 140, 0, 0.15) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            color: var(--gold);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .btn-gold-neural:hover {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 140, 0, 0.3) 100%);
+            box-shadow: 
+                0 8px 25px rgba(255, 215, 0, 0.4),
+                0 0 30px rgba(255, 215, 0, 0.3);
+            color: white;
+            border-color: var(--gold);
+        }
+
+        /* Neural Input Fields */
+        .input-neural {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(96, 165, 250, 0.2);
+            color: white;
+            font-size: 12px;
+            border-radius: 10px;
+            padding: 12px 16px;
+            transform: translateZ(0);
+            transition: all 0.3s ease;
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.5),
+                0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .input-neural:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.6),
+                0 0 20px rgba(96, 165, 250, 0.3),
+                0 0 0 3px rgba(96, 165, 250, 0.1);
+            transform: translateZ(5px);
+        }
+
+        /* Neural Cards */
+        .card-neural {
+            background: linear-gradient(145deg, rgba(96, 165, 250, 0.05) 0%, rgba(11, 15, 25, 0.95) 100%);
+            border: 1px solid rgba(96, 165, 250, 0.15);
+            border-radius: 12px;
+            transform: translateZ(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 4px 6px rgba(0,0,0,0.3),
+                0 0 20px rgba(96, 165, 250, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-neural::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card-neural:hover {
+            transform: translateY(-4px) translateZ(20px) rotateX(2deg);
+            box-shadow: 
+                0 8px 20px rgba(96, 165, 250, 0.2),
+                0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(96, 165, 250, 0.4);
+        }
+
+        .card-neural:hover::after {
+            left: 100%;
+        }
+
+        .card-neural.active {
+            border-color: var(--primary-light);
+            background: linear-gradient(145deg, rgba(96, 165, 250, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+            box-shadow: 
+                0 0 30px rgba(96, 165, 250, 0.3),
+                0 8px 16px rgba(0,0,0,0.3);
+            transform: translateZ(10px);
+        }
+
+        /* Neural Stat Pills */
+        .stat-pill-neural {
+            background: linear-gradient(145deg, rgba(96, 165, 250, 0.1) 0%, rgba(11, 15, 25, 0.9) 100%);
+            border-left: 3px solid var(--primary-light);
+            border-radius: 10px;
+            padding: 12px 16px;
+            transform: translateZ(0);
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 6px rgba(0,0,0,0.2),
+                0 0 15px rgba(96, 165, 250, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-pill-neural::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary-light), var(--primary-blue));
+            box-shadow: 0 0 10px var(--primary-light);
+        }
+
+        .stat-pill-neural:hover {
+            transform: translateY(-2px) translateZ(10px);
+            box-shadow: 
+                0 6px 12px rgba(96, 165, 250, 0.2),
+                0 0 20px rgba(96, 165, 250, 0.2);
+        }
+
+        .stat-pill-neural.success { border-left-color: #10b981; box-shadow: 0 0 15px rgba(0, 255, 136, 0.1); }
+        .stat-pill-neural.warning { border-left-color: #f59e0b; box-shadow: 0 0 15px rgba(255, 184, 0, 0.1); }
+        .stat-pill-neural.danger { border-left-color: #ef4444; box-shadow: 0 0 15px rgba(255, 51, 102, 0.1); }
+
+        /* Neural Table */
+        .table-neural {
+            font-size: 12px;
+            border-collapse: separate;
+            border-spacing: 0 6px;
+        }
+
+        .table-neural th {
+            background: linear-gradient(180deg, rgba(96, 165, 250, 0.2) 0%, rgba(96, 165, 250, 0.05) 100%);
+            color: var(--primary-light);
+            font-weight: 700;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 14px 12px;
+            border-bottom: 2px solid rgba(96, 165, 250, 0.3);
+            text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+        }
+
+        .table-neural td {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 12px;
+            border-bottom: 1px solid rgba(96, 165, 250, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .table-neural tr:hover td {
+            background: rgba(96, 165, 250, 0.08);
+            transform: scale(1.01);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.1);
+        }
+
+        /* Neural Tabs */
+        .tab-neural {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            color: #6B7280;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transform: translateZ(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-neural::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.3), transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .tab-neural:hover {
+            border-color: var(--primary-light);
+            color: white;
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px) translateZ(5px);
+            box-shadow: 0 4px 8px rgba(96, 165, 250, 0.2);
+        }
+
+        .tab-neural:hover::before {
+            width: 100px;
+            height: 100px;
+        }
+
+        .tab-neural.active {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+            color: white;
+            border-color: var(--primary-light);
+            font-weight: 700;
+            transform: translateY(-2px) translateZ(10px);
+            box-shadow: 
+                0 0 20px rgba(96, 165, 250, 0.4),
+                inset 0 0 10px rgba(96, 165, 250, 0.1);
+            text-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+        }
+
+        /* Neural Attendance Buttons */
+        .attendance-btn-neural {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid rgba(96, 165, 250, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transform: translateZ(0);
+            box-shadow: 
+                0 4px 6px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .attendance-btn-neural::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.3), transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .attendance-btn-neural:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .attendance-btn-neural:hover {
+            transform: translateY(-3px) translateZ(10px) scale(1.1);
+            box-shadow: 0 8px 16px rgba(96, 165, 250, 0.3);
+        }
+
+        .attendance-btn-neural.present {
+            background: linear-gradient(145deg, #10b981 0%, #059669 100%);
+            border-color: #10b981;
+            color: black;
+            box-shadow: 
+                0 4px 15px rgba(0, 255, 136, 0.5),
+                0 0 20px rgba(0, 255, 136, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .attendance-btn-neural.absent {
+            background: linear-gradient(145deg, #ef4444 0%, #dc2626 100%);
+            border-color: #ef4444;
+            color: white;
+            box-shadow: 
+                0 4px 15px rgba(255, 51, 102, 0.5),
+                0 0 20px rgba(255, 51, 102, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .attendance-btn-neural.late {
+            background: linear-gradient(145deg, #f59e0b 0%, #d97706 100%);
+            border-color: #f59e0b;
+            color: black;
+            box-shadow: 
+                0 4px 15px rgba(255, 184, 0, 0.5),
+                0 0 20px rgba(255, 184, 0, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .attendance-btn-neural.excused {
+            background: linear-gradient(145deg, #6b7280 0%, #4b5563 100%);
+            border-color: #6b7280;
+            color: white;
+            box-shadow: 
+                0 4px 15px rgba(136, 153, 170, 0.5),
+                0 0 20px rgba(136, 153, 170, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        /* Neural Calendar */
+        .calendar-day-neural {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(96, 165, 250, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 11px;
+            font-weight: 600;
+            transform: translateZ(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calendar-day-neural::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(96, 165, 250, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .calendar-day-neural:hover::before {
+            opacity: 1;
+        }
+
+        .calendar-day-neural:hover {
+            background: rgba(96, 165, 250, 0.1);
+            border-color: rgba(96, 165, 250, 0.5);
+            transform: translateY(-3px) translateZ(10px);
+            box-shadow: 0 8px 16px rgba(96, 165, 250, 0.2);
+        }
+
+        .calendar-day-neural.selected {
+            background: linear-gradient(145deg, rgba(96, 165, 250, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+            border-color: var(--primary-light);
+            transform: translateY(-2px) translateZ(15px);
+            box-shadow: 
+                0 0 30px rgba(96, 165, 250, 0.3),
+                0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .calendar-day-neural.today {
+            border-color: var(--primary-light);
+            color: var(--primary-light);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+        }
+
+        /* Neural Progress Bar */
+        .progress-neural {
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            border: 1px solid rgba(96, 165, 250, 0.1);
+            position: relative;
+        }
+
+        .progress-neural-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 0 20px currentColor,
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-neural-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { left: 100%; }
+        }
+
+        /* Neural Modal */
+        .modal-neural {
+            background: rgba(11, 15, 25, 0.98);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            border-radius: 20px;
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.8),
+                0 0 0 1px rgba(96, 165, 250, 0.1),
+                0 0 50px rgba(96, 165, 250, 0.2),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+            transform: translateZ(50px);
+        }
+
+        /* Neural Toast */
+        .toast-neural {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: linear-gradient(145deg, rgba(96, 165, 250, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+            border: 1px solid var(--primary-light);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            transform: translateY(100px) translateZ(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.6),
+                0 0 30px rgba(96, 165, 250, 0.3);
+            text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+        }
+
+        .toast-neural.show { 
+            transform: translateY(0) translateZ(100px);
+            opacity: 1;
+        }
+
+        /* Neural Upload Area */
+        .upload-neural {
+            border: 2px dashed rgba(96, 165, 250, 0.3);
+            background: linear-gradient(145deg, rgba(96, 165, 250, 0.05) 0%, rgba(11, 15, 25, 0.8) 100%);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            transform: translateZ(0);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-neural::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .upload-neural:hover, .upload-neural.dragover {
+            border-color: var(--primary-light);
+            background: linear-gradient(145deg, rgba(96, 165, 250, 0.1) 0%, rgba(11, 15, 25, 0.9) 100%);
+            transform: translateY(-4px) translateZ(20px);
+            box-shadow: 
+                0 20px 40px rgba(96, 165, 250, 0.15),
+                0 0 40px rgba(96, 165, 250, 0.1);
+        }
+
+        .upload-neural:hover::before, .upload-neural.dragover::before {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Neural Badge */
+        .badge-neural {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            transform: translateZ(5px);
+            box-shadow: 
+                0 2px 8px rgba(0,0,0,0.3),
+                0 0 10px currentColor;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            border: 1px solid currentColor;
+        }
+
+        /* Neural Header */
+        .header-neural {
+            background: linear-gradient(180deg, rgba(96, 165, 250, 0.1) 0%, rgba(11, 15, 25, 0.98) 100%);
+            border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+            box-shadow: 
+                0 4px 20px rgba(0,0,0,0.5),
+                0 0 30px rgba(96, 165, 250, 0.1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--deep-space); }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary-blue) 100%);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+        }
+        ::-webkit-scrollbar-thumb:hover { 
+            background: var(--primary-light);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.8);
+        }
+
+        /* View Section Transitions */
+        .view-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px) translateZ(-20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .view-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) translateZ(0);
+            animation: neuralEnter 0.4s ease-out;
+        }
+
+        @keyframes neuralEnter {
+            from { 
+                opacity: 0;
+                transform: translateY(20px) translateZ(-20px);
+                filter: blur(10px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) translateZ(0);
+                filter: blur(0);
+            }
+        }
+
+        /* Data Stream Animation */
+        .data-stream {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, var(--primary-light), transparent);
+            opacity: 0.3;
+            animation: streamMove 3s linear infinite;
+        }
+
+        @keyframes streamMove {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Neural Grid Background */
+        .neural-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(96, 165, 250, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(96, 165, 250, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            mask-image: radial-gradient(circle at center, black, transparent 80%);
+        }
+
+        /* Status Indicator Pulse */
+        .status-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            box-shadow: 0 0 10px var(--primary-light);
+            animation: statusPulse 2s infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Floating Animation */
+        .float-neural {
+            animation: floatNeural 6s ease-in-out infinite;
+        }
+
+        @keyframes floatNeural {
+            0%, 100% { transform: translateY(0px) translateZ(0) rotateX(0); }
+            50% { transform: translateY(-10px) translateZ(30px) rotateX(2deg); }
+        }
+
+        /* Connection Lines for UI */
+        .connection-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+            height: 1px;
+            opacity: 0.3;
+        }
+
+        .brand-neural {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 50%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.5));
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.5)); }
+            to { filter: drop-shadow(0 0 30px rgba(96, 165, 250, 0.8)) drop-shadow(0 0 40px rgba(37, 99, 235, 0.4)); }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body class="min-h-screen">
+    <canvas id="neuralCanvas"></canvas>
+    <div class="neural-grid"></div>
+    <div id="toast" class="toast-neural"></div>
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="fixed inset-0 z-50 flex flex-col" style="background: linear-gradient(135deg, #0b0f19 0%, #0a0c14 50%, #0b0f19 100%);">
+        <div class="header-neural py-8 px-8 relative overflow-hidden">
+            <div class="data-stream" style="left: 20%; animation-delay: 0s;"></div>
+            <div class="data-stream" style="left: 40%; animation-delay: 1s;"></div>
+            <div class="data-stream" style="left: 60%; animation-delay: 2s;"></div>
+            <div class="data-stream" style="left: 80%; animation-delay: 0.5s;"></div>
+            
+            <div class="max-w-7xl mx-auto flex items-center justify-between relative z-10">
+                <div class="flex items-center space-x-6">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#60a5fa] to-[#2563eb] flex items-center justify-center border-2 border-[#60a5fa] float-neural" style="box-shadow: 0 0 30px rgba(96, 165, 250, 0.6);">
+                        <i class="fas fa-brain text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="brand-neural text-3xl">Teachers Student Tracker</h1>
+                        <p class="text-[#60a5fa] text-sm tracking-[0.4em] uppercase font-bold mt-1 font-[Orbitron]" style="text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);">Classroom Command Center</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="flex items-center space-x-2 mb-1">
+                        <div class="status-pulse"></div>
+                        <span class="text-[#60a5fa] text-xs font-bold tracking-wider">SYSTEM ONLINE</span>
+                    </div>
+                    <p class="text-gray-500 text-xs font-mono">AI Neural Network Active</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-1 flex items-center justify-center p-6 relative">
+            <div class="neural-panel p-10 max-w-2xl w-full float-neural" style="animation-delay: 0.5s;">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#60a5fa] to-transparent opacity-50"></div>
+                
+                <div class="text-center mb-8">
+                    <div class="inline-block mb-4 p-4 rounded-full bg-gradient-to-br from-[#60a5fa]/20 to-[#2563eb]/20 border border-[#60a5fa]/30">
+                        <i class="fas fa-network-wired text-[#60a5fa] text-3xl"></i>
+                    </div>
+                    <h2 class="text-cyber-gold text-2xl font-bold mb-2 font-[Orbitron]">Initialize Neural Link</h2>
+                    <p class="text-gray-400 text-sm">Connect to the student tracking neural network</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div id="uploadArea" class="upload-neural p-8 text-center cursor-pointer col-span-2" onclick="document.getElementById('csvFileInput').click()">
+                        <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleFileSelect(event)">
+                        <i class="fas fa-cloud-upload-alt text-[#60a5fa] text-4xl mb-3" style="filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.5));"></i>
+                        <p class="text-white text-sm font-bold mb-1">Upload Data Stream</p>
+                        <p class="text-gray-500 text-xs">Drop CSV or neural data packet</p>
+                        <p class="text-[#60a5fa]/60 text-xs mt-2 font-mono">> File → Download → CSV</p>
+                    </div>
+                    <button onclick="loadDemoData()" class="btn-neural btn-neural-sm">
+                        <i class="fas fa-database mr-2"></i>Load Simulation
+                    </button>
+                    <button onclick="startFresh()" class="btn-neural btn-neural-sm">
+                        <i class="fas fa-plus mr-2"></i>New Session
+                    </button>
+                </div>
+
+                <div class="neural-panel p-4" style="background: rgba(96, 165, 250, 0.05);">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-xs text-gray-400 uppercase tracking-wider font-bold font-[Orbitron]">Memory Bank Status</p>
+                        <i class="fas fa-microchip text-[#60a5fa]"></i>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-300">Previous neural patterns:</span>
+                        <span id="autoLoadStatus" class="text-xs text-[#60a5fa] font-bold font-mono">Scanning...</span>
+                    </div>
+                    <div class="mt-3 h-1 bg-black/50 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-[#60a5fa] to-[#2563eb] w-3/4 animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden">
+        <header class="header-neural sticky top-0 z-40">
+            <div class="max-w-[1600px] mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#60a5fa] to-[#2563eb] flex items-center justify-center border-2 border-[#60a5fa]" style="box-shadow: 0 0 20px rgba(96, 165, 250, 0.6);">
+                            <i class="fas fa-brain text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h1 class="brand-neural text-xl">Teachers Student Tracker</h1>
+                            <p class="text-[#60a5fa] text-[10px] tracking-[0.3em] uppercase font-bold font-[Orbitron]">Classroom Command Center</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="flex items-center space-x-2 mr-4 px-3 py-1 rounded-full bg-[#60a5fa]/10 border border-[#60a5fa]/30">
+                            <div class="status-pulse"></div>
+                            <span class="text-[10px] text-[#60a5fa] font-bold font-mono">ONLINE</span>
+                        </div>
+                        <span class="text-[10px] text-[#60a5fa] font-bold font-mono" id="saveStatus"><i class="fas fa-save mr-1"></i>NEURAL_SYNC</span>
+                        <div class="h-6 w-px bg-white/20"></div>
+                        <button id="themeToggleBtn" class="btn-neural btn-neural-sm" onclick="toggleTheme()" title="Toggle light/dark"><i class="fas fa-moon"></i></button>
+                        <a href="https://sms.mjqeducation.edu.kh/scores/kid-assessments/result/189?class_id=4169&mid_final_semester=0" target="_blank" class="btn-neural btn-neural-sm" style="text-decoration: none; display: inline-flex; align-items: center;">
+                            <i class="fas fa-school mr-1"></i>SMS
+                        </a>
+                        <button onclick="showUploadModal()" class="btn-neural btn-neural-sm"><i class="fas fa-file-import mr-1"></i>Import</button>
+                        <button onclick="exportAllData()" class="btn-gold-neural btn-neural btn-neural-sm"><i class="fas fa-file-export mr-1"></i>Export</button>
+                        <button onclick="manualSave()" class="btn-neural btn-neural-sm"><i class="fas fa-sync mr-1"></i>Sync</button>
+                        <button onclick="clearAllData()" class="text-gray-400 hover:text-[#ef4444] text-xs px-2 transition-colors"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-[1600px] mx-auto px-4 py-4">
+            <!-- Stats Bar -->
+            <div class="neural-panel p-4 mb-4 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-full bg-gradient-to-l from-[#60a5fa]/5 to-transparent pointer-events-none"></div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="stat-pill-neural">
+                            <span class="text-[10px] text-gray-400 uppercase font-bold font-[Orbitron]">Nodes</span>
+                            <span class="text-lg font-bold text-white ml-2" id="totalClasses">0</span>
+                        </div>
+                        <div class="stat-pill-neural">
+                            <span class="text-[10px] text-gray-400 uppercase font-bold font-[Orbitron]">Entities</span>
+                            <span class="text-lg font-bold text-white ml-2" id="totalStudents">0</span>
+                        </div>
+                        <div class="stat-pill-neural">
+                            <span class="text-[10px] text-gray-400 uppercase font-bold font-[Orbitron]">Data Points</span>
+                            <span class="text-lg font-bold text-white ml-2" id="totalRecords">0</span>
+                        </div>
+                        <div class="stat-pill-neural success">
+                            <span class="text-[10px] text-gray-400 uppercase font-bold font-[Orbitron]">Uptime</span>
+                            <span class="text-lg font-bold text-white ml-2" id="avgAttendance">--</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <select id="periodFilter" onchange="updatePeriod()" class="input-neural w-32 font-mono text-xs">
+                            <option value="1">1 Cycle</option>
+                            <option value="2">2 Cycles</option>
+                            <option value="3">3 Cycles</option>
+                            <option value="4" selected>4 Cycles</option>
+                        </select>
+                        <button onclick="showAddClass()" class="btn-neural btn-neural-sm"><i class="fas fa-plus mr-1"></i>Node</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-4">
+                <!-- Left Sidebar -->
+                <div class="col-span-3">
+                    <div class="neural-panel p-4 h-full">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xs font-bold text-[#60a5fa] uppercase tracking-wider font-[Orbitron]"><i class="fas fa-project-diagram mr-2"></i>Class Nodes</h3>
+                            <span class="text-xs text-gray-500 font-bold font-mono" id="classCount">0</span>
+                        </div>
+                        <div id="classesList" class="space-y-3 max-h-[calc(100vh-280px)] overflow-y-auto"></div>
+                        <div class="mt-4 pt-4 border-t border-[#60a5fa]/20">
+                            <button onclick="window.open('timer.html','_blank')" class="btn-neural w-full flex items-center justify-center">
+                                <i class="fas fa-stopwatch mr-2"></i>Class Timer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-span-9">
+                    <div id="classDashboard" class="hidden">
+                        <!-- Class Header -->
+                        <div class="neural-panel p-4 mb-4 relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#60a5fa] to-[#2563eb]"></div>
+                            <div class="flex items-center justify-between pl-4">
+                                <div>
+                                    <h2 id="selectedClassName" class="text-2xl font-bold text-cyber-gold font-[Orbitron]"></h2>
+                                    <p class="text-xs text-gray-400 mt-1 font-mono"><span id="classStudentCount">0</span> entities • ID: <span id="selectedClassCode" class="text-[#60a5fa] font-bold"></span></p>
+                                </div>
+                                <div class="flex space-x-3">
+                                    <button onclick="showAddStudent()" class="btn-neural btn-neural-sm"><i class="fas fa-user-plus mr-1"></i>Entity</button>
+                                    <button onclick="showAddScore()" class="btn-neural btn-neural-sm"><i class="fas fa-star mr-1"></i>Data</button>
+                                    <button onclick="exportClassData()" class="btn-gold-neural btn-neural btn-neural-sm"><i class="fas fa-download mr-1"></i>Extract</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- View Tabs -->
+                        <div class="flex space-x-3 mb-4">
+                            <button onclick="switchView('overview')" id="tab-overview" class="tab-neural active"><i class="fas fa-chart-line mr-2"></i>Overview</button>
+                            <button onclick="switchView('attendance')" id="tab-attendance" class="tab-neural"><i class="fas fa-calendar-check mr-2"></i>Attendance</button>
+                            <button onclick="switchView('daily')" id="tab-daily" class="tab-neural"><i class="fas fa-clipboard-check mr-2"></i>Daily</button>
+                            <button onclick="switchView('history')" id="tab-history" class="tab-neural"><i class="fas fa-history mr-2"></i>History</button>
+                        </div>
+
+                        <!-- Overview View -->
+                        <div id="view-overview" class="view-section active">
+                            <div class="grid grid-cols-5 gap-3 mb-4">
+                                <div class="stat-pill-neural">
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold font-[Orbitron]">Homework</p>
+                                    <p class="text-xl font-bold text-white mt-1" id="avgHw">--</p>
+                                </div>
+                                <div class="stat-pill-neural">
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold font-[Orbitron]">Quizzes</p>
+                                    <p class="text-xl font-bold text-white mt-1" id="avgQuiz">--</p>
+                                </div>
+                                <div class="stat-pill-neural">
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold font-[Orbitron]">Classwork</p>
+                                    <p class="text-xl font-bold text-white mt-1" id="avgCw">--</p>
+                                </div>
+                                <div class="stat-pill-neural">
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold font-[Orbitron]">Participation</p>
+                                    <p class="text-xl font-bold text-white mt-1" id="avgPart">--</p>
+                                </div>
+                                <div class="stat-pill-neural">
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold font-[Orbitron]">Writing</p>
+                                    <p class="text-xl font-bold text-white mt-1" id="avgWriting">--</p>
+                                </div>
+                            </div>
+
+                            <div class="neural-panel overflow-hidden">
+                                <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#60a5fa] to-transparent opacity-30"></div>
+                                <table class="w-full table-neural">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left">ID</th>
+                                            <th class="text-left">Entity Name</th>
+                                            <th class="text-center">Overall</th>
+                                            <th class="text-center">HW</th>
+                                            <th class="text-center">Quiz</th>
+                                            <th class="text-center">CW</th>
+                                            <th class="text-center">Part</th>
+                                            <th class="text-center">Writing</th>
+                                            <th class="text-center">Attendance</th>
+                                            <th class="text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="studentsTableBody"></tbody>
+                                </table>
+                            </div>
+
+                            <div class="neural-panel p-4 mt-4 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-[#60a5fa]/5 rounded-full blur-3xl pointer-events-none"></div>
+                                <h3 class="text-xs font-bold text-[#60a5fa] uppercase tracking-wider mb-3 font-[Orbitron]"><i class="fas fa-chart-area mr-2"></i>Performance Matrix</h3>
+                                <div class="h-48">
+                                    <canvas id="trendChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attendance View -->
+                        <div id="view-attendance" class="view-section">
+                            <div class="grid grid-cols-3 gap-4">
+                                <!-- Calendar -->
+                                <div class="col-span-1">
+                                    <div class="neural-panel p-4 mb-4 relative overflow-hidden">
+                                        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-[#2563eb]/10 rounded-full blur-2xl pointer-events-none"></div>
+                                        <h3 class="text-xs font-bold text-[#60a5fa] uppercase tracking-wider mb-3 font-[Orbitron]"><i class="fas fa-calendar-alt mr-2"></i>Temporal Select</h3>
+                                        <div class="flex items-center justify-between mb-3">
+                                            <button onclick="changeMonth(-1)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-[#60a5fa]/20 flex items-center justify-center transition-colors border border-[#60a5fa]/30"><i class="fas fa-chevron-left text-xs text-[#60a5fa]"></i></button>
+                                            <span id="calendarMonth" class="text-sm font-bold text-cyber-gold font-[Orbitron]"></span>
+                                            <button onclick="changeMonth(1)" class="w-8 h-8 rounded-full bg-white/5 hover:bg-[#60a5fa]/20 flex items-center justify-center transition-colors border border-[#60a5fa]/30"><i class="fas fa-chevron-right text-xs text-[#60a5fa]"></i></button>
+                                        </div>
+                                        <div class="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 mb-2 font-bold font-mono">
+                                            <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+                                        </div>
+                                        <div id="calendarGrid" class="grid grid-cols-7 gap-1"></div>
+                                    </div>
+
+                                    <div class="neural-panel p-4 relative overflow-hidden">
+                                        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-[#60a5fa] to-[#2563eb] opacity-50"></div>
+                                        <h3 class="text-xs font-bold text-[#60a5fa] uppercase tracking-wider mb-3 font-[Orbitron]"><i class="fas fa-chart-pie mr-2"></i>Cycle Stats</h3>
+                                        <div id="attendanceStats"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Daily Attendance -->
+                                <div class="col-span-2">
+                                    <div class="neural-panel p-4 h-full relative overflow-hidden">
+                                        <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#60a5fa]/5 rounded-full blur-3xl pointer-events-none"></div>
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div>
+                                                <h3 class="text-xs font-bold text-[#60a5fa] uppercase tracking-wider font-[Orbitron]"><i class="fas fa-users mr-2"></i>Daily Scan</h3>
+                                                <p class="text-xs text-gray-400 mt-1 font-bold font-mono" id="attendanceDateDisplay"></p>
+                                            </div>
+                                            <div class="flex space-x-2">
+                                                <button onclick="markAllPresent()" class="btn-neural btn-neural-sm text-xs"><i class="fas fa-check mr-1"></i>All Present</button>
+                                                <button onclick="copyPreviousDay()" class="btn-neural btn-neural-sm text-xs"><i class="fas fa-copy mr-1"></i>Copy Prev</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center space-x-4 mb-4 pb-3 border-b border-[#60a5fa]/20">
+                                            <div class="flex items-center space-x-2 text-xs"><div class="w-3 h-3 rounded-full bg-[#10b981] shadow-[0_0_10px_#10b981]"></div><span class="text-gray-400">Present</span></div>
+                                            <div class="flex items-center space-x-2 text-xs"><div class="w-3 h-3 rounded-full bg-[#f59e0b] shadow-[0_0_10px_#f59e0b]"></div><span class="text-gray-400">Late</span></div>
+                                            <div class="flex items-center space-x-2 text-xs"><div class="w-3 h-3 rounded-full bg-[#6b7280] shadow-[0_0_10px_#6b7280]"></div><span class="text-gray-400">Excused</span></div>
+                                            <div class="flex items-center space-x-2 text-xs"><div class="w-3 h-3 rounded-full bg-[#ef4444] shadow-[0_0_10px_#ef4444]"></div><span class="text-gray-400">Absent</span></div>
+                                        </div>
+
+                                        <div id="attendanceStudentList" class="space-y-2 max-h-[500px] overflow-y-auto"></div>
+
+                                        <div class="mt-4 pt-4 border-t border-[#60a5fa]/20">
+                                            <div class="flex items-center justify-between text-xs mb-2">
+                                                <span class="text-gray-400 font-bold font-[Orbitron]">Daily Summary</span>
+                                                <span class="text-[#60a5fa] font-bold font-mono" id="attendanceSummaryText">0 Present, 0 Absent</span>
+                                            </div>
+                                            <div class="progress-neural">
+                                                <div class="flex h-full">
+                                                    <div id="barPresent" class="progress-neural-fill" style="background: linear-gradient(90deg, #10b981, #059669); color: #10b981; width: 0%"></div>
+                                                    <div id="barLate" class="progress-neural-fill" style="background: linear-gradient(90deg, #f59e0b, #d97706); color: #f59e0b; width: 0%"></div>
+                                                    <div id="barExcused" class="progress-neural-fill" style="background: linear-gradient(90deg, #6b7280, #4b5563); color: #6b7280; width: 0%"></div>
+                                                    <div id="barAbsent" class="progress-neural-fill" style="background: linear-gradient(90deg, #ef4444, #dc2626); color: #ef4444; width: 0%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Daily Tracking View -->
+                        <div id="view-daily" class="view-section">
+                            <div class="neural-panel p-4 relative overflow-hidden">
+                                <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-[#2563eb]/10 rounded-full blur-3xl pointer-events-none"></div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-xs font-bold text-[#60a5fa] uppercase tracking-wider font-[Orbitron]"><i class="fas fa-clipboard-list mr-2"></i>Daily Data Input</h3>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="date" id="dailyDatePicker" class="input-neural font-mono" onchange="loadDailyView()">
+                                        <span class="text-xs text-gray-400 font-bold font-mono" id="dailyDateDisplay"></span>
+                                    </div>
+                                </div>
+
+                                <div class="flex space-x-2 mb-4">
+                                    <button onclick="setDailyCategory('homework')" id="daily-cat-homework" class="tab-neural active">Homework</button>
+                                    <button onclick="setDailyCategory('quiz')" id="daily-cat-quiz" class="tab-neural">Quiz</button>
+                                    <button onclick="setDailyCategory('classwork')" id="daily-cat-classwork" class="tab-neural">Classwork</button>
+                                    <button onclick="setDailyCategory('participation')" id="daily-cat-participation" class="tab-neural">Participation</button>
+                                    <button onclick="setDailyCategory('writing')" id="daily-cat-writing" class="tab-neural">Writing</button>
+                                </div>
+
+                                <div id="dailyStudentsList" class="space-y-2 max-h-[500px] overflow-y-auto"></div>
+
+                                <div class="mt-4 pt-4 border-t border-[#60a5fa]/20">
+                                    <div class="flex items-center justify-between text-xs mb-2">
+                                        <span class="text-gray-400 font-bold font-[Orbitron]">Data Completion Rate:</span>
+                                        <span class="text-[#60a5fa] font-bold text-lg font-mono" id="dailyCompletionRate">0%</span>
+                                    </div>
+                                    <div class="progress-neural">
+                                        <div id="dailyProgressBar" class="progress-neural-fill" style="background: linear-gradient(90deg, #60a5fa, #2563eb); color: #60a5fa; width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- History View -->
+                        <div id="view-history" class="view-section">
+                            <div class="neural-panel p-4 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-64 h-full bg-gradient-to-l from-[#2563eb]/5 to-transparent pointer-events-none"></div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-xs font-bold text-[#60a5fa] uppercase tracking-wider font-[Orbitron]"><i class="fas fa-history mr-2"></i>Neural History Log</h3>
+                                    <div class="flex items-center space-x-2">
+                                        <select id="historyStudentFilter" onchange="loadHistoryView()" class="input-neural font-mono text-xs">
+                                            <option value="all">All Entities</option>
+                                        </select>
+                                        <select id="historyCategoryFilter" onchange="loadHistoryView()" class="input-neural font-mono text-xs">
+                                            <option value="all">All Categories</option>
+                                            <option value="homework">Homework</option>
+                                            <option value="quiz">Quiz</option>
+                                            <option value="classwork">Classwork</option>
+                                            <option value="participation">Participation</option>
+                                            <option value="writing">Writing</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="historyTimeline" class="max-h-[500px] overflow-y-auto space-y-4"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="emptyState" class="hidden text-center py-16">
+                        <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#60a5fa]/20 to-transparent flex items-center justify-center border-2 border-[#60a5fa]/30 float-neural">
+                            <i class="fas fa-network-wired text-[#60a5fa]/50 text-3xl"></i>
+                        </div>
+                        <p class="text-gray-400 text-sm font-bold font-[Orbitron]">Select a class node to initialize</p>
+                        <p class="text-gray-600 text-xs mt-2 font-mono">Neural connection required</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
+        <div class="modal-neural p-6 max-w-md w-full relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#60a5fa] via-[#2563eb] to-[#60a5fa]"></div>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-bold text-[#60a5fa] uppercase tracking-wider font-[Orbitron]"><i class="fas fa-file-import mr-2"></i>Data Import</h3>
+                <button onclick="closeModal('uploadModal')" class="text-gray-400 hover:text-white text-xl transition-colors">&times;</button>
+            </div>
+            <div id="modalUploadArea" class="upload-neural p-8 text-center cursor-pointer mb-4" onclick="document.getElementById('modalCsvInput').click()">
+                <input type="file" id="modalCsvInput" accept=".csv" class="hidden" onchange="handleModalFileSelect(event)">
+                <i class="fas fa-cloud-upload-alt text-[#60a5fa]/60 text-3xl mb-2"></i>
+                <p class="text-white text-sm font-bold">Upload Neural Data</p>
+                <p class="text-gray-500 text-xs mt-1 font-mono">CSV format required</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="addClassModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
+        <div class="modal-neural p-6 max-w-sm w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-bold text-[#60a5fa] uppercase tracking-wider font-[Orbitron]"><i class="fas fa-plus-circle mr-2"></i>New Node</h3>
+                <button onclick="closeModal('addClassModal')" class="text-gray-400 hover:text-white text-xl transition-colors">&times;</button>
+            </div>
+            <div class="space-y-3">
+                <input type="text" id="newClassName" placeholder="Node Name" class="input-neural w-full font-mono">
+                <input type="text" id="newClassCode" placeholder="Node ID (e.g., MATH-10A)" class="input-neural w-full font-mono">
+                <input type="text" id="newClassDesc" placeholder="Description (optional)" class="input-neural w-full font-mono">
+                <button onclick="addClass()" class="btn-neural w-full">Initialize Node</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addStudentModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
+        <div class="modal-neural p-6 max-w-sm w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-bold text-[#60a5fa] uppercase tracking-wider font-[Orbitron]"><i class="fas fa-user-plus mr-2"></i>Add Entity</h3>
+                <button onclick="closeModal('addStudentModal')" class="text-gray-400 hover:text-white text-xl transition-colors">&times;</button>
+            </div>
+            <div class="space-y-3">
+                <input type="text" id="newStudentId" placeholder="Entity ID (e.g., STU-001)" class="input-neural w-full font-mono">
+                <input type="text" id="newStudentName" placeholder="Entity Name" class="input-neural w-full">
+                <button onclick="addStudent()" class="btn-neural w-full">Register Entity</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addScoreModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-50">
+        <div class="modal-neural p-6 max-w-sm w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-bold text-[#60a5fa] uppercase tracking-wider font-[Orbitron]"><i class="fas fa-star mr-2"></i>Input Data</h3>
+                <button onclick="closeModal('addScoreModal')" class="text-gray-400 hover:text-white text-xl transition-colors">&times;</button>
+            </div>
+            <div class="space-y-3">
+                <select id="scoreStudent" class="input-neural w-full font-mono"></select>
+                <select id="scoreCategory" class="input-neural w-full font-mono">
+                    <option value="homework">Homework</option>
+                    <option value="quiz">Quiz</option>
+                    <option value="classwork">Classwork</option>
+                    <option value="participation">Participation</option>
+                    <option value="writing">Writing</option>
+                </select>
+                <input type="number" id="scoreValue" min="1" max="100" placeholder="Value (1-100)" class="input-neural w-full font-mono">
+                <input type="date" id="scoreDate" class="input-neural w-full font-mono">
+                <button onclick="addScore()" class="btn-neural w-full">Commit to Neural Net</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Store
+        let classes = [];
+        let students = [];
+        let scores = { homework: [], quiz: [], classwork: [], participation: [], writing: [] };
+        let attendance = [];
+        let selectedClassId = null;
+        let chart = null;
+        let trackingMonths = 4;
+        let autoSaveInterval = null;
+        let currentDailyCategory = 'homework';
+        let currentDailyDate = new Date().toISOString().split('T')[0];
+        let currentAttendanceDate = new Date().toISOString().split('T')[0];
+        let currentCalendarMonth = new Date();
+
+        // Neural Network Animation
+        class NeuralNetwork {
+            constructor() {
+                this.canvas = document.getElementById('neuralCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.connections = [];
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.init();
+                this.animate();
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            init() {
+                const particleCount = Math.floor((this.canvas.width * this.canvas.height) / 15000);
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        radius: Math.random() * 2 + 1,
+                        pulse: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                const isLight = document.body.classList.contains('light-theme');
+                const nodeColor = '96, 165, 250';
+                const glowColor = isLight ? 'rgba(37, 99, 235, 0.35)' : 'rgba(37, 99, 235, 0.5)';
+                const pulseLineColor = isLight ? 'rgba(37, 99, 235, 0.8)' : 'rgba(59, 130, 246, 0.8)';
+
+                this.particles.forEach((p, i) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.pulse += 0.02;
+                    if (p.x < 0) p.x = this.canvas.width;
+                    if (p.x > this.canvas.width) p.x = 0;
+                    if (p.y < 0) p.y = this.canvas.height;
+                    if (p.y > this.canvas.height) p.y = 0;
+
+                    const pulseRadius = p.radius + Math.sin(p.pulse) * 1;
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, pulseRadius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `rgba(${nodeColor}, ${0.3 + Math.sin(p.pulse) * 0.2})`;
+                    this.ctx.fill();
+                    this.ctx.shadowBlur = 15;
+                    this.ctx.shadowColor = glowColor;
+                    this.ctx.fill();
+                    this.ctx.shadowBlur = 0;
+
+                    this.particles.forEach((p2, j) => {
+                        if (i === j) return;
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120) {
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(p.x, p.y);
+                            this.ctx.lineTo(p2.x, p2.y);
+                            const alpha = (1 - dist / 120) * 0.3;
+                            this.ctx.strokeStyle = `rgba(${nodeColor}, ${alpha})`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.stroke();
+                            if (Math.random() > 0.99) {
+                                this.ctx.beginPath();
+                                this.ctx.moveTo(p.x, p.y);
+                                this.ctx.lineTo(p2.x, p2.y);
+                                this.ctx.strokeStyle = pulseLineColor;
+                                this.ctx.lineWidth = 2;
+                                this.ctx.stroke();
+                            }
+                        }
+                    });
+                });
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Theme helpers
+        function applySavedTheme() {
+            var savedTheme = localStorage.getItem('ryshubTheme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+            } else {
+                document.body.classList.remove('light-theme');
+            }
+            updateThemeToggleUi();
+        }
+        function updateThemeToggleUi() {
+            var btn = document.getElementById('themeToggleBtn');
+            if (!btn) return;
+            var isLight = document.body.classList.contains('light-theme');
+            btn.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            localStorage.setItem('ryshubTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+            updateThemeToggleUi();
+        }
+
+        // Initialize Neural Network
+        document.addEventListener('DOMContentLoaded', () => {
+            applySavedTheme();
+            new NeuralNetwork();
+            document.getElementById('scoreDate').valueAsDate = new Date();
+            document.getElementById('dailyDatePicker').value = currentDailyDate;
+            setupDragAndDrop();
+            checkAutoLoad();
+            autoSaveInterval = setInterval(autoSave, 30000);
+        });
+
+        function manualSave() { autoSave(); showToast("💾 Manual sync complete"); }
+
+        function autoSave() {
+            if (students.length > 0 || classes.length > 0) {
+                const data = { classes, students, scores, attendance, lastSaved: new Date().toISOString() };
+                localStorage.setItem('creativeMindsTracker_data', JSON.stringify(data));
+                document.getElementById('saveStatus').innerHTML = '<i class="fas fa-check-circle mr-1"></i>SYNCED ' + new Date().toLocaleTimeString();
+            }
+        }
+
+        function checkAutoLoad() {
+            const saved = localStorage.getItem('creativeMindsTracker_data');
+            const statusEl = document.getElementById('autoLoadStatus');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    const date = new Date(data.lastSaved);
+                    statusEl.innerHTML = `<i class="fas fa-database mr-1"></i>Found: ${date.toLocaleDateString()}`;
+                    setTimeout(() => {
+                        if (confirm('📡 Load previous neural patterns?')) {
+                            loadSavedData(data);
+                        }
+                    }, 1000);
+                } catch (e) {
+                    statusEl.textContent = 'No patterns found';
+                }
+            } else {
+                statusEl.textContent = 'No patterns found';
+            }
+        }
+
+        function loadSavedData(data) {
+            classes = data.classes || [];
+            students = data.students || [];
+            scores = data.scores || { homework: [], quiz: [], classwork: [], participation: [], writing: [] };
+            attendance = data.attendance || [];
+            showDashboard();
+            showToast('✅ Neural patterns restored');
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Purge all neural data? This cannot be undone.')) {
+                localStorage.removeItem('creativeMindsTracker_data');
+                classes = [];
+                students = [];
+                scores = { homework: [], quiz: [], classwork: [], participation: [], writing: [] };
+                attendance = [];
+                location.reload();
+            }
+        }
+
+        function setupDragAndDrop() {
+            ['uploadArea', 'modalUploadArea'].forEach(id => {
+                const area = document.getElementById(id);
+                if (!area) return;
+                area.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    area.classList.add('dragover');
+                });
+                area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+                area.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    area.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0 && files[0].name.endsWith('.csv')) {
+                        processCSVFile(files[0]);
+                    } else {
+                        showToast('❌ Upload CSV format only');
+                    }
+                });
+            });
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) processCSVFile(file);
+        }
+
+        function handleModalFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                processCSVFile(file);
+                closeModal('uploadModal');
+            }
+        }
+
+        function processCSVFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    parseCSVData(e.target.result);
+                    showToast(`✅ Data imported: ${file.name}`);
+                } catch (error) {
+                    showToast('❌ Error: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function parseCSVData(csv) {
+            const lines = csv.split('\n').filter(line => line.trim());
+            if (lines.length < 2) throw new Error('Empty CSV');
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            const nameIdx = headers.findIndex(h => h.toLowerCase().includes('name'));
+            const idIdx = headers.findIndex(h => h.toLowerCase().includes('id'));
+            const classIdx = headers.findIndex(h => h.toLowerCase().includes('class'));
+
+            const classrooms = new Set();
+            for (let i = 1; i < lines.length; i++) {
+                const cols = lines[i].split(',');
+                const room = classIdx >= 0 ? cols[classIdx]?.trim().replace(/"/g, '') : 'Default';
+                if (room) classrooms.add(room);
+            }
+
+            const classMap = {};
+            classrooms.forEach((room, idx) => {
+                const newClass = {
+                    id: Date.now() + idx,
+                    name: room,
+                    code: room.substring(0, 8).toUpperCase().replace(/\s/g, '-'),
+                    desc: 'Imported',
+                    created: new Date().toISOString().split('T')[0]
+                };
+                classes.push(newClass);
+                classMap[room] = newClass.id;
+            });
+
+            for (let i = 1; i < lines.length; i++) {
+                const cols = lines[i].split(',');
+                if (cols.length < 2) continue;
+                const name = nameIdx >= 0 ? cols[nameIdx]?.trim().replace(/"/g, '') : cols[0]?.trim();
+                const studentId = idIdx >= 0 ? cols[idIdx]?.trim().replace(/"/g, '') : `STU-${String(i).padStart(3, '0')}`;
+                const room = classIdx >= 0 ? cols[classIdx]?.trim().replace(/"/g, '') : 'Default';
+                if (name) {
+                    students.push({
+                        id: studentId || `STU-${Date.now()}-${i}`,
+                        name: name,
+                        classId: classMap[room] || classes[0]?.id,
+                        lastUpdated: new Date().toISOString().split('T')[0]
+                    });
+                }
+            }
+            showDashboard();
+            autoSave();
+        }
+
+        function loadDemoData() {
+            classes = [
+                { id: 1, name: 'Grade 10-A Mathematics', code: 'MATH-10A', desc: 'Advanced Algebra', created: '2026-01-15' },
+                { id: 2, name: 'Grade 10-B Mathematics', code: 'MATH-10B', desc: 'Standard Math', created: '2026-01-15' },
+                { id: 3, name: 'Grade 11 Physics', code: 'PHYS-11', desc: 'Mechanics', created: '2026-02-01' }
+            ];
+            students = [
+                { id: 'STU-2026-001', name: 'Alice Johnson', classId: 1, lastUpdated: '2026-04-05' },
+                { id: 'STU-2026-002', name: 'Bob Smith', classId: 1, lastUpdated: '2026-04-05' },
+                { id: 'STU-2026-003', name: 'Carol White', classId: 1, lastUpdated: '2026-04-04' },
+                { id: 'STU-2026-004', name: 'David Brown', classId: 2, lastUpdated: '2026-04-05' },
+                { id: 'STU-2026-005', name: 'Emma Davis', classId: 2, lastUpdated: '2026-04-03' },
+                { id: 'STU-2026-006', name: 'Frank Miller', classId: 3, lastUpdated: '2026-04-05' }
+            ];
+            scores = {
+                homework: [
+                    { studentId: 'STU-2026-001', score: 85, date: '2026-04-05' },
+                    { studentId: 'STU-2026-002', score: 78, date: '2026-04-05' },
+                    { studentId: 'STU-2026-003', score: 92, date: '2026-04-04' }
+                ],
+                quiz: [
+                    { studentId: 'STU-2026-001', score: 88, date: '2026-04-03' },
+                    { studentId: 'STU-2026-002', score: 82, date: '2026-04-03' }
+                ],
+                classwork: [
+                    { studentId: 'STU-2026-001', score: 90, date: '2026-04-05' },
+                    { studentId: 'STU-2026-003', score: 87, date: '2026-04-04' }
+                ],
+                participation: [
+                    { studentId: 'STU-2026-001', score: 95, date: '2026-04-05' },
+                    { studentId: 'STU-2026-002', score: 88, date: '2026-04-05' }
+                ],
+                writing: [
+                    { studentId: 'STU-2026-001', score: 88, date: '2026-04-04' },
+                    { studentId: 'STU-2026-002', score: 92, date: '2026-04-03' },
+                    { studentId: 'STU-2026-003', score: 85, date: '2026-04-05' }
+                ]
+            };
+            const today = new Date().toISOString().split('T')[0];
+            const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+            attendance = [
+                { studentId: 'STU-2026-001', date: today, status: 'present' },
+                { studentId: 'STU-2026-002', date: today, status: 'present' },
+                { studentId: 'STU-2026-003', date: today, status: 'late' },
+                { studentId: 'STU-2026-001', date: yesterday, status: 'present' },
+                { studentId: 'STU-2026-002', date: yesterday, status: 'absent' },
+                { studentId: 'STU-2026-003', date: yesterday, status: 'present' }
+            ];
+            showToast('✨ Neural simulation loaded');
+            showDashboard();
+            autoSave();
+        }
+
+        function startFresh() {
+            showDashboard();
+            showToast('🚀 Neural link established');
+        }
+
+        function showDashboard() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('fade-in');
+            updateStats();
+            renderClasses();
+            if (classes.length === 0) {
+                document.getElementById('emptyState').classList.remove('hidden');
+                document.getElementById('classDashboard').classList.add('hidden');
+            } else if (!selectedClassId) {
+                document.getElementById('emptyState').classList.remove('hidden');
+                document.getElementById('classDashboard').classList.add('hidden');
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalClasses').textContent = classes.length;
+            document.getElementById('totalStudents').textContent = students.length;
+            document.getElementById('classCount').textContent = classes.length;
+            const totalRecords = Object.values(scores).reduce((a, b) => a + b.length, 0);
+            document.getElementById('totalRecords').textContent = totalRecords + attendance.length;
+
+            if (students.length > 0 && attendance.length > 0) {
+                const presentCount = attendance.filter(a => a.status === 'present' || a.status === 'late').length;
+                const avg = Math.round((presentCount / attendance.length) * 100);
+                document.getElementById('avgAttendance').textContent = avg + '%';
+            } else {
+                document.getElementById('avgAttendance').textContent = '--';
+            }
+        }
+
+        function renderClasses() {
+            const list = document.getElementById('classesList');
+            if (classes.length === 0) {
+                list.innerHTML = '<p class="text-gray-500 text-xs text-center py-4 font-mono">No nodes initialized</p>';
+                return;
+            }
+            list.innerHTML = classes.map(cls => {
+                const count = students.filter(s => s.classId === cls.id).length;
+                const isActive = selectedClassId === cls.id;
+                return `
+                    <div onclick="selectClass(${cls.id})" class="card-neural p-4 cursor-pointer ${isActive ? 'active' : ''}">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[10px] text-[#60a5fa] font-bold font-mono">${cls.code}</span>
+                            <span class="text-[10px] text-gray-500 font-bold font-mono">${count} entities</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white truncate">${cls.name}</h4>
+                        ${isActive ? '<div class="mt-2 h-0.5 w-full bg-gradient-to-r from-[#60a5fa] to-[#2563eb]"></div>' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectClass(classId) {
+            selectedClassId = classId;
+            const cls = classes.find(c => c.id === classId);
+            renderClasses();
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('classDashboard').classList.remove('hidden');
+            document.getElementById('classDashboard').classList.add('fade-in');
+            document.getElementById('selectedClassName').textContent = cls.name;
+            document.getElementById('selectedClassCode').textContent = cls.code;
+            const classStudents = students.filter(s => s.classId === classId);
+            document.getElementById('classStudentCount').textContent = classStudents.length;
+
+            updateScoreStudents();
+            updateHistoryStudentFilter();
+            renderStudentsTable();
+            updateClassStats();
+            initChart();
+
+            currentDailyDate = new Date().toISOString().split('T')[0];
+            document.getElementById('dailyDatePicker').value = currentDailyDate;
+            loadDailyView();
+            loadHistoryView();
+
+            currentAttendanceDate = new Date().toISOString().split('T')[0];
+            renderCalendar();
+            loadAttendanceView();
+        }
+
+        function updateScoreStudents() {
+            const select = document.getElementById('scoreStudent');
+            if (!select) return;
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            if (classStudents.length === 0) {
+                select.innerHTML = '<option value="">No entities in node</option>';
+                return;
+            }
+            select.innerHTML = classStudents.map(s => 
+                `<option value="${s.id}">${s.name} (${s.id})</option>`
+            ).join('');
+        }
+
+        function updateHistoryStudentFilter() {
+            const select = document.getElementById('historyStudentFilter');
+            if (!select) return;
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            const currentValue = select.value;
+            select.innerHTML = '<option value="all">All Entities</option>' + 
+                classStudents.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            if (currentValue && (currentValue === 'all' || classStudents.find(s => s.id === currentValue))) {
+                select.value = currentValue;
+            }
+        }
+
+        function renderStudentsTable() {
+            const tbody = document.getElementById('studentsTableBody');
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            if (classStudents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="py-4 text-center text-gray-500 text-xs font-mono">No entities registered</td></tr>';
+                return;
+            }
+            tbody.innerHTML = classStudents.map(student => {
+                const sScores = getStudentScores(student.id);
+                const overall = calcOverall(sScores);
+                const attendanceRate = getStudentAttendanceRate(student.id);
+                return `
+                    <tr>
+                        <td class="text-gray-400 font-mono text-xs">${student.id}</td>
+                        <td>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#60a5fa] to-[#2563eb] flex items-center justify-center text-white text-xs font-bold border border-[#60a5fa]/50" style="box-shadow: 0 0 10px rgba(96, 165, 250, 0.3);">
+                                    ${student.name.split(' ').map(n => n[0]).join('')}
+                                </div>
+                                <span class="text-white text-sm font-bold">${student.name}</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge-neural ${getScoreColor(overall)}">${Math.round(overall)}%</span>
+                        </td>
+                        <td class="text-center text-gray-400 text-xs font-bold font-mono">${sScores.homework.avg}%</td>
+                        <td class="text-center text-gray-400 text-xs font-bold font-mono">${sScores.quiz.avg}%</td>
+                        <td class="text-center text-gray-400 text-xs font-bold font-mono">${sScores.classwork.avg}%</td>
+                        <td class="text-center text-gray-400 text-xs font-bold font-mono">${sScores.participation.avg}%</td>
+                        <td class="text-center text-gray-400 text-xs font-bold font-mono">${sScores.writing.avg}%</td>
+                        <td class="text-center">
+                            <span class="badge-neural ${attendanceRate >= 90 ? 'text-[#10b981] border-[#10b981]' : attendanceRate >= 80 ? 'text-[#f59e0b] border-[#f59e0b]' : 'text-[#ef4444] border-[#ef4444]'}">${attendanceRate}%</span>
+                        </td>
+                        <td class="text-right">
+                            <button onclick="quickScore('${student.id}')" class="text-[#60a5fa] hover:text-white text-xs font-bold transition-colors font-mono"><i class="fas fa-plus-circle mr-1"></i>DATA</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getScoreColor(score) {
+            if (score >= 90) return 'text-[#10b981] border-[#10b981]';
+            if (score >= 80) return 'text-[#60a5fa] border-[#60a5fa]';
+            if (score >= 70) return 'text-[#f59e0b] border-[#f59e0b]';
+            return 'text-[#ef4444] border-[#ef4444]';
+        }
+
+        function getStudentScores(studentId) {
+            const cutoff = new Date();
+            cutoff.setMonth(cutoff.getMonth() - trackingMonths);
+            const result = {};
+            Object.keys(scores).forEach(cat => {
+                const catScores = scores[cat].filter(s => {
+                    const d = new Date(s.date);
+                    return s.studentId === studentId && d >= cutoff;
+                });
+                result[cat] = {
+                    avg: catScores.length ? Math.round(catScores.reduce((a,b) => a + b.score, 0) / catScores.length) : 0,
+                    count: catScores.length
+                };
+            });
+            return result;
+        }
+
+        function getStudentAttendanceRate(studentId) {
+            const studentAttendance = attendance.filter(a => a.studentId === studentId);
+            if (studentAttendance.length === 0) return 100;
+            const present = studentAttendance.filter(a => a.status === 'present' || a.status === 'late').length;
+            return Math.round((present / studentAttendance.length) * 100);
+        }
+
+        function calcOverall(sScores) {
+            const avgs = Object.values(sScores).map(s => s.avg).filter(a => a > 0);
+            return avgs.length ? avgs.reduce((a,b) => a + b, 0) / avgs.length : 0;
+        }
+
+        function updateClassStats() {
+            if (!selectedClassId) return;
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            Object.keys(scores).forEach(cat => {
+                let total = 0, count = 0;
+                classStudents.forEach(student => {
+                    const sScores = getStudentScores(student.id);
+                    if (sScores[cat].avg > 0) {
+                        total += sScores[cat].avg;
+                        count++;
+                    }
+                });
+                const avg = count ? Math.round(total / count) : 0;
+                const ids = { homework: 'avgHw', quiz: 'avgQuiz', classwork: 'avgCw', participation: 'avgPart', writing: 'avgWriting' };
+                const el = document.getElementById(ids[cat]);
+                if (el) el.textContent = avg ? avg + '%' : '--';
+            });
+        }
+
+        function initChart() {
+            if (!selectedClassId) return;
+            const ctx = document.getElementById('trendChart');
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            const labels = [];
+            const data = { homework: [], quiz: [], classwork: [], participation: [], writing: [] };
+            for (let i = trackingMonths - 1; i >= 0; i--) {
+                const d = new Date();
+                d.setMonth(d.getMonth() - i);
+                labels.push(d.toLocaleDateString('en-US', { month: 'short' }));
+                Object.keys(data).forEach(cat => {
+                    let total = 0, count = 0;
+                    classStudents.forEach(student => {
+                        const monthScores = scores[cat].filter(s => {
+                            const sd = new Date(s.date);
+                            return s.studentId === student.id && sd.getMonth() === d.getMonth() && sd.getFullYear() === d.getFullYear();
+                        });
+                        if (monthScores.length) {
+                            total += monthScores.reduce((a,b) => a + b.score, 0) / monthScores.length;
+                            count++;
+                        }
+                    });
+                    data[cat].push(count ? Math.round(total / count) : 0);
+                });
+            }
+            if (chart) chart.destroy();
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'HW', data: data.homework, borderColor: '#60a5fa', backgroundColor: 'rgba(96,165,250,0.1)', tension: 0.4, pointRadius: 3, pointHoverRadius: 5 },
+                        { label: 'Quiz', data: data.quiz, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.1)', tension: 0.4, pointRadius: 3, pointHoverRadius: 5 },
+                        { label: 'CW', data: data.classwork, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', tension: 0.4, pointRadius: 3, pointHoverRadius: 5 },
+                        { label: 'Part', data: data.participation, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', tension: 0.4, pointRadius: 3, pointHoverRadius: 5 },
+                        { label: 'Writing', data: data.writing, borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', tension: 0.4, pointRadius: 3, pointHoverRadius: 5 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#9CA3AF', usePointStyle: true, font: { size: 11, weight: 'bold' } } } },
+                    scales: {
+                        y: { beginAtZero: true, max: 100, ticks: { color: '#6B7280', font: { size: 11, weight: 'bold' } }, grid: { color: 'rgba(37,99,235,0.03)' } },
+                        x: { ticks: { color: '#6B7280', font: { size: 11, weight: 'bold' } }, grid: { color: 'rgba(37,99,235,0.03)' } }
+                    }
+                }
+            });
+        }
+
+        function updatePeriod() {
+            trackingMonths = parseInt(document.getElementById('periodFilter').value);
+            if (selectedClassId) {
+                renderStudentsTable();
+                updateClassStats();
+                initChart();
+            }
+        }
+
+        function switchView(viewName) {
+            document.querySelectorAll('.tab-neural').forEach(btn => {
+                if (btn.id.startsWith('tab-')) btn.classList.remove('active');
+            });
+            document.getElementById(`tab-${viewName}`).classList.add('active');
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`view-${viewName}`).classList.add('active');
+            if (viewName === 'daily') loadDailyView();
+            else if (viewName === 'history') loadHistoryView();
+            else if (viewName === 'attendance') {
+                renderCalendar();
+                loadAttendanceView();
+            }
+        }
+
+        // ==================== ATTENDANCE FUNCTIONS ====================
+
+        function renderCalendar() {
+            const year = currentCalendarMonth.getFullYear();
+            const month = currentCalendarMonth.getMonth();
+            document.getElementById('calendarMonth').textContent = new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date().toISOString().split('T')[0];
+
+            let html = '';
+            for (let i = 0; i < firstDay; i++) html += '<div></div>';
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const hasData = attendance.some(a => a.date === dateStr);
+                const isToday = dateStr === today;
+                const isSelected = dateStr === currentAttendanceDate;
+
+                html += `
+                    <div class="calendar-day-neural ${isSelected ? 'selected' : ''} ${isToday ? 'today' : ''} ${hasData ? 'has-data' : ''}" 
+                         onclick="selectAttendanceDate('${dateStr}')">
+                        ${day}
+                        ${hasData ? '<div class="w-1.5 h-1.5 bg-[#60a5fa] rounded-full mt-1 shadow-[0_0_5px_#60a5fa]"></div>' : ''}
+                    </div>
+                `;
+            }
+            document.getElementById('calendarGrid').innerHTML = html;
+            updateMonthlyStats(year, month);
+        }
+
+        function changeMonth(delta) {
+            currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function selectAttendanceDate(date) {
+            currentAttendanceDate = date;
+            renderCalendar();
+            loadAttendanceView();
+        }
+
+        function updateMonthlyStats(year, month) {
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            const monthStart = `${year}-${String(month + 1).padStart(2, '0')}-01`;
+            const monthEnd = `${year}-${String(month + 1).padStart(2, '0')}-31`;
+
+            const monthAttendance = attendance.filter(a => {
+                return a.date >= monthStart && a.date <= monthEnd && classStudents.some(s => s.id === a.studentId);
+            });
+
+            const present = monthAttendance.filter(a => a.status === 'present').length;
+            const late = monthAttendance.filter(a => a.status === 'late').length;
+            const absent = monthAttendance.filter(a => a.status === 'absent').length;
+            const excused = monthAttendance.filter(a => a.status === 'excused').length;
+            const total = monthAttendance.length;
+
+            const container = document.getElementById('attendanceStats');
+            if (total === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-xs text-center font-mono">No data this cycle</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-gray-400 font-bold font-mono"><i class="fas fa-check-circle text-[#10b981] mr-2"></i>Present</span>
+                        <span class="font-bold text-white">${present} (${Math.round(present/total*100)}%)</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-gray-400 font-bold font-mono"><i class="fas fa-clock text-[#f59e0b] mr-2"></i>Late</span>
+                        <span class="font-bold text-white">${late} (${Math.round(late/total*100)}%)</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-gray-400 font-bold font-mono"><i class="fas fa-times-circle text-[#ef4444] mr-2"></i>Absent</span>
+                        <span class="font-bold text-white">${absent} (${Math.round(absent/total*100)}%)</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-gray-400 font-bold font-mono"><i class="fas fa-notes-medical text-[#6b7280] mr-2"></i>Excused</span>
+                        <span class="font-bold text-white">${excused} (${Math.round(excused/total*100)}%)</span>
+                    </div>
+                    <div class="pt-3 border-t border-[#60a5fa]/20 mt-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-[#60a5fa] font-bold font-[Orbitron]">Total Records</span>
+                            <span class="font-bold text-[#60a5fa] text-lg">${total}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadAttendanceView() {
+            if (!selectedClassId) return;
+            document.getElementById('attendanceDateDisplay').textContent = new Date(currentAttendanceDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            const container = document.getElementById('attendanceStudentList');
+
+            if (classStudents.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-xs text-center py-4 font-mono">No entities in this node</p>';
+                updateAttendanceSummary(0, 0, 0, 0);
+                return;
+            }
+
+            let present = 0, absent = 0, late = 0, excused = 0;
+
+            container.innerHTML = classStudents.map(student => {
+                const record = attendance.find(a => a.studentId === student.id && a.date === currentAttendanceDate);
+                const status = record ? record.status : null;
+                if (status === 'present') present++;
+                else if (status === 'absent') absent++;
+                else if (status === 'late') late++;
+                else if (status === 'excused') excused++;
+
+                return `
+                    <div class="student-attendance-row" style="display: flex; align-items: center; padding: 12px; background: rgba(0,0,0,0.4); border-radius: 10px; margin-bottom: 8px; border: 1px solid rgba(37,99,235,0.1);">
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#60a5fa] to-[#2563eb] flex items-center justify-center text-white text-sm font-bold mr-3 border border-[#60a5fa]/50" style="box-shadow: 0 0 10px rgba(37,99,235,0.3);">
+                                ${student.name.split(' ').map(n => n[0]).join('')}
+                            </div>
+                            <div>
+                                <p class="text-white text-sm font-bold">${student.name}</p>
+                                <p class="text-gray-500 text-xs font-mono">${student.id}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="setAttendance('${student.id}', 'present')" class="attendance-btn-neural ${status === 'present' ? 'present' : ''}" title="Present"><i class="fas fa-check"></i></button>
+                            <button onclick="setAttendance('${student.id}', 'late')" class="attendance-btn-neural ${status === 'late' ? 'late' : ''}" title="Late"><i class="fas fa-clock"></i></button>
+                            <button onclick="setAttendance('${student.id}', 'excused')" class="attendance-btn-neural ${status === 'excused' ? 'excused' : ''}" title="Excused"><i class="fas fa-notes-medical"></i></button>
+                            <button onclick="setAttendance('${student.id}', 'absent')" class="attendance-btn-neural ${status === 'absent' ? 'absent' : ''}" title="Absent"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            updateAttendanceSummary(present, absent, late, excused);
+        }
+
+        function updateAttendanceSummary(present, absent, late, excused) {
+            const total = present + absent + late + excused;
+            document.getElementById('attendanceSummaryText').textContent = `${present} Present, ${late} Late, ${excused} Excused, ${absent} Absent`;
+            if (total > 0) {
+                document.getElementById('barPresent').style.width = (present / total * 100) + '%';
+                document.getElementById('barLate').style.width = (late / total * 100) + '%';
+                document.getElementById('barExcused').style.width = (excused / total * 100) + '%';
+                document.getElementById('barAbsent').style.width = (absent / total * 100) + '%';
+            } else {
+                document.getElementById('barPresent').style.width = '0%';
+                document.getElementById('barLate').style.width = '0%';
+                document.getElementById('barExcused').style.width = '0%';
+                document.getElementById('barAbsent').style.width = '0%';
+            }
+        }
+
+        function setAttendance(studentId, status) {
+            attendance = attendance.filter(a => !(a.studentId === studentId && a.date === currentAttendanceDate));
+            attendance.push({ studentId: studentId, date: currentAttendanceDate, status: status });
+            const student = students.find(s => s.id === studentId);
+            if (student) student.lastUpdated = currentAttendanceDate;
+            loadAttendanceView();
+            renderCalendar();
+            updateStats();
+            renderStudentsTable();
+            autoSave();
+            const statusEmoji = { present: '✅', late: '⏰', excused: '🏥', absent: '❌' };
+            showToast(`${statusEmoji[status]} ${student.name}: ${status.toUpperCase()}`);
+        }
+
+        function markAllPresent() {
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            classStudents.forEach(student => {
+                attendance = attendance.filter(a => !(a.studentId === student.id && a.date === currentAttendanceDate));
+                attendance.push({ studentId: student.id, date: currentAttendanceDate, status: 'present' });
+            });
+            loadAttendanceView();
+            renderCalendar();
+            updateStats();
+            renderStudentsTable();
+            autoSave();
+            showToast(`✅ All ${classStudents.length} entities marked present`);
+        }
+
+        function copyPreviousDay() {
+            const prevDate = new Date(currentAttendanceDate);
+            prevDate.setDate(prevDate.getDate() - 1);
+            const prevDateStr = prevDate.toISOString().split('T')[0];
+            const prevDayRecords = attendance.filter(a => a.date === prevDateStr);
+            if (prevDayRecords.length === 0) {
+                showToast('⚠️ No data for previous day');
+                return;
+            }
+            prevDayRecords.forEach(record => {
+                attendance = attendance.filter(a => !(a.studentId === record.studentId && a.date === currentAttendanceDate));
+                attendance.push({ studentId: record.studentId, date: currentAttendanceDate, status: record.status });
+            });
+            loadAttendanceView();
+            renderCalendar();
+            updateStats();
+            renderStudentsTable();
+            autoSave();
+            showToast(`📋 Copied ${prevDayRecords.length} records`);
+        }
+
+        // ==================== DAILY TRACKING ====================
+        function setDailyCategory(category) {
+            currentDailyCategory = category;
+            document.querySelectorAll('[id^="daily-cat-"]').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`daily-cat-${category}`).classList.add('active');
+            loadDailyView();
+        }
+
+        function loadDailyView() {
+            if (!selectedClassId) return;
+            currentDailyDate = document.getElementById('dailyDatePicker').value;
+            document.getElementById('dailyDateDisplay').textContent = new Date(currentDailyDate).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            const container = document.getElementById('dailyStudentsList');
+            if (classStudents.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-xs text-center py-4 font-mono">No entities in node</p>';
+                updateDailyStats(0, 0);
+                return;
+            }
+            const completedStudents = scores[currentDailyCategory].filter(s => s.date === currentDailyDate);
+            const completedIds = new Set(completedStudents.map(s => s.studentId));
+            container.innerHTML = classStudents.map(student => {
+                const isCompleted = completedIds.has(student.id);
+                const score = completedStudents.find(s => s.studentId === student.id)?.score || 0;
+                return `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(0,0,0,0.4); border-radius: 10px; margin-bottom: 8px; border: 1px solid rgba(37,99,235,0.1);">
+                        <div class="flex items-center space-x-3">
+                            <div onclick="toggleDailyCompletion('${student.id}', ${isCompleted}, ${score})" style="width: 24px; height: 24px; border: 2px solid ${isCompleted ? '#10b981' : '#60a5fa'}; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; background: ${isCompleted ? '#10b981' : 'transparent'}; transition: all 0.2s; box-shadow: ${isCompleted ? '0 0 10px #10b981' : '0 0 5px rgba(37,99,235,0.3)'};">
+                                ${isCompleted ? '<i class="fas fa-check text-black text-xs"></i>' : ''}
+                            </div>
+                            <div>
+                                <p class="text-white text-sm font-bold">${student.name}</p>
+                                <p class="text-gray-500 text-xs font-mono">${student.id}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            ${isCompleted ? `
+                                <span class="badge-neural ${getScoreColor(score)}">${score}%</span>
+                                <button onclick="editDailyScore('${student.id}', ${score})" class="text-[#60a5fa] hover:text-white text-xs font-bold"><i class="fas fa-edit"></i></button>
+                            ` : `<button onclick="addDailyScore('${student.id}')" class="btn-neural btn-neural-sm">Input</button>`}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            updateDailyStats(classStudents.length, completedIds.size);
+        }
+
+        function updateDailyStats(total, completed) {
+            const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('dailyCompletionRate').textContent = `${rate}% (${completed}/${total})`;
+            document.getElementById('dailyProgressBar').style.width = `${rate}%`;
+        }
+
+        function toggleDailyCompletion(studentId, isCompleted, currentScore) {
+            if (isCompleted) {
+                scores[currentDailyCategory] = scores[currentDailyCategory].filter(s => !(s.studentId === studentId && s.date === currentDailyDate));
+                showToast('🗑️ Data purged');
+            } else {
+                addDailyScore(studentId);
+                return;
+            }
+            loadDailyView();
+            autoSave();
+        }
+
+        function addDailyScore(studentId) {
+            const score = prompt('Enter value (1-100):', '85');
+            if (score === null) return;
+            const scoreNum = parseInt(score);
+            if (isNaN(scoreNum) || scoreNum < 1 || scoreNum > 100) {
+                showToast('❌ Invalid value. Range: 1-100');
+                return;
+            }
+            scores[currentDailyCategory] = scores[currentDailyCategory].filter(s => !(s.studentId === studentId && s.date === currentDailyDate));
+            scores[currentDailyCategory].push({ studentId: studentId, score: scoreNum, date: currentDailyDate });
+            const student = students.find(s => s.id === studentId);
+            if (student) student.lastUpdated = currentDailyDate;
+            loadDailyView();
+            autoSave();
+            showToast(`✅ Data committed: ${scoreNum}%`);
+        }
+
+        function editDailyScore(studentId, currentScore) {
+            addDailyScore(studentId);
+        }
+
+        // ==================== HISTORY ====================
+        function loadHistoryView() {
+            if (!selectedClassId) return;
+            const studentFilter = document.getElementById('historyStudentFilter').value;
+            const categoryFilter = document.getElementById('historyCategoryFilter').value;
+            const container = document.getElementById('historyTimeline');
+            let allRecords = [];
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            const classStudentIds = new Set(classStudents.map(s => s.id));
+            const categories = categoryFilter === 'all' ? Object.keys(scores) : [categoryFilter];
+            categories.forEach(cat => {
+                scores[cat].forEach(record => {
+                    if (classStudentIds.has(record.studentId)) {
+                        if (studentFilter === 'all' || record.studentId === studentFilter) {
+                            allRecords.push({ ...record, category: cat, studentName: students.find(s => s.id === record.studentId)?.name || 'Unknown' });
+                        }
+                    }
+                });
+            });
+            allRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
+            if (allRecords.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-xs text-center py-8 font-mono">No records in neural log</p>';
+                return;
+            }
+            const grouped = {};
+            allRecords.forEach(record => { if (!grouped[record.date]) grouped[record.date] = []; grouped[record.date].push(record); });
+            container.innerHTML = Object.entries(grouped).map(([date, records]) => `
+                <div style="border-left: 2px solid #60a5fa; padding-left: 16px; margin-bottom: 16px; position: relative;">
+                    <div class="absolute left-[-5px] top-0 w-2 h-2 rounded-full bg-[#60a5fa] shadow-[0_0_10px_#60a5fa]"></div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[#60a5fa] text-xs font-bold font-mono">${new Date(date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                        <span class="text-gray-500 text-xs font-bold font-mono">${records.length} entries</span>
+                    </div>
+                    <div class="space-y-2">
+                        ${records.map(r => `
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; border: 1px solid rgba(37,99,235,0.1);">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-white text-xs font-bold">${r.studentName}</span>
+                                    <span class="text-gray-500 text-xs uppercase font-mono">${r.category}</span>
+                                </div>
+                                <span class="badge-neural ${getScoreColor(r.score)}">${r.score}%</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== MODALS ====================
+        function showUploadModal() { document.getElementById('uploadModal').classList.remove('hidden'); document.getElementById('uploadModal').classList.add('flex'); }
+        function showAddClass() { document.getElementById('addClassModal').classList.remove('hidden'); document.getElementById('addClassModal').classList.add('flex'); }
+        function showAddStudent() { if (!selectedClassId) { showToast('⚠️ Select a node first'); return; } document.getElementById('addStudentModal').classList.remove('hidden'); document.getElementById('addStudentModal').classList.add('flex'); }
+        function showAddScore() { if (!selectedClassId) { showToast('⚠️ Select a node first'); return; } updateScoreStudents(); document.getElementById('addScoreModal').classList.remove('hidden'); document.getElementById('addScoreModal').classList.add('flex'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+
+        function addClass() {
+            const name = document.getElementById('newClassName').value.trim();
+            const code = document.getElementById('newClassCode').value.trim() || name.substring(0, 8).toUpperCase().replace(/\s/g, '-');
+            const desc = document.getElementById('newClassDesc').value.trim();
+            if (!name) { showToast('❌ Enter node name'); return; }
+            classes.push({ id: Date.now(), name: name, code: code, desc: desc, created: new Date().toISOString().split('T')[0] });
+            updateStats(); renderClasses(); closeModal('addClassModal'); showToast('✅ Node initialized'); autoSave();
+            document.getElementById('newClassName').value = ''; document.getElementById('newClassCode').value = ''; document.getElementById('newClassDesc').value = '';
+        }
+
+        function addStudent() {
+            const id = document.getElementById('newStudentId').value.trim();
+            const name = document.getElementById('newStudentName').value.trim();
+            if (!id || !name) { showToast('❌ Complete all fields'); return; }
+            students.push({ id: id, name: name, classId: selectedClassId, lastUpdated: new Date().toISOString().split('T')[0] });
+            updateStats(); renderClasses(); renderStudentsTable(); updateScoreStudents(); updateHistoryStudentFilter(); closeModal('addStudentModal'); showToast('✅ Entity registered'); autoSave();
+            document.getElementById('newStudentId').value = ''; document.getElementById('newStudentName').value = '';
+        }
+
+        function addScore() {
+            const studentId = document.getElementById('scoreStudent').value;
+            const category = document.getElementById('scoreCategory').value;
+            const score = parseInt(document.getElementById('scoreValue').value);
+            const date = document.getElementById('scoreDate').value;
+            if (!studentId) { showToast('❌ No entity selected'); return; }
+            if (!score || score < 1 || score > 100) { showToast('❌ Range: 1-100'); return; }
+            scores[category].push({ studentId, score, date });
+            const student = students.find(s => s.id === studentId);
+            if (student) student.lastUpdated = date;
+            renderStudentsTable(); updateClassStats(); updateStats(); initChart();
+            if (document.getElementById('view-daily').classList.contains('active')) loadDailyView();
+            if (document.getElementById('view-history').classList.contains('active')) loadHistoryView();
+            closeModal('addScoreModal'); showToast(`✅ Data committed: ${score}%`); autoSave();
+            document.getElementById('scoreValue').value = '';
+        }
+
+        function quickScore(studentId) { updateScoreStudents(); document.getElementById('scoreStudent').value = studentId; document.getElementById('addScoreModal').classList.remove('hidden'); document.getElementById('addScoreModal').classList.add('flex'); }
+
+        function exportClassData() {
+            if (!selectedClassId) return;
+            const cls = classes.find(c => c.id === selectedClassId);
+            const classStudents = students.filter(s => s.classId === selectedClassId);
+            let csv = 'Student ID,Name,Overall,Homework,Quiz,Classwork,Participation,Writing,Attendance,Last Updated\n';
+            classStudents.forEach(student => {
+                const sScores = getStudentScores(student.id);
+                const overall = calcOverall(sScores);
+                const attRate = getStudentAttendanceRate(student.id);
+                csv += `${student.id},${student.name},${Math.round(overall)},${sScores.homework.avg},${sScores.quiz.avg},${sScores.classwork.avg},${sScores.participation.avg},${sScores.writing.avg},${attRate}%,${student.lastUpdated || ''}\n`;
+            });
+            downloadCSV(csv, `${cls.code}_neural_data.csv`);
+            showToast('📥 Data extracted');
+        }
+
+        function exportAllData() {
+            if (students.length === 0) { showToast('❌ No data to extract'); return; }
+            let csv = 'Student ID,Name,Class,Class Code,Overall,Homework,Quiz,Classwork,Participation,Writing,Attendance,Last Updated\n';
+            students.forEach(student => {
+                const cls = classes.find(c => c.id === student.classId);
+                const sScores = getStudentScores(student.id);
+                const overall = calcOverall(sScores);
+                const attRate = getStudentAttendanceRate(student.id);
+                csv += `${student.id},${student.name},${cls?.name || ''},${cls?.code || ''},${Math.round(overall)},${sScores.homework.avg},${sScores.quiz.avg},${sScores.classwork.avg},${sScores.participation.avg},${sScores.writing.avg},${attRate}%,${student.lastUpdated || ''}\n`;
+            });
+            downloadCSV(csv, `neural_tracker_export_${new Date().toISOString().split('T')[0]}.csv`);
+            showToast('📥 Full neural backup created');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = filename; a.click();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        window.onclick = function(e) { if (e.target.id && e.target.id.includes('Modal')) closeModal(e.target.id); }
+    </script>
+</body>
+</html>

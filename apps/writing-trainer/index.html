@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WriteCraft • Writing Trainer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #020617;
+            --bg-elevated: #0f172a;
+            --bg-card: #1e293b;
+            --border: #334155;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-orange: #f97316;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Dynamic Background */
+        #wt-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Header */
+        .wt-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(2,6,23,0.88);
+            backdrop-filter: blur(16px) saturate(1.2);
+            border-bottom: 1px solid rgba(148,163,184,0.12);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .wt-back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            color: var(--text-secondary);
+            font-family: inherit; font-weight: 600; font-size: 0.82rem;
+            text-decoration: none; cursor: pointer;
+            transition: all 0.25s;
+        }
+        .wt-back-btn:hover {
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            border-color: rgba(96,165,250,0.35);
+        }
+        .wt-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .wt-brand-icon {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 16px rgba(59,130,246,0.35);
+        }
+        .wt-brand-text h1 {
+            font-size: 1.15rem; font-weight: 800; letter-spacing: -0.3px;
+        }
+        .wt-brand-text span {
+            font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: -2px;
+        }
+        .wt-header-actions {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .wt-btn {
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 8px;
+            transition: all 0.25s;
+        }
+        .wt-btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            box-shadow: 0 4px 0 #1e3a8a, 0 6px 20px rgba(37,99,235,0.35);
+        }
+        .wt-btn-primary:hover { transform: translateY(-2px); }
+        .wt-btn-primary:active { transform: translateY(1px); box-shadow: 0 2px 0 #1e3a8a; }
+        .wt-btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .wt-btn-ghost:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+        .wt-btn-sm { padding: 8px 14px; font-size: 0.8rem; }
+
+        /* Layout */
+        .wt-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Mode Tabs */
+        .wt-mode-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .wt-mode-btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 8px;
+            transition: all 0.25s;
+        }
+        .wt-mode-btn:hover {
+            border-color: rgba(96,165,250,0.4);
+            color: var(--text);
+        }
+        .wt-mode-btn.active {
+            background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(139,92,246,0.12));
+            border-color: rgba(96,165,250,0.45);
+            color: #dbeafe;
+            box-shadow: 0 0 20px rgba(37,99,235,0.12);
+        }
+        .wt-mode-btn i { font-size: 1rem; }
+
+        /* Stats Bar */
+        .wt-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .wt-stat {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+        }
+        .wt-stat-value {
+            font-size: 1.6rem; font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), #60a5fa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .wt-stat-label {
+            font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;
+        }
+        .wt-stat.best .wt-stat-value {
+            background: linear-gradient(135deg, var(--success), #34d399);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* Prompt Card */
+        .wt-prompt {
+            background: linear-gradient(135deg, var(--bg-elevated), var(--bg-card));
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .wt-prompt::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-purple), var(--accent-pink));
+        }
+        .wt-prompt-tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 5px 12px; border-radius: 999px;
+            margin-bottom: 12px;
+        }
+        .wt-prompt-tag.essay { background: rgba(59,130,246,0.12); color: #93c5fd; }
+        .wt-prompt-tag.summary { background: rgba(16,185,129,0.12); color: #6ee7b7; }
+        .wt-prompt-tag.story { background: rgba(236,72,153,0.12); color: #f9a8d4; }
+        .wt-prompt h3 {
+            font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;
+        }
+        .wt-prompt p {
+            color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;
+        }
+        .wt-prompt-actions {
+            display: flex; gap: 10px; margin-top: 16px;
+        }
+
+        /* Timer */
+        .wt-timer-bar {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 16px;
+        }
+        .wt-timer-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem; font-weight: 800;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            min-width: 80px; text-align: center;
+        }
+        .wt-timer-display.running { color: var(--warning); border-color: rgba(245,158,11,0.35); }
+        .wt-timer-display.urgent { color: var(--danger); border-color: rgba(239,68,68,0.35); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        /* Editor */
+        .wt-editor-wrap {
+            position: relative;
+        }
+        .wt-editor {
+            width: 100%; min-height: 320px;
+            background: var(--bg-elevated);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            resize: vertical;
+            outline: none;
+            transition: all 0.25s;
+        }
+        .wt-editor:focus {
+            border-color: rgba(96,165,250,0.5);
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+        }
+        .wt-editor::placeholder { color: var(--text-muted); }
+        .wt-editor-stats {
+            display: flex; gap: 16px; padding: 10px 4px;
+            font-size: 0.82rem; color: var(--text-muted);
+        }
+        .wt-editor-stats span { display: inline-flex; align-items: center; gap: 5px; }
+        .wt-editor-stats i { font-size: 0.75rem; }
+
+        /* Results */
+        .wt-results {
+            background: linear-gradient(135deg, var(--bg-elevated), var(--bg-card));
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            margin-top: 20px;
+            display: none;
+        }
+        .wt-results.open { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .wt-results h3 {
+            font-size: 1.15rem; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .wt-score-ring {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) calc(var(--score) * 1%), var(--border) 0);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        .wt-score-ring::before {
+            content: ''; position: absolute;
+            width: 78px; height: 78px; border-radius: 50%;
+            background: var(--bg-elevated);
+        }
+        .wt-score-value {
+            position: relative; z-index: 1;
+            font-size: 1.6rem; font-weight: 800;
+        }
+        .wt-feedback-list {
+            list-style: none; display: flex; flex-direction: column; gap: 10px;
+        }
+        .wt-feedback-item {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 12px 14px; border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            font-size: 0.9rem;
+        }
+        .wt-feedback-item i { margin-top: 3px; font-size: 0.85rem; }
+        .wt-feedback-item.good { color: #6ee7b7; }
+        .wt-feedback-item.warn { color: #fcd34d; }
+        .wt-feedback-item.bad { color: #fca5a5; }
+
+        /* History */
+        .wt-history {
+            margin-top: 32px;
+        }
+        .wt-history h3 {
+            font-size: 1.1rem; margin-bottom: 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .wt-history-list {
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .wt-history-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 16px; border-radius: 12px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+        .wt-history-item .mode { font-weight: 700; }
+        .wt-history-item .score {
+            font-weight: 800; padding: 3px 10px; border-radius: 8px;
+            font-size: 0.8rem;
+        }
+        .wt-history-item .score.high { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+        .wt-history-item .score.mid { background: rgba(245,158,11,0.15); color: #fcd34d; }
+        .wt-history-item .score.low { background: rgba(239,68,68,0.15); color: #fca5a5; }
+
+        /* Toast */
+        .wt-toast {
+            position: fixed; bottom: 24px; right: 24px;
+            padding: 14px 22px; border-radius: 14px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            color: var(--text); font-weight: 600; font-size: 0.9rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform: translateY(120px); opacity: 0;
+            transition: all 0.35s ease;
+            z-index: 9999;
+        }
+        .wt-toast.show { transform: translateY(0); opacity: 1; }
+
+        @media (max-width: 640px) {
+            .wt-header { padding: 12px 16px; flex-wrap: wrap; }
+            .wt-container { padding: 16px; }
+            .wt-mode-btn { padding: 10px 14px; font-size: 0.82rem; }
+            .wt-editor { min-height: 240px; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="wt-canvas"></canvas>
+
+<header class="wt-header">
+    <div style="display:flex;align-items:center;gap:14px;">
+        <a href="../../index.html" class="wt-back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+        <a href="../../index.html" class="wt-brand">
+            <div class="wt-brand-icon"><i class="fas fa-pen-nib"></i></div>
+            <div class="wt-brand-text">
+                <h1>WriteCraft</h1>
+                <span>Writing Trainer by Teacher Ry</span>
+            </div>
+        </a>
+    </div>
+    <div class="wt-header-actions">
+        <button class="wt-btn wt-btn-ghost wt-btn-sm" onclick="toggleHistory()"><i class="fas fa-history"></i> History</button>
+        <button class="wt-btn wt-btn-primary wt-btn-sm" onclick="submitWriting()"><i class="fas fa-check-circle"></i> Submit</button>
+    </div>
+</header>
+
+<main class="wt-container">
+
+    <!-- Mode Selection -->
+    <div class="wt-mode-bar">
+        <button class="wt-mode-btn active" data-mode="essay" onclick="setMode('essay')">
+            <i class="fas fa-file-alt"></i> Essay
+        </button>
+        <button class="wt-mode-btn" data-mode="summary" onclick="setMode('summary')">
+            <i class="fas fa-compress-alt"></i> Summary
+        </button>
+        <button class="wt-mode-btn" data-mode="story" onclick="setMode('story')">
+            <i class="fas fa-book-open"></i> Story
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="wt-stats">
+        <div class="wt-stat">
+            <div class="wt-stat-value" id="statSessions">0</div>
+            <div class="wt-stat-label">Sessions</div>
+        </div>
+        <div class="wt-stat">
+            <div class="wt-stat-value" id="statWords">0</div>
+            <div class="wt-stat-label">Total Words</div>
+        </div>
+        <div class="wt-stat best">
+            <div class="wt-stat-value" id="statBest">0</div>
+            <div class="wt-stat-label">Best Score</div>
+        </div>
+        <div class="wt-stat">
+            <div class="wt-stat-value" id="statAvg">0</div>
+            <div class="wt-stat-label">Avg Score</div>
+        </div>
+    </div>
+
+    <!-- Prompt -->
+    <div class="wt-prompt" id="promptCard">
+        <div class="wt-prompt-tag essay" id="promptTag"><i class="fas fa-file-alt"></i> Essay Mode</div>
+        <h3 id="promptTitle">Loading prompt...</h3>
+        <p id="promptText">Select a mode to begin.</p>
+        <div class="wt-prompt-actions">
+            <button class="wt-btn wt-btn-ghost wt-btn-sm" onclick="newPrompt()"><i class="fas fa-dice"></i> New Prompt</button>
+            <button class="wt-btn wt-btn-ghost wt-btn-sm" onclick="toggleTimer()"><i class="fas fa-stopwatch"></i> <span id="timerBtnText">Start Timer</span></button>
+        </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="wt-timer-bar" id="timerBar" style="display:none;">
+        <div class="wt-timer-display" id="timerDisplay">15:00</div>
+        <button class="wt-btn wt-btn-ghost wt-btn-sm" onclick="resetTimer()"><i class="fas fa-redo"></i> Reset</button>
+    </div>
+
+    <!-- Editor -->
+    <div class="wt-editor-wrap">
+        <textarea class="wt-editor" id="writingEditor" placeholder="Start writing here... Your work is saved automatically."></textarea>
+        <div class="wt-editor-stats">
+            <span><i class="fas fa-font"></i> <b id="liveWords">0</b> words</span>
+            <span><i class="fas fa-align-left"></i> <b id="liveSentences">0</b> sentences</span>
+            <span><i class="fas fa-clock"></i> <b id="liveTime">0</b> min</span>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="wt-results" id="resultsPanel">
+        <h3><i class="fas fa-chart-pie" style="color:var(--primary);"></i> Your Results</h3>
+        <div class="wt-score-ring" id="scoreRing" style="--score:0;">
+            <div class="wt-score-value" id="scoreValue">0</div>
+        </div>
+        <ul class="wt-feedback-list" id="feedbackList"></ul>
+    </div>
+
+    <!-- History -->
+    <div class="wt-history" id="historyPanel" style="display:none;">
+        <h3><i class="fas fa-history" style="color:var(--accent-purple);"></i> Recent Sessions</h3>
+        <div class="wt-history-list" id="historyList"></div>
+    </div>
+
+</main>
+
+<div class="wt-toast" id="wtToast"></div>
+
+<script>
+    // ─── Prompts ──────────────────────────────────────────────────────────────────
+    var PROMPTS = {
+        essay: [
+            { title: 'The Importance of Education', text: 'Write an essay explaining why education is important for personal and societal growth. Include examples from your own experience or observations.' },
+            { title: 'Technology in the Classroom', text: 'Discuss how technology has changed the way students learn. What are the benefits and drawbacks of using digital tools in education?' },
+            { title: 'Travel Broadens the Mind', text: 'Do you agree that traveling to different places helps people become more open-minded? Support your opinion with specific examples.' },
+            { title: 'The Value of Teamwork', text: 'Describe a situation where teamwork led to success. What role did each person play, and what did you learn from the experience?' },
+            { title: 'Protecting the Environment', text: 'What are the most important steps individuals can take to protect the environment? Write a persuasive essay with practical suggestions.' },
+            { title: 'Learning a Second Language', text: 'Explain the benefits and challenges of learning a second language. How has it (or would it) change your perspective on the world?' },
+            { title: 'The Future of Work', text: 'How do you think work will change in the next 20 years? Discuss the impact of automation, remote work, and new technologies.' },
+            { title: 'Healthy Lifestyle Choices', text: 'What does it mean to live a healthy lifestyle? Write about diet, exercise, mental health, and sleep habits.' }
+        ],
+        summary: [
+            { title: 'The Water Cycle', text: 'Read the following passage and write a summary in your own words.\n\nThe water cycle, also known as the hydrologic cycle, describes the continuous movement of water on, above, and below the surface of the Earth. Water changes states between liquid, vapor, and ice at various places in the water cycle. The sun drives the entire cycle by heating water in the oceans, which evaporates into the air. This water vapor rises and cools, forming clouds through condensation. When the clouds become heavy enough, precipitation occurs as rain, snow, sleet, or hail. Some of this water flows into rivers and oceans, while some seeps into the ground, replenishing underground aquifers. The cycle then begins again.' },
+            { title: 'Microfinance in Developing Countries', text: 'Read the following passage and write a summary.\n\nMicrofinance is a banking service provided to unemployed or low-income individuals or groups who otherwise would have no other access to financial services. It allows people to take on reasonable small business loans safely and in a manner that is consistent with ethical lending practices. Microfinance has been shown to help reduce poverty by giving people the means to start businesses, build savings, and improve their living conditions. Organizations like Grameen Bank and Kiva have helped millions of people worldwide. However, critics argue that high interest rates can sometimes trap borrowers in debt.' },
+            { title: 'The Benefits of Reading', text: 'Read the following passage and summarize the main points.\n\nReading regularly has numerous cognitive and emotional benefits. Studies show that reading fiction improves empathy by allowing readers to experience different perspectives. Non-fiction reading expands knowledge and critical thinking skills. Regular readers tend to have better vocabulary, stronger analytical abilities, and improved memory. Reading before bed can also reduce stress levels by up to 68%, making it more effective than listening to music or drinking tea. Furthermore, children who are read to from an early age develop stronger language skills and perform better academically throughout their schooling.' },
+            { title: 'Solar Energy', text: 'Read the passage and summarize.\n\nSolar energy is radiant light and heat from the Sun that is harnessed using a range of technologies such as solar heating, photovoltaics, and solar thermal energy. It is an important source of renewable energy. The Earth receives 174 petawatts of incoming solar radiation at the upper atmosphere. Approximately 30% is reflected back to space while the rest is absorbed by clouds, oceans and land masses. Solar technologies are broadly characterized as either passive solar or active solar depending on how they capture, convert and distribute sunlight.' },
+            { title: 'The History of Coffee', text: 'Read the passage and write a concise summary.\n\nCoffee is a brewed drink prepared from roasted coffee beans, the seeds of berries from certain Coffea species. The genus Coffea is native to tropical Africa and Madagascar, the Comoros, Mauritius, and Reunion in the Indian Ocean. Coffee plants are now cultivated in over 70 countries, primarily in the equatorial regions of the Americas, Southeast Asia, India, and Africa. The two most commonly grown are C. arabica and C. robusta. Once ripe, coffee berries are picked, processed, and dried. Dried coffee seeds are roasted to varying degrees, depending on the desired flavor.' }
+        ],
+        story: [
+            { title: 'The Lost Key', text: 'Write a story that begins with this sentence: "The old brass key had been in her family for generations, but no one knew what it opened — until today."' },
+            { title: 'A Strange Encounter', text: 'Write a story about a character who meets someone who claims to be from the future. What do they say? Does your character believe them?' },
+            { title: 'The Last Library', text: 'In a world where all books are digital, your character discovers the last physical library. Write about what they find there and how it changes them.' },
+            { title: 'The Storm', text: 'Write a story about a group of strangers trapped together during a violent storm. How do they interact? What secrets come out?' },
+            { title: 'A New Beginning', text: 'Your main character has just moved to a new country and does not speak the language. Write about their first day and the challenges they face.' },
+            { title: 'The Message in a Bottle', text: 'Write a story about someone who finds a message in a bottle on the beach. The message is addressed to them, but they have never been to that place before.' },
+            { title: 'The Forgotten Door', text: 'While cleaning the attic, your character finds a door that was never there before. Write about what happens when they open it.' },
+            { title: 'The Interview', text: 'Write a story about a job interview that takes an unexpected turn. The interviewer seems to know everything about the character already.' }
+        ]
+    };
+
+    // ─── State ────────────────────────────────────────────────────────────────────
+    var currentMode = 'essay';
+    var currentPrompt = null;
+    var timerInterval = null;
+    var timerSeconds = 0;
+    var timerRunning = false;
+    var sessionStartTime = Date.now();
+    var HISTORY_KEY = 'writecraft_history';
+    var SESSIONS_KEY = 'writecraft_sessions';
+    var WORDS_KEY = 'writecraft_words';
+
+    // ─── Init ─────────────────────────────────────────────────────────────────────
+    function init() {
+        loadStats();
+        newPrompt();
+        updateLiveStats();
+        document.getElementById('writingEditor').addEventListener('input', updateLiveStats);
+    }
+
+    // ─── Mode ─────────────────────────────────────────────────────────────────────
+    function setMode(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.wt-mode-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.mode === mode);
+        });
+        newPrompt();
+        document.getElementById('resultsPanel').classList.remove('open');
+        document.getElementById('writingEditor').value = '';
+        updateLiveStats();
+    }
+
+    // ─── Prompts ──────────────────────────────────────────────────────────────────
+    function newPrompt() {
+        var list = PROMPTS[currentMode];
+        currentPrompt = list[Math.floor(Math.random() * list.length)];
+        document.getElementById('promptTitle').textContent = currentPrompt.title;
+        document.getElementById('promptText').textContent = currentPrompt.text;
+
+        var tagEl = document.getElementById('promptTag');
+        tagEl.className = 'wt-prompt-tag ' + currentMode;
+        var icons = { essay: 'fa-file-alt', summary: 'fa-compress-alt', story: 'fa-book-open' };
+        var labels = { essay: 'Essay Mode', summary: 'Summary Mode', story: 'Story Mode' };
+        tagEl.innerHTML = '<i class="fas ' + icons[currentMode] + '"></i> ' + labels[currentMode];
+
+        sessionStartTime = Date.now();
+    }
+
+    // ─── Live Stats ───────────────────────────────────────────────────────────────
+    function updateLiveStats() {
+        var text = document.getElementById('writingEditor').value || '';
+        var words = text.trim().split(/\s+/).filter(function(w) { return w.length > 0; }).length;
+        var sentences = text.split(/[.!?]+/).filter(function(s) { return s.trim().length > 0; }).length;
+        var minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
+
+        document.getElementById('liveWords').textContent = words;
+        document.getElementById('liveSentences').textContent = sentences;
+        document.getElementById('liveTime').textContent = minutes;
+    }
+
+    // ─── Timer ────────────────────────────────────────────────────────────────────
+    function toggleTimer() {
+        if (timerRunning) {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            document.getElementById('timerBtnText').textContent = 'Start Timer';
+            document.getElementById('timerDisplay').className = 'wt-timer-display';
+        } else {
+            document.getElementById('timerBar').style.display = 'flex';
+            timerRunning = true;
+            document.getElementById('timerBtnText').textContent = 'Pause Timer';
+            timerInterval = setInterval(function() {
+                timerSeconds++;
+                var mins = Math.floor(timerSeconds / 60);
+                var secs = timerSeconds % 60;
+                var display = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+                var el = document.getElementById('timerDisplay');
+                el.textContent = display;
+                el.className = 'wt-timer-display running';
+                if (timerSeconds >= 900) el.className = 'wt-timer-display urgent'; // 15 min warning
+            }, 1000);
+        }
+    }
+
+    function resetTimer() {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        timerSeconds = 0;
+        document.getElementById('timerDisplay').textContent = '15:00';
+        document.getElementById('timerDisplay').className = 'wt-timer-display';
+        document.getElementById('timerBtnText').textContent = 'Start Timer';
+    }
+
+    // ─── Submit & Score ───────────────────────────────────────────────────────────
+    function submitWriting() {
+        var text = document.getElementById('writingEditor').value || '';
+        var words = text.trim().split(/\s+/).filter(function(w) { return w.length > 0; }).length;
+        var sentences = text.split(/[.!?]+/).filter(function(s) { return s.trim().length > 0; }).length;
+
+        if (words < 10) {
+            showToast('Please write at least a few sentences before submitting.');
+            return;
+        }
+
+        // Scoring logic
+        var score = 0;
+        var feedback = [];
+
+        // Word count scoring
+        var wordGoals = { essay: 200, summary: 100, story: 150 };
+        var goal = wordGoals[currentMode];
+        var wordRatio = words / goal;
+        if (wordRatio >= 1) {
+            score += 35;
+            feedback.push({ type: 'good', text: 'Word count target reached (' + words + ' words).' });
+        } else if (wordRatio >= 0.6) {
+            score += 20;
+            feedback.push({ type: 'warn', text: 'Good start with ' + words + ' words. Aim for ' + goal + ' for full marks.' });
+        } else {
+            score += 10;
+            feedback.push({ type: 'bad', text: 'Only ' + words + ' words. Try to reach at least ' + goal + ' words.' });
+        }
+
+        // Sentence variety
+        var avgWordsPerSentence = sentences > 0 ? words / sentences : 0;
+        if (avgWordsPerSentence >= 12 && avgWordsPerSentence <= 25) {
+            score += 25;
+            feedback.push({ type: 'good', text: 'Excellent sentence variety and length.' });
+        } else if (avgWordsPerSentence > 25) {
+            score += 15;
+            feedback.push({ type: 'warn', text: 'Some sentences are quite long. Try breaking them up for clarity.' });
+        } else {
+            score += 15;
+            feedback.push({ type: 'warn', text: 'Try mixing short and long sentences for better rhythm.' });
+        }
+
+        // Content checks
+        var lower = text.toLowerCase();
+        var hasTransition = /\b(however|therefore|furthermore|moreover|additionally|consequently|meanwhile|although|because|since|while|first|second|finally|in conclusion|for example|such as)\b/.test(lower);
+        if (hasTransition) {
+            score += 20;
+            feedback.push({ type: 'good', text: 'Great use of transition words to connect ideas.' });
+        } else {
+            feedback.push({ type: 'warn', text: 'Try adding transition words (however, therefore, furthermore) to improve flow.' });
+        }
+
+        // Paragraph structure
+        var paragraphs = text.split(/\n\n+/).filter(function(p) { return p.trim().length > 0; }).length;
+        if (paragraphs >= 2) {
+            score += 15;
+            feedback.push({ type: 'good', text: 'Good paragraph structure with ' + paragraphs + ' paragraphs.' });
+        } else {
+            feedback.push({ type: 'warn', text: 'Consider organizing your writing into multiple paragraphs.' });
+        }
+
+        // Time bonus
+        var minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
+        if (minutes >= 5) {
+            score += 5;
+            feedback.push({ type: 'good', text: 'You spent ' + minutes + ' minutes — good effort!' });
+        }
+
+        score = Math.min(100, Math.max(0, Math.round(score)));
+
+        // Save
+        saveSession(score, words);
+
+        // Display results
+        var ring = document.getElementById('scoreRing');
+        ring.style.setProperty('--score', score);
+        document.getElementById('scoreValue').textContent = score;
+
+        var list = document.getElementById('feedbackList');
+        list.innerHTML = feedback.map(function(f) {
+            var icon = f.type === 'good' ? 'fa-check-circle' : (f.type === 'warn' ? 'fa-exclamation-triangle' : 'fa-times-circle');
+            var color = f.type === 'good' ? '#6ee7b7' : (f.type === 'warn' ? '#fcd34d' : '#fca5a5');
+            return '<li class="wt-feedback-item ' + f.type + '"><i class="fas ' + icon + '" style="color:' + color + ';"></i> ' + f.text + '</li>';
+        }).join('');
+
+        document.getElementById('resultsPanel').classList.add('open');
+        document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        loadStats();
+        showToast('Writing submitted! Score: ' + score + '/100');
+    }
+
+    // ─── Storage ──────────────────────────────────────────────────────────────────
+    function saveSession(score, words) {
+        var sessions = parseInt(localStorage.getItem(SESSIONS_KEY) || '0', 10) + 1;
+        var totalWords = parseInt(localStorage.getItem(WORDS_KEY) || '0', 10) + words;
+        localStorage.setItem(SESSIONS_KEY, sessions);
+        localStorage.setItem(WORDS_KEY, totalWords);
+
+        var history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+        history.unshift({
+            mode: currentMode,
+            score: score,
+            words: words,
+            title: currentPrompt.title,
+            date: Date.now()
+        });
+        if (history.length > 20) history = history.slice(0, 20);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    }
+
+    function loadStats() {
+        var sessions = parseInt(localStorage.getItem(SESSIONS_KEY) || '0', 10);
+        var totalWords = parseInt(localStorage.getItem(WORDS_KEY) || '0', 10);
+        var history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+
+        document.getElementById('statSessions').textContent = sessions;
+        document.getElementById('statWords').textContent = totalWords.toLocaleString();
+
+        if (history.length > 0) {
+            var best = Math.max.apply(null, history.map(function(h) { return h.score; }));
+            var avg = Math.round(history.reduce(function(s, h) { return s + h.score; }, 0) / history.length);
+            document.getElementById('statBest').textContent = best;
+            document.getElementById('statAvg').textContent = avg;
+        }
+
+        renderHistory();
+    }
+
+    function renderHistory() {
+        var history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+        var container = document.getElementById('historyList');
+        if (history.length === 0) {
+            container.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;text-align:center;padding:16px;">No sessions yet. Start writing!</div>';
+            return;
+        }
+        container.innerHTML = history.map(function(h) {
+            var modeLabels = { essay: 'Essay', summary: 'Summary', story: 'Story' };
+            var scoreClass = h.score >= 80 ? 'high' : (h.score >= 50 ? 'mid' : 'low');
+            var date = new Date(h.date).toLocaleDateString();
+            return '<div class="wt-history-item">'
+                + '<div><span class="mode">' + modeLabels[h.mode] + '</span> · ' + h.title + '</div>'
+                + '<div><span class="score ' + scoreClass + '">' + h.score + '</span> · ' + h.words + 'w · ' + date + '</div>'
+                + '</div>';
+        }).join('');
+    }
+
+    function toggleHistory() {
+        var panel = document.getElementById('historyPanel');
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        if (panel.style.display === 'block') panel.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ─── Toast ────────────────────────────────────────────────────────────────────
+    function showToast(msg) {
+        var t = document.getElementById('wtToast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+
+    // ─── Dynamic Background ───────────────────────────────────────────────────────
+    (function(){
+        var canvas = document.getElementById('wt-canvas');
+        var ctx = canvas.getContext('2d');
+        var w, h, particles = [];
+        var count = 55;
+        var connectDist = 150;
+        var maxConn = 3;
+
+        function resize(){
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function Particle(){
+            this.x = Math.random() * w;
+            this.y = Math.random() * h;
+            this.vx = (Math.random() - 0.5) * 0.4;
+            this.vy = (Math.random() - 0.5) * 0.4;
+            this.r = Math.random() * 1.2 + 0.8;
+        }
+        Particle.prototype.update = function(){
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > w) this.vx *= -1;
+            if (this.y < 0 || this.y > h) this.vy *= -1;
+        };
+        Particle.prototype.draw = function(){
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(96, 165, 250, 0.5)';
+            ctx.fill();
+        };
+
+        for (var i = 0; i < count; i++) particles.push(new Particle());
+
+        var mouse = { x: null, y: null };
+        window.addEventListener('mousemove', function(e){
+            mouse.x = e.clientX; mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseleave', function(){ mouse.x = null; mouse.y = null; });
+
+        function animate(){
+            ctx.clearRect(0, 0, w, h);
+            for (var i = 0; i < particles.length; i++){
+                particles[i].update();
+                particles[i].draw();
+            }
+            for (var i = 0; i < particles.length; i++){
+                var connections = 0;
+                for (var j = i + 1; j < particles.length; j++){
+                    var dx = particles[i].x - particles[j].x;
+                    var dy = particles[i].y - particles[j].y;
+                    var dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < connectDist && connections < maxConn){
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'rgba(96, 165, 250, ' + (0.18 * (1 - dist/connectDist)) + ')';
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                        connections++;
+                    }
+                }
+                if (mouse.x !== null){
+                    var dx = particles[i].x - mouse.x;
+                    var dy = particles[i].y - mouse.y;
+                    var dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 180){
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'rgba(37, 99, 235, ' + (0.3 * (1 - dist/180)) + ')';
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    })();
+
+    // ─── Start ────────────────────────────────────────────────────────────────────
+    init();
+</script>
+</body>
+</html>

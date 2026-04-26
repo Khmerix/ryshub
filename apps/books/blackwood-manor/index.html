@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackwood Manor: A Murder Mystery</title>
+    <style>
+        :root {
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0b0;
+            --accent: #8b5cf6;
+            --accent-hover: #7c3aed;
+            --gold: #d4af37;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #game-container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
+            min-height: 600px;
+            border: 1px solid #2a2a3e;
+        }
+
+        .scene {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .scene.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        h1 { font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        h2 { font-size: 1.8rem; border-bottom: 2px solid var(--gold); padding-bottom: 0.5rem; }
+
+        p { margin-bottom: 1rem; color: var(--text-secondary); }
+        em { color: var(--text-primary); font-weight: bold; }
+
+        /* IMAGE PLACEHOLDERS */
+        .image-wrapper {
+            width: 100%;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 3px solid #333;
+            background: #111;
+            position: relative;
+            aspect-ratio: 2 / 3;
+            max-height: 520px;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .image-fallback {
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a2e;
+            color: var(--text-secondary);
+            font-style: italic;
+            border-radius: 8px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* CHOICE BUTTONS */
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .choice-btn {
+            background: #25253a;
+            border: 2px solid var(--accent);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .choice-btn:hover {
+            background: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .choice-btn small {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .choice-btn.with-avatar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-align: left !important;
+        }
+
+        .choice-btn.with-avatar .btn-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
+        }
+
+        /* CLUE & SUSPECT CARDS */
+        .clue-box {
+            background: #2d2a1f;
+            border-left: 5px solid var(--warning);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .suspect-card {
+            background: #202030;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border: 1px solid #333;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .suspect-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+        }
+
+        /* ENDINGS */
+        .ending-box {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .ending-justice { background: #0f2018; border: 2px solid var(--success); }
+        .ending-partial { background: #2a1f0f; border: 2px solid var(--warning); }
+        .ending-failure { background: #2a0f0f; border: 2px solid var(--danger); }
+
+        .status-bar {
+            background: #111;
+            padding: 0.8rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--gold);
+            border-bottom: 1px solid #333;
+        }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .scene { padding: 1.5rem; }
+            .suspect-card { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="status-bar" id="status">🔍 Clues: 0 | 💭 Suspicion: None</div>
+
+    <!-- COVER SCENE -->
+    <div id="scene-cover" class="scene active">
+        <div class="image-wrapper">
+            <!-- 🖼️ REPLACE WITH YOUR IMAGE: images/cover.png -->
+            <img src="images/cover.png" alt="Blackwood Manor Cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="image-fallback">📷 Place your cover.png in an /images folder</div>
+        </div>
+        <h1>BLACKWOOD MANOR</h1>
+        <p style="text-align: center; font-style: italic; margin-bottom: 2rem;">A Rain-Slicked Night</p>
+        <button class="choice-btn" style="text-align: center;" onclick="goTo('scene-intro')">Begin Investigation →</button>
+    </div>
+
+    <!-- INTRO SCENE -->
+    <div id="scene-intro" class="scene">
+        <h2>The Case</h2>
+        <div class="image-wrapper">
+            <!-- 🖼️ REPLACE WITH YOUR IMAGE: images/manor.png -->
+            <img src="images/manor.png" alt="Blackwood Manor Exterior" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="image-fallback">📷 Place manor.png in /images</div>
+        </div>
+        <p>Lord Blackwood lies dead in his locked study. The grandfather clock struck midnight an hour ago, and the storm has washed out all roads. No one leaves until dawn.</p>
+        <p>You are the detective. The household consists of:</p>
+        
+        <div class="suspect-card">
+            <img src="images/eleanor.png" alt="Lady Eleanor" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22><rect width=%22100%%22 height=%22100%%22 fill=%22%23333%22/><text x=%2250%%22 y=%2250%%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22>E</text></svg>'">
+            <div>
+                <strong>Lady Eleanor Blackwood</strong><br>
+                The victim's wife. Young, elegant, and reportedly unhappy in her marriage.
+            </div>
+        </div>
+        <div class="suspect-card">
+            <img src="images/vance.png" alt="Dr. Vance" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22><rect width=%22100%%22 height=%22100%%22 fill=%22%23333%22/><text x=%2250%%22 y=%2250%%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22>V</text></svg>'">
+            <div>
+                <strong>Dr. Marcus Vance</strong><br>
+                Family physician. Last person to see Lord Blackwood alive.
+            </div>
+        </div>
+        <div class="suspect-card">
+            <img src="images/thomas.png" alt="Thomas" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22><rect width=%22100%%22 height=%22100%%22 fill=%22%23333%22/><text x=%2250%%22 y=%2250%%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22>T</text></svg>'">
+            <div>
+                <strong>Thomas the Butler</strong><br>
+                Loyal servant of twenty years. Knows every lock and passage in the manor.
+            </div>
+        </div>
+
+        <div class="choices">
+            <button class="choice-btn" onclick="investigate('study')">🔍 Investigate the Study</button>
+            <button class="choice-btn" onclick="investigate('kitchen')">🍵 Investigate the Kitchen</button>
+            <button class="choice-btn" onclick="investigate('garden')">🌧️ Investigate the Garden</button>
+        </div>
+    </div>
+
+    <!-- INVESTIGATION SCENE -->
+    <div id="scene-investigation" class="scene">
+        <h2 id="inv-title">Investigation</h2>
+        <div id="inv-image" class="image-wrapper"></div>
+        <div id="inv-content"></div>
+        <div class="choices">
+            <button class="choice-btn" onclick="goTo('scene-interrogation')">🗣️ Interrogate a Suspect →</button>
+        </div>
+    </div>
+
+    <!-- INTERROGATION SCENE -->
+    <div id="scene-interrogation" class="scene">
+        <h2>Interrogation</h2>
+        <p>The clock ticks. You must choose who to press for answers.</p>
+        <div class="choices">
+            <button class="choice-btn with-avatar" onclick="interrogate('eleanor')">
+                <img src="images/eleanor.png" alt="" class="btn-avatar">
+                <div>
+                    <strong>Question Lady Eleanor</strong>
+                    <small>"He threatened to cut me off. I wanted my freedom, not his blood."</small>
+                </div>
+            </button>
+            <button class="choice-btn with-avatar" onclick="interrogate('vance')">
+                <img src="images/vance.png" alt="" class="btn-avatar">
+                <div>
+                    <strong>Question Dr. Vance</strong>
+                    <small>"I prescribed his medication. I had no reason to harm him."</small>
+                </div>
+            </button>
+            <button class="choice-btn with-avatar" onclick="interrogate('thomas')">
+                <img src="images/thomas.png" alt="" class="btn-avatar">
+                <div>
+                    <strong>Question Thomas</strong>
+                    <small>"I served this house for twenty years. I would never lay hands on my lord."</small>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- ACCUSATION SCENE -->
+    <div id="scene-accusation" class="scene">
+        <h2>The Final Accusation</h2>
+        <p>You gather the household in the drawing room. The storm howls outside. You have one chance to name the killer.</p>
+        <div id="clue-summary" class="clue-box" style="background:#111; border-left-color:#666;"></div>
+        <div class="choices">
+            <button class="choice-btn with-avatar" onclick="accuse('eleanor')">
+                <img src="images/eleanor.png" alt="" class="btn-avatar">
+                <div>⚖️ Accuse Lady Eleanor</div>
+            </button>
+            <button class="choice-btn with-avatar" onclick="accuse('vance')">
+                <img src="images/vance.png" alt="" class="btn-avatar">
+                <div>⚖️ Accuse Dr. Vance</div>
+            </button>
+            <button class="choice-btn with-avatar" onclick="accuse('thomas')">
+                <img src="images/thomas.png" alt="" class="btn-avatar">
+                <div>⚖️ Accuse Thomas the Butler</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- ENDING 1: JUSTICE -->
+    <div id="scene-ending-1" class="scene">
+        <div class="ending-box ending-justice">
+            <h1>✓ ENDING 1: JUSTICE SERVED</h1>
+        </div>
+        <div class="image-wrapper">
+            <img src="images/thomas.png" alt="Thomas Arrested" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="image-fallback">📷 Use thomas.png or justice_ending.png</div>
+        </div>
+        <p>You present the muddy boot prints and the poisoned tea. Thomas's composure shatters.</p>
+        <p><em>"He was going to dismiss me after my wife's funeral! I only meant to lock him in. The tea was for his nerves. I didn't know about the cyanide!"</em></p>
+        <p>The truth unravels: Thomas tampered with the study lock, but Dr. Vance had poisoned the tea to cover up medical malpractice. Both are taken into custody.</p>
+        <p>The storm breaks at dawn. You solved it cleanly. <strong>Case closed.</strong></p>
+        <button class="choice-btn" style="text-align: center;" onclick="resetGame()">🔄 Play Again</button>
+    </div>
+
+    <!-- ENDING 2: HALF-TRUTH -->
+    <div id="scene-ending-2" class="scene">
+        <div class="ending-box ending-partial">
+            <h1>⚠ ENDING 2: HALF-TRUTH</h1>
+        </div>
+        <p>You accuse Thomas, but your evidence is incomplete. He admits to tampering with the lock but denies murder.</p>
+        <p>Without the poison clue, the death is ruled a heart attack. Thomas is dismissed without charge.</p>
+        <p><em>You uncovered part of the truth, but the full picture remains in the shadows.</em></p>
+        <button class="choice-btn" style="text-align: center;" onclick="resetGame()">🔄 Try Again</button>
+    </div>
+
+    <!-- ENDING 3: FAILURE -->
+    <div id="scene-ending-3" class="scene">
+        <div class="ending-box ending-failure">
+            <h1>✗ ENDING 3: THE SHADOW REMAINS</h1>
+        </div>
+        <p>Your accusation falters. The constable arrives, shrugs, and files it as natural causes.</p>
+        <p>As you pack your coat, you notice a familiar boot print drying on the hallway rug... and a half-empty teacup waiting to be washed.</p>
+        <p><em>Some mysteries outlive their detectives.</em></p>
+        <button class="choice-btn" style="text-align: center;" onclick="resetGame()">🔄 Investigate Again</button>
+    </div>
+</div>
+
+<script>
+    // Game State
+    let state = {
+        clues: [],
+        suspicion: { eleanor: 0, vance: 0, thomas: 0 },
+        currentScene: 'scene-cover'
+    };
+
+    const clueTexts = {
+        study: "Partial handwriting reads: '...if you don't settle the debt...'",
+        kitchen: "Faint almond scent in a porcelain cup. Cyanide.",
+        garden: "Deep, size-10 work boot prints near the French doors."
+    };
+
+    const sceneImages = {
+        study: `<div class="image-wrapper">
+            <img src="images/study.png" alt="Crime Scene Study" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="image-fallback">📷 Place study.png in /images</div>
+        </div>`,
+        kitchen: `<div class="image-wrapper">
+            <img src="images/kitchen.png" alt="Kitchen Crime Scene" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="image-fallback">📷 Place kitchen.png in /images</div>
+        </div>`,
+        garden: `<div class="image-wrapper">
+            <img src="images/garden.png" alt="Garden Evidence" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="image-fallback">📷 Place garden.png in /images</div>
+        </div>`
+    };
+
+    // Navigation
+    function goTo(sceneId) {
+        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+        document.getElementById(sceneId).classList.add('active');
+        state.currentScene = sceneId;
+        updateStatusBar();
+        window.scrollTo(0,0);
+    }
+
+    function updateStatusBar() {
+        document.getElementById('status').textContent = `🔍 Clues: ${state.clues.length} | 💭 Suspicion: ${Object.keys(state.suspicion).reduce((a, b) => state.suspicion[a] > state.suspicion[b] ? a : b).capitalize()}`;
+    }
+    String.prototype.capitalize = function() { return this.charAt(0).toUpperCase() + this.slice(1); };
+
+    // Investigation Logic
+    function investigate(location) {
+        if (state.clues.includes(location)) {
+            document.getElementById('inv-content').innerHTML = `<p>You've already searched this area thoroughly. The clues remain unchanged.</p>`;
+        } else {
+            state.clues.push(location);
+            state.suspicion[location === 'study' ? 'vance' : location === 'kitchen' ? 'eleanor' : 'thomas']++;
+            document.getElementById('inv-title').textContent = `Investigating the ${location.capitalize()}`;
+            document.getElementById('inv-image').innerHTML = sceneImages[location];
+            document.getElementById('inv-content').innerHTML = `
+                <div class="clue-box"><strong>CLUE FOUND:</strong> ${clueTexts[location]}</div>
+                <p>The evidence has been logged. Keep searching or move to interrogations.</p>
+            `;
+        }
+        goTo('scene-investigation');
+    }
+
+    // Interrogation Logic
+    function interrogate(suspect) {
+        state.suspicion[suspect]++;
+        goTo('scene-accusation');
+        
+        // Update clue summary
+        const summary = document.getElementById('clue-summary');
+        if (state.clues.length === 0) {
+            summary.innerHTML = "<strong>📓 Case Notes:</strong> No physical evidence collected. Proceeding on suspicion alone.";
+        } else {
+            summary.innerHTML = `<strong>📓 Case Notes:</strong><br>• ${state.clues.map(c => clueTexts[c]).join('<br>• ')}`;
+        }
+    }
+
+    // Accusation & Endings
+    function accuse(target) {
+        const keyClues = ['garden', 'kitchen']; // Need both for justice
+        const foundKeys = state.clues.filter(c => keyClues.includes(c)).length;
+
+        if (target === 'thomas') {
+            if (foundKeys === 2) {
+                goTo('scene-ending-1');
+            } else {
+                goTo('scene-ending-2');
+            }
+        } else {
+            goTo('scene-ending-3');
+        }
+    }
+
+    // Reset
+    function resetGame() {
+        state = { clues: [], suspicion: { eleanor: 0, vance: 0, thomas: 0 }, currentScene: 'scene-cover' };
+        document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+        document.getElementById('scene-cover').classList.add('active');
+        updateStatusBar();
+    }
+
+    // Initialize
+    updateStatusBar();
+</script>
+
+</body>
+</html>

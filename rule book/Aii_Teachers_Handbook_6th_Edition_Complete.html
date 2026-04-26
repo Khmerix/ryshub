@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aii Teacher's Handbook — 6th Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --accent: #3b82f6;
+    --accent-light: #60a5fa;
+    --sage: #6b7280;
+    --bg: #0b0f19;
+    --surface: rgba(17,24,39,0.92);
+    --text: #f3f4f6;
+    --text-light: #9ca3af;
+    --border: rgba(255,255,255,0.08);
+    --shadow: 0 4px 20px rgba(0,0,0,0.2);
+    --radius: 8px;
+    --sidebar-width: 300px;
+    --header-height: 64px;
+    --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  body.light-theme {
+    --bg: #f8fbff;
+    --surface: rgba(255,255,255,0.92);
+    --text: #0f172a;
+    --text-light: #64748b;
+    --border: rgba(15,23,42,0.08);
+    --shadow: 0 14px 28px rgba(15,23,42,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+    transition: var(--transition);
+  }
+
+  /* Progress Bar */
+  #progress-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 4px;
+    background: var(--border);
+    z-index: 1001;
+  }
+  #progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* Header */
+  .topbar {
+    position: fixed;
+    top: 4px; left: 0; right: 0;
+    height: var(--header-height);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
+  .brand {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-weight: 700; font-size: 1.1rem;
+    color: var(--primary);
+    text-decoration: none;
+  }
+  .brand .logo-circle {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 0.85rem;
+  }
+  .topbar-actions {
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-icon {
+    width: 40px; height: 40px; border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    display: grid; place-items: center;
+    transition: var(--transition);
+  }
+  .btn-icon:hover { background: var(--bg); border-color: var(--accent); color: var(--primary); }
+  .search-wrap { position: relative; }
+  .search-wrap input {
+    width: 220px; padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--bg); color: var(--text);
+    font-size: 0.9rem; outline: none; transition: var(--transition);
+  }
+  .search-wrap input:focus { border-color: var(--primary); width: 280px; }
+  .search-wrap svg {
+    position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%);
+    color: var(--text-light); pointer-events: none;
+  }
+  .hamburger { display: none; }
+
+  /* Layout */
+  .layout {
+    display: flex;
+    padding-top: calc(var(--header-height) + 4px);
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: calc(var(--header-height) + 4px); bottom: 0; left: 0;
+    overflow-y: auto;
+    padding: 1.5rem 1rem;
+    transition: var(--transition);
+    z-index: 999;
+  }
+  .sidebar h3 {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text-light); margin: 1.5rem 0 0.5rem; padding-left: 0.5rem;
+  }
+  .nav-list { list-style: none; }
+  .nav-list li { margin-bottom: 0.25rem; }
+  .nav-list a {
+    display: block; padding: 0.4rem 0.5rem;
+    border-radius: var(--radius);
+    color: var(--text); text-decoration: none;
+    font-size: 0.88rem; line-height: 1.4;
+    transition: var(--transition);
+    border-left: 3px solid transparent;
+  }
+  .nav-list a:hover { background: var(--bg); color: var(--primary); }
+  .nav-list a.active { background: var(--bg); color: var(--primary); border-left-color: var(--accent); font-weight: 600; }
+  .nav-list .sub a { padding-left: 1.25rem; font-size: 0.82rem; color: var(--text-light); }
+  .nav-list .sub a:hover { color: var(--primary); }
+
+  /* Main Content */
+  .main {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    max-width: 900px;
+    padding: 2.5rem 2rem 4rem;
+    transition: var(--transition);
+  }
+
+  /* Cover */
+  .cover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    padding: 5rem 3rem;
+    border-radius: var(--radius);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow);
+  }
+  .cover::before, .cover::after {
+    content: "";
+    position: absolute;
+    background: rgba(255,255,255,0.06);
+    transform: rotate(15deg);
+  }
+  .cover::before { width: 120px; height: 300px; top: -50px; right: 80px; }
+  .cover::after { width: 80px; height: 200px; bottom: -30px; right: 160px; background: rgba(96,165,250,0.25); }
+  .cover .cover-accent {
+    position: absolute; width: 140px; height: 140px;
+    background: var(--sage); opacity: 0.35;
+    top: 40px; left: -40px; transform: rotate(25deg);
+  }
+  .cover .cover-accent-2 {
+    position: absolute; width: 100px; height: 100px;
+    background: var(--accent); opacity: 0.2;
+    bottom: 60px; right: 40px; transform: rotate(-15deg);
+  }
+
+  /* Animated cover text */
+  .cover-brand {
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.2s forwards;
+    position: relative;
+    z-index: 2;
+    font-weight: 500;
+  }
+  .cover-brand::before, .cover-brand::after {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: rgba(255,255,255,0.4);
+    vertical-align: middle;
+    margin: 0 12px;
+  }
+  .cover h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 2;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #fff 0%, #93bbfc 50%, #fff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite, fadeInUp 0.8s 0.4s both;
+  }
+  .cover .edition {
+    font-size: 1.3rem;
+    color: var(--accent-light);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.6s forwards;
+    display: inline-block;
+    padding: 6px 20px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px);
+  }
+  .cover .institution {
+    font-size: 1.15rem;
+    opacity: 0;
+    animation: fadeInUp 0.8s 0.8s forwards;
+    position: relative;
+    z-index: 2;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .cover .editors {
+    margin-top: 2.5rem;
+    font-size: 0.8rem;
+    opacity: 0;
+    animation: fadeInUp 0.8s 1s forwards;
+    position: relative;
+    z-index: 2;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* Typing cursor */
+  .typing-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: var(--accent-light);
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+
+  /* Floating particles in cover */
+  .cover-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* Content Typography */
+  h2 {
+    font-size: 1.6rem; font-weight: 700;
+    color: var(--primary);
+    margin: 3rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  h2 .section-num { font-size: 0.9rem; background: var(--primary); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; }
+  h3 {
+    font-size: 1.2rem; font-weight: 600;
+    color: var(--primary-dark);
+    margin: 2rem 0 0.75rem;
+  }
+  h4 {
+    font-size: 1rem; font-weight: 600;
+    color: var(--text);
+    margin: 1.5rem 0 0.5rem;
+  }
+  p { margin-bottom: 1rem; text-align: justify; }
+  ul, ol { margin: 0.75rem 0 1rem 1.5rem; }
+  li { margin-bottom: 0.4rem; }
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(27,79,122,0.08) 0%, rgba(201,169,110,0.08) 100%);
+    border-left: 4px solid var(--accent);
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    margin: 1.5rem 0;
+  }
+  .policy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .policy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
+  .policy-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .policy-card h4 { color: var(--primary); margin-top: 0; font-size: 0.95rem; }
+  .policy-card p { font-size: 0.85rem; color: var(--text-light); margin-bottom: 0; }
+
+  /* Lists styling */
+  .clean-list { list-style: none; margin-left: 0; }
+  .clean-list li {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .clean-list li:last-child { border-bottom: none; }
+  .clean-list li::before {
+    content: "•"; color: var(--accent); font-weight: 700;
+    position: absolute; left: 0; top: 0.5rem;
+  }
+  .kpi-table {
+    width: 100%; border-collapse: collapse; margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .kpi-table th, .kpi-table td {
+    padding: 0.6rem 0.75rem; text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .kpi-table th { background: var(--primary); color: #fff; font-weight: 600; }
+  .kpi-table tr:hover { background: var(--bg); }
+  .kpi-table .category { font-weight: 700; color: var(--primary); }
+
+  /* Dedication */
+  .dedication {
+    text-align: center; padding: 4rem 2rem;
+    font-style: italic; font-size: 1.25rem;
+    color: var(--text-light);
+  }
+  .dedication em { display: block; margin-top: 0.5rem; font-weight: 600; color: var(--primary); font-style: normal; }
+
+  /* Welcome Letter */
+  .letter {
+    background: var(--surface);
+    padding: 2.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin: 2rem 0;
+    border-top: 4px solid var(--accent);
+  }
+  .letter .signature { margin-top: 2rem; font-weight: 600; color: var(--primary); }
+  .letter .title { color: var(--text-light); font-size: 0.9rem; }
+
+  /* Front matter */
+  .front-matter {
+    text-align: center; padding: 3rem 1rem;
+  }
+  .front-matter h2 { justify-content: center; border: none; }
+  .meta-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 2rem;
+    max-width: 600px; margin: 1.5rem auto; text-align: left;
+    font-size: 0.9rem;
+  }
+  .meta-grid .label { color: var(--text-light); }
+
+  /* Footer nav */
+  .section-footer {
+    display: flex; justify-content: space-between;
+    margin-top: 3rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .section-footer a {
+    color: var(--primary); text-decoration: none;
+    font-weight: 600; font-size: 0.9rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-footer a:hover { color: var(--accent); }
+
+  /* Back to top */
+  #backToTop {
+    position: fixed; bottom: 2rem; right: 2rem;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    border: none; cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: var(--shadow);
+    opacity: 0; pointer-events: none;
+    transition: var(--transition);
+    z-index: 998;
+  }
+  #backToTop.visible { opacity: 1; pointer-events: all; }
+  #backToTop:hover { background: var(--accent); transform: translateY(-2px); }
+
+  /* Search highlights */
+  .search-highlight { background: rgba(201,169,110,0.4); padding: 0 2px; border-radius: 2px; }
+
+  /* Missing content placeholder */
+  .placeholder {
+    background: repeating-linear-gradient(45deg, var(--bg), var(--bg) 10px, rgba(27,79,122,0.03) 10px, rgba(27,79,122,0.03) 20px);
+    border: 2px dashed var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-light);
+    border-radius: var(--radius);
+    margin: 1rem 0;
+  }
+
+  /* Print */
+  @media print {
+    .sidebar, .topbar, #backToTop, .section-footer { display: none !important; }
+    .main { margin-left: 0; max-width: 100%; padding: 1rem; }
+    .cover { page-break-after: always; }
+    h2 { page-break-after: avoid; }
+    .letter { box-shadow: none; border: 1px solid #ddd; }
+  }
+
+  /* Mobile */
+  @media (max-width: 1024px) {
+    .hamburger { display: grid; }
+    .search-wrap input { width: 160px; }
+    .search-wrap input:focus { width: 200px; }
+    .sidebar {
+      transform: translateX(-100%);
+      box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; padding: 1.5rem; }
+    .cover h1 { font-size: 2rem; }
+    .meta-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Dynamic Background */
+  .page-bg-image {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../AI.jpg') center center / cover no-repeat;
+    opacity: 0.08;
+    z-index: -1;
+    pointer-events: none;
+  }
+  #neuron-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Theme Toggle */
+  .theme-toggle-mini {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(15, 23, 42, 0.88);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.24);
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 500;
+  }
+  .theme-toggle-mini:hover {
+    transform: translateY(-1px);
+    border-color: rgba(96,165,250,0.45);
+    box-shadow: 0 10px 22px rgba(37,99,235,0.18);
+  }
+  .theme-toggle-mini i { color: #fde68a; font-size: 0.85rem; }
+
+  body.light-theme .page-bg-image { opacity: 0.04; }
+  body.light-theme .theme-toggle-mini {
+    background: rgba(255,255,255,0.92);
+    color: #0f172a;
+    border-color: rgba(37,99,235,0.14);
+  }
+  body.light-theme .theme-toggle-mini i { color: #f59e0b; }
+  body.light-theme .topbar {
+    background: rgba(255,255,255,0.82);
+    border-bottom-color: rgba(37,99,235,0.12);
+  }
+  body.light-theme .brand { color: var(--primary); }
+  body.light-theme .sidebar {
+    background: rgba(255,255,255,0.92);
+    border-right-color: rgba(15,23,42,0.08);
+  }
+  body.light-theme .nav-list a:hover { background: rgba(37,99,235,0.06); }
+  body.light-theme .nav-list a.active { background: rgba(37,99,235,0.06); }
+  body.light-theme .search-wrap input {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(15,23,42,0.1);
+  }
+  body.light-theme .btn-icon {
+    border-color: rgba(15,23,42,0.1);
+    color: #0f172a;
+  }
+  body.light-theme .btn-icon:hover {
+    background: rgba(37,99,235,0.06);
+    border-color: var(--accent);
+  }
+  body.light-theme .cover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  }
+  body.light-theme .highlight-box {
+    background: linear-gradient(135deg, rgba(37,99,235,0.06) 0%, rgba(59,130,246,0.06) 100%);
+    border-left-color: var(--accent);
+  }
+  body.light-theme .policy-card {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(15,23,42,0.08);
+  }
+  body.light-theme .policy-card:hover { border-color: var(--accent); }
+  body.light-theme .back-to-top {
+    background: rgba(255,255,255,0.92);
+    border-color: rgba(37,99,235,0.2);
+    color: #0f172a;
+  }
+  body.light-theme .modal-content {
+    background: rgba(255,255,255,0.95);
+    border-color: rgba(15,23,42,0.08);
+  }
+  body.light-theme .close-modal {
+    background: rgba(15,23,42,0.06);
+    color: #0f172a;
+  }
+  body.light-theme .close-modal:hover { background: rgba(15,23,42,0.1); }
+  body.light-theme .table-wrap { background: rgba(255,255,255,0.82); }
+  body.light-theme .schedule-table th { background: rgba(37,99,235,0.08); }
+  body.light-theme .schedule-table td { border-bottom-color: rgba(15,23,42,0.06); }
+  body.light-theme .flow-step { background: rgba(255,255,255,0.82); border-color: rgba(15,23,42,0.08); }
+  body.light-theme .flow-arrow { color: var(--text-light); }
+  body.light-theme .meta-card { background: rgba(255,255,255,0.82); border-color: rgba(15,23,42,0.08); }
+
+  @media (max-width: 768px) {
+    .theme-toggle-mini { right: 16px; bottom: 16px; padding: 6px 9px; font-size: 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-bg-image" aria-hidden="true"></div>
+<canvas id="neuron-canvas"></canvas>
+
+<div id="progress-container"><div id="progress-bar"></div></div>
+
+<header class="topbar">
+  <a href="#cover" class="brand">
+    <div class="logo-circle">Aii</div>
+    <span>Teacher's Handbook</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="search-wrap">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search handbook...">
+    </div>
+    <button class="btn-icon" id="themeToggle" title="Toggle theme">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="btn-icon hamburger" id="menuToggle" title="Menu">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <h3>Front Matter</h3>
+    <ul class="nav-list">
+      <li><a href="#cover">Cover</a></li>
+      <li><a href="#title-page">Title Page</a></li>
+      <li><a href="#publication">Publication Info</a></li>
+      <li><a href="#dedication">Dedication</a></li>
+      <li><a href="#welcome">Welcome Letter</a></li>
+      <li><a href="#toc">Table of Contents</a></li>
+    </ul>
+
+    <h3>Section A — Introduction</h3>
+    <ul class="nav-list">
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#vision-mission">Vision & Mission</a></li>
+    </ul>
+
+    <h3>Section C — Employment Policies</h3>
+    <ul class="nav-list">
+      <li><a href="#c1">1. New Teacher Induction</a></li>
+      <li><a href="#c2">2. Employment Categories</a></li>
+      <li><a href="#c3">3. School Email</a></li>
+      <li><a href="#c4">4. Identification Card</a></li>
+      <li><a href="#c5">5. Clocking in Procedures</a></li>
+      <li><a href="#c6">6. Working Hours</a></li>
+      <li><a href="#c7">7. Attendance & Punctuality</a></li>
+      <li><a href="#c8">8. Progressive Discipline</a></li>
+      <li><a href="#c9">9. Outside Employment</a></li>
+      <li><a href="#c10">10. Job Performance Development</a></li>
+      <li><a href="#c11">11. Teacher Assessment & KPI</a></li>
+      <li><a href="#c12">12. Teaching Observation</a></li>
+      <li><a href="#c13">13. Job Movement</a></li>
+      <li><a href="#c14">14. Dress Code</a></li>
+      <li><a href="#c15">15. Updating Personal Info</a></li>
+      <li><a href="#c16">16. Public Safety</a></li>
+      <li><a href="#c17">17. Sexual Harassment Policy</a></li>
+      <li><a href="#c18">18. Gambling, Smoking, Drugs & Alcohol</a></li>
+      <li><a href="#c19">19. Kickbacks & Gratuities</a></li>
+      <li><a href="#c20">20. Use of Aii Systems</a></li>
+      <li><a href="#c21">21. Internet Policy</a></li>
+      <li><a href="#c22">22. Request for Leave</a></li>
+      <li><a href="#c23">23. Insurance Coverage</a></li>
+      <li><a href="#c24">24. Seniority Indemnity</a></li>
+      <li><a href="#c25">25. Work Permit & Visa</a></li>
+      <li><a href="#c26">26. Cambodian Employment Book</a></li>
+      <li><a href="#c27">27. Job Abandonment</a></li>
+    </ul>
+
+    <h3>Section D — Code of Ethics</h3>
+    <ul class="nav-list">
+      <li><a href="#d1">1. Code of Ethics</a></li>
+      <li><a href="#d2">2. Classroom Policy</a></li>
+      <li><a href="#d3">3. Classroom Duties</a></li>
+      <li><a href="#d4">4. Teacher Aide Assignment</a></li>
+      <li><a href="#d5">5. Classroom Environment</a></li>
+      <li><a href="#d6">6. Photocopy Procedure</a></li>
+      <li><a href="#d7">7. Lesson Planning</a></li>
+      <li><a href="#d8">8. Certificate of Merit</a></li>
+      <li><a href="#d9">9. Syllabus Compliance</a></li>
+      <li><a href="#d10">10. Tests, Quizzes & Homework</a></li>
+      <li><a href="#d11">11. Student Work Correction</a></li>
+      <li><a href="#d12">12. Projects & Workshops</a></li>
+      <li><a href="#d13">13. Performance Records</a></li>
+      <li><a href="#d14">14. Grading System</a></li>
+      <li><a href="#d15">15. Speaking Test</a></li>
+      <li><a href="#d16">16. Administering Exams</a></li>
+      <li><a href="#d17">17. Exam Regulations</a></li>
+      <li><a href="#d18">18. Video Policy</a></li>
+      <li><a href="#d20">20. Extra-curricular</a></li>
+      <li><a href="#d21">21. PTA Meeting</a></li>
+      <li><a href="#d22">22. Potluck Day</a></li>
+      <li><a href="#d23">23. Survey</a></li>
+      <li><a href="#d24">24. Salary</a></li>
+      <li><a href="#d25">25. TOEFL ITP</a></li>
+    </ul>
+
+    <h3>Section E — Governance</h3>
+    <ul class="nav-list">
+      <li><a href="#e-committee">Aii School Committee</a></li>
+    </ul>
+  </nav>
+
+  <main class="main" id="mainContent">
+
+    <!-- COVER -->
+    <section id="cover" class="cover">
+      <div class="cover-accent"></div>
+      <div class="cover-accent-2"></div>
+      <div class="cover-particle" style="width:6px;height:6px;top:20%;left:15%;animation:float 4s ease-in-out infinite;"></div>
+      <div class="cover-particle" style="width:4px;height:4px;top:35%;left:80%;animation:float 5s ease-in-out 1s infinite;"></div>
+      <div class="cover-particle" style="width:8px;height:8px;top:70%;left:25%;animation:float 6s ease-in-out 0.5s infinite;"></div>
+      <div class="cover-particle" style="width:5px;height:5px;top:15%;left:60%;animation:float 4.5s ease-in-out 1.5s infinite;"></div>
+      <div class="cover-particle" style="width:3px;height:3px;top:80%;left:70%;animation:float 5.5s ease-in-out 2s infinite;"></div>
+      <div class="cover-brand">A Mengly J. Quach Education School</div>
+      <h1 id="coverTitle">TEACHER'S HANDBOOK</h1>
+      <div class="edition">6<sup>th</sup> Edition</div>
+      <div class="institution">Aii Language Center</div>
+      <div class="editors">
+        Editors: Joanna Cabredo, Mark Nuguid, Soksreyla Owens,<br>
+        Mel Bunne, Charlotte Martin
+      </div>
+    </section>
+
+    <!-- TITLE PAGE -->
+    <section id="title-page" class="front-matter">
+      <h2 style="justify-content:center;border:none;">Teacher's Handbook<br><span style="font-size:1rem;color:var(--text-light);font-weight:400;">6<sup>th</sup> Edition</span></h2>
+      <div style="margin:2rem 0;font-size:1.1rem;">
+        <strong style="color:var(--primary);font-size:1.3rem;">MENGLY J. QUACH</strong><br>
+        University Press<br>
+        <span style="font-size:0.95rem;color:var(--text-light);">A Mengly J. Quach Education</span>
+      </div>
+    </section>
+
+    <!-- PUBLICATION INFO -->
+    <section id="publication" class="front-matter">
+      <div class="highlight-box" style="text-align:left;">
+        <div class="meta-grid">
+          <div class="label">Author</div><div>Aii Management Committee</div>
+          <div class="label">Publisher</div><div>MENGLY J. QUACH University Press</div>
+          <div class="label">First Publication</div><div>June 21, 2021</div>
+          <div class="label">Second Publication</div><div>July 10, 2023</div>
+          <div class="label">Online Publication</div><div>January 23, 2025</div>
+          <div class="label">ISBN-13</div><div>978-9924-508-24-3</div>
+          <div class="label">Email</div><div>info@mjquniversitypress.com</div>
+          <div class="label">Website</div><div>www.mjquniversitypress.com</div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-light);margin-top:1rem;text-align:center;">
+          No part of this publication may be reproduced or transmitted in any form.<br>
+          Published by MENGLY J. QUACH University Press, Phnom Penh, Kingdom of Cambodia.
+        </p>
+      </div>
+    </section>
+
+    <!-- DEDICATION -->
+    <section id="dedication" class="dedication">
+      <p>To all teachers,<br><em>the unsung heroes of the world</em></p>
+    </section>
+
+    <!-- WELCOME LETTER -->
+    <section id="welcome" class="letter">
+      <h3 style="margin-top:0;color:var(--primary);">Welcome to Aii Language Centers</h3>
+      <p style="font-style:italic;color:var(--text-light);">"Everyone who remembers his own education remembers teachers, not methods and techniques. The teacher is the heart of the educational system." — Sidney Hook</p>
+      <p>Dear Teacher,</p>
+      <p>Congratulations on choosing to continue your career in education at Aii Language Centers. As our newest member, you represent the future of this outstanding institution and we look up to you to provide the guiding light and inspiration for thousands of Cambodian children and adults on their journey through the English, Chinese, Thai language and other course offerings.</p>
+      <p>You are the latest addition to our team of the best of the best. We pride ourselves on only selecting the candidates with the best qualifications, greatest experience and deepest commitment to become our teachers. As a member of this first-class faculty, you find yourself in good company. Here at Aii, you will be accompanied by teachers from many backgrounds and cultures willing to guide and mentor you in your development as an exceptional educator.</p>
+      <p>Being a member of such a distinguished professional body comes with certain expectations. Firstly, we demand all our teachers to consistently meet the absolute highest ethical and professional standards. Secondly, the policies and procedures outlined in this handbook, shared in person by your head teacher, or found on our Teacher Website, are deemed to be absolute and inalienable. As such they should be employed without deviation unless expressly instructed otherwise.</p>
+      <p>This Handbook aims to provide you with a roadmap to facilitate your transition from new hire to the future winner of the Mengly J. Quach Annual Award for Excellence in Teaching. The Handbook is only a small part of the jigsaw though, complemented by the knowledge, expertise and commitment of the members of our school committee. They are not just your colleagues but the greatest resource you could ever have available at your fingertips.</p>
+      <p>Allow me to take this final opportunity to thank you for making Aii your professional home and for your commitment to upholding our vision to change the face of education in Cambodia. The commitment you are making today is nothing less than a commitment to improve the future of this beautiful developing country and to improve the future of the world.</p>
+      <div class="signature">Sophea M. Lay</div>
+      <div class="title">President</div>
+      <div class="title">mikelay1500@aii.edu.kh</div>
+    </section>
+
+    <!-- TABLE OF CONTENTS -->
+    <section id="toc">
+      <h2><span class="section-num">TOC</span> Table of Contents</h2>
+      <div class="policy-grid">
+        <div class="policy-card"><h4>A. Introduction</h4><p>Institutional history and campus network</p></div>
+        <div class="policy-card"><h4>B. Vision & Mission</h4><p>Strategic educational direction</p></div>
+        <div class="policy-card"><h4>C. Employment Policies</h4><p>27 policies covering induction, conduct, hours, assessment, and benefits</p></div>
+        <div class="policy-card"><h4>D. Code of Ethics & Duties</h4><p>25 sections on classroom standards, grading, exams, and professional responsibilities</p></div>
+        <div class="policy-card"><h4>E. School Committee</h4><p>Governance structure and leadership</p></div>
+      </div>
+    </section>
+
+    <!-- SECTION A -->
+    <section id="introduction">
+      <h2><span class="section-num">A</span> Introduction</h2>
+      <p><strong>Aii Language Center</strong> was founded by our Chairman and CEO, Neak Oknha, Dr. Mengly J. Quach, on <strong>January 21, 2005</strong>, with the mission of providing real education to the Cambodian public.</p>
+      <p>Aii Language Center (Aii) is one of the most prestigious institutions of English, Chinese, and Thai language learning in Cambodia. It provides a combination of well-balanced curricula, proficient English and Chinese language specialization and up-to-date life skills. The development of Aii students is facilitated by a milieu complementary to learning, competent and committed national and expatriate teachers and well-kept amenities.</p>
+      <div class="highlight-box">
+        <strong>Campuses:</strong> Mao Tse Tong, Toul Kork, Chak Angre, Choam Chao, Phsar Thmey, Chroy Chongva, Siem Reap, Takeo, Sen Sok, and Chbar Ampov.
+      </div>
+    </section>
+
+    <section id="vision-mission">
+      <h2><span class="section-num">B</span> Aii Vision and Mission</h2>
+      <div class="policy-grid">
+        <div class="policy-card">
+          <h4>Vision</h4>
+          <p>To shape the future of language education, championing innovation, cultural exchange, and excellence for inclusive growth.</p>
+        </div>
+        <div class="policy-card">
+          <h4>Mission</h4>
+          <p>To empower learners with innovative instruction, personalized support, and opportunities for lifelong success.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION C -->
+    <section id="c1">
+      <h2><span class="section-num">C.1</span> New Teacher Induction</h2>
+      <p>At the start of employment, new teachers are required to participate in the new teacher induction session. The induction must be provided to the new teachers before the start of their classes. It must contain a basic understanding of the school policy and teacher handbook.</p>
+      <p>The new teachers will undergo training as part of the onboarding process. The following must be completed within the first two weeks of the current term:</p>
+      <ol>
+        <li>Explore the ESL and CSL teacher websites and its components</li>
+        <li>Classroom Management Workshop</li>
+        <li>Syllabus and Curriculum Orientation</li>
+        <li>Aii Culture and Events</li>
+        <li>Online Continuous Assessment and Sponsorship Program</li>
+        <li>Online Tools (NGL Spark website, MyELT, Q:Skills, ClassDojo, Google Classroom, Fun English, etc.)</li>
+        <li>Student Opinion Survey and Peer-to-Peer Assessment</li>
+        <li>Teaching Observation Criteria and Teacher Opinion Survey</li>
+        <li>Use of the school server, e-mail, google account and teacher resource drive</li>
+        <li>Training Modules (only for Teacher Aide which follow a different set of schedules)</li>
+      </ol>
+    </section>
+
+    <section id="c2">
+      <h2><span class="section-num">C.2</span> Employment Categories</h2>
+      <p>Teachers are hired into different categories as below.</p>
+      <ul class="clean-list">
+        <li><strong>2.1.</strong> Full-time teacher with 5 or 6 Classes</li>
+        <li><strong>2.2.</strong> Full-time teacher with 4 Classes</li>
+        <li><strong>2.3.</strong> Part-time teacher (1 to 2 classes)</li>
+      </ul>
+    </section>
+
+    <section id="c3">
+      <h2><span class="section-num">C.3</span> School Email</h2>
+      <p>The teachers will be issued a user ID and password to use the school email. This email will provide access to the school's Google Drive (G Suite for Education) as well as the teacher's individual Google Drive. Documents and forms may be shared with teachers by their supervisors using Google Drive. The teacher may also save documents for their classes in their individual Google Drive or in the Teacher-Focused Group. The teachers are encouraged to use their Aii email in making any official exchange of information and in accessing official documents from Aii.</p>
+    </section>
+
+    <section id="c4">
+      <h2><span class="section-num">C.4</span> Identification Card</h2>
+      <ul class="clean-list">
+        <li><strong>4.1.</strong> Teachers will be issued an Aii ID card. For security purposes, teachers are required to wear the card at all times.</li>
+        <li><strong>4.2.</strong> At the beginning of every term, teachers must get a new sticker on their cards from the secretary indicating the current term number.</li>
+        <li><strong>4.3.</strong> Loss of the card must be immediately reported to your supervisor. Teachers will be charged <strong>$2</strong> for a replacement. Lost or broken lanyard replacements are available free of charge from the Secretary Team.</li>
+        <li><strong>4.4.</strong> Teachers cannot enter campus buildings on non-working days without prior permission.</li>
+      </ul>
+    </section>
+
+    <section id="c5">
+      <h2><span class="section-num">C.5</span> Clocking in Procedures</h2>
+      <ul class="clean-list">
+        <li><strong>5.1.</strong> Teachers are required to clock in and out <strong>15 minutes</strong> before and after their teaching hours.</li>
+        <li><strong>5.2.</strong> Teachers are required to clock in before their assigned start time at the campus building where the first class will be held.</li>
+        <li><strong>5.3.</strong> Teachers must clock out for their designated lunch time. All employees are free to leave the premises during lunch.</li>
+        <li><strong>5.4.</strong> Teachers should not clock out for designated break times and must stay within the assigned campus building area during the break unless transferring to another campus.</li>
+        <li><strong>5.5.</strong> Teachers are required to clock out after their assigned finish time at the campus building where their last class is held.</li>
+        <li><strong>5.6.</strong> Under no circumstance may one employee clock in or out for another employee.</li>
+        <li><strong>5.7.</strong> Teachers may fill in the form and submit it to their supervisor if they miss clocking in/out. The form must be submitted within the next three working days. Failure to do so will be deducted from salary.</li>
+        <li><strong>5.8.</strong> Teachers may submit the leave form if they are late for <strong>10 minutes or more</strong>. The form must be submitted to the supervisor within the next three working days.</li>
+      </ul>
+    </section>
+
+    <section id="c6">
+      <h2><span class="section-num">C.6</span> Working Hours</h2>
+      <table class="kpi-table">
+        <tr><th>Category</th><th>Schedule</th></tr>
+        <tr><td class="category">Full-time Teacher (4 classes)</td><td>7:45 a.m. – 10:45 a.m. &nbsp;|&nbsp; 1:45 p.m. – 4:45 p.m.</td></tr>
+        <tr><td class="category">Full-time Teacher (5 classes)</td><td>7:45 a.m. – 10:45 a.m. &nbsp;|&nbsp; 1:45 p.m. – 4:45 p.m.<br>5:15 p.m. – 6:30 p.m. / 6:30 p.m. – 7:45 p.m.</td></tr>
+        <tr><td class="category">Part-time Teacher</td><td>Following individual teaching schedules</td></tr>
+        <tr><td class="category">Full-time Teacher Aide</td><td>7:30 a.m. – 10:45 a.m. &nbsp;|&nbsp; 1:30 p.m. – 4:45 p.m.</td></tr>
+        <tr><td class="category">Part-time Teacher Aide</td><td>7:30 a.m. – 10:45 a.m. &nbsp;OR&nbsp; 1:30 p.m. – 4:45 p.m.</td></tr>
+      </table>
+      <ul class="clean-list">
+        <li><strong>6.1.</strong> All full-time main teachers who teach in the Kid Program are <strong>REQUIRED</strong> to stay after their class hours to stand by and supervise their students according to the patrol schedule.</li>
+        <li><strong>6.2.</strong> Teachers are accountable to the school committee for their whereabouts during working hours. Without prior approval, teachers are to remain on campus during working hours.</li>
+        <li><strong>6.3.</strong> Teachers whose whereabouts are unknown during working hours are presumed to be doing personal business which could lead to disciplinary action.</li>
+      </ul>
+    </section>
+
+    <section id="c7">
+      <h2><span class="section-num">C.7</span> Attendance and Punctuality</h2>
+      <ul class="clean-list">
+        <li><strong>7.1.</strong> Main teachers and teacher aides are <strong>NOT</strong> required to work on Saturdays.</li>
+        <li><strong>7.2.</strong> Main teachers and teacher aides are <strong>REQUIRED</strong> to participate in workshops, meetings, contests, or events if asked by their supervisors.</li>
+        <li><strong>7.3.</strong> For anticipated absences, such as a wedding ceremony, teachers are expected to notify their supervisor at least <strong>3 days</strong> ahead.</li>
+        <li><strong>7.4.</strong> Unless unable to notify in person a teacher may inform her/his supervisor via phone call in case of emergency.</li>
+        <li><strong>7.5.</strong> Teachers may fill in the form and submit it to their supervisor if they miss clocking in/out. The form must be submitted within the next three working days.</li>
+        <li><strong>7.6.</strong> Teachers may submit the leave form if they are late for 10 minutes or more. The form must be submitted to the supervisor within the next three working days.</li>
+        <li><strong>7.7.</strong> Teachers are required to fill out and submit a leave form no later than <strong>THREE</strong> working days after they return to work. Late submission will result in a salary deduction equivalent to three times the rate of pay for the number of hours or days absent.</li>
+        <li><strong>7.8.</strong> For an absence of three days or above, teachers are required to ask for written permission from their supervisor. Approval of absences or leaves is based on reason or urgency of the matter.</li>
+        <li><strong>7.9.</strong> Teachers are required to prepare teaching materials for substitutes.</li>
+        <li><strong>7.10.</strong> The teaching materials for the substitute should include lesson notes, the links for the audio, video files, or worksheets if any. Those documents should be given to the supervisor beforehand.</li>
+        <li><strong>7.11.</strong> Failure to notify a supervisor about any unscheduled absence will result in a formal warning and/or termination of the contract.</li>
+        <li><strong>7.12.</strong> Teachers are advised not to be absent frequently. Absences of five days or more within a term will disqualify teachers from awards and recognitions, and negatively affect their teaching schedules for the following term.</li>
+        <li><strong>7.13.</strong> Teachers are required to be in the classroom <strong>5 minutes</strong> before the beginning of class. Teachers who are tardy three or more times in a single term will have their class schedules reviewed for the following term.</li>
+        <li><strong>7.14.</strong> Teachers who are consistently late will be subject to disciplinary procedures up to and including termination.</li>
+        <li><strong>7.15.</strong> Be aware of the policy of being absent <strong>BEFORE or AFTER</strong> a long holiday. It is subject to a <strong>double salary deduction</strong>.</li>
+      </ul>
+    </section>
+
+    <section id="c8">
+      <h2><span class="section-num">C.8</span> Progressive Discipline</h2>
+      <p>The following steps cover the normal pattern of corrective action for teachers who have completed the probationary period. If job-related performance problems persist, the supervisor may initiate the progressive discipline process.</p>
+      <div class="policy-grid">
+        <div class="policy-card"><h4>1. Verbal Warning</h4><p>Head teacher discusses performance problems, necessary improvements, and a correction date. Supervisor documents the conversation.</p></div>
+        <div class="policy-card"><h4>2. Written Warning</h4><p>If problems persist, a written warning is issued containing a statement of problems, required corrections, and improvement deadline.</p></div>
+        <div class="policy-card"><h4>3. Final Written Warning</h4><p>If written warning issues are not addressed by the given date, a final written warning is issued.</p></div>
+        <div class="policy-card"><h4>4. Suspension or Termination</h4><p>If problems persist after the final written warning, suspension or termination may occur.</p></div>
+      </div>
+      <p>Teachers have to cooperate in completing the Disciplinary Form, Incident Report and other related documents that are necessary to complete the procedure. The committee must approve every step of the disciplinary action.</p>
+      <p>When circumstances dictate due to the seriousness of the case, Aii retains the right to omit steps in the disciplinary process. Certain infractions may result in immediate suspension or immediate termination. Such infractions include, but are not limited to:</p>
+      <ul class="clean-list">
+        <li>Using cellphones or any other electronic devices that are not directly related to teaching purposes during class hours</li>
+        <li>Marking or correcting student work during class hours (to maintain an uninterrupted learning environment)</li>
+        <li>Fabricating scores, or inaccurately or inadequately completing Continuous Assessment (CA) records or Report Cards</li>
+        <li>Any form of bribery in exchange for Student Opinion Survey scores</li>
+        <li>Enabling a student to cheat</li>
+        <li>Stealing or other acts of dishonesty</li>
+        <li>Unprofessional behavior or insubordination</li>
+        <li>Spreading fake information or rumors that affect the school and its reputation</li>
+        <li>Borrowing a sum of money that can lead to unprofessional behavior</li>
+        <li>Creating or contributing to a hostile work environment</li>
+        <li>Intoxication or otherwise violating the Anti-Drug and Alcohol Policy</li>
+        <li>Breach of confidentiality, fraud, or clear cases of conflict of interest</li>
+        <li>Sexual harassment or other forms of discrimination</li>
+        <li>Threatening actions, language, or violence</li>
+        <li>Violation against Child Protection Policy and any form of Child abuse <em>(See Aii Child and Student Protection Policy)</em></li>
+        <li>Fighting or any form of violence against an employee</li>
+        <li>Bullying</li>
+        <li>Any form of cheating and abuse</li>
+        <li>Borrowing & lending among employees</li>
+        <li>Staff rotation for personal purposes</li>
+        <li>Using Social Media at Work</li>
+        <li>Domestic violence</li>
+        <li>Vaping and smoking on the school premises</li>
+        <li>Gossiping</li>
+        <li>Swiping in and out for others</li>
+        <li>Salary comparison</li>
+      </ul>
+    </section>
+
+    <section id="c9">
+      <h2><span class="section-num">C.9</span> Outside Employment</h2>
+      <p>Teachers are hired with the understanding that their main employer is Aii Language Centers. As such, full-time teachers are <strong>not permitted</strong> to work outside of the Institution. Part-time teachers who desire to work outside Aii may do so as long as there is no conflict of interest and the second job does not interfere with the Teacher's scheduled work hours or work performance.</p>
+    </section>
+
+    <section id="c10">
+      <h2><span class="section-num">C.10</span> Job Performance Development Program</h2>
+      <p>Aii provides various professional development programs for teachers, such as teaching conferences, sharing sessions, workshops and seminars. Participation in professional development for full-time teachers is <strong>mandatory</strong>; however, it is optional for part-time teachers. We strongly recommend that all part-time teachers take part in these programs.</p>
+      <div class="highlight-box">
+        <strong>Buddy System:</strong> A buddy is a senior teacher who can provide support to newly hired teachers or teacher assistants in terms of teaching tips, classroom management, peer and ghost observation, and understanding Aii policies and culture.
+      </div>
+    </section>
+
+    <section id="c11">
+      <h2><span class="section-num">C.11</span> Teacher Assessment and Evaluation</h2>
+      <p>Assessment and evaluation will reflect on the official teacher appraisals which take place once per year and will influence salaries, promotions, transfers and demotions. The teachers are evaluated at Aii according to these criteria:</p>
+      <h3>11.1. Key Performance Indicator (KPI)</h3>
+      <table class="kpi-table">
+        <tr><th>Domain</th><th>Indicator</th><th>Weight</th></tr>
+        <tr><td class="category" rowspan="2">Financial & Business</td><td>Stock Control (Teaching Materials)</td><td>5%</td></tr>
+        <tr><td>Student Retention</td><td>10%</td></tr>
+        <tr><td class="category" rowspan="9">Business / Dept Functions</td><td>Teaching Observation</td><td>5%</td></tr>
+        <tr><td>Student Tardiness</td><td>5%</td></tr>
+        <tr><td>Academic Activities and CA Completion</td><td>10%</td></tr>
+        <tr><td>Report Cards & Final Result</td><td>5%</td></tr>
+        <tr><td>Punctuality to class</td><td>5%</td></tr>
+        <tr><td>Attendance (AL only)</td><td>5%</td></tr>
+        <tr><td>Deadline Compliance</td><td>5%</td></tr>
+        <tr><td>Dress Code</td><td>5%</td></tr>
+        <tr><td>Open Discussion / Orientation / Termly Meeting</td><td>5%</td></tr>
+        <tr><td class="category" rowspan="2">Customer Service</td><td>Student Opinion Survey / Peer Survey</td><td>5%</td></tr>
+        <tr><td>Sponsorship Programs</td><td>5%</td></tr>
+        <tr><td class="category" rowspan="2">Training & Development</td><td>National Teaching Conference / Sharing Session</td><td>5%</td></tr>
+        <tr><td>Webinar / Training from TESOL House / Other PD</td><td>5%</td></tr>
+        <tr><td class="category" rowspan="9">Behavior Assessment</td><td>Responsibility and Ownership</td><td>25%</td></tr>
+        <tr><td>Collaboration & Team Spirit</td><td>8%</td></tr>
+        <tr><td>Strong Work Ethic</td><td>8%</td></tr>
+        <tr><td>Job Passion & Commitment</td><td>8%</td></tr>
+        <tr><td>Justification / Reaction to the problem</td><td>8%</td></tr>
+        <tr><td>Caring Behavior</td><td>8%</td></tr>
+        <tr><td>Learning Behavior</td><td>7%</td></tr>
+        <tr><td>Professional Behavior</td><td>7%</td></tr>
+        <tr><td>Integrity and Loyalty</td><td>7%</td></tr>
+        <tr><td class="category" rowspan="2">Behavior (cont.)</td><td>Adaptability or Reaction to Change</td><td>7%</td></tr>
+        <tr><td>Positive Attitude</td><td>7%</td></tr>
+      </table>
+      <h4>Soft Skills</h4>
+      <ul class="clean-list">
+        <li>Effective Communication</li>
+        <li>Active Listening</li>
+        <li>Time management and Planning</li>
+        <li>Customer Service</li>
+        <li>Critical Thinking</li>
+      </ul>
+      <h4>Technical Skills / Professional Knowledge</h4>
+      <p>Evaluated as part of the overall competency framework.</p>
+    </section>
+
+    <section id="c12">
+      <h2><span class="section-num">C.12</span> Teaching Observation</h2>
+      <p>ESL Teachers will be observed twice a year unless they fail the Student Opinion Survey or the Teaching Observation, in which case they will be observed more than twice.</p>
+      <div class="policy-grid">
+        <div class="policy-card"><h4>80+</h4><p>Expert</p></div>
+        <div class="policy-card"><h4>70 – 79</h4><p>Proficient</p></div>
+        <div class="policy-card"><h4>60 – 69</h4><p>Competent (meets standard)</p></div>
+        <div class="policy-card"><h4>&lt; 60</h4><p>Requires counseling & re-observation</p></div>
+      </div>
+      <p>The result of the observation must be discussed by the head teacher and the teacher along with a witness within <strong>3 working days</strong> after the observation. Teachers must receive a link to the Observation Feedback Survey provided by the head teacher and must submit it within 3 days after the feedback session.</p>
+      <p>The following areas will be evaluated by the head teacher, using <strong>1</strong> as the lowest (poor or unacceptable) and <strong>5</strong> as the highest (exceptional or excellent):</p>
+
+      <h3>20 Observation Criteria for Kid 5 to Adult Teachers</h3>
+      <ol>
+        <li>Lesson Aim</li>
+        <li>Warm-Up, Circle Time or Lead-In</li>
+        <li>Presentation in Context</li>
+        <li>Meaning</li>
+        <li>Form</li>
+        <li>Pronunciation</li>
+        <li>Practice</li>
+        <li>Production</li>
+        <li>STT/TTT balance</li>
+        <li>Instructions</li>
+        <li>Monitoring</li>
+        <li>Feedback</li>
+        <li>Adaptation and Personalization</li>
+        <li>Course Completion and Component Usage</li>
+        <li>Whiteboard and/or Technology Use</li>
+        <li>Rules, Routines and Discipline</li>
+        <li>Rapport</li>
+        <li>Reinforcement</li>
+        <li>Interaction Patterns</li>
+        <li>Time management</li>
+      </ol>
+      <p><em>CSL and other language programs will use the same observation criteria mentioned above.</em></p>
+
+      <h3>20 Observation Criteria for Pre-kid to Kid 4 Teachers</h3>
+      <ol>
+        <li>Lesson Aim</li>
+        <li>Warm-Up, Circle Time or Lead-In</li>
+        <li>Presentation in Context</li>
+        <li>Interpersonal Communication</li>
+        <li>Communication with the TA</li>
+        <li>Communication with the Students</li>
+        <li>Practice</li>
+        <li>Production</li>
+        <li>STT/TTT balance</li>
+        <li>Instructions</li>
+        <li>Monitoring</li>
+        <li>Feedback</li>
+        <li>Adaptation and Personalization</li>
+        <li>Course Completion and Component Usage</li>
+        <li>Whiteboard and/or Technology Use</li>
+        <li>Rules, Routines and Discipline</li>
+        <li>Rapport</li>
+        <li>Reinforcement</li>
+        <li>Use of Learning Aid</li>
+        <li>Time management</li>
+      </ol>
+
+      <h3>10 Observation Criteria for Teacher Aides</h3>
+      <ol>
+        <li>The TA was proactive in the classroom.</li>
+        <li>Teaching materials were distributed efficiently.</li>
+        <li>The classroom environment was kept safe.</li>
+        <li>The classroom environment was kept clean and tidy.</li>
+        <li>The TA communicated well with the main teacher.</li>
+        <li>All students were supported according to their needs.</li>
+        <li>Classroom rules were actively reinforced.</li>
+        <li>The TA was focused on the job at all times.</li>
+        <li>Accurate and appropriate English was used throughout the lesson.</li>
+        <li>Interactions with students were positive and encouraging.</li>
+      </ol>
+
+      <h3>Observation Feedback Survey (10 Criteria)</h3>
+      <p>In connection with the teaching observation, teachers will submit an Observation Feedback Survey to share and assess how the feedback session is conducted by the observer. This will help ensure that the feedback is fair, genuine, and objective.</p>
+      <ol>
+        <li>The feedback was scheduled at a time that was convenient for both of us to discuss the observation in detail.</li>
+        <li>The feedback was balanced between positive points and areas for improvement/development.</li>
+        <li>The feedback was objective — focusing on what happened in the classroom and how to improve it.</li>
+        <li>The feedback was a conversation, not a lecture — my opinion and ideas were valued.</li>
+        <li>I was given helpful recommendations and concrete suggestions about how to make my teaching more effective.</li>
+        <li>Areas for improvement/development were limited to three specific points.</li>
+        <li>I was encouraged to take an active role in the feedback by thinking of solutions myself and reflecting on how I could improve.</li>
+        <li>I was treated with respect during the feedback — the observer used a friendly tone of voice.</li>
+        <li>The feedback was a fair reflection of what happened during my lesson.</li>
+        <li>I felt the feedback aimed to help me rather than criticize me.</li>
+      </ol>
+
+      <h3>Criteria for the Mengly J. Quach Excellence in Teaching Award</h3>
+      <h4>1. Selection Process</h4>
+      <p>To qualify for selection, a teacher must:</p>
+      <ul class="clean-list">
+        <li><strong>1.1.</strong> Receive one (1) observation score of <strong>80% or more</strong> within the two quarters (first two terms) of the current Academic Year with an exemption for new teachers who entered in the third term. If there are 5 terms in one academic year, the first three quarters will be considered.</li>
+        <li><strong>1.2.</strong> The qualifying observation must not contain any criteria scored lower than <strong>3 points</strong>.</li>
+        <li><strong>1.3.</strong> Meet standards in punctuality (not more than 5 excused absences or tardiness per term), deadline compliance (not more than 5 missed deadlines/year), active participation (not more than 5 missed activities), and no written warnings under Progressive Discipline.</li>
+        <li><strong>1.4.</strong> Passed all Student Opinion Surveys for Kid 7 and up or Peer to Peer Assessment for Kid 4 and below (score not lower than 75%).</li>
+      </ul>
+
+      <h4>2. Nomination Guidelines</h4>
+      <ul class="clean-list">
+        <li><strong>2.1.</strong> The teachers having the highest score in their qualifying observation will move forward to the final observation upon recommendation of the Head Teacher, Deputy Campus Director and Campus Director.</li>
+        <li><strong>2.2.</strong> The number of nominees must be between <strong>10% to 13%</strong> of the total population of teachers on the campus.</li>
+      </ul>
+
+      <h4>3. Final Observation and Selection of Awardees</h4>
+      <ul class="clean-list">
+        <li><strong>3.1.</strong> The selected teachers will be observed by a committee of three persons: Deputy Campus Director, Director of Studies, and Campus Director.</li>
+        <li><strong>3.2.</strong> This observation serves as a check and balance on the Head Teacher's observations.</li>
+        <li><strong>3.3.</strong> This observation will take place between Week 3 and 7 of the final term of an Academic Year.</li>
+        <li><strong>3.4.</strong> The teacher(s) with the highest aggregate score will receive the award provided they meet all criteria duly approved by the Director of Studies, Campus Directors and the President of Aii.</li>
+        <li><strong>3.5.</strong> Official winners must have a balanced number of awardees for ESL Expatriate Teachers, ESL National Teachers, Teacher Aides and other Language Teachers.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>Notes:</strong>
+        <ul style="margin-top:0.5rem;">
+          <li>MJQ Annual Excellence Awardees receive a <strong>monthly bonus</strong> on top of their salary for 1 year provided they maintain good standing.</li>
+          <li>Awardees serve as role models and must present in the following term at the Teaching Conference, Sharing Session, or Parent Conference.</li>
+          <li>TOEFL iTP scores will be considered. A CEFR rating of B2 and no rating lower than B1 in Listening, Structure/Written Expression, and Reading must be achieved.</li>
+          <li>The decision of the school committee is final and irrevocable.</li>
+          <li>For detailed rubrics, visit the <a href="#" style="color:var(--primary);">Teacher Website</a>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="c13">
+      <h2><span class="section-num">C.13</span> Job Movement within the Institution</h2>
+      <h4>13.1. Promotions</h4>
+      <p>There are many opportunities for promotion within the institution and it is a policy to always promote from within where possible. If you feel you have what it takes to be a leader, let your supervisor know and they will inform you of any vacancies and arrange an interview for you if possible.</p>
+      <h4>13.2. Transfers</h4>
+      <p>If you wish to transfer to either another campus or another department, change condition or employment category, or change working hours, inform your supervisor about the request on or before <strong>Week 6</strong> of the current term or semester and we will do everything possible to accommodate you.</p>
+    </section>
+
+    <section id="c14">
+      <h2><span class="section-num">C.14</span> Dress Code</h2>
+      <h4>14.1. General</h4>
+      <ul class="clean-list">
+        <li>Teachers should dress appropriately and professionally.</li>
+        <li>Teachers must be clean and well-groomed.</li>
+        <li>Clothing must be neat, clean, pressed and in a good state of repair.</li>
+        <li>Clothing should not be transparent, too tight, or revealing.</li>
+        <li>Denim is not allowed.</li>
+        <li>Visible tattoos must be covered up. <em>Exceptions can be made for teachers who have small, non-offensive tattoos that cannot easily be covered by standard clothing (i.e., wrist, neck, etc.).</em></li>
+        <li>Visible piercings other than earrings are not allowed.</li>
+      </ul>
+      <h4>14.2. Hair</h4>
+      <ul class="clean-list">
+        <li>Hair should be clean, combed, and neatly trimmed or arranged.</li>
+        <li>Non-traditional hair colors are not permitted.</li>
+      </ul>
+      <h4>14.3. Male Dress Code</h4>
+      <ul class="clean-list">
+        <li>Male teachers are required to wear a shirt and tie. The shirt must be tucked into pants.</li>
+        <li>Pants should not have patch pockets made of a separate piece of cloth sewn onto the pants. (i.e.: Dress pants)</li>
+        <li>Shoes must be well polished and should be kept clean.</li>
+        <li>Sideburns, mustaches, and beards should be neatly trimmed.</li>
+      </ul>
+      <h4>14.4. Female Dress Code</h4>
+      <ul class="clean-list">
+        <li>Clothes must be an appropriate and modest length. (Knee level skirt)</li>
+        <li>Jeans or denims are not allowed.</li>
+        <li>Leggings, unless worn with a skirt, are not permitted.</li>
+        <li>The chest and shoulder area must be covered with no visible cleavage.</li>
+        <li>Make-up should be professional and conservative.</li>
+        <li>Shoes should be closed at both heel and toe. (i.e. court shoes or pumps: NO sandals)</li>
+      </ul>
+      <h4>14.5. Attending School Outside of Teaching Hours</h4>
+      <ul class="clean-list">
+        <li>Teachers should follow a 'smart casual' dress code. However, the points under 'General' should be observed.</li>
+        <li>Shorts, flip-flops, and jeans may <strong>NOT</strong> be worn.</li>
+        <li>Shoulders should be covered.</li>
+        <li>Football or other sports shirts may not be worn.</li>
+        <li>Shirts must be tucked in.</li>
+        <li>Bear in mind lots of photos are taken at events and published on the school's public Facebook pages and website. Consider your role as a school ambassador.</li>
+      </ul>
+      <h4>14.6. Discrimination</h4>
+      <ul class="clean-list">
+        <li>Please speak to your supervisor if you have a genuine issue with either the dress code or the way it is enforced on the grounds of gender, age, race, religion, or belief.</li>
+        <li>If you are not happy with the response, please feel free to talk to a more senior member of the management.</li>
+      </ul>
+    </section>
+
+    <section id="c15">
+      <h2><span class="section-num">C.15</span> Updating Personal Information</h2>
+      <p>Teachers must notify the Personnel Office of any changes to personal information such as a change of address or phone number.</p>
+    </section>
+
+    <section id="c16">
+      <h2><span class="section-num">C.16</span> Public Safety</h2>
+      <p>To maintain safety, teachers must only cross major streets with the help of security staff. Teachers must wear helmets when commuting by motorcycle or bicycle. Failure to comply will result in a <strong>50,000 Riel</strong> fine.</p>
+    </section>
+
+    <section id="c17">
+      <h2><span class="section-num">C.17</span> Sexual Harassment Policy</h2>
+      <p>Aii has <strong>zero tolerance</strong> for sexual harassment. No teacher — male or female — should be subjected to unsolicited or unwelcome sexual overtures or conduct in the workplace. Any teacher's behavior that fits the definition of sexual harassment is a form of misconduct that will result in dismissal.</p>
+      <div class="highlight-box">
+        <strong>Report anonymously:</strong> Female Hotline <strong>012 442 438</strong> / <strong>089 788 359</strong><br>
+        Or report directly to your Head Teacher or Deputy Campus Director.
+      </div>
+    </section>
+
+    <!-- PLACEHOLDERS FOR REMAINING SECTION C -->
+    <section id="c18"><h2><span class="section-num">C.18</span> Gambling, Smoking, Drugs and Alcohol</h2><h4>18.1. Aii has zero tolerance for gambling, smoking, prohibited drugs, and alcohol. Noncompliance is grounds for immediate dismissal.</h4>
+<h4>18.2. Gambling is strictly prohibited, in or out of school premises.</h4>
+<h4>18.3. Smoking is strictly prohibited on school premises. Be aware that students are likely to complain about teachers that smell of smoke.</h4>
+<h4>18.4. Teachers are prohibited from attending work under the influence of alcohol, illegal drugs or non-prescribed and/or restricted substances.</h4>
+<h4>18.5. Teachers are prohibited from using, supplying, sharing, distributing, or selling drugs and other prohibited substances. (See Law on Drug Control Enacted in 2012)</h4></section>
+    <section id="c19"><h2><span class="section-num">C.19</span> Kickbacks and Gratuities</h2><h4>19.1. It is unethical for teachers to accept payment, gift, gratuity, or employment from parents or relatives of students as an inducement for preferential treatment.</h4>
+<h4>19.2. All offers of kickbacks and gratuities should be reported to the supervisor or Deputy Campus Director.</h4>
+<h4>19.3. Any gift that appears to be worth more than $50 should be declared to your supervisor.</h4>
+<h4>19.4. Teachers should never accept money as a gift.</h4></section>
+    <section id="c20"><h2><span class="section-num">C.20</span> Use of Aii Systems, Resources, and Information</h2><h4>20.1. Teachers may not disclose sensitive or personally identifiable information regarding students to individuals and/or parties</h4>
+<p><strong>not</strong> authorized to receive it.</p>
+<h4>20.2. School records are confidential and should be treated professionally. Personal matters or events related to students, other teachers, or staff should not be discussed inside the school premises.</h4>
+<h4>20.3. All course books and teaching materials must be claimed and checked properly by the teachers once the individual teaching schedule has been provided by the line managers before the start of the new term.</h4>
+<h4>20.4. All course books and teaching materials must be returned to the academic secretary no later than 5:30 pm on the final exam day.</h4></section>
+    <section id="c21"><h2><span class="section-num">C.21</span> Internet Policy</h2><p>21. Internet Policy Teachers are <strong>not</strong> permitted to use the internet, email, Facebook, or other social network sites for personal use during teaching hours. The use of the Institution's computer and resources to seek out, access or send any material of an illegal, offensive, obscene, or defamatory nature is prohibited and may result in <strong>immediate dismissal</strong>.</p></section>
+    <section id="c22"><h2><span class="section-num">C.22</span> Request for Leave</h2><h4>22.1. Annual Leave ● A new staff member is entitled to 1.5 days leave per month. However, s/he can only apply for it from the fourth month after the probationary period. Staff who stayed with the company for at least one year or more have an 18-day annual leave entitlement.</h4>
+<p>● A probationary employee may avail of leave credits after completing her /his probationary period. If her /his date of confirmation of probation is in the same year as s/he was hired, the employee may avail 18 (eighteen) days of Annual Leave prorated according to the number of months served in the Company. Unused annual leave shall be paid and included in the last salary of those who fail the probation. ● Teachers must provide a clear reason in her /his leave application. Teachers are <strong>not</strong> allowed to go on annual leave without prior approval of her /his leave application by the Company. ● Teachers should apply for annual leave for at least 03 (three) days in advance. Applications received with less than 03 (three) days' notice must state reasons and shall be considered as Emergency Leave. Teachers need to ensure that her/his leave application is approved before going on leave. ● Line manager together with department head reserves the rights to postpone or reject requested leave due to business need. ● If the unused annual leave is equal or less than 06 (six) days will be carried forward to the next years of service. If the unused annual leave is greater than 06 (six) days, the maximum day that could be carried forward only 06 (six) days and the remaining leaves would be forfeited at the end of each year. The maximum of keeping the remaining annual leave is 02</p>
+<p>(two) years and after the 2nd year, the remaining balance will be automatically forfeited at the end of year. ● In case of resignation or termination, the number of remaining annual leave shall be calculated and to be paid with the teacher's last salary payment. Number of leave taken that exceeded the entitled balance shall be deducted from the last salary payment. ● If annual leave is overused, actions below have to be taken: ✔ The overused leaves shall be considered twice the number of absence(s) ✔ The number of overused leaves shall <strong>not</strong> be more than three times ✔ Four or more times of overused annual leave shall impact the annual performance appraisal</p>
+<h4>22.2. Common Leave ● Common Leave (Force Leave) is an additional leave that extends public holidays determined by the Ministry of Labor and Vocational Training and shall be deducted from annual leave. Common Leave shall also be applied for new employees, but will not be deducted from their annual leave during the probation period. Common leave shall not be deducted from an employee's annual leave balance if the common day fails under the day off of the employee.</h4>
+<h4>22.3. Sick Leave ● Teachers and staff are entitled to have 7 days per year</h4>
+<p>of sick leave. ● Medical certificate from the doctor is <strong>not</strong> <strong>required</strong> for one-day or two-day sick leave. ● Medical certificate from the doctor is <strong>required</strong> if the teacher or staff is absent for 3 or more consecutive days. Otherwise, it will <strong>not</strong> be credited to the sick leave. The number of days already served shall be deducted from the teacher’s annual leave or shall lead to salary deduction. ● Prolonged sick leave up to 1 month is allowed with 100% paid salary with proper and legal documentation issued by the doctor and hospital stating the patient's serious medical condition, proof of being unfit to work, and the need of a prolonged treatment. Same requirements apply to prolonged sick leave for the second and third month with 60% paid salary. Beyond that means no salary and can be considered upon the approval of the supervisor. ● Prolonged sick leave for more than 6 months shall <strong>not</strong> be granted or lead to termination of contract. ● If found faking illness, s/he shall be responsible for paying all the leaves served, including the company’s losses and other interests.</p>
+<h4>22.4. Maternity Leave ● Maternity leave is applicable for female teachers with a minimum of one-year uninterrupted employment service in the Company. ● A teacher is permitted two consecutive months of paid</h4>
+<p>maternity leave only if she has served at least one year of service. Otherwise, she shall take unpaid maternity leave. Beyond that, she can request for another month of unpaid leave. ● The teacher is entitled to take maternity leave for 90 (ninety) calendar days. The rate of pay during maternity leave is 100% (one hundred percent) of the first month and second month. The third month will be considered as unpaid leave. Female teacher can request for another one month unpaid leave subject to approval from her line manager. ● Absence from work due to illness or miscarriage during pregnancy shall <strong>not</strong> be considered as maternity leave but normal sick leave. ● Notice of maternity leave must be in writing and has to be submitted to Line Manager and further submitted to the Human Resources Department at least 01 (one) week before such leave. ● Application for maternity leave must be supported by a certificate/maternity record from a registered medical practitioner.</p>
+<h4>22.5. Paternity Leave ● All legally married male teachers with a minimum of 01 (one) year of employment service are entitled to 07 (seven) calendar days of paternity leave without deduction of their annual leave. ● A teacher shall be entitled to 07 (seven) calendar days of paternity leave without deduction of his annual leave.</h4>
+<p>● His application of paternity leave is similar to that of maternity leave and must be supported with documentary proof of such leave.</p>
+<h4>22.6. Marriage Leave ● Any teacher with a minimum of one year of employment service shall be entitled to 07 (seven) consecutive calendar days on the occasion of her /his marriage without deduction of the annual leave. ● Eligible teachers shall fill out permission form for marriage leave with documentary proof of such marriage. ● Marriage leave must be applied at least 0 l (one) week before the expected date of marriage. The teacher needs to ensure that her /his leave application is approved before going on leave.</h4>
+<h4>22.7. Other Types of Leaves ● Application of leave during long holidays (three consecutive days or more) will be multiplied by 2 and will be multiplied to 4 if the leave is taken both before and after the long holidays. ● Teachers are allowed to take the maximum of 3 months unpaid leave duly approved by the supervisor. ● Teachers can take special leave for personal or family obligations such as son/daughter’s marriage and illness or death of spouse, children and parents. Special leave shall be deducted from the annual leave or if not available shall request for leave without pay. ● All foreseen or planned leaves shall be submitted</h4>
+<p>before and must be approved by the supervisor.</p></section>
+    <section id="c23"><h2><span class="section-num">C.23</span> Insurance Coverage</h2><h4>23.1. All full-time teachers are entitled to get medical assistance from Sokrangsey Nin Student Health Center and health insurance from National Social Security Fund (NSSF). For more information about NSSF, feel free to visit their website at http://www.nssf.gov.kh</h4>
+<h4>23.2. The 24-hour Insurance coverage on accidents from Phillip General Insurance. Coverage includes accidents (except as limited by the Exclusions) whether on or off the job, occurring in the home, or traveling. For more information about the Group Personal Insurance from Phillip General Insurance, feel free to visit their website: https://www.phillipinsurance.com.kh or contact their customer support at 023 723 888 or send an email at info@phillipinsurance.com.kh</h4>
+<h4>23.3. All part-time teachers are entitled to get insurance from NSSF.</h4>
+<h4>23.4. New part-time teachers are required to get reference from another workplace (if have) if he or she wishes MJQE to pay for the insurance.</h4>
+<h4>23.5. All part-time teachers shall inform HR if s/he has the NSSF, or s/he must pay back all the fee that MJQE company paid to NSSF.</h4>
+<h4>23.6. All teachers are required to sign on the declaration on Pension Fund Payment. Half of the pension fee will be covered by MJQE Company while the other half will be</h4>
+<p>deducted from the teacher’s salary monthly.</p></section>
+    <section id="c24"><h2><span class="section-num">C.24</span> The Payment of Seniority Indemnity</h2><h4>24.1. The seniority indemnity from 2019 and the back pay of seniority and indemnity before 2019 shall be calculated for all the teachers and staff in accordance with the following formalities:</h4>
+<h4>24.2. Full-time teachers and staff are entitled to seniority and indemnity as the Prakas of MoLVT.</h4>
+<h4>24.3. Part-time, internship teachers and staff shall not be entitled to the seniority indemnity.</h4>
+<h4>24.4. For the computation and calculation, please refer to Memorandum No. 057 Series of 2019 dated June 06, 2019 or refer to the Human Resources Department.</h4></section>
+    <section id="c25"><h2><span class="section-num">C.25</span> Work Permit and Visa Standard Operation Procedure</h2><h4>25.1. Work permit is an official document giving a foreigner permission to seek employment and a job in another country. The 1997 Labor Law requires all foreign employees living and working in Cambodia to obtain work permits during employment. ● Requirements: 1. Colored copy of the current passport and valid visa. 2. 2 copies of 4x6 photos if the applicant is applying for the first time or requests to change the photo in their card for the renewal. 3. Payment of fees (retroactive fees might be</h4>
+<p>applied, depends on the first E-Business Visa entry) 4. Contract from the ministry if the current contract is expired. The contract’s validity is 2 years. - Teachers to fill in the contract with the following details: ✔ Workplace name ✔ Staff’s name, sex, and nationality ✔ Position ✔ Address ✔ Period of contract ✔ Salary ✔ School stamp from the admin department ✔ A signature from the Campus Director 5. School Quota The teacher who processes work permits with another agent/s needs to request for the campus school quota.</p>
+<h4>25.2. Visa is a conditional authorization granted by a polity to a foreigner that allows them to enter, remain within, or leave its territory. ● Visa Requirements ✔ Certificate of Employment with the MJQE Logo and Stamp ✔ MJQE Patent Tax ✔ MJQE MoC (Ministry of Commerce) ✔ Passport and the Current Visa ✔ Foreign Presence in Cambodia System (FPCS) ✔ Valid work permit ✔ Extension of Stay Form ✔ The fee</h4>
+<h4>25.3. Visa and Work Permit Benefit ✔ Full time expatriate teachers/staff are entitled to 50% work permit benefit and 25% visa benefit after probation. All expatriate candidates must have a valid business visa before recruitment. ✔ Full time expatriate teachers/staff who are in their 3 rd year are entitled to 75% work permit benefit and 25% visa benefit. ✔ Full time expatriate teachers/staff who are in their 4 th year are entitled to 100% work permit benefit and 25% visa benefit. (For more information, please contact your line manager)</h4></section>
+    <section id="c26"><h2><span class="section-num">C.26</span> Cambodian Employment Book</h2><p>26. Cambodian Employment Book All national teachers and staff are to have the Cambodian Employment Book. In the case that teachers do <strong>not</strong> have the Cambodian Employment Books, they are to submit the necessary documents to the Head of Academic Secretary for HR to process with the Ministry of Labor.</p></section>
+    <section id="c27"><h2><span class="section-num">C.27</span> Job Abandonment or Breach of Contract</h2><h4>27.1. Job abandonment occurs when an employee has been absent for 7 consecutive working days without notice.</h4>
+<h4>27.2. Breach of contract is a legal cause of action and a type of civil wrong, in which a binding agreement or bargained-for exchange is not honored by one or more of the parties to the contract by non-performance or interference with the other party's performance.</h4>
+<h4>27.3. In the case of job abandonment or breach of contract, the company reserves the right to proceed with legal action that may result in punitive damage or compensatory damage to the teacher or staff who abandon the job or breach the contract. D. Teacher’s Code of Ethics, Duties and Responsibilities Teachers play a huge part in every student’s life. Teachers serve as second parents. Children spend most of their time at school and the teachers’ presence is part of the overall formation of their character. Aside from the fact that they teach reading, writing, grammar, listening, and speaking, the biggest and most important of them all is the fact that they teach morals, discipline, and life as a whole. To set a positive example, teachers must follow certain standards to show professionalism. These standards ensure that they remain unbiased in doing their job and fulfill their objective of providing uncompromised education. This also ensures that they remain at par with the mission and vision of the school.</h4></section>
+
+    <!-- SECTION D -->
+    <section id="d1">
+      <h2><span class="section-num">D.1</span> Code of Ethics for Teachers</h2>
+      <p>1. Code of Ethics for Teachers Ethical Conduct towards the Students Teachers accept the responsibility of forming the students’ characters by teaching them life lessons. You guide them in distinguishing right from wrong and help them decide to know the consequences of their actions. You encourage them to be good citizens by being a good example. You teach them values like Integrity, Responsibility, Honesty, Loyalty, Respect, and
+
+Humanity. Teachers are expected to possess the following ethical conduct towards the students:</p>
+<ul class="clean-list"><li>Considerate and fair in treating each student, resolve any problems according to school policy, and create just measures to foster discipline</li><li>Protect the students’ confidential information</li><li>Think of ways to develop the students’ critical thinking</li><li>Provide opportunities for students to maximize their own potentials and push hard to achieve success</li><li>Create a happy environment for the students’ holistic learning development</li><li>Follow-up on lessons by giving homework and quizzes regularly</li><li>Allow students to confide and share their worries at home or with peers</li><li>Make fair and sound advice that allows the students to weigh things and come up with decisions for their own sake</li><li>Motivate the students and praise little things and small efforts of the students in a form of positive reinforcement</li><li>Honest in giving facts and avoid bias or prejudice Ethical Conduct towards Practices and Performance Teachers accept the responsibility to continue learning and maintain a high standard of competence. As teachers, you have to:</li><li>Acknowledge and do the responsibilities stated in the employment contract</li><li>Maintain composure and professionalism, comes to class early and prepared, wears professional attire, and uphold the highest of standard in everything</li><li>Train and study continuously for professional growth and personal satisfaction</li><li>Comply with school policies and regulations</li><li>Submit reports or school works on time and know the importance of prioritizing tasks</li><li>Take care of the teaching materials and other school resources at all times. Make sure to return them in good condition.</li><li>Be diligent and accountable at all times.</li><li>Protect the dignity and the image of the school</li><li>Promise <strong>not</strong> to air his/her frustrations in front of the class</li><li>Talk in a professional manner to students, parents, colleagues, and staff</li><li>Maintain a dignified personality whether in school or elsewhere which could serve as a model, worthy of emulation by learners, peers, and others</li><li>Strive for excellence by undergoing continuing professional development (CPD) Ethical Conduct in the Workplace Teachers accept the responsibility of building good working relations in the workplace. As teachers, you have to:</li><li>Avoid any acts of indecency towards anyone especially to the students, parents, colleagues, and supervisors;</li><li>Avoid sharing confidential information concerning any member of the school unless <strong>required</strong> by law;</li><li>Avoid making false or malicious statements about any member of the school or the school as a whole; and</li><li>Uphold the principle of integrity by implementing <strong>zero tolerance</strong> against bribery, cheating, and corruption. Ethical Conduct towards Parents and Community Teachers accept the responsibility of building trust with the parents and the community. You recognize that the common goal of the school, parents, and the community is quality education. Teachers are expected to:</li><li>Exert effort to communicate with the parents especially the students under sponsorship</li><li>Be responsible for their actions, posts, and communications on any social media</li><li>Bear in mind the nobility, integrity, and dignity of the teaching profession by <strong>NOT</strong> engaging in malicious acts, indecency, cyberbullying, bribery, cheating, and corruption</li><li>Understand the importance of talking to the parents about anything that may be of relevance to the student’s welfare;</li><li>Respect the community’s culture, traditions, and beliefs</li><li>Act as a catalyst of change to improve the condition of the community</li></ul>
+    </section>
+
+    <section id="d2"><h2><span class="section-num">D.2</span> Classroom Policy</h2><h4>2.1. Teachers are required to be aware of the school’s classroom policy in order to implement rules and regulations. The teachers are expected to come up with a set of routines in the classroom to help with the classroom management.</h4>
+<h4>2.2. Teachers are required to ensure that the classroom is a 100% target language speaking zone.</h4>
+<h4>2.3. Teachers must provide sponsorship to students who have academic problems and counseling to those with behavioral issues.</h4>
+<h4>2.4. For severe disciplinary problems, complete a misconduct form and ask the security guard to bring the form along with the student(s) to the Student Affairs Office or Academic Office.</h4>
+<h4>2.5. Teachers must never use corporal punishment as a form of discipline.</h4></section>
+    <section id="d3"><h2><span class="section-num">D.3</span> Classroom Duties</h2><h4>3.1. Teachers are required to arrive in the classroom 5 minutes early before the class starts, with all of the required materials.</h4>
+<h4>3.2. Attendance should be taken within 20 minutes of the students entering the classroom. Leave the column blank for present students, mark EA (Excused Absence) for students who are 20 minutes late with a permission slip, and UA (Unexcused Absence) for students who are absent without permission slip.</h4>
+<h4>3.3. Teachers are required to use the Continuous Assessment (CA) to record student’s daily attendance.</h4>
+<p>● Complete all the information of the CA on the first day of the term. ● Update "Study Shift" in the beginning of the new month when the student changes their study shift. ● To indicate that teachers have checked the class attendance, they have to key-in “AM” for morning and “PM” for afternoon and evening. ● Campus Directors have the right to make exceptions for students <strong>not</strong> to go to student affairs or be marked absent in case of natural occurrences or unforeseen events that cause mass tardiness. Students may fill in the permission form later. Maximizing the time for learning and attending classes shall be given priority.</p>
+<h4>3.4. There may be some late enrollees after the grace period (3 days of the new term) that will join your class. Do not allow a student who is not included in the auto sheet, without a receipt or a permission slip to join the class. Send the student to the Student Affairs Office or Head Teachers.</h4>
+<h4>3.5. Teachers are required to discuss with their head teachers any new students that they believe have been placed in the wrong level within the first two weeks of their study.</h4>
+<h4>3.6. Be aware that some of the students switch from the morning class to the afternoon class and vice versa on a monthly basis in accordance with their Khmer School schedule. Attendance sheets will be updated accordingly. If a student is not on the list, refer them to the Student Affairs office to officially register the change of learning shift.</h4>
+<h4>3.7. Main teachers and teacher aides are encouraged to</h4>
+<p>collaborate in planning and executing engaging PE sessions that promote health, teamwork, and physical fitness. A proper guide and schedule will be provided to support teachers in this transition. (Memo signed on 01-09-2025).</p></section>
+    <section id="d4"><h2><span class="section-num">D.4</span> Teacher Aide's Teaching Assignment</h2><h4>4.1. This policy aims to enhance the educational experience for both the teacher aides and the students by providing opportunities for teaching and learning. Teacher aides shall be encouraged to participate in professional development to enhance their teaching skills, knowledge, and pedagogical practices. The academic management shall provide training, resources, and support for professional development activities whenever feasible.</h4>
+<h4>4.2. Teacher aides shall be assigned to teach a class once a week as part of their duties at Aii Language Center. The main teacher shall determine the specific day and time for each teacher aide's teaching assignment. The teaching assignment may vary depending on the school's needs, students, or courses.</h4>
+<h4>4.3. The subject and level for each teacher aide's teaching assignment shall be aligned with the teacher aide's area of expertise, level, and the school's needs.</h4>
+<h4>4.4. Teacher aides shall be responsible for planning and preparing their lessons for the assigned class. The main teacher may provide guidance and support in the lesson planning process. Teacher aides are encouraged to collaborate with other teachers & utilize resources to create engaging and effective lesson plans.</h4>
+<h4>4.5. The main teacher shall provide guidance and support to teacher aides in their teaching assignments. Teacher aides may seek assistance or clarification from the main teacher regarding the curriculum, classroom management, or other relevant matters.</h4>
+<h4>4.6. Teacher aides' teaching performance shall be termly evaluated by the main teacher or the head teacher. The main teacher shall request assistance or ask her/his head teacher to be the witness during the feedback or evaluation. Constructive feedback shall be provided to support their professional growth and development as teachers. Main teacher teaching observation criteria shall be used for the teacher aide teaching assignment.</h4>
+<h4>4.7. All teacher aides and main teachers shall comply with this policy and any additional guidelines or procedures established by the school management and the Vice President for Academic Affairs Office.</h4>
+<h4>4.8. This policy shall be periodically reviewed by the school administration or department to ensure its effectiveness and relevance. Amendments may be made as deemed necessary</h4></section>
+    <section id="d5"><h2><span class="section-num">D.5</span> Classroom Environment</h2><h4>5.1. Seating arrangements are very important to the classroom for interaction, atmosphere, and behavior. We recommend the U-shaped method of seating as interaction is greatly facilitated in this seating arrangement.</h4>
+<h4>5.2. Kid and Pre-Kid Teachers are responsible for decorating the classrooms at the beginning of every semester. The classroom can continue to be decorated with student artwork throughout</h4>
+<p>the term or semester.</p>
+<h4>5.3. Teachers are required to check that air-conditioning, fans and fluorescent lights are working to provide a comfortable learning environment. Notify your line manager in case the classroom facilities are not functioning properly.</h4>
+<h4>5.4. Teachers must ensure that fans and lights are switched off at the end of the final class of a shift. Otherwise, the policy on fines shall be applied.</h4>
+<h4>5.5. The whiteboard should be cleaned at the end of every lesson, and the board eraser should remain in the classroom for communal use.</h4>
+<h4>5.6. Littering is prohibited. Rubbish should be put into the bins provided. Encourage students to avoid bringing smelly food and drinks in school that are not placed in sealed bottles or containers.</h4>
+<h4>5.7. The teachers must ask their students to clean up after themselves and arrange their respective chairs back into U-Shape after each session.</h4>
+<h4>5.8. Buying and selling energy drinks and chewing gums for students in the school are prohibited as they are not good for the health.</h4>
+<h4>5.9. Graffiti or willful damage of school property will lead to disciplinary action or immediate dismissal. Students caught defacing walls or other classroom furniture and fixings must be reported to the supervisor or deputy campus director immediately. Parents may be required to replace damaged goods or pay for repairs.</h4>
+<h4>5.10. Ask your students to turn off their phones or put them on silent</h4>
+<p>mode during class time. Other electronic devices such as MP3 players, iPads, Tablets, etc., should be turned off and stored in the student’s bag. Students are <strong>not</strong> allowed to use phones or smart devices except when the teacher requests permission to use them for educational purposes. 5.</p>
+<h4>10.1. If students receive a phone call from their parents, they may request permission to take the call outside. 5.</h4>
+<h4>10.2. If students need to use smartphones, laptops, or tablets during a class activity, the teacher must seek permission from the head teacher at least one day's notice.</h4>
+<h4>5.11. Requisition for teaching supplies, classroom materials or stationery: o Teachers are required to complete a supply request form; get it approved by their supervisor then submit it to the Secretary Team at least one day ahead of the request date. o Please reserve tools and facilities you may need for your class at least one (1) day ahead of time with the Secretary Team. Depending on the availability of resources, the following could be reserved: projectors, speakers, and laptops except TVs which need to be reserved at least 3 days ahead of time.</h4>
+<h4>5.12. Teachers can suggest any books or materials they think are necessary, and the school will try to acquire those materials.</h4></section>
+    <section id="d6"><h2><span class="section-num">D.6</span> Photocopy Procedure</h2><p>6. Photocopy Procedure Teachers are <strong>required</strong> to complete a Copy Request Form which needs to be submitted at least half a day ahead of time. As a requirement, all documents must have a header of the school logo, and a footer of the teacher’s name, class level, room, page number and date. Documents without a header or footer will <strong>not</strong> be copied.</p></section>
+    <section id="d7"><h2><span class="section-num">D.7</span> Lesson Planning</h2><p>7. Lesson Planning Lesson planning is very important and directly related to the Quality of Teaching, the Quality of Learning, Child Psychology, and Classroom Management. Teachers are suggested to plan their lessons based on the syllabus and lesson notes found in the Teacher’s Guide. They must also prepare any necessary materials or resources needed before the class as well. Below is the suggested format for a 60-minute lesson: 1. Warm-Up 3-5 Minutes 2. State the Objective 2 Minutes 3. The Lesson/ Blended Learning (Teacher Talking Time) 15 Minutes 1. Guided Practice (Student Talking Time) 10 Minutes Questions & Discussion 1. Independent Practice 10 Minutes 2. Recap or Wrap-up 5 Minutes 3. Assessment 10 Minutes 4. Assign Homework 2-3 Minutes</p>
+<p>There are various resources saved in the Teacher Resource Center (Google Shared Drive) to provide teachers the access and convenience of maximizing the tools included in the course books. Lesson Plan templates are in the shared drive as well. In addition, teachers should put the date (American Format), lesson objective, and homework assignment instructions on the whiteboard every day.</p></section>
+    <section id="d8"><h2><span class="section-num">D.8</span> Student Certificate of Merit</h2><h4>8.1. Teachers are encouraged to reward students with special certificates during term or semester to show appreciation and recognition of great effort, achievement, or progress by the students.</h4>
+<h4>8.2. You can also highlight acts of kindness in the classroom, or good citizenship. The aim is to promote good behavior and encourage good study performance.</h4>
+<h4>8.3. No more than 2 certificates per student per term.</h4>
+<h4>8.4. Teachers are required to fill out a Certificate Request Form which needs to be approved by their supervisor in order to acquire the necessary certificates. Teachers are liable for any loss or damage to the certificates and will be required to reimburse should the certificate be filled in incorrectly.</h4>
+<h4>8.5. The list of available certificates can be found on the Certificate Request Form.</h4></section>
+    <section id="d9"><h2><span class="section-num">D.9</span> Compliance with the Syllabus</h2><h4>9.1. Course syllabus will be provided together with the course materials by the Secretary Team. It is a pacing guide for completing the coursework and meeting the objectives.</h4>
+<h4>9.2. Teachers must ensure that the topics in the syllabus are completed before the progress test, mid semester, final semester, or final exam. Inform your supervisor in the event that there is a delay or non-completion of the syllabus coverage due to valid reasons.</h4>
+<h4>9.3. Teachers are advised to develop a course outline for the term by noting all the term activities on the Academic Calendar to ensure all requirements will be fulfilled before the end of the term.</h4>
+<h4>9.4. The syllabus serves as an important tool for teachers to provide a holistic learning experience to the students as it focuses on: ● Thematic contents and units based from the coursebook ● CEFR (Common European Framework of Reference) based Learning outcomes ● 21 st Century Skills (Communication, Collaboration, Critical Thinking, Creativity, Information Literacy and Social Skills) ● Macro-skills of listening, reading, speaking, writing and viewing ● Test-taking skills especially for the higher levels ● Values Integration for the Kid Program ● Projects (Project-based Learning and Community Engagement Project) ● Integration of phonemic awareness, sensorial, and practical life skills for Pre-kids, blended learning, and ICT methods and objectives.</h4></section>
+    <section id="d10"><h2><span class="section-num">D.10</span> Tests, Quizzes and Homework</h2><h4>10.1. There must be at least three pieces of homework in a week from week 2 to week 9 of every term. At least one (1) piece of homework during week 1 and week 10 of every term is required.</h4>
+<h4>10.2. There must be at least a minimum of five quizzes in one term and teachers are encouraged to provide more than five quizzes. At least 1 Quiz score must be updated every 2 weeks.</h4>
+<h4>10.3. If the students do not submit the homework or a quiz, put a zero (0) in the meantime. When the students have submitted the homework or have taken the quiz with your permission, inform your Head Teacher that you updated the CA with the new score. Depending on the submitted homework and the date it was submitted, the teachers may deduct points as part of her/his academic freedom.</h4>
+<h4>10.4. The scores of the students must be recorded in the CA upon enrollment. If the student enrolls late, the teacher must insert as a comment in the cell entry for the first homework the date of enrolment of the student. This shall provide a history of the blank entries of the previous homework.</h4>
+<h4>10.5. Keep all the records of the homework and quizzes that were completed by the students.</h4>
+<h4>10.6. Go to the Sponsorship Tab and put comments, especially the solution or intervention given to the students under the sponsorship after counseling the student. As much as possible, make a follow-up if the first intervention did not work.</h4>
+<h4>10.7. Talk to your head teacher ahead of time should you need any help or consideration in completing the CA or in the</h4>
+<p>sponsorship.</p>
+<h4>10.8. Any student who is under sponsorship for 3 consecutive weeks must be counseled by the head teacher.</h4></section>
+    <section id="d11"><h2><span class="section-num">D.11</span> Student Work Correction</h2><h4>11.1. Teachers are required to correct all written classwork, homework, quizzes, projects, and final exams and record the scores in a timely manner on the online continuous assessment sheets accordingly. Failure to do so will lead to disciplinary measures.</h4>
+<h4>11.2. Bringing examination materials such as exam papers and answer keys outside the school premises is allowed for correction purposes only. The teacher shall be held liable for any loss or damage to the exam papers and will be dealt with in accordance to progressive discipline policy.</h4></section>
+    <section id="d12"><h2><span class="section-num">D.12</span> Projects and Workshops</h2><h4>12.1. There is one main project for each program: Kid Program will have the Project Based Learning (PBL) for each session and Community Engagement Project (Community Work) for the second and last level of the stage depending on the session (please refer to the syllabus for more information).</h4>
+<h4>12.2. There are four skills projects for each level, two for each session. Each session will have speaking or writing and a receptive listening or reading project.</h4>
+<h4>12.3. Online Continuous Assessment and Skills Project Scores ● Put the score for the listening or reading project in the project</h4>
+<p>column listening and reading in the online continuous assessment. ● Put the score for the speaking or writing project in the project column speaking and writing in the online continuous assessment.</p>
+<h4>12.4. Level Starter; Intro; and General English Levels 1,2, and 3 ● Session 1 projects are reading and writing. ● Session 2 projects are listening and speaking. ● New Adult Standardization projects must be based or patterned from the syllabus.</h4>
+<h4>12.5. General English from Level 4 to Level 12 and all AEP levels ● Session 1 projects are listening and speaking. ● Session 2 projects are reading and writing. ● New Adult Standardization projects must be based or patterned from the syllabus.</h4>
+<h4>12.6. General English from Level 4 to Level 12 and all AEP levels ● Session 1 projects are listening and speaking. ● Session 2 projects are reading and writing. ● New Adult Standardization projects must be based or patterned from the syllabus.</h4>
+<h4>12.7. All projects are available on the Projects Website and on the syllabus. ● You are free to set your own productive project if you wish, provided it is integrated and appropriate.</h4>
+<h4>12.8. Some of the listening projects are in two parts that are studied over two levels. ● Any new students joining your class when part one has already been studied should listen to both parts to make sure</h4>
+<p>they have followed the story. However, they only need to answer the questions for the second part.</p>
+<h4>12.9. Students in the ESL Adult Program undergo a series of workshops and activities such Basic Presentation and Student Conference to equip them with practical concepts that can be applied in learning English as a second language.</h4>
+<h4>12.10. Students in Level 1 have an interview in lieu of the speaking project. ● The score from the interview will be used in the CA column for the project. ● They can still do the written project.</h4></section>
+    <section id="d13"><h2><span class="section-num">D.13</span> Maintaining Performance Records</h2><h4>13.1. Continuous Assessment, Progress Report and Report Cards (Adult Classes) ● Teachers are required to record students’ performance for homework, quizzes, Speaking Test or Interview, Final Test, attendance and class participation on the Online Continuous Assessment on Google Drive. ● At the end of term teachers are required to produce Progress Reports or Report Cards for their students with the Online Continuous Assessment. The Progress Reports will be printed in regular A4 paper. ● Completed report cards should be printed, signed and submitted to the Secretary Team. ● Please refer to the Term Calendar for the deadline of submission. Late submission will result in a one-week salary delay.</h4>
+<h4>13.2. Continuous Assessment and Student Report Card (Kid 5 – Kid 12 classes) ● Teachers are required to record students’ performance for homework, quizzes, Speaking Test or Interview, Mid-term Test, Final Test, attendance and class participation on the Online Continuous Assessment in a timely manner. ● Teachers are also required to produce progress reports or report cards recording student’s overall performance using the Online Continuous Assessment (Mid-semester and Final). The evaluations should be carefully considered and based on the actual performance of the student in class. The comments for each student should be clear and direct, stating the positives with supporting evidence and some suggestions for improvements. ● Completed progress reports and report cards should be printed, signed and submitted to the Secretary Team. ● Please refer to the Term Calendar for the deadline of submission.</h4>
+<h4>13.3. Student Report Card ● Teachers are required to report the student’s overall performance in the Student Report Card twice per semester. ● As there are no summative assessments for these age groups, (no mid semester or final exams), teachers are required to focus on characteristics such as personal attributes, behavior, work habits, social skills and communication to draw an overall picture of the students’ development during the term.</h4>
+<h4>13.4. Sponsorship Program ● Teachers are required to sponsor students by providing support and guidance throughout the term/semester. ● Teachers can make time to counsel students who are academically challenged. Teachers can provide personalized activities and tasks, and make an effort to understand the situation. Teachers should always seek to provide positive encouragement and be sensitive towards the feelings and situation of the student. Teachers should always strive to be more creative and innovative in their support, motivate and inspire students to build their confidence, provide strategic solutions, work together, and do whatever is necessary to strengthen the sponsorship program. ● No students on the first two levels of each stage in the new adult standardization curriculum will fail, so teachers must fully implement the sponsorship program.</h4>
+<h4>13.5. Guidelines & Procedure for Continuous Assessment & Sponsorship Program Compliance ● The creation of this aims to educate the teachers and head teachers on how to fill out the CA and Sponsorship Tracker properly. ● It also aims to lower the number of students under sponsorship by using a standardized process. Guidelines & Procedure for Teachers i. Open the Google Spreadsheet. ii. Go to the Homework Tab/Quiz Tab and type the scores for homework and quizzes.</h4>
+<p>iii. There must be at least three pieces of homework in a week from week 2 to week 9 of every term. At least one (1) piece of homework during week 1 and week 10 of every term is <strong>required</strong>. iv. There must be at least a minimum of five quizzes in one term, however teachers are encouraged to provide more than five quizzes. At least 1 Quiz score must be updated every 2 weeks. Quiz scores must be recorded in consecutive order, starting with the first quiz in the first column and so forth. v. For students who haven’t submitted homework or quizzes, please enter '0' as a placeholder score. If a student submits a late homework or quiz, please notify your Head Teacher and update the CA with the final score. Teachers may deduct points for late homework or quizzes, based on their discretion and academic liberty. vi. Upon enrollment, all student scores should be recorded in the CA. For late enrollees, please note the enrollment date as a comment section on their first homework entry. This will help track any previous blank entries. vii. Keep all the records of the homework and quizzes that were completed by the students. viii. In the Sponsorship tab, leave detailed comments about the counseling session, including the specific solution or intervention provided to the student. If the initial intervention is ineffective, please follow up with additional support. ix. Talk to your head teacher ahead of time should you need any help or consideration in completing the CA or the sponsorship. x. Any student who is under sponsorship for 3 consecutive weeks must be counseled by the head teacher.</p>
+<p>xi. In the case that a student drops-out from the class, the student’s ID number must be erased and left blank. Once removed, the name will automatically be excluded from the report card once generated at the end of the term. Guidelines & Procedure for Head Teachers i. Go to the Automated System for CA and Sponsorship as per approved guidelines dated October 22, 2021, with the document tracking number Aii030216. ii. Review the compliance statistics of homework and quizzes per level by navigating through the CA Report. Marked or Highlighted in YELLOW means INCOMPLETE, and Highlighted in RED means <strong>NOT</strong> DONE or no compliance. iii. Review the statistics for the Sponsorship, Homework, and Quiz by navigating through the respective sheets. In the Sponsorship Program sheet, Highlighted in RED means a high number of sponsorships. iv. If the data reveals concerns, such as incomplete or missing homework or quiz entries, or unusually high sponsorship numbers, please visit the relevant teacher's CA link for further investigation. v. Conduct a weekly individual spot-checking of all the teachers under supervision. vi. Submit the action plan within 3 working days after every two weeks based on the report and statistics generated by the system. Go to this link to see the template of the action plan. a. Note: When all teachers under your supervision are doing well in terms of CA and Sponsorship, simply send a status</p>
+<p>email confirming that all the teachers are in compliance with the policy. vii. Give a follow-up to the teachers with a high number of sponsorship cases, or those who do <strong>not</strong> update the CA correctly. viii. Provide a second reminder, counseling, or suggested action plan if the problem persists. ix. Follow the Progressive Discipline if there is no improvement or effort from the teacher. Guidelines & Procedure for Deputy Campus Director & Campus Director i. Maintain the Main Control Panel/ Masterlist of all the CA. Ensure all the formulas, links, statistics, and progress reports are updated. ii. Consolidate the head teachers' Corrective Action Plan related to the CA and Sponsorship. iii. Provide a campus-wide solution and timeline to carry out the action plans. iv. Communicate with any member in the Office of the Director of Studies the follow-up or status report of the progress of these actions taken. Guidelines & Procedure for Office of the Director of Studies i. Make an independent spot and check based on the Automated System for CA and Sponsorship. This is done through a</p>
+<p>systematic random sampling (at least two CAs or classes from each head teacher). The color indication on the report: Red=Recurring/Non-compliance; Yellow=Partially compliance; Green=Complete/Compliance. ii. Submit the CA and Sponsorship Report reflecting the campuses who submitted their corrective action plan, statistics, and recommendations. iii. Collaborate with the campuses for additional support that they need to carry out and implement the guidelines for the CA and Sponsorship effectively in their respective campuses.</p>
+<h4>13.6. Target Language Speaking Campaign ● Teachers who are teaching a specific language program are required to speak the language that they are teaching at all times inside the school premises. As teachers, they must encourage the students to speak the target language inside and outside the classroom. Anyone who is not following the Target Language Speaking Campaign must be reported to the head teachers or the head of academic secretary.</h4>
+<h4>13.7. Reading and Writing Campaign ● Teachers are encouraged to strengthen the reading and writing programs of the school. ○ Reading must be done every week preferably Friday for at least 30 minutes to form a habit of reading among students. Teachers should plan weekly in-class readings that encourage reading aloud. Readings should always have comprehension activities, worksheets, or quizzes that follow to gauge student understanding. Writing activities can be done every day for Journal Writing and at least one per week</h4>
+<p>for writing portfolio depending on the syllabus or lesson. Writing activities include but are <strong>not</strong> limited to sentence building, paragraph strengthening, essay writing, writing reports, research papers, writing effective emails, poetry, memoirs, reflection papers, and even blended learning posts and comments in the virtual classroom. ● Teachers must post at least one writing and reading activity in their ClassDojo or Google Classroom every week.</p>
+<ul class="clean-list"><li>Teachers must follow up students’ progress by doing spot check activities, quizzes, or worksheets at the end of the reading lesson and must check the outputs of students related to their writing activities.</li><li>Teachers must ensure to use proper rubrics in grading the writing output (please refer to the Teacher Resource Center for more information regarding rubrics). There are several new Rubric Templates located in the Rubric folder of the Teacher Resource Center shared drive that we highly recommend using, as they provide all of the necessary specifications for student success.</li></ul>
+<h4>13.8. Implementation of Blended Learning ● Pre-Kid 1 to Kid 4 classes are required to use the ClassDojo application. Classes Kid 5 and up (including target languages) use Google Classroom. Blended Learning activities and engagement should be happening daily. Teachers can post the homework, pictures, videos, widgets, interactive posts, games, puzzles, and assign students to comment and engage with the virtual classroom content. ● Teachers must post at least 3 activities including reading and</h4>
+<p>writing in Class Dojo or Google Classroom every week. ● Teachers are encouraged to explore app-based learning and resources to fully integrate Blended Learning into their classes. There are resources available in the Teacher Resource Center to assist teachers in Blended Learning.</p>
+<h4>13.9. ICT Integration ● Teachers are required to integrate ICT methods and technologies into their language lessons wherever and whenever possible. Syllabus updates with ICT integration guidelines have already been updated and there are weekly objectives for every week of the term for every level. ● ICT integration means using ICT methods and techniques to assist in Teaching and Learning a language. This could include using the campus computer labs on a regular basis to conduct writing, blended learning, or research. It could also mean using all of the Microsoft products to do assignments, or using all of the google environment applications to conduct classes and assignments, etc. Teachers are encouraged to be creative, and innovative, and keep a positive attitude toward our vision of bringing 21st-century techniques and experiences into our classrooms.</h4></section>
+    <section id="d14"><h2><span class="section-num">D.14</span> Grading System</h2><p>14. Grading System ● Students will be assessed on the following (these can be found in the CA): ■ Final Examination ■ Assignments ■ Homework ■ Quizzes</p>
+<p>■ Speaking test ■ Class Participation ■ Attendance ● Grades will be determined on the following percentages: ■ Pass: ● A 95%+ Outstanding ● A- 90% – 94% Superior ● B+ 87% – 89% Good ● B 83% – 86% Good ● B- 80% – 82% Good ● C+ 77% – 79% Fair ● C 73% – 76% Fair ● C- 70% – 72% Fair ● D+ 67% – 69% Poor ● D 60% – 66% Poor ■ Make-up Exam ● M 55% – 59 Make-up Exam ■ Fail ● F 54% or less Unsatisfactory ■ Incomplete Pass (New Adult Standardization) ● IP 59% or less Can move to the next level, but needs improvement to pass the stage. ● For full-time students, the 1 st session teacher is responsible for calculating the total combined score of all the courses. ● Students who enroll after the 5 th week in the Adult Program or the 10 th week in the Kid Program will <strong>not</strong> receive their actual grades in the final continuous assessment. Teachers are advised to give their</p>
+<p>results as below: ■ Incomplete Pass (IP) if they are capable of moving up to the next level. ■ Incomplete Fail (IF) if they are <strong>not</strong> capable of moving up to the next level.</p></section>
+    <section id="d15"><h2><span class="section-num">D.15</span> Speaking Test</h2><p>15. Speaking Test ● Teachers are <strong>required</strong> to develop and administer one Speaking Test per term. ● Judging Criteria Forms are available in the Teacher’s Office. ● For Kid 5 to Kid 8 and Starter classes, the Speaking Test should be in a Q&A format, based on the target language and learning objectives covered in the syllabus. Scores should be recorded in the Speaking / Oral Test Score Sheet. ● For Kid 9 to Kid 12 and Intro 1 to ESP classes (except TOEFL Preparation Course), teachers are <strong>required</strong> to provide a topic related to completed book contents before the Speaking Test. ● Students will be <strong>required</strong> to prepare and deliver a speech in front of their classmates for 1 to 7 minutes depending on their level of study: ○ Kid 9 – Kid 12 (3 – 5 minutes) ○ Intro 1 – Intro 3 (1– 3 minutes) ○ Level 1 – Level 6 (3 – 5 minutes) ○ Level 7 – Level 12 (5 – 7 minutes)</p></section>
+    <section id="d16"><h2><span class="section-num">D.16</span> Administering Exams</h2><p>16. Administering Exams ● Teachers are <strong>required</strong> to administer one exam per term for adult classes and two exams per semester for kid classes.</p>
+<p>● The school will provide teachers with the mid-semester exam, progress test, and final test, including answer keys and audio files, 3 working days before the examination schedule. The exam answer keys and audio files will be shared via the respective Telegram groups for each campus. ● Exams will be administered in accordance with student class schedules. In order to make testing more effective, the center will provide different test papers to students in the morning, afternoon, and evening shifts. ● If students plan to be absent for the mid-semester, progress test, or final test, they must request permission from the Student Affairs Office in advance. A 5% deduction will be applied to their total scores if permission is granted, and a 10% deduction will apply if permission is <strong>not</strong> granted. These percentage deductions will be subtracted from their final scores. ● Teachers are responsible for ensuring that there is no cheating during exams. The school has a <strong>ZERO TOLERANCE</strong> POLICY with regards to cheating. Any teacher found to be allowing cheating or <strong>not</strong> paying attention to cheating will be immediately dismissed after a thorough and complete investigation. As a teacher, it is your responsibility to ensure a secure examination environment is provided and academic integrity is upheld. Remember, as a proctor, your allegiance is <strong>not</strong> to the student but to the academic process. Invigilator’s Responsibilities: Before Examination ● Arrive at least 10 minutes before the examination starts ● Make sure the examination papers are correct and enough for the students.</p>
+<p>● Make sure the following items are available or work properly ■ Extra blank papers ■ Pens & markers ■ Speaker ● Write down the following information on the board as in the example below: ■ Date (Format: Tuesday, July 2, 2024) ■ Course (e.g.: World Link) ■ Time allowed: 60 minutes ■ Remaining Time: ● 60 minutes ● 30 minutes ● 15 minutes ● 5 minutes ● 1 minute ● Silently cross out the remaining time for the 30 minutes and 15 minutes. ● Alert the whole class when there are only 5 minutes and 1 minute left. ● Instruct the students to raise their hands if they have any questions and avoid shouting. ● Make sure all students have their blue pens and pencils on their desk. ● Make sure there are no other things on the desk. ● Ask the students to put their phones and other gadgets inside their bags. They are <strong>not</strong> allowed to use phones inside the classroom.</p>
+<p>● Provide students extra papers if needed. If the student wishes to use her/his own extra paper, it must be checked first. ● Give only one set of examination papers to each student. ● Contact your supervisor for another proctor at least three days ahead if the class is crowded and unmanageable. ● Arrange students’ seats in rows. Make use of all space in the classroom. ● Ask students to put their bags in front of the whiteboard. ● Do <strong>not</strong> bring food or drinks into the class. Only bottled water is allowed. ● Inform students that cheating is <strong>not</strong> allowed during examination. ● Teach students basic examination instructions or tips well ahead of the examination days. During Examination ● Students are <strong>not</strong> allowed to start the examination on their own so do <strong>not</strong> forget to give your students a go signal. ● Check the attendance during the first 20 minutes. ● Stay at the front or at the back of the classroom and refrain from walking back and forth. ● Do <strong>not</strong> read, write or mark students’ work. ● Cell phones or other devices are <strong>not</strong> permitted for the students. Teachers can only use the phone/tablet/laptop to play the audio file. ● Make sure to instruct students on how to fill out the names and other information such as ID number on the answer sheet before allowing them to start. ● Make sure no one cheats. If any student is caught cheating, his/her examination paper will be invalidated.</p>
+<p>● Make sure that the students remain silent during the examination. ● At the conclusion of the examination, ask students to place the examination papers on the desk and leave the classroom silently. ● Do <strong>not</strong> allow the students to take extra time to finish the examination because that is considered cheating. ● Students can leave the room silently if they finish the exam but they SHOULD <strong>NOT</strong> wait in the hallway and instead go quietly to the common area, whether it is in the lobby, playground, cafeteria or library. They don’t need to wait until the last 15 minutes or until the exam time ends. ● Teachers are <strong>not</strong> allowed to leave the classroom unless there is a substitute (Secretary or HT) to oversee the exam inside the classroom. Do <strong>not</strong> leave the students without a proctor. After Examination ● Make sure that the number of the examination papers is the same as the number of the students before leaving the class. ● The teacher must follow the instructions provided indicated on the brown envelope: ○ Collect all the exam papers in an orderly manner. ○ Exam papers must be sorted properly by separating the test questions from the answer sheets and by segregating the unused and used papers. ● Return the envelope and it must be signed by the teacher and the secretary following the school calendar.</p>
+<p>● The teacher is allowed to bring the answer sheets home for checking; however, they are responsible for any damages or loss of the answer sheets of the students. ● Based on the school calendar on review day after every termly exams, the teachers must show corrected test papers of the students for review. The head teachers or any assigned member of the academic management team must conduct a random spot check of three (3) classes from each shift. ● The head teachers or any assigned member of the academic management team must spot and check the examination scores recorded by the teachers. ○ the spot check must be conducted before the final grades of the students are released ○ 10% of all test papers submitted per class shall be spot check ○ any errors found shall be corrected immediately by the teacher concerned or the head teacher or the management team member who conducted the spot and check ○ for errors on examination score, the wrong score shall be crossed out and replaced with the correct score beside it. The faculty or management team member who corrected the examination score shall attach their name and initial in the correction.</p></section>
+    <section id="d17"><h2><span class="section-num">D.17</span> Examination Regulations for Students</h2><p>17. Examination Regulations for Students On Examination Day What to bring?</p>
+<p>You must bring the following information and materials with you on test day: ● School Identification Card ● At least 2 blue pens ● At least 2 pencils with eraser (for ZipGrade Answer Sheet) Prohibited Personal Items You are <strong>not</strong> allowed to use any of these personal belongings with you while taking the test. Personal belongings may be left in your car, a locker or be kept inside the bag. Prohibited personal items include, but are <strong>not</strong> limited to: ● Purses ● Pocketbooks ● Backpacks ● Smart watches ● any electronic devices ● calculators ● watch alarms ● mobile phones ● listening devices ● recording or photographic equipment ● books ● dictionaries ● food ● correction pen How to Prepare</p>
+<p>Being well rested and relaxed on the day of the test is as important as studying and practicing your language skills before the test. Here are some things you can do to put yourself in a good frame of mind on test day: ● Rest and sleep well. ● Dress comfortably for any room temperature. ● Eat a well-balanced meal before the test. ● Make sure to go to the restroom before the examination. ● Allow plenty of time to arrive at the school on schedule. ● Listen to the teacher’s instruction before and during the examination. Before Examination ● Arrive at least 10 minutes before the examination starts. ● Get your pens ready. ● Follow the seating arrangement as assigned. ● Do <strong>not</strong> put books or any documents under the examination papers. ● Only bottled water is allowed. ● Put the phone and other devices inside the bag or at the teacher’s table. ● Put the bags in front of the classroom near the whiteboard. ● Do <strong>not</strong> start the examination unless instructed ● Fill in all the information on the examination sheet or answer sheet as follows: ○ Exam: __________ (e.g. Exam A, B or C)</p>
+<p>○ Student’s name (no nicknames): __________ ○ Room: __________ ○ ID: __________ ○ Time: __________ ○ Date: __________ During Examination ● Do <strong>not</strong> talk, read out loud, whisper or make any other sounds. ● Do <strong>not</strong> walk around the room or use any signs such as hand gestures, symbols or passing pieces of papers. ● Students should use the bathroom before the exam starts. Should they need to use the bathroom during exam period, they must ask permission from their teacher. ● The examination papers must stay flat on the desk at all times. ● Do <strong>not</strong> look at other student’s papers. ● Do <strong>not</strong> borrow or ask to borrow anything from classmates. ● If you finish the exam early, place your paper face down and leave quietly. Please avoid making noise in the hallways, as other students are still taking the exam. ● If you need help for any reason, simply raise your hand. Do <strong>NOT</strong> speak. ● Work carefully and quickly. ● Do <strong>not</strong> linger on any one question. ● Mark answers on the answer sheet and <strong>not</strong> in the answer book. ● Write neatly. ● Try to answer every question to the best of your ability. ● Pay attention to the time and pace yourself accordingly. ● If you are caught cheating or attempting to cheat your examination papers will be invalidated.</p>
+<p>After the examination ● Flip the examination paper face down on the desk and wait for the teacher to get the exam papers and test questions. ● Collect your belongings. ● Do <strong>not</strong> talk to other students and leave quietly. ● Do <strong>not</strong> bring any examination materials outside the classroom. ● Students are <strong>not</strong> allowed to take pictures of the exam or her/his answers.</p></section>
+    <section id="d18"><h2><span class="section-num">D.18</span> Video Policy</h2><p>18. Video Policy ● The use of videos in the classroom will be restricted to those that enhance and support the instructional program. Videos will be subject to the same review as other instructional materials and must <strong>not</strong> contain: ○ Any matter reflecting adversely upon persons because of their race, color, creed, national origin, ancestry, sex, or occupation. ○ Any sectarian or denominational doctrine or propaganda contrary to law. ○ All videos will be appropriate and will address the needs and comprehension of students at their respective grade levels and their ages. ● The School Administrators, Campus Directors, Deputy Campus Directors, and Head Teachers are responsible for monitoring the suitability of videos according to administrative regulations. ● The following regulations govern the use of videos in the classroom: ○ A movie can only be shown in any class on two occasions</p>
+<p>per term. ○ All videos must support the instructional program. ○ The title of the video should be included in the teacher’s lesson plans, together with a brief description and rating. ○ TVs and DVD players or laptops have to be booked at least a day ahead of time. Relevant worksheets and movie details must be submitted at the same time. ○ Teachers are <strong>not</strong> allowed to show movies during the last three days before mid-semester or final examinations, except Pre-kid classes. ○ The showing of any video with "G" rating will require the followings: ● A verbal explanation of educational value; that is, how the video supports the subject/content area and/or improves student performance ● A comment from the teacher outlining the reason for its rating ○ "R" rated videos are <strong>not</strong> allowed. 19. Child Protection Policy ● All teachers are to follow the Child Protection Policy. ○ Everyone in the school shall have the right to refer any child or student who has been suspected of abuse or receives complaints of abuse. Referral shall <strong>not</strong> be limited from staff, parents, students, teachers, management members, or any concerned individual. ○ In all cases where abuse is suspected, or where an allegation has been made by a student that abuse has taken</p>
+<p>place, or where serious concerns exist about the welfare of the child, the concerned individual should report verbally and in writing the information to the Student Protection Contact Persons (Deputy Campus Directors). ○ In the event that a person, for example, a parent, has a concern that the processes within the Student Protection Policy have <strong>not</strong> been complied with, then the person can make a complaint directly to the Campus Directors, the Vice Presidents or President of the school. ○ Both the Policy and Guidelines are publicly available via the Aii Language Center website. The Child Protection Policy outlines the process to make a complaint, which in the first instance should be to the Campus Director of the school, where appropriate, or the Student Protection Contact Persons (Deputy Campus Directors). ○ When the concern is <strong>not</strong> addressed and reported by the authorized person within 5 working days, the complaint of non-compliance can be reported directly to the Vice Presidents or President of the school.</p></section>
+    <section id="d20"><h2><span class="section-num">D.20</span> Extra-curricular Activities</h2><p>20. Extra-curricular Activities ● Various competitions are run throughout the school year and will be listed on the school calendar and in memos posted on classroom notice boards. ○ The Mengly J. Quach Spelling Bee ○ The Mengly J. Quach WordSpeed Contest ○ The Mengly J. Quach Pronunciation Contest ○ The Mengly J. Quach Debate and Public Speaking Championship</p>
+<p>○ The Mengly J. Quach Essay Writing Contest ● Teachers are <strong>required</strong> to encourage students to participate in competitions and other events like Halloween, Christmas Party, Culture Day, Field Trip, Overseas Trips and many more. ● Teachers are obliged to make sure students are well prepared in order to do their best in whatever competition they are taking part in.</p></section>
+    <section id="d21"><h2><span class="section-num">D.21</span> PTA Meeting</h2><p>21. PTA Meeting (Parent Teacher Association Meeting) ● Meeting Date: Week 13 & 14 of the semester ● Meeting Time Slots: Morning shift: 10:45-11:00 a.m. & 11:00-11:15 a.m./Afternoon shift: 04:45-05:00 p.m. & 05:00-05:15 p.m. ● Target Students: ○ Pre-kid 01-Kid 04: students will be recommended by Main Teacher and Teacher Aide. ○ Kid 05-Kid 12: students who are in Sponsorship Program, those who get a grade "D", and students with behavioral problems. ● For teachers handling the Adult Program, meetings with concerned parents may be conducted as necessary at any time during the term. Teachers’ Responsibilities ✔ Fill out the Student Appointment Name List before dropping the soft copy in the school server and, or Google Drive Folder created by campus, and submit the hard copy</p>
+<p>to the secretary team by the last day of week 12 of the semester. ✔ For Kid 5 to Kid 12, national teachers will contact the parents based on the Student Appointment List. ✔ Collect documents (printed name list, scratch paper, school name cards etc.) a day before the PTA meeting. ✔ Prepare the following documents for the meeting such as mid-semester report cards, grading policies, and any other student assessment tools. During the Meeting ✔ Remind the parents that the goal of this meeting is to share information about students' academic progress and growth and how their child interacts in the school environment. ✔ National teachers will assist to translate for expatriate teachers. ✔ Be sure to discuss both the strengths and the challenges—but start with the positives. ✔ Inform parent(s) about the students’ academic performances. ✔ Give comments and provide suggestions for activities and strategies to support students’ learning at home. ✔ Ask the parent(s) whether s/he has any comments or suggestions for the school and record the information.</p>
+<p>✔ Appreciate the parents for their valuable time in attending the PTA meeting and remind the parents to contact the school if they have any further questions or concerns.</p></section>
+    <section id="d22"><h2><span class="section-num">D.22</span> DOs and DON'Ts on Potluck Day</h2><p>22. DOs and DON’Ts on Potluck Day Potluck Day and the day after the examination are regular school days, and all the teachers must encourage students to attend these schedules. The Potluck Day serves as a communal gathering of students and teachers to have fun and celebrate a successful end of the term. Here are some Dos and Don’ts during the Potluck Day: ○ DOs: ■ Allowing students to arrange their own food and drinks. ■ Keeping the classroom clean. ■ Coming on time. ■ Inviting other students or friends to join their potluck, but they need to sign a waiver of responsibility at the Student Affairs Office. ○ DON’Ts: ■ Getting involved in the handling of students’ money. ■ Vouching for the students who are under 18 to go out of the school campus. ■ Bringing or drinking alcoholic beverages. ■ Gambling. ■ Playing the music too loud. ■ Turning off the lights. ■ Allowing students to bring gas, balloons or spray.</p></section>
+    <section id="d23"><h2><span class="section-num">D.23</span> Survey</h2><h4>23.1. Academic Concerns: Teachers fill up this form for the issues and concerns they may have with regard to the exam papers, books, resources, academic procedures, environment and processes, students, and teachers.</h4>
+<h4>23.2. Observation Feedback Survey: Teachers fill up this form after Teaching Observation feedback to share how much they agree with the statements and the score they have received.</h4>
+<h4>23.3. Open Discussion Survey: Teachers fill in this form to share their general comments and suggestions with our management team. Their feedback will be shared in the open discussion.</h4>
+<h4>23.4. Peer Assessment Survey: Pre-kid to Kid 4 teachers fill in this form to give feedback about their Co-teachers and Teacher Aides. For Main Teacher For Teacher Aide</h4>
+<h4>23.5. Teacher Opinion Survey: Teachers fill in this form to share their comments and feedback about their Head Teacher or Line Manager.</h4></section>
+    <section id="d24"><h2><span class="section-num">D.24</span> Salary</h2><h4>24.1. Payment by direct deposit is a condition of hire for all Aii employees. With direct deposit, the net pay is deposited in the bank.</h4>
+<h4>24.2. Every new hire will receive their salary in cash, not direct deposit, for the first month of employment. This allows time for the bank to verify the accuracy of the direct deposit information. However, in case the new employee has opened her/his bank account, s/he may receive the salary through direct deposit.</h4>
+<h4>24.3. Every new hire shall receive her/his salary once on the first and last month of her/his employment through direct deposit except</h4>
+<p>for payment in cash, the salary will be issued after five (5) working days. Otherwise, s/he shall receive her/his salary twice a month on the 15th and 30th of the month.</p>
+<h4>24.4. An amount equivalent to five (5) days shall be withheld from the first month salary of a full-time newly hired teacher. The same amount shall be reimbursed to the teacher upon termination of her/his employment contract without issue.</h4>
+<h4>24.5. All part-time teachers are paid by the hour. The direct deposit of the net pay is deposited in the bank at the end of the month of the cut off period.</h4>
+<h4>24.6. Any pension fund to be paid is withheld by the employer, in accordance with Cambodian labor law.</h4>
+<h4>24.7. Submission of missed or unrecorded substitute teaching hours will be unpaid. It is the responsibility of the teachers to ensure dates and times are recorded correctly.</h4>
+<h4>24.8. For part-time teachers, pay periods run from the 22nd of the month to the 21st of the following month.</h4>
+<h4>24.9. Payday is on the 15th and on the last working day of every month unless it falls on a Saturday or Sunday, in which case it will be paid before the said days.</h4>
+<h4>24.10. Any income tax to be paid is determined by the gross monthly taxable salary and is withheld by the employer, in accordance with Cambodian taxation laws.</h4></section>
+    <section id="d25"><h2><span class="section-num">D.25</span> TOEFL ITP</h2><p>25. TOEFL ITP ● All native English teachers are <strong>NOT</strong> <strong>required</strong> to take the TOEFL ITP test. ● For the non-native expatriate teachers and national teachers taking the test for the first time, they must stay with Aii for at least</p>
+<p>6 months with good performance based on the appraisal record (<strong>not</strong> lower than 75%) to get the free TOEFL ITP test. ● For the national teachers taking the test for the next or succeeding tests and the score is equivalent to the benchmark (meets the benchmark), the school will reserve the right to schedule them for their next free TOEFL test. For example, if a teacher's performance is declining, the teacher can be recommended to take a new test. ● For the national teachers taking the test for the next or succeeding tests, have scores above the benchmark, and are receiving the bonus or incentive, the school will reserve the right to schedule them for their next TOEFL test. For example, if a teacher's performance is declining, the teacher can be recommended to take a new test. ● For teachers (national or expatriate non-native teachers) taking the test for the second time (after six months from the first test) because they did <strong>not</strong> meet the benchmark score, they have to pay 50% of the test price. On their third testing, they have to pay the full price. ● If ANY teacher abandoned the job, the HR policy will be implemented regarding job abandonment. Benchmark Score for Teachers: ● The benchmark score is from 543 to 560. Note that the teachers must have scores equal or higher in each section in order to qualify with the benchmark score: Listening = 54 , Structure/Written Expression = 53 , and Reading = 56 ● Any national teacher who gets a score higher than 560 can qualify for the incentive or bonus.</p>
+<p>● Any teacher whose score is lower than 543 has to retake the test. This Handbook provides key information regarding Aii policies and workplace standards for teachers. It is intended to be an internal reference tool for Aii teachers and is presented for informational purposes only. The Handbook applies to teachers of Aii at all campuses. The policies stated herein are subject to change at any time at the sole discretion of the institution. This version of the Teacher’s Handbook supersedes all prior versions issued by the institution. Although comprehensive, this Handbook is intended to be a summary guide and cannot address every question that might occur during your employment. Your Deputy Campus Director and the school committee welcome the opportunity to answer your questions. Our school committee will do everything possible to ensure that equal stature is afforded to all of our teachers.</p>
+<p>Thank you for taking the time to read the Teacher’s Handbook.</p></section>
+
+    <!-- SECTION E -->
+    <section id="e-committee">
+      <h2><span class="section-num">E</span> Aii School Committee</h2>
+      <h4>Office of President (Aii Language Center) Mr. Sophea M. Lay</h4>
+<p>President <strong>mikelay1500@aii.edu.kh</strong> Mr. Thy Moung
+Executive Secretary to President
+<strong>moung_thy@aii.edu.kh</strong></p>
+<h4>Office of Vice President (Aii Language Center) Mr. Chansoma Yen</h4>
+<p>Vice President for Operations
+<strong>yenchansoma@aii.edu.kh</strong> Mr. Jayrald A. Salvacion
+Vice President for <strong>jayraldsalvacion@aii.edu.kh</strong> Academic Affairs Mr. Chung Eang Tiv
+Operations Manager <strong>chungeangtiv@aii.edu.kh</strong> Mr. Chankeo Ra Executive Secretary to
+<strong>chankeo.ra@aii.edu.kh</strong>
+Vice President for Operations Mr. Angkeareaksmey So
+Executive Secretary to <strong>angkeareaksmey.so@aii.edu.kh</strong>
+Vice President for Academic Affairs</p>
+<h4>Office of Director of Studies (Aii Language Center) Ms. Joanna S. Cabredo Director of Studies</h4>
+<p><strong>joanna.sabanal@aii.edu.kh</strong> Ms. Soksreyla Owens
+Asst. Director of Studies
+<strong>soksreyla.owens@aii.edu.kh</strong> Mr. Mark Nuguid
+Asst. Director of Studies
+<strong>mark.garcia@aii.edu.kh</strong> Mr. Bunne Mel
+Asst. Director of Studies
+<strong>bunne.mel@aii.edu.kh</strong> Ms. Charlotte Martin
+Asst. Director of Studies
+<strong>charlotte.martin@aii.edu.kh</strong> Mr. Senghong Sen
+Asst. Director of Studies
+<strong>senghong.sen@aii.edu.kh</strong></p>
+<h4>Mao Tse Tong Campus (Main Office) Mr. Ravi Ghimire</h4>
+<p>Campus Director
+<strong>ravi.ghimire@aii.edu.kh</strong> Ms. Rathana Cham
+Deputy Campus Director
+<strong>rathana.cham@aii.edu.kh</strong> for Operations Ms. Maleth Chhay
+Deputy Campus Director <strong>maleth.chhay@aii.edu.kh</strong> for Academic Affairs Ms. Sreyneang Sam
+CSL Head Teacher
+<strong>sreyneangsam@aii.edu.kh</strong> Ms. Englalin Ek
+Head Teacher <strong>englalin.ek@aii.edu.kh</strong> Mr. Dara Phin
+Head Teacher <strong>daraphin@aii.edu.kh</strong> Mr. Phannith Peth
+Head Teacher <strong>phannith.peth@aii.edu.kh</strong> Mr. James K.D.F.
+Head Teacher <strong>james.denny@aii.edu.kh</strong> Ms. Kimheng Lin
+Head Teacher <strong>kimheng.lin@aii.edu.kh</strong>
+Ms. Kuy Eng Khat
+Head Teacher <strong>kuyeng.khat@aii.edu.kh</strong></p>
+<h4>Toul Kork Campus Ms. Kimhong Phan</h4>
+<p>Campus Director
+<strong>kimhong.phan@aii.edu.kh</strong> Mr. Ross Francis Fernandez
+Deputy Campus Director <strong>ross.francis@aii.edu.kh</strong> Mr. Sinhleang Tang
+CSL Head Teacher <strong>sinhleang.tang@aii.edu.kh</strong> Mr. Sela Prak
+Head Teacher
+<strong>sela.prak@aii.edu.kh</strong> Ms. Sreytouch Eng Head Teacher <strong>sreytouch.eng@aii.edu</strong>
+.kh</p>
+<h4>Chak Angre Campus Ms. Ratana Touch</h4>
+<p>Campus Director <strong>ratana.touch@aii.edu.kh</strong> Dr. Thomas Adisa Deputy Campus Director
+<strong>thomasadisa@aii.edu.kh</strong> Ms. Sreyleak Penh
+Head Teacher
+<strong>sreyleakpenh@aii.edu.kh</strong> Mr. Kimsrun Sao
+Head Teacher
+<strong>sao.kimsrun@aii.edu.kh</strong> Ms. Houychheng Sieng
+CSL Head Teacher <strong>houychheng.sieng@aii.edu.kh</strong></p>
+<h4>Choam Chao Campus Mr. Kimhak Pom Campus Director kimhakpom@aii.edu.kh Mr. Kimsroy Khy Deputy Campus Director</h4>
+<p><strong>kimsroy.khy@aii.edu.kh</strong> Ms. Sreyleak Meas Head Teacher
+<strong>sreyleak.meas@aii.edu.kh</strong> Ms. Sreynoch Chamroeun Head Teacher
+<strong>sreyleak.meas@aii.edu.kh</strong> Ms. Saing Ou CSL Head Teacher
+<strong>ou.saing@aii.edu.kh</strong></p>
+<h4>Phsar Thmey Campus Miss Nalen Khlim</h4>
+<p>Campus Director <strong>nalenkhlim@aii.edu.kh</strong> Mrs. Soponglekhena Eng
+Deputy Campus Director <strong>soponglekhenaeng@aii.edu.kh</strong>
+Mr. Mengthu Hout CSL Head Teacher
+<strong>mengthu.hout@aii.edu.kh</strong></p>
+<h4>Chroy Chongva Campus Mr. Sophen Pho</h4>
+<p>Campus Director
+<strong>sophenpho@aii.edu.kh</strong> Mr. Mohammathnasiet Sales Deputy Campus Director <strong>mohammathnasiet.sales@aii.edu.kh</strong> Ms. Muyleng Ung
+CSL Head Teacher
+<strong>muyleng.ung@aii.edu.kh</strong> Ms. Keopichnearyrath Nhim Head Teacher
+<strong>keopichnearyrath.nhim@aii.edu.kh</strong> Mr. Barndith Oum
+Head Teacher
+<strong>barndithoum@aii.edu.kh</strong></p>
+<h4>Siem Reap Campus Ms. Leakhena Kong</h4>
+<p>Campus Director <strong>leakhenakong@aii.edu.kh</strong> Mr. Vanntha Hon
+Deputy Campus Director
+<strong>vanntha.hon@aii.edu.kh</strong> Ms. Milcah Madlang-Awa
+Head Teacher
+<strong>milcah.mandlang@aii.edu.kh</strong></p>
+<h4>Takeo Campus Mr. Vanny Sim</h4>
+<p>Deputy Campus Director
+<strong>vanny.sim@aii.edu.kh</strong> Mr. Vit Yeang
+Head Teacher <strong>vit.yeang@aii.edu.kh</strong></p>
+<h4>Sen Sok Campus Mr. Phanit Phann Deputy Campus Director phanit.phann@aii.edu.kh Mr. Manith Long CSL Head Teacher manith.long@aii.edu.kh Ms. Sreyna Eang Head Teacher</h4>
+<p><strong>sreynaeang@aii.edu.kh</strong></p>
+<h4>Chbar Ampov Campus Mr. Chheangmay Kheang Campus Director chheangmay.kheang@aii.edu.kh Mr. Royd I. Guyon</h4>
+<p>Deputy Campus Director
+<strong>roydigualdo.guyon@aii.edu.kh</strong> Mr. Lyhov Seung
+Head Teacher <strong>lyhov.seung@aii.edu.kh</strong> Ms. Kanharath Kong
+Head Teacher
+<strong>kanharathkong@aii.edu.kh</strong> Mr. Siemhouy Thav
+CSL Head Teacher
+<strong>siemhouy.thav@aii.edu.kh</strong></p>
+<h4>Chamkar Doung Campus Ms. Sochna Noeu</h4>
+<p>Campus Director <strong>noeu_sochna@aii.edu.kh</strong> Ms. Sreymom Samath
+Deputy Campus Director
+<strong>sreymom.samath@aii.edu.kh</strong> Mr. Vengkheang Kiang
+Head Teacher <strong>vengkheang.kiang@aii.edu.kh</strong></p>
+<h4>Toul Sangke Campus Mr. Savoeun Sret</h4>
+<p>Campus Director <strong>savoeun.sret@aii.edu.kh</strong> Mr. Vuthyro Chuon Deputy Campus Director
+<strong>vuthyrochuon@aii.edu.kh</strong></p>
+    </section>
+
+    <div class="section-footer">
+      <a href="#cover">← Back to Top</a>
+      <a href="#toc">Table of Contents →</a>
+    </div>
+
+  </main>
+</div>
+
+<button id="backToTop" title="Back to top">
+  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script>
+  // Theme Toggle
+  function updateThemeToggleUi() {
+    var btn = document.getElementById('themeToggleBtn');
+    if (!btn) return;
+    var isLight = document.body.classList.contains('light-theme');
+    btn.innerHTML = isLight
+      ? '<i class="fas fa-sun"></i><span>Light</span>'
+      : '<i class="fas fa-moon"></i><span>Dark</span>';
+  }
+
+  function applySavedTheme() {
+    var savedTheme = localStorage.getItem('ryshubTheme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-theme');
+    } else {
+      document.body.classList.remove('light-theme');
+    }
+    updateThemeToggleUi();
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+    localStorage.setItem('ryshubTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    updateThemeToggleUi();
+  }
+
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  applySavedTheme();
+
+  /* ===== Neuron Network Background ===== */
+  (function(){
+    const canvas = document.getElementById('neuron-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    const particleCount = 70;
+    const connectionDistance = 140;
+    const maxConnections = 3;
+
+    function resize(){
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor(){
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.radius = Math.random() * 1.5 + 1;
+      }
+      update(){
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+      }
+      draw(){
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(96, 165, 250, 0.55)';
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+    let mouse = { x: null, y: null };
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+    function animate(){
+      ctx.clearRect(0, 0, width, height);
+      for (let p of particles) { p.update(); p.draw(); }
+
+      for (let i = 0; i < particles.length; i++){
+        let connections = 0;
+        for (let j = i + 1; j < particles.length; j++){
+          let dx = particles[i].x - particles[j].x;
+          let dy = particles[i].y - particles[j].y;
+          let dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < connectionDistance && connections < maxConnections){
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(96, 165, 250, ${0.2 * (1 - dist/connectionDistance)})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+            connections++;
+          }
+        }
+        if (mouse.x !== null){
+          let dx = particles[i].x - mouse.x;
+          let dy = particles[i].y - mouse.y;
+          let dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 200){
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(37, 99, 235, ${0.35 * (1 - dist/200)})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+
+  // Cover text scramble effect
+  (function(){
+    const el = document.getElementById('coverTitle');
+    if (!el) return;
+    const original = el.textContent;
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ\' ';
+    let iteration = 0;
+    let interval = setInterval(() => {
+      el.textContent = original
+        .split('')
+        .map((letter, index) => {
+          if (index < iteration) return original[index];
+          return chars[Math.floor(Math.random() * chars.length)];
+        })
+        .join('');
+      if (iteration >= original.length) clearInterval(interval);
+      iteration += 1/2;
+    }, 40);
+  })();
+
+  // Mobile Menu
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 1024 && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+      sidebar.classList.remove('open');
+    }
+  });
+
+  // Scroll Progress
+  const progressBar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (scrollTop / scrollHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  });
+
+  // Active Nav Link
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-list a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + entry.target.id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+  sections.forEach(section => observer.observe(section));
+
+  // Back to Top
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 600) backToTop.classList.add('visible');
+    else backToTop.classList.remove('visible');
+  });
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Search
+  const searchInput = document.getElementById('searchInput');
+  let searchTimeout;
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    const term = e.target.value.trim().toLowerCase();
+    searchTimeout = setTimeout(() => {
+      document.querySelectorAll('.search-highlight').forEach(el => {
+        const parent = el.parentNode;
+        parent.replaceChild(document.createTextNode(el.textContent), el);
+        parent.normalize();
+      });
+      if (!term) return;
+      const walker = document.createTreeWalker(document.getElementById('mainContent'), NodeFilter.SHOW_TEXT, null, false);
+      const nodes = [];
+      let node;
+      while (node = walker.nextNode()) {
+        if (node.nodeValue.toLowerCase().includes(term)) nodes.push(node);
+      }
+      nodes.forEach(node => {
+        const span = document.createElement('span');
+        span.className = 'search-highlight';
+        const regex = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\$&') + ')', 'gi');
+        const parts = node.nodeValue.split(regex);
+        parts.forEach((part, i) => {
+          if (regex.test(part)) {
+            const mark = document.createElement('span');
+            mark.className = 'search-highlight';
+            mark.textContent = part;
+            node.parentNode.insertBefore(mark, node);
+          } else {
+            node.parentNode.insertBefore(document.createTextNode(part), node);
+          }
+        });
+        node.parentNode.removeChild(node);
+      });
+      if (nodes.length > 0) {
+        nodes[0].parentNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 300);
+  });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (window.innerWidth <= 1024) sidebar.classList.remove('open');
+      }
+    });
+  });
+</script>
+
+<button class="theme-toggle-mini" onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle dark and light mode">
+  <i class="fas fa-moon"></i><span>Dark</span>
+</button>
+
+</body>
+</html>

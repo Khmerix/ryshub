@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Secret Cave • RysHub Interactive Books</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0d1117;
+            --bg-card: #161b22;
+            --bg-card-hover: #1c2330;
+            --border: rgba(255,255,255,0.07);
+            --border-focus: rgba(180,120,60,0.5);
+            --text: #e6ddd0;
+            --text-dim: #8b949e;
+            --accent: #c9813a;
+            --accent-dark: #a0602a;
+            --accent-glow: rgba(201,129,58,0.25);
+            --choice-bg: rgba(201,129,58,0.08);
+            --choice-border: rgba(201,129,58,0.25);
+            --choice-hover-bg: rgba(201,129,58,0.15);
+            --choice-hover-border: rgba(201,129,58,0.5);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── Top bar ────────────────────────────────── */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(13,17,23,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+
+        .icon-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+        .icon-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+
+        .book-title-bar {
+            font-family: 'Lora', serif;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+            overflow: hidden;
+            max-width: 200px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #e8a85a);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .depth-indicator {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            white-space: nowrap;
+        }
+
+        /* ── Main layout ───────────────────────────── */
+        .reader-wrap {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        /* ── Scene card ─────────────────────────────── */
+        .scene-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px 40px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+        }
+
+        .scene-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .scene-text {
+            font-family: 'Lora', serif;
+            font-size: 1.05rem;
+            line-height: 1.85;
+            color: var(--text);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .scene-text.fade-in {
+            animation: fadeScene 0.5s ease forwards;
+        }
+
+        @keyframes fadeScene {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Choices ─────────────────────────────────── */
+        .choices-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+        }
+
+        .choices-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .choice-btn {
+            background: var(--choice-bg);
+            border: 1px solid var(--choice-border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            text-align: left;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.4;
+        }
+
+        .choice-btn:hover {
+            background: var(--choice-hover-bg);
+            border-color: var(--choice-hover-border);
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+
+        .choice-btn:active {
+            transform: translateX(2px);
+        }
+
+        .choice-arrow {
+            color: var(--accent);
+            font-size: 0.75rem;
+            margin-left: auto;
+            flex-shrink: 0;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: all 0.2s ease;
+        }
+
+        .choice-btn:hover .choice-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ── Ending card ─────────────────────────────── */
+        .ending-card {
+            background: linear-gradient(135deg, rgba(40,30,20,0.6), rgba(20,15,10,0.8));
+            border: 1px solid rgba(201,129,58,0.3);
+            border-radius: 16px;
+            padding: 28px 32px;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .ending-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 14px;
+            background: rgba(201,129,58,0.15);
+            border: 1px solid rgba(201,129,58,0.3);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .ending-card p {
+            font-family: 'Lora', serif;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .ending-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: 0 4px 0 #7a4820, 0 6px 18px var(--accent-glow);
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #7a4820, 0 10px 24px var(--accent-glow); }
+        .btn-primary:active { transform: translateY(0); }
+
+        .btn-ghost {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+        /* ── History drawer ──────────────────────────── */
+        .history-toggle {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 6px 0;
+            margin-top: 8px;
+        }
+
+        .history-toggle:hover { color: var(--text); }
+
+        .history-list {
+            margin-top: 12px;
+            border-left: 2px solid rgba(201,129,58,0.2);
+            padding-left: 16px;
+            display: none;
+        }
+
+        .history-list.open { display: block; }
+
+        .history-item {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            padding: 4px 0;
+        }
+
+        .history-item.current { color: var(--accent); font-weight: 600; }
+
+        /* ── Toast ───────────────────────────────────── */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: #161b22;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ── Responsive ──────────────────────────────── */
+        @media (max-width: 600px) {
+            .scene-card { padding: 24px 20px; }
+            .scene-text { font-size: 1rem; }
+            .book-title-bar { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top navigation bar -->
+<div class="top-bar">
+    <div class="top-bar-left">
+        <a href="../library.html" class="icon-btn" title="Back to Library"><i class="fas fa-arrow-left"></i></a>
+        <button id="btnBack" class="icon-btn" title="Previous scene" onclick="goBack()" disabled><i class="fas fa-undo"></i></button>
+        <span class="book-title-bar" id="topTitle">The Secret Cave</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="depth-indicator" id="depthLabel">Scene 1</span>
+    <button class="icon-btn" title="Restart" onclick="confirmReset()"><i class="fas fa-redo"></i></button>
+</div>
+
+<!-- Reader -->
+<div class="reader-wrap">
+    <div class="scene-card">
+        <p class="scene-text" id="sceneText"></p>
+    </div>
+
+    <div id="choicesArea">
+        <div class="choices-label">What do you do?</div>
+        <div class="choices-list" id="choicesList"></div>
+    </div>
+
+    <div id="endingArea" style="display:none;">
+        <div class="ending-card">
+            <div class="ending-badge"><i class="fas fa-star"></i> Story Complete</div>
+            <p>You've reached one of the story's endings. Try a different path to discover more.</p>
+            <div class="ending-actions">
+                <button class="btn-primary" onclick="resetStory()"><i class="fas fa-redo"></i> Read Again</button>
+                <button class="btn-ghost" onclick="window.location.href='../library.html'"><i class="fas fa-book-open"></i> More Books</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="history-toggle" id="historyToggle" onclick="toggleHistory()">
+        <i class="fas fa-route"></i> Your path (<span id="historyCount">0</span> scenes)
+        <i class="fas fa-chevron-down" id="historyChevron"></i>
+    </button>
+    <div class="history-list" id="historyList"></div>
+</div>
+
+<div id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+    /* ── State ────────────────────────────────────────── */
+    var safeMeta = (typeof STORY_META === 'object' && STORY_META) ? STORY_META : { title: 'The Secret Cave', startNode: 'start' };
+    var safeData = (typeof STORY_DATA === 'object' && STORY_DATA) ? STORY_DATA : {};
+    var currentId = safeMeta.startNode;
+    var storyHistory = [safeMeta.startNode];
+    var SAVE_KEY = 'book_' + (safeMeta.title || 'default').replace(/\s+/g, '_').toLowerCase() + '_save';
+
+    /* ── Engine ───────────────────────────────────────── */
+    function renderScene(animate) {
+        var node = safeData[currentId];
+        if (!node) { showToast('Story node missing: ' + currentId); return; }
+
+        var textEl = document.getElementById('sceneText');
+        textEl.textContent = node.text;
+
+        if (animate !== false) {
+            textEl.classList.remove('fade-in');
+            void textEl.offsetWidth;
+            textEl.classList.add('fade-in');
+        }
+
+        var isEnding = !node.choices || node.choices.length === 0;
+
+        document.getElementById('choicesArea').style.display = isEnding ? 'none' : 'block';
+        document.getElementById('endingArea').style.display  = isEnding ? 'block' : 'none';
+
+        if (!isEnding) {
+            document.getElementById('choicesList').innerHTML = node.choices.map(function(c) {
+                return '<button class="choice-btn" onclick="makeChoice(\'' + c.next + '\')">'
+                    + c.text
+                    + '<i class="fas fa-chevron-right choice-arrow"></i>'
+                    + '</button>';
+            }).join('');
+        }
+
+        var depth = storyHistory.length;
+        var maxDepth = 22;
+        var pct = Math.min((depth / maxDepth) * 100, 98);
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('depthLabel').textContent = 'Scene ' + depth;
+        document.getElementById('btnBack').disabled = storyHistory.length <= 1;
+
+        renderHistory();
+        saveProgress();
+    }
+
+    function makeChoice(nextId) {
+        if (!safeData[nextId]) {
+            showToast('That path is not available yet.');
+            return;
+        }
+        currentId = nextId;
+        storyHistory.push(nextId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        renderScene(true);
+    }
+
+    function goBack() {
+        if (storyHistory.length <= 1) return;
+        storyHistory.pop();
+        currentId = storyHistory[storyHistory.length - 1];
+        renderScene(true);
+    }
+
+    function resetStory() {
+        currentId = safeMeta.startNode;
+        storyHistory = [safeMeta.startNode];
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        renderScene(true);
+        localStorage.removeItem(SAVE_KEY);
+    }
+
+    function confirmReset() {
+        if (storyHistory.length <= 1 || confirm('Start over from the beginning?')) {
+            resetStory();
+        }
+    }
+
+    /* ── Progress persistence ─────────────────────────── */
+    function saveProgress() {
+        try {
+            var maxDepth = 22;
+            var progress = Math.min(Math.round((storyHistory.length / maxDepth) * 100), 99);
+            localStorage.setItem(SAVE_KEY, JSON.stringify({
+                nodeId: currentId,
+                history: storyHistory,
+                progress: progress,
+                ts: Date.now()
+            }));
+            /* Also update library-visible progress key */
+            localStorage.setItem('book_progress_the-secret-cave', JSON.stringify({ progress: progress }));
+        } catch (e) {}
+    }
+
+    function loadProgress() {
+        try {
+            var saved = JSON.parse(localStorage.getItem(SAVE_KEY));
+            if (saved && saved.nodeId && safeData[saved.nodeId]) {
+                currentId = saved.nodeId;
+                storyHistory = Array.isArray(saved.history) && saved.history.length
+                    ? saved.history.filter(function(id) { return !!safeData[id]; })
+                    : [safeMeta.startNode];
+                if (!storyHistory.length) storyHistory = [safeMeta.startNode];
+                return true;
+            }
+        } catch (e) {}
+        return false;
+    }
+
+    /* ── Path history ─────────────────────────────────── */
+    function renderHistory() {
+        if (!Array.isArray(storyHistory) || !storyHistory.length) {
+            storyHistory = [safeMeta.startNode];
+        }
+
+        var count = storyHistory.length;
+        document.getElementById('historyCount').textContent = count;
+
+        var html = storyHistory.map(function(id, idx) {
+            var node = safeData[id];
+            var label = node ? node.text.split('\n')[0].slice(0, 60) + (node.text.length > 60 ? '…' : '') : id;
+            var isCurrent = idx === storyHistory.length - 1;
+            return '<div class="history-item' + (isCurrent ? ' current' : '') + '">'
+                + (idx + 1) + '. ' + label + '</div>';
+        }).join('');
+
+        document.getElementById('historyList').innerHTML = html;
+    }
+
+    function toggleHistory() {
+        var list = document.getElementById('historyList');
+        var chevron = document.getElementById('historyChevron');
+        list.classList.toggle('open');
+        chevron.style.transform = list.classList.contains('open') ? 'rotate(180deg)' : '';
+    }
+
+    /* ── Toast ────────────────────────────────────────── */
+    function showToast(msg) {
+        var t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(function() { t.classList.remove('show'); }, 2800);
+    }
+
+    /* ── Init ─────────────────────────────────────────── */
+    if (!Object.keys(safeData).length) {
+        document.getElementById('sceneText').textContent = 'Story data failed to load. Please refresh this page.';
+        showToast('Could not load story data.');
+    }
+
+    var resumed = loadProgress();
+    renderScene(false);
+
+    if (resumed && storyHistory.length > 1) {
+        showToast('Resuming where you left off — Scene ' + storyHistory.length);
+    }
+</script>
+<script src="../../../assets/ryshub-global-header.js"></script>
+</body>
+</html>

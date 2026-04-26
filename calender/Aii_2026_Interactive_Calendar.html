@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aii 2026 Yearly Calendar – Interactive</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary-blue: #2563eb;
+    --primary-dark: #1e40af;
+    --primary-light: #3b82f6;
+    --gray-900: #0b0f19;
+    --gray-800: #111827;
+    --gray-700: #1f2937;
+    --gray-600: #374151;
+    --gray-500: #6b7280;
+    --gray-400: #9ca3af;
+    --gray-300: #d1d5db;
+    --gray-100: #f3f4f6;
+    --white: #ffffff;
+    --holiday-red: #ef4444;
+    --holiday-bg: rgba(239,68,68,0.12);
+    --event-blue: #60a5fa;
+    --event-bg: rgba(96,165,250,0.12);
+    --weekend-bg: rgba(255,255,255,0.04);
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--gray-900);
+    color: var(--gray-100);
+    min-height: 100vh;
+    padding-bottom: 40px;
+    overflow-x: hidden;
+  }
+
+  .page-bg-image {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../AI.jpg') center center / cover no-repeat;
+    opacity: 0.08;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  #neuron-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11, 15, 25, 0.75);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: white;
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu-btn {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 101;
+  }
+  .menu-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.25); }
+
+  .side-panel {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, rgba(17,24,39,0.98) 0%, rgba(11,15,25,0.99) 100%);
+    border-right: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+    z-index: 300;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+  }
+  .side-panel.open { left: 0; }
+
+  .panel-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 250;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .panel-overlay.active { display: block; opacity: 1; }
+
+  .panel-header {
+    padding: 0 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .panel-header span {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary-light);
+  }
+  .panel-header button {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    font-size: 1.4rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .panel-header button:hover { background: rgba(255,255,255,0.06); color: var(--gray-200); }
+
+  .panel-link {
+    padding: 14px 20px;
+    color: var(--gray-100);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .panel-link:hover {
+    background: rgba(37,99,235,0.1);
+    border-left-color: var(--primary-blue);
+    color: var(--primary-light);
+  }
+
+  header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: 0.5px; }
+  header p { opacity: 0.8; margin-top: 6px; font-size: 0.95rem; color: var(--gray-300); }
+
+  .controls {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  .month-nav { display: flex; gap: 8px; align-items: center; }
+  .month-nav button {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--gray-100);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .month-nav button:hover { background: var(--primary-blue); border-color: var(--primary-blue); color: white; }
+
+  .month-nav select {
+    padding: 10px 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--gray-100);
+    background: rgba(255,255,255,0.06);
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .search-box { display: flex; gap: 8px; flex: 1; min-width: 220px; max-width: 400px; }
+  .search-box input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: rgba(255,255,255,0.06);
+    color: var(--gray-100);
+    transition: border-color 0.2s;
+  }
+  .search-box input::placeholder { color: var(--gray-500); }
+  .search-box input:focus { outline: none; border-color: var(--primary-blue); }
+  .search-box button {
+    padding: 10px 18px;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  .search-box button:hover { background: var(--primary-dark); }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; align-items: center; color: var(--gray-400); }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  .dot.holiday { background: var(--holiday-red); }
+  .dot.event { background: var(--event-blue); }
+  .dot.weekend { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); }
+
+  .calendar-wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  .month-card {
+    background: rgba(17,24,39,0.85);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    overflow: hidden;
+    margin-bottom: 24px;
+    animation: fadeIn 0.4s ease;
+    backdrop-filter: blur(8px);
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .month-header {
+    background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 16px 24px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .month-header .year-badge {
+    background: rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+  }
+
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: rgba(255,255,255,0.06); }
+
+  .day-label {
+    background: rgba(37,99,235,0.12);
+    padding: 12px 4px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--primary-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .day-cell {
+    background: rgba(17,24,39,0.6);
+    min-height: 110px;
+    padding: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    flex-direction: column;
+  }
+  .day-cell:hover { background: rgba(37,99,235,0.08); }
+  .day-cell.empty { background: rgba(11,15,25,0.4); cursor: default; }
+  .day-cell.empty:hover { background: rgba(11,15,25,0.4); }
+  .day-cell.weekend { background: rgba(255,255,255,0.03); }
+  .day-cell.holiday { background: rgba(239,68,68,0.08); }
+  .day-cell.holiday .day-num { color: #f87171; font-weight: 700; }
+  .day-cell.has-events { border-left: 3px solid var(--primary-blue); }
+  .day-cell.holiday.has-events { border-left: 3px solid var(--holiday-red); }
+
+  .day-num { font-size: 0.95rem; font-weight: 600; color: var(--gray-100); margin-bottom: 4px; }
+
+  .day-events { display: flex; flex-direction: column; gap: 3px; overflow: hidden; }
+
+  .event-pill {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .event-pill.academic { background: rgba(96,165,250,0.15); color: #93bbfc; }
+  .event-pill.holiday { background: rgba(239,68,68,0.15); color: #f87171; }
+  .event-pill.workshop { background: rgba(251,191,36,0.12); color: #fbbf24; }
+  .event-pill.test { background: rgba(192,132,252,0.12); color: #c084fc; }
+  .event-pill.social { background: rgba(74,222,128,0.12); color: #4ade80; }
+  .event-pill.term { background: rgba(45,212,191,0.12); color: #2dd4bf; }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: rgba(17,24,39,0.95);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    max-width: 560px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    animation: modalIn 0.3s ease;
+    backdrop-filter: blur(12px);
+  }
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+  .modal-header {
+    background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-header h2 { font-size: 1.2rem; }
+  .modal-header button {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .modal-header button:hover { background: rgba(255,255,255,0.25); }
+
+  .modal-body { padding: 20px 24px; }
+
+  .modal-event { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .modal-event:last-child { border-bottom: none; }
+  .modal-event .ev-type {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+  .modal-event .ev-title { font-weight: 600; font-size: 1rem; color: var(--gray-100); }
+  .modal-event .ev-desc { font-size: 0.9rem; color: var(--gray-400); margin-top: 4px; line-height: 1.4; }
+
+  .terms-panel { max-width: 1200px; margin: 30px auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  .terms-card {
+    background: rgba(17,24,39,0.85);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    padding: 24px;
+    backdrop-filter: blur(8px);
+  }
+  .terms-card h3 { color: var(--primary-light); font-size: 1.1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+  .terms-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .terms-table th {
+    background: rgba(37,99,235,0.12);
+    color: var(--primary-light);
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .terms-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: var(--gray-300);
+  }
+  .terms-table tr:hover td { background: rgba(37,99,235,0.05); }
+
+  .search-results { max-width: 1200px; margin: 0 auto 20px; padding: 0 20px; display: none; position: relative; z-index: 1; }
+  .search-results.active { display: block; }
+
+  .result-card {
+    background: rgba(17,24,39,0.85);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.15s;
+    border-left: 4px solid var(--primary-blue);
+  }
+  .result-card:hover { transform: translateX(4px); background: rgba(37,99,235,0.08); }
+  .result-card .res-date { font-size: 0.8rem; color: var(--primary-light); font-weight: 700; margin-bottom: 4px; }
+  .result-card .res-title { font-weight: 600; color: var(--gray-100); }
+
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--gray-500);
+    font-size: 0.85rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Theme Toggle */
+  .theme-toggle-mini {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(15, 23, 42, 0.88);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.24);
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 500;
+  }
+  .theme-toggle-mini:hover {
+    transform: translateY(-1px);
+    border-color: rgba(96,165,250,0.45);
+    box-shadow: 0 10px 22px rgba(37,99,235,0.18);
+  }
+  .theme-toggle-mini i { color: #fde68a; font-size: 0.85rem; }
+
+  /* Light Theme Overrides */
+  body.light-theme {
+    background: linear-gradient(180deg, #eef4ff 0%, #f8fbff 100%);
+    color: #0f172a;
+  }
+  body.light-theme .page-bg-image { opacity: 0.04; }
+
+  body.light-theme header {
+    background: rgba(255,255,255,0.82);
+    border-bottom-color: rgba(37,99,235,0.12);
+    color: #0f172a;
+  }
+  body.light-theme header p { color: #475569; }
+  body.light-theme .menu-btn {
+    background: rgba(15,23,42,0.06);
+    border-color: rgba(15,23,42,0.12);
+    color: #0f172a;
+  }
+  body.light-theme .menu-btn:hover { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.25); }
+
+  body.light-theme .side-panel {
+    background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(226,232,240,0.99) 100%);
+    border-right-color: rgba(15,23,42,0.08);
+  }
+  body.light-theme .panel-header { border-bottom-color: rgba(15,23,42,0.08); }
+  body.light-theme .panel-header span { color: var(--primary-blue); }
+  body.light-theme .panel-header button { color: var(--gray-500); }
+  body.light-theme .panel-header button:hover { background: rgba(15,23,42,0.04); color: var(--gray-700); }
+  body.light-theme .panel-link { color: #0f172a; }
+  body.light-theme .panel-link:hover { background: rgba(37,99,235,0.08); border-left-color: var(--primary-blue); color: var(--primary-blue); }
+
+  body.light-theme .month-nav button {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(37,99,235,0.2);
+    color: var(--primary-blue);
+  }
+  body.light-theme .month-nav button:hover { background: var(--primary-blue); color: white; }
+  body.light-theme .month-nav select {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(37,99,235,0.2);
+    color: #0f172a;
+  }
+  body.light-theme .search-box input {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(15,23,42,0.1);
+    color: #0f172a;
+  }
+  body.light-theme .search-box input::placeholder { color: #94a3b8; }
+  body.light-theme .search-box input:focus { border-color: var(--primary-blue); }
+  body.light-theme .search-box button { color: white; }
+
+  body.light-theme .legend { color: #64748b; }
+  body.light-theme .dot.weekend { background: #f1f5f9; border-color: #cbd5e1; }
+
+  body.light-theme .month-card {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(15,23,42,0.08);
+    box-shadow: 0 14px 28px rgba(15,23,42,0.08);
+  }
+  body.light-theme .cal-grid { background: rgba(15,23,42,0.06); }
+  body.light-theme .day-label { background: rgba(37,99,235,0.08); color: var(--primary-blue); }
+  body.light-theme .day-cell { background: rgba(255,255,255,0.7); }
+  body.light-theme .day-cell:hover { background: rgba(37,99,235,0.06); }
+  body.light-theme .day-cell.empty { background: #f8fafc; }
+  body.light-theme .day-cell.empty:hover { background: #f8fafc; }
+  body.light-theme .day-cell.weekend { background: #f1f5f9; }
+  body.light-theme .day-cell.holiday { background: rgba(239,68,68,0.06); }
+  body.light-theme .day-cell.holiday .day-num { color: #dc2626; }
+  body.light-theme .day-num { color: #0f172a; }
+
+  body.light-theme .event-pill.academic { background: rgba(37,99,235,0.08); color: #2563eb; }
+  body.light-theme .event-pill.holiday { background: rgba(239,68,68,0.08); color: #dc2626; }
+  body.light-theme .event-pill.workshop { background: rgba(245,158,11,0.08); color: #d97706; }
+  body.light-theme .event-pill.test { background: rgba(147,51,234,0.08); color: #9333ea; }
+  body.light-theme .event-pill.social { background: rgba(34,197,94,0.08); color: #16a34a; }
+  body.light-theme .event-pill.term { background: rgba(13,148,136,0.08); color: #0d9488; }
+
+  body.light-theme .modal {
+    background: rgba(255,255,255,0.95);
+    border-color: rgba(15,23,42,0.08);
+    box-shadow: 0 20px 60px rgba(15,23,42,0.15);
+  }
+  body.light-theme .modal-event { border-bottom-color: rgba(15,23,42,0.06); }
+  body.light-theme .modal-event .ev-title { color: #0f172a; }
+  body.light-theme .modal-event .ev-desc { color: #64748b; }
+
+  body.light-theme .terms-card {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(15,23,42,0.08);
+    box-shadow: 0 14px 28px rgba(15,23,42,0.08);
+  }
+  body.light-theme .terms-card h3 { color: var(--primary-blue); }
+  body.light-theme .terms-table th { background: rgba(37,99,235,0.08); color: var(--primary-blue); }
+  body.light-theme .terms-table td { border-bottom-color: rgba(15,23,42,0.06); color: #334155; }
+  body.light-theme .terms-table tr:hover td { background: rgba(37,99,235,0.04); }
+
+  body.light-theme .result-card {
+    background: rgba(255,255,255,0.82);
+    border-color: rgba(15,23,42,0.08);
+    box-shadow: 0 2px 8px rgba(15,23,42,0.06);
+  }
+  body.light-theme .result-card:hover { background: rgba(37,99,235,0.06); }
+  body.light-theme .result-card .res-date { color: var(--primary-blue); }
+  body.light-theme .result-card .res-title { color: #0f172a; }
+
+  body.light-theme footer { color: #64748b; }
+
+  body.light-theme .theme-toggle-mini {
+    background: rgba(255,255,255,0.92);
+    color: #0f172a;
+    border-color: rgba(37,99,235,0.14);
+  }
+
+  @media (max-width: 768px) {
+    .day-cell { min-height: 70px; padding: 4px; }
+    .day-label { padding: 8px 2px; font-size: 0.7rem; }
+    .event-pill { font-size: 0.6rem; padding: 1px 4px; }
+    .day-num { font-size: 0.8rem; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .search-box { max-width: 100%; }
+    .month-header { font-size: 1.1rem; padding: 12px 16px; }
+    .theme-toggle-mini { right: 16px; bottom: 16px; padding: 6px 9px; font-size: 0.7rem; }
+  }
+  @media print {
+    header, .controls, .modal-overlay, footer, .theme-toggle-mini, .page-bg-image, #neuron-canvas { display: none !important; }
+    .month-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+    .day-cell { min-height: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-bg-image" aria-hidden="true"></div>
+<canvas id="neuron-canvas"></canvas>
+
+<header>
+  <button class="menu-btn" onclick="togglePanel()" aria-label="Open menu">☰</button>
+  <div>
+    <h1>📅 Aii Language Center – 2026 Yearly Calendar</h1>
+    <p>Interactive Academic Calendar • Version 1.0 • Subject to change</p>
+  </div>
+</header>
+
+<div class="panel-overlay" id="panelOverlay" onclick="togglePanel()"></div>
+<nav class="side-panel" id="sidePanel">
+  <div class="panel-header">
+    <span>Menu</span>
+    <button onclick="togglePanel()" aria-label="Close menu">×</button>
+  </div>
+  <a href="../index.html" class="panel-link">🏠 RYS HUB</a>
+</nav>
+
+<div class="controls">
+  <div class="month-nav">
+    <button onclick="changeMonth(-1)">◀</button>
+    <select id="monthSelect" onchange="jumpMonth(this.value)">
+      <option value="0">January</option>
+      <option value="1">February</option>
+      <option value="2">March</option>
+      <option value="3">April</option>
+      <option value="4">May</option>
+      <option value="5">June</option>
+      <option value="6">July</option>
+      <option value="7">August</option>
+      <option value="8">September</option>
+      <option value="9">October</option>
+      <option value="10">November</option>
+      <option value="11">December</option>
+    </select>
+    <button onclick="changeMonth(1)">▶</button>
+  </div>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search events, workshops, tests..." onkeyup="if(event.key==='Enter')doSearch()">
+    <button onclick="doSearch()">Search</button>
+  </div>
+  <div class="legend">
+    <span><span class="dot holiday"></span> Holiday</span>
+    <span><span class="dot event"></span> School Event</span>
+    <span><span class="dot weekend"></span> Weekend</span>
+  </div>
+</div>
+
+<div class="search-results" id="searchResults"></div>
+
+<div class="calendar-wrap" id="calendarWrap"></div>
+
+<div class="terms-panel">
+  <div class="terms-card">
+    <h3>📚 Academic Term Dates 2026</h3>
+    <table class="terms-table">
+      <thead>
+        <tr><th>Term</th><th>Weekday Period</th><th>Weekend Period</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Year 22 Term 91</strong></td><td>Jan 29 – Apr 10, 2026</td><td>Jan 17 – Apr 4, 2026</td></tr>
+        <tr><td><strong>Year 22 Term 92</strong></td><td>Apr 23 – Jul 7, 2026</td><td>Apr 18 – Jun 21, 2026</td></tr>
+        <tr><td><strong>Year 22 Term 93</strong></td><td>Jul 13 – Sep 18, 2026</td><td>Jul 4 – Sep 6, 2026</td></tr>
+        <tr><td><strong>Year 22 Term 94</strong></td><td>Sep 28 – Dec 15, 2026</td><td>Sep 19 – Nov 29, 2026</td></tr>
+        <tr><td><strong>Year 23 Term 95</strong></td><td>Dec 21 – Mar 5, 2027</td><td>Dec 12 – Feb 21, 2027</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer>
+  <p>Prepared by Ravi Ghimire • Checked by Jayrald A. Salvacion • Verified by Chansoma Yen • Approved by Sophea M. Lay</p>
+  <p style="margin-top:4px;">Aii Language Center • Note: This yearly calendar is subject to change.</p>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2 id="modalTitle">Events</h2>
+      <button onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const calendarData = [
+  // January 2026 (starts Thursday)
+  {
+    month: "January", year: 2026, startDay: 4, days: 31,
+    events: {
+      1: [
+        { type: "holiday", title: "New Year", desc: "Public Holiday" }
+      ],
+      2: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 1", desc: "For Level 10 Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Part 2", desc: "For Level 11a Students" },
+        { type: "academic", title: "Final Exam, End-of-Term & Potluck", desc: "Y21T90 CSL Weekend Class" },
+        { type: "academic", title: "Interview for GEP 1 Students", desc: "From 02:00 p.m. to 05:00 p.m." }
+      ],
+      5: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 3", desc: "For Level 11b Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Final", desc: "For Level 11c Students" }
+      ],
+      6: [
+        { type: "holiday", title: "Victory over Genocide Day", desc: "Public Holiday" }
+      ],
+      7: [
+        { type: "social", title: "Open Field Study", desc: "For Kid Starter to Kid 4 Students" }
+      ],
+      8: [
+        { type: "workshop", title: "Workshop: Tips on How to Make Good PowerPoint Slides", desc: "For Level 11b Students" }
+      ],
+      9: [
+        { type: "social", title: "The 52nd Aii Field Trip", desc: "MTT, PT, CC, CAP, & TSK" }
+      ],
+      16: [
+        { type: "term", title: "Y22T91 CSL Weekend Classes Matriculates", desc: "" },
+        { type: "social", title: "The 9th Mengly J. Quach Debate and Public Speaking Championship", desc: "Final Round" }
+      ],
+      19: [
+        { type: "academic", title: "Pre-kid 1 to Kid 4 Final Result Sheet Submission Deadline", desc: "No Later Than 5:30 p.m. • Final Semester" }
+      ],
+      20: [
+        { type: "academic", title: "Mid-Semester Exam / Final Semester", desc: "" },
+        { type: "academic", title: "Progress Test", desc: "" },
+        { type: "academic", title: "Stage Exam", desc: "" },
+        { type: "academic", title: "Teaching Material Submission Deadline", desc: "No Later Than 5:00 p.m." },
+        { type: "social", title: "The 21st Aii Anniversary Celebration", desc: "" }
+      ],
+      21: [
+        { type: "academic", title: "Review, Checking and Discussion", desc: "Of the results of the exam" }
+      ],
+      23: [
+        { type: "social", title: "End-of-Term Potluck", desc: "Year 21 Term 90" },
+        { type: "academic", title: "Digital Final Result Submission", desc: "" },
+        { type: "academic", title: "Continuous Assessment Confirmation", desc: "" }
+      ],
+      24: [
+        { type: "academic", title: "Publish Final Result and Make-up Name List", desc: "By 02:00 p.m." }
+      ],
+      25: [
+        { type: "term", title: "New Teacher Induction", desc: "From 08:30 a.m. – 11:00 a.m. • The Billy V. Chhay Conference Room, 16th Floor, LKN Tower, MTT Campus" },
+        { type: "academic", title: "Make-up Exam (AM/PM) and Result Released", desc: "" }
+      ],
+      26: [
+        { type: "term", title: "New Teacher Induction", desc: "From 08:30 a.m. – 11:00 a.m. • The Billy V. Chhay Conference Room, 16th Floor, LKN Tower, MTT Campus" },
+        { type: "academic", title: "Make-up Exam (AM/PM) and Result Released", desc: "" }
+      ],
+      27: [
+        { type: "term", title: "New Term Orientation", desc: "09:00 a.m. – 11:30 a.m. • 6th Floor, Paul Quach Auditorium, AIS-TK Campus" }
+      ],
+      28: [
+        { type: "term", title: "Y22T91 Matriculates (Adult)", desc: "" },
+        { type: "term", title: "Y22S35 Matriculates (Kid)", desc: "" },
+        { type: "term", title: "New Student Orientation", desc: "" }
+      ]
+    }
+  },
+  // February 2026 (starts Sunday)
+  {
+    month: "February", year: 2026, startDay: 0, days: 28,
+    events: {
+      4: [
+        { type: "workshop", title: "Phonetics Workshop 1", desc: "For Level Starter Students" },
+        { type: "academic", title: "Class Monitor & Sub-class Monitor Submission Deadline", desc: "Name & ID No." }
+      ],
+      5: [
+        { type: "workshop", title: "Phonetics Workshop 2", desc: "For Level Starter Students" }
+      ],
+      8: [
+        { type: "workshop", title: "Phonetics Workshop 3", desc: "For Level Intro 1 Students" }
+      ],
+      16: [
+        { type: "holiday", title: "Chinese New Year", desc: "Public Holiday" }
+      ],
+      17: [
+        { type: "holiday", title: "Chinese New Year", desc: "Public Holiday" }
+      ],
+      18: [
+        { type: "holiday", title: "Chinese New Year", desc: "Public Holiday" }
+      ],
+      22: [
+        { type: "workshop", title: "Tips for Great Interviews", desc: "For Level Intro 3 Students" }
+      ]
+    }
+  },
+  // March 2026 (starts Sunday)
+  {
+    month: "March", year: 2026, startDay: 0, days: 31,
+    events: {
+      2: [
+        { type: "workshop", title: "Workshop: How to Overcome Procrastination", desc: "For Level 4 Students" }
+      ],
+      8: [
+        { type: "holiday", title: "International Women's Day", desc: "Public Holiday" },
+        { type: "workshop", title: "Workshop: Presentation Skills and Speaking in Front of an Audience", desc: "For Level 7b Students" }
+      ],
+      9: [
+        { type: "workshop", title: "Workshop: TOEFL Writing Skills", desc: "For Level 10 Students" },
+        { type: "workshop", title: "Workshop: TOEFL Listening Skills", desc: "For Level 11a Students" }
+      ],
+      10: [
+        { type: "workshop", title: "Workshop: TOEFL Reading Skills", desc: "For Level 11b Students" }
+      ],
+      13: [
+        { type: "social", title: "Open Discussion", desc: "09:00 a.m. to 11:30 a.m. • 17th Floor, SHK Auditorium, LKN Tower, MTT Campus" },
+        { type: "academic", title: "Level 8 Basic Presentation", desc: "" }
+      ],
+      20: [
+        { type: "academic", title: "Interview for GEP 1 Students", desc: "From 02:00 p.m. to 05:00 p.m." }
+      ],
+      22: [
+        { type: "workshop", title: "Workshop: Introduction to TOEFL", desc: "For Level 9a Students" }
+      ],
+      23: [
+        { type: "social", title: "Student Learning Conference", desc: "For Level 11c Students • Note: Level 8, 9a, 9b, 10, 11a & 11b students will be the audience" }
+      ],
+      24: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 1", desc: "For Level 10 Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Part 2", desc: "For Level 11a Students" }
+      ],
+      25: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 3", desc: "For Level 11b Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Final", desc: "For Level 11c Students" }
+      ],
+      26: [
+        { type: "social", title: "Open Field Study", desc: "For Pre-kid 2 to Pre-kid 4 Students" }
+      ],
+      27: [
+        { type: "social", title: "The 53rd Aii Field Trip", desc: "TK, CA, CCV, SS, & CKD" }
+      ],
+      30: [
+        { type: "workshop", title: "Workshop: Tips on How to Make Good PowerPoint Slides", desc: "For Level 11b Students" }
+      ]
+    }
+  },
+  // April 2026 (starts Wednesday)
+  {
+    month: "April", year: 2026, startDay: 3, days: 30,
+    events: {
+      3: [
+        { type: "term", title: "Y22T92 CSL Weekend Classes Matriculates", desc: "" }
+      ],
+      6: [
+        { type: "academic", title: "Pre-kid 1 to Kid 4 Final Result Sheet Submission Deadline", desc: "No Later Than 5:30 p.m. • Final Semester" }
+      ],
+      7: [
+        { type: "academic", title: "Mid-Semester Exam / Final Semester", desc: "" },
+        { type: "academic", title: "Progress Test", desc: "" },
+        { type: "academic", title: "Stage Exam", desc: "" },
+        { type: "academic", title: "Teaching Material Submission Deadline", desc: "No Later Than 5:00 p.m." }
+      ],
+      8: [
+        { type: "academic", title: "Review, Checking and Discussion", desc: "Of the results of the exam" }
+      ],
+      9: [
+        { type: "social", title: "End-of-Term Potluck", desc: "Year 22 Term 91" },
+        { type: "academic", title: "Digital Final Result Submission", desc: "" },
+        { type: "academic", title: "Continuous Assessment Confirmation", desc: "" }
+      ],
+      10: [
+        { type: "social", title: "Culture Day", desc: "" },
+        { type: "academic", title: "Digital Final Result Submission", desc: "" },
+        { type: "academic", title: "Continuous Assessment Confirmation", desc: "" }
+      ],
+      13: [
+        { type: "holiday", title: "Additional Holiday", desc: "" }
+      ],
+      14: [
+        { type: "holiday", title: "Khmer New Year", desc: "Public Holiday" }
+      ],
+      15: [
+        { type: "holiday", title: "Khmer New Year", desc: "Public Holiday" }
+      ],
+      16: [
+        { type: "holiday", title: "Khmer New Year", desc: "Public Holiday" }
+      ],
+      17: [
+        { type: "holiday", title: "Additional Holiday", desc: "" },
+        { type: "social", title: "The 12th Aii-TK Anniversary", desc: "" }
+      ],
+      18: [
+        { type: "term", title: "Y22T92 CSL Weekend Classes Matriculates", desc: "" }
+      ],
+      19: [
+        { type: "academic", title: "Publish Final Result and Make-up Name List", desc: "By 02:00 p.m." }
+      ],
+      20: [
+        { type: "term", title: "New Teacher Induction", desc: "From 08:30 a.m. – 11:00 a.m. • The Billy V. Chhay Conference Room, 16th Floor, LKN Tower, MTT Campus" }
+      ],
+      21: [
+        { type: "term", title: "New Term Orientation", desc: "09:00 a.m. – 11:30 a.m. • 6th Floor, Paul Quach Auditorium, AIS-TK Campus" },
+        { type: "academic", title: "Make-up Exam (AM/PM) and Result Released", desc: "" }
+      ],
+      22: [
+        { type: "term", title: "Y22T92 Matriculates (Adult)", desc: "" },
+        { type: "term", title: "Y22S35 Resumes (Kid)", desc: "" },
+        { type: "term", title: "New Student Orientation", desc: "" }
+      ],
+      29: [
+        { type: "workshop", title: "Phonetics Workshop 1", desc: "For Level Starter Students" },
+        { type: "academic", title: "Class Monitor & Sub-class Monitor Submission Deadline", desc: "Name & ID No." }
+      ]
+    }
+  },
+  // May 2026 (starts Friday)
+  {
+    month: "May", year: 2026, startDay: 5, days: 31,
+    events: {
+      1: [
+        { type: "holiday", title: "International Labor Day", desc: "Public Holiday" },
+        { type: "holiday", title: "Visak Bochea", desc: "Public Holiday" }
+      ],
+      3: [
+        { type: "workshop", title: "Phonetics Workshop 2", desc: "For Level Starter Students" }
+      ],
+      5: [
+        { type: "holiday", title: "Royal Plowing Ceremony", desc: "Public Holiday" }
+      ],
+      6: [
+        { type: "workshop", title: "Phonetics Workshop 3", desc: "For Level Intro 1 Students" }
+      ],
+      8: [
+        { type: "social", title: "Sharing Session on New Student Interview", desc: "Participant: Aii & AIS interviewers • Time: 09:00 a.m. to 11:00 a.m. • Venue: 17th Floor, SKH Auditorium, LKN Tower, MTT Campus" }
+      ],
+      10: [
+        { type: "academic", title: "PTA", desc: "" }
+      ],
+      11: [
+        { type: "academic", title: "PTA", desc: "" }
+      ],
+      12: [
+        { type: "academic", title: "PTA", desc: "" }
+      ],
+      14: [
+        { type: "holiday", title: "King Norodom Sihamoni's Birthday", desc: "Public Holiday" }
+      ],
+      17: [
+        { type: "workshop", title: "Tips for Great Interviews", desc: "For Level Intro 3 Students" },
+        { type: "academic", title: "PTA", desc: "" }
+      ],
+      24: [
+        { type: "workshop", title: "Workshop: How to Overcome Procrastination", desc: "For Level 4 Students" }
+      ],
+      30: [
+        { type: "social", title: "The 28th Aii Graduation Ceremony", desc: "From 7:30 a.m. to 12:00 p.m." }
+      ]
+    }
+  },
+  // June 2026 (starts Monday)
+  {
+    month: "June", year: 2026, startDay: 1, days: 30,
+    events: {
+      1: [
+        { type: "workshop", title: "Workshop: Presentation Skills and Speaking in Front of an Audience", desc: "For Level 7b Students" }
+      ],
+      2: [
+        { type: "workshop", title: "Workshop: TOEFL Writing Skills", desc: "For Level 10 Students" },
+        { type: "workshop", title: "Workshop: TOEFL Listening Skills", desc: "For Level 11a Students" }
+      ],
+      3: [
+        { type: "workshop", title: "Workshop: TOEFL Reading Skills", desc: "For Level 11b Students" }
+      ],
+      4: [
+        { type: "workshop", title: "Workshop: General English Program", desc: "For Kid 12 Students" }
+      ],
+      7: [
+        { type: "workshop", title: "Workshop: Introduction to TOEFL", desc: "For Level 9a Students" }
+      ],
+      12: [
+        { type: "academic", title: "Interview for GEP 1 Students", desc: "From 02:00 p.m. to 05:00 p.m." },
+        { type: "academic", title: "Level 8 Basic Presentation", desc: "" }
+      ],
+      14: [
+        { type: "social", title: "Student Learning Conference", desc: "For Level 11c Students • Note: Level 8, 9a, 9b, 10, 11a & 11b students will be the audience" }
+      ],
+      15: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 1", desc: "For Level 10 Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Part 2", desc: "For Level 11a Students" }
+      ],
+      16: [
+        { type: "holiday", title: "Queen Norodom Monineath Sihanouk's Birthday", desc: "Public Holiday" }
+      ],
+      17: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 3", desc: "For Level 11b Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Final", desc: "For Level 11c Students" }
+      ],
+      18: [
+        { type: "social", title: "The 7th Mengly J. Quach Chinese Calligraphy Contest", desc: "17th Floor, SHK Auditorium, LKN Tower, MTT Campus" }
+      ],
+      22: [
+        { type: "social", title: "Open Field Study", desc: "For Kid Starter to Kid 4 Students" }
+      ],
+      23: [
+        { type: "workshop", title: "Workshop: Tips on How to Make Good PowerPoint Slides", desc: "For Level 11b Students" }
+      ],
+      26: [
+        { type: "social", title: "The 54th Aii Field Trip", desc: "MTT, PT, CC, CAP, & TSK" }
+      ]
+    }
+  },
+  // July 2026 (starts Wednesday)
+  {
+    month: "July", year: 2026, startDay: 3, days: 31,
+    events: {
+      1: [
+        { type: "academic", title: "Pre-kid 1 to Kid 4 Final Result Sheet Submission Deadline", desc: "No Later Than 5:30 p.m. • Final Semester" }
+      ],
+      2: [
+        { type: "academic", title: "Mid-Semester Exam / Final Semester", desc: "" },
+        { type: "academic", title: "Progress Test", desc: "" },
+        { type: "academic", title: "Stage Exam", desc: "" },
+        { type: "academic", title: "Teaching Material Submission Deadline", desc: "No Later Than 5:00 p.m." }
+      ],
+      3: [
+        { type: "term", title: "Y22T93 CSL Weekend Classes Matriculates", desc: "" }
+      ],
+      5: [
+        { type: "academic", title: "Review, Checking and Discussion", desc: "Of the results of the exam" }
+      ],
+      6: [
+        { type: "social", title: "End-of-Term Potluck", desc: "Year 22 Term 92" },
+        { type: "academic", title: "Digital Final Result Submission", desc: "" },
+        { type: "academic", title: "Continuous Assessment Confirmation", desc: "" }
+      ],
+      7: [
+        { type: "academic", title: "Publish Final Result and Make-up Name List", desc: "By 02:00 p.m." }
+      ],
+      8: [
+        { type: "academic", title: "Make-up Exam (AM/PM) and Result Released", desc: "" }
+      ],
+      9: [
+        { type: "term", title: "New Teacher Induction", desc: "From 08:30 a.m. – 11:00 a.m. • The Billy V. Chhay Conference Room, 16th Floor, LKN Tower, MTT Campus" }
+      ],
+      10: [
+        { type: "term", title: "New Term Orientation", desc: "09:00 a.m. – 11:30 a.m. • 6th Floor, Paul Quach Auditorium, AIS-TK Campus" }
+      ],
+      13: [
+        { type: "term", title: "Y22T93 Matriculates (Adult)", desc: "" },
+        { type: "term", title: "Y22S36 Matriculates (Kid)", desc: "" },
+        { type: "term", title: "New Student Orientation", desc: "" }
+      ],
+      19: [
+        { type: "workshop", title: "Phonetics Workshop 1", desc: "For Level Starter Students" },
+        { type: "academic", title: "Class Monitor & Sub-class Monitor Submission Deadline", desc: "Name & ID No." }
+      ],
+      20: [
+        { type: "workshop", title: "Phonetics Workshop 2", desc: "For Level Starter Students" }
+      ],
+      21: [
+        { type: "workshop", title: "Phonetics Workshop 3", desc: "For Level Intro 1 Students" }
+      ],
+      26: [
+        { type: "workshop", title: "Tips for Great Interviews", desc: "For Level Intro 3 Students" }
+      ]
+    }
+  },
+  // August 2026 (starts Saturday)
+  {
+    month: "August", year: 2026, startDay: 6, days: 31,
+    events: {
+      7: [
+        { type: "workshop", title: "Workshop: How to Overcome Procrastination", desc: "For Level 4 Students" }
+      ],
+      9: [
+        { type: "workshop", title: "Workshop: Presentation Skills and Speaking in Front of an Audience", desc: "For Level 7b Students" }
+      ],
+      16: [
+        { type: "workshop", title: "Workshop: TOEFL Writing Skills", desc: "For Level 10 Students" },
+        { type: "workshop", title: "Workshop: TOEFL Listening Skills", desc: "For Level 11a Students" }
+      ],
+      17: [
+        { type: "workshop", title: "Workshop: TOEFL Reading Skills", desc: "For Level 11b Students" }
+      ],
+      20: [
+        { type: "workshop", title: "Workshop: Introduction to TOEFL", desc: "For Level 9a Students" }
+      ],
+      21: [
+        { type: "social", title: "Open Discussion", desc: "09:00 a.m. to 11:30 a.m. • 17th Floor, SHK Auditorium, LKN Tower, MTT Campus" },
+        { type: "academic", title: "Level 8 Basic Presentation", desc: "" }
+      ],
+      23: [
+        { type: "social", title: "Student Learning Conference", desc: "For Level 11c Students • Note: Level 8, 9a, 9b, 10, 11a & 11b students will be the audience" }
+      ],
+      27: [
+        { type: "academic", title: "Interview for GEP 1 Students", desc: "From 02:00 p.m. to 05:00 p.m." }
+      ],
+      30: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 1", desc: "For Level 10 Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Part 2", desc: "For Level 11a Students" }
+      ],
+      31: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 3", desc: "For Level 11b Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Final", desc: "For Level 11c Students" }
+      ]
+    }
+  },
+  // September 2026 (starts Tuesday)
+  {
+    month: "September", year: 2026, startDay: 2, days: 30,
+    events: {
+      2: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 3", desc: "For Level 11b Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Final", desc: "For Level 11c Students" }
+      ],
+      3: [
+        { type: "social", title: "Open Field Study", desc: "For Pre-kid 2 to Pre-kid 4 Students" }
+      ],
+      4: [
+        { type: "workshop", title: "Workshop: Tips on How to Make Good PowerPoint Slides", desc: "For Level 11b Students" }
+      ],
+      5: [
+        { type: "social", title: "The 55th Aii Field Trip", desc: "TK, CA, CCV, SS, & CKD" }
+      ],
+      13: [
+        { type: "academic", title: "Pre-kid 1 to Kid 4 Final Result Sheet Submission Deadline", desc: "No Later Than 5:30 p.m. • Final Semester" }
+      ],
+      14: [
+        { type: "academic", title: "Mid-Semester Exam / Final Semester", desc: "" },
+        { type: "academic", title: "Progress Test", desc: "" },
+        { type: "academic", title: "Stage Exam", desc: "" },
+        { type: "academic", title: "Teaching Material Submission Deadline", desc: "No Later Than 5:00 p.m." }
+      ],
+      15: [
+        { type: "academic", title: "Review, Checking and Discussion", desc: "Of the results of the exam" }
+      ],
+      17: [
+        { type: "social", title: "End-of-Term Potluck", desc: "Year 22 Term 93" },
+        { type: "academic", title: "Digital Final Result Submission", desc: "" },
+        { type: "academic", title: "Continuous Assessment Confirmation", desc: "" }
+      ],
+      18: [
+        { type: "term", title: "Y22T94 CSL Weekend Classes Matriculates", desc: "" }
+      ],
+      20: [
+        { type: "academic", title: "Publish Final Result and Make-up Name List", desc: "By 02:00 p.m." }
+      ],
+      21: [
+        { type: "academic", title: "Make-up Exam (AM/PM) and Result Released", desc: "" }
+      ],
+      24: [
+        { type: "holiday", title: "Constitutional Day", desc: "Public Holiday" }
+      ],
+      25: [
+        { type: "term", title: "New Teacher Induction", desc: "From 08:30 a.m. – 11:00 a.m. • The Billy V. Chhay Conference Room, 16th Floor, LKN Tower, MTT Campus" }
+      ],
+      26: [
+        { type: "term", title: "New Term Orientation", desc: "09:00 a.m. – 11:30 a.m. • 6th Floor, Paul Quach Auditorium, AIS-TK Campus" }
+      ],
+      28: [
+        { type: "term", title: "Y22T94 Matriculates (Adult)", desc: "" },
+        { type: "term", title: "Y22S36 Resumes (Kid)", desc: "" },
+        { type: "term", title: "New Student Orientation", desc: "" }
+      ]
+    }
+  },
+  // October 2026 (starts Thursday)
+  {
+    month: "October", year: 2026, startDay: 4, days: 31,
+    events: {
+      4: [
+        { type: "workshop", title: "Phonetics Workshop 1", desc: "For Level Starter Students" },
+        { type: "academic", title: "Class Monitor & Sub-class Monitor Submission Deadline", desc: "Name & ID No." }
+      ],
+      5: [
+        { type: "workshop", title: "Phonetics Workshop 2", desc: "For Level Starter Students" }
+      ],
+      6: [
+        { type: "workshop", title: "Phonetics Workshop 3", desc: "For Level Intro 1 Students" }
+      ],
+      10: [
+        { type: "holiday", title: "Pchum Ben", desc: "Public Holiday" }
+      ],
+      11: [
+        { type: "holiday", title: "Pchum Ben", desc: "Public Holiday" }
+      ],
+      12: [
+        { type: "holiday", title: "Pchum Ben", desc: "Public Holiday" }
+      ],
+      13: [
+        { type: "academic", title: "PTA", desc: "" }
+      ],
+      14: [
+        { type: "academic", title: "PTA", desc: "" }
+      ],
+      15: [
+        { type: "holiday", title: "Commemoration Day of King's Father", desc: "Public Holiday" }
+      ],
+      17: [
+        { type: "social", title: "Sharing Session on New Student Interview", desc: "Participant: Aii & AIS interviewers • Time: 09:00 a.m. to 11:00 a.m. • Venue: 17th Floor, SKH Auditorium, LKN Tower, MTT Campus" }
+      ],
+      19: [
+        { type: "workshop", title: "Tips for Great Interviews", desc: "For Level Intro 3 Students" },
+        { type: "academic", title: "PTA", desc: "" }
+      ],
+      25: [
+        { type: "workshop", title: "Workshop: How to Overcome Procrastination", desc: "For Level 4 Students" }
+      ],
+      29: [
+        { type: "holiday", title: "King's Coronation Day", desc: "Public Holiday" }
+      ],
+      30: [
+        { type: "social", title: "Halloween Celebration", desc: "" }
+      ],
+      31: [
+        { type: "social", title: "Elimination Round by Campus", desc: "The 22nd Mengly J. Quach Spelling Bee" }
+      ]
+    }
+  },
+  // November 2026 (starts Sunday)
+  {
+    month: "November", year: 2026, startDay: 0, days: 30,
+    events: {
+      2: [
+        { type: "workshop", title: "Workshop: Presentation Skills and Speaking in Front of an Audience", desc: "For Level 7b Students" }
+      ],
+      3: [
+        { type: "workshop", title: "Workshop: TOEFL Writing Skills", desc: "For Level 10 Students" },
+        { type: "workshop", title: "Workshop: TOEFL Listening Skills", desc: "For Level 11a Students" }
+      ],
+      4: [
+        { type: "workshop", title: "Workshop: TOEFL Reading Skills", desc: "For Level 11b Students" }
+      ],
+      5: [
+        { type: "workshop", title: "Workshop: General English Program", desc: "For Kid 12 Students" }
+      ],
+      7: [
+        { type: "academic", title: "Level 8 Basic Presentation", desc: "" }
+      ],
+      9: [
+        { type: "holiday", title: "Independence Day", desc: "Public Holiday" },
+        { type: "workshop", title: "Workshop: Introduction to TOEFL", desc: "For Level 9a Students" }
+      ],
+      15: [
+        { type: "social", title: "Student Learning Conference", desc: "For Level 11c Students • Note: Level 8, 9a, 9b, 10, 11a & 11b students will be the audience" }
+      ],
+      18: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 1", desc: "For Level 10 Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Part 2", desc: "For Level 11a Students" }
+      ],
+      19: [
+        { type: "test", title: "TOEFL ITP Mock Test – Part 3", desc: "For Level 11b Students" },
+        { type: "test", title: "TOEFL ITP Mock Test – Final", desc: "For Level 11c Students" }
+      ],
+      20: [
+        { type: "academic", title: "Interview for GEP 1 Students", desc: "From 02:00 p.m. to 05:00 p.m." }
+      ],
+      23: [
+        { type: "holiday", title: "Water Festival", desc: "Public Holiday" }
+      ],
+      24: [
+        { type: "holiday", title: "Water Festival", desc: "Public Holiday" }
+      ],
+      25: [
+        { type: "holiday", title: "Water Festival", desc: "Public Holiday" }
+      ],
+      26: [
+        { type: "social", title: "The 22nd Mengly J. Quach Spelling Bee", desc: "" }
+      ]
+    }
+  },
+  // December 2026 (starts Tuesday)
+  {
+    month: "December", year: 2026, startDay: 2, days: 31,
+    events: {
+      1: [
+        { type: "workshop", title: "Workshop: Tips on How to Make Good PowerPoint Slides", desc: "For Level 11b Students" }
+      ],
+      4: [
+        { type: "social", title: "The 56th Aii Field Trip", desc: "MTT, PT, CC, CAP, & TSK" }
+      ],
+      8: [
+        { type: "academic", title: "Pre-kid 1 to Kid 4 Final Result Sheet Submission Deadline", desc: "No Later Than 5:30 p.m. • Final Semester" }
+      ],
+      9: [
+        { type: "academic", title: "Mid-Semester Exam / Final Semester", desc: "" },
+        { type: "academic", title: "Progress Test", desc: "" },
+        { type: "academic", title: "Stage Exam", desc: "" },
+        { type: "academic", title: "Teaching Material Submission Deadline", desc: "No Later Than 5:00 p.m." }
+      ],
+      11: [
+        { type: "social", title: "End-of-Term Potluck", desc: "Year 22 Term 94" },
+        { type: "academic", title: "Digital Final Result Submission", desc: "" },
+        { type: "academic", title: "Continuous Assessment Confirmation", desc: "" }
+      ],
+      12: [
+        { type: "term", title: "Y22T94 CSL Weekend Classes Matriculates", desc: "" }
+      ],
+      13: [
+        { type: "social", title: "The 7th Aii Camping", desc: "" }
+      ],
+      14: [
+        { type: "academic", title: "Review, Checking and Discussion", desc: "Of the results of the exam" }
+      ],
+      15: [
+        { type: "academic", title: "Publish Final Result and Make-up Name List", desc: "By 02:00 p.m." }
+      ],
+      16: [
+        { type: "term", title: "New Teacher Induction", desc: "From 08:30 a.m. – 11:00 a.m. • The Billy V. Chhay Conference Room, 16th Floor, LKN Tower, MTT Campus" }
+      ],
+      17: [
+        { type: "academic", title: "Make-up Exam (AM/PM) and Result Released", desc: "" }
+      ],
+      18: [
+        { type: "term", title: "New Term Orientation", desc: "09:00 a.m. – 11:30 a.m. • 6th Floor, Paul Quach Auditorium, AIS-TK Campus" }
+      ],
+      19: [
+        { type: "social", title: "The 7th Aii Camping", desc: "" }
+      ],
+      20: [
+        { type: "term", title: "Y23T95 Matriculates (Adult)", desc: "" },
+        { type: "term", title: "Y23S37 Matriculates (Kid)", desc: "" },
+        { type: "term", title: "New Student Orientation", desc: "" }
+      ],
+      24: [
+        { type: "social", title: "Christmas Celebration", desc: "" }
+      ],
+      28: [
+        { type: "workshop", title: "Phonetics Workshop 1", desc: "For Level Starter Students" },
+        { type: "academic", title: "Class Monitor & Sub-class Monitor Submission Deadline", desc: "Name & ID No." }
+      ],
+      29: [
+        { type: "holiday", title: "Peace Day", desc: "Public Holiday" }
+      ],
+      30: [
+        { type: "workshop", title: "Phonetics Workshop 2", desc: "For Level Starter Students" }
+      ],
+      31: [
+        { type: "holiday", title: "New Year's Eve", desc: "Public Holiday" }
+      ]
+    }
+  }
+];
+
+let currentMonth = 0;
+const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+function renderMonth(idx) {
+  const data = calendarData[idx];
+  const wrap = document.getElementById('calendarWrap');
+  let html = `<div class="month-card">
+    <div class="month-header">
+      <span>${data.month} ${data.year}</span>
+      <span class="year-badge">${data.year}</span>
+    </div>
+    <div class="cal-grid">`;
+
+  dayNames.forEach(d => {
+    html += `<div class="day-label">${d.slice(0,3)}</div>`;
+  });
+
+  // Empty cells before start
+  for (let i = 0; i < data.startDay; i++) {
+    html += `<div class="day-cell empty"></div>`;
+  }
+
+  // Days
+  for (let d = 1; d <= data.days; d++) {
+    const dayOfWeek = (data.startDay + d - 1) % 7;
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const evs = data.events[d] || [];
+    const isHoliday = evs.some(e => e.type === 'holiday');
+    const hasEvents = evs.length > 0;
+
+    let cls = 'day-cell';
+    if (isWeekend) cls += ' weekend';
+    if (isHoliday) cls += ' holiday';
+    if (hasEvents) cls += ' has-events';
+
+    html += `<div class="${cls}" onclick="openModal(${idx},${d})">
+      <div class="day-num">${d}</div>
+      <div class="day-events">`;
+
+    evs.slice(0, 3).forEach(ev => {
+      let pillClass = ev.type;
+      html += `<div class="event-pill ${pillClass}">${ev.title}</div>`;
+    });
+    if (evs.length > 3) {
+      html += `<div class="event-pill" style="background:#f5f5f5;color:#666;">+${evs.length - 3} more</div>`;
+    }
+
+    html += `</div></div>`;
+  }
+
+  // Fill remaining to complete last row
+  const totalCells = data.startDay + data.days;
+  const remaining = (7 - (totalCells % 7)) % 7;
+  for (let i = 0; i < remaining; i++) {
+    html += `<div class="day-cell empty"></div>`;
+  }
+
+  html += `</div></div>`;
+  wrap.innerHTML = html;
+  document.getElementById('monthSelect').value = idx;
+  currentMonth = idx;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function changeMonth(dir) {
+  let next = currentMonth + dir;
+  if (next < 0) next = 11;
+  if (next > 11) next = 0;
+  renderMonth(next);
+}
+
+function jumpMonth(val) {
+  renderMonth(parseInt(val));
+}
+
+function openModal(monthIdx, day) {
+  const data = calendarData[monthIdx];
+  const evs = data.events[day] || [];
+  if (!evs.length) return;
+
+  document.getElementById('modalTitle').textContent = `${data.month} ${day}, ${data.year}`;
+  let body = '';
+  evs.forEach(ev => {
+    body += `<div class="modal-event">
+      <span class="ev-type ${ev.type}">${ev.type}</span>
+      <div class="ev-title">${ev.title}</div>
+      ${ev.desc ? `<div class="ev-desc">${ev.desc}</div>` : ''}
+    </div>`;
+  });
+  document.getElementById('modalBody').innerHTML = body;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function togglePanel() {
+  const panel = document.getElementById('sidePanel');
+  const overlay = document.getElementById('panelOverlay');
+  const isOpen = panel.classList.contains('open');
+  if (isOpen) {
+    panel.classList.remove('open');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  } else {
+    panel.classList.add('open');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const resDiv = document.getElementById('searchResults');
+  if (!q) {
+    resDiv.classList.remove('active');
+    resDiv.innerHTML = '';
+    return;
+  }
+
+  let results = [];
+  calendarData.forEach((m, mi) => {
+    Object.entries(m.events).forEach(([day, evs]) => {
+      evs.forEach(ev => {
+        const text = (ev.title + ' ' + ev.desc).toLowerCase();
+        if (text.includes(q)) {
+          results.push({ monthIdx: mi, day: parseInt(day), ev });
+        }
+      });
+    });
+  });
+
+  if (!results.length) {
+    resDiv.innerHTML = '<div style="padding:20px;color:#999;text-align:center;">No events found.</div>';
+    resDiv.classList.add('active');
+    return;
+  }
+
+  let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <strong style="color:var(--aii-blue);">Found ${results.length} result(s)</strong>
+    <button onclick="clearSearch()" style="background:none;border:none;color:var(--aii-blue);cursor:pointer;font-weight:600;">Clear ✕</button>
+  </div>`;
+
+  results.forEach(r => {
+    const m = calendarData[r.monthIdx];
+    html += `<div class="result-card" onclick="jumpTo(${r.monthIdx},${r.day})">
+      <div class="res-date">${m.month} ${r.day}, ${m.year}</div>
+      <div class="res-title">${r.ev.title}</div>
+      ${r.ev.desc ? `<div style="font-size:0.85rem;color:#666;margin-top:2px;">${r.ev.desc}</div>` : ''}
+    </div>`;
+  });
+
+  resDiv.innerHTML = html;
+  resDiv.classList.add('active');
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').classList.remove('active');
+}
+
+function jumpTo(mi, day) {
+  renderMonth(mi);
+  setTimeout(() => openModal(mi, day), 350);
+  document.getElementById('searchResults').classList.remove('active');
+}
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowLeft') changeMonth(-1);
+  if (e.key === 'ArrowRight') changeMonth(1);
+});
+
+/* ===== Neuron Network Background ===== */
+(function(){
+    const canvas = document.getElementById('neuron-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    const particleCount = 70;
+    const connectionDistance = 140;
+    const maxConnections = 3;
+
+    function resize(){
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+        constructor(){
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() * 1.5 + 1;
+        }
+        update(){
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+        draw(){
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(96, 165, 250, 0.55)';
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+    let mouse = { x: null, y: null };
+    window.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+    function animate(){
+        ctx.clearRect(0, 0, width, height);
+        for (let p of particles) { p.update(); p.draw(); }
+
+        for (let i = 0; i < particles.length; i++){
+            let connections = 0;
+            for (let j = i + 1; j < particles.length; j++){
+                let dx = particles[i].x - particles[j].x;
+                let dy = particles[i].y - particles[j].y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < connectionDistance && connections < maxConnections){
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(96, 165, 250, ${0.2 * (1 - dist/connectionDistance)})`;
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                    connections++;
+                }
+            }
+            if (mouse.x !== null){
+                let dx = particles[i].x - mouse.x;
+                let dy = particles[i].y - mouse.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 200){
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(37, 99, 235, ${0.35 * (1 - dist/200)})`;
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+})();
+
+function updateThemeToggleUi() {
+    var btn = document.getElementById('themeToggleBtn');
+    if (!btn) return;
+    var isLight = document.body.classList.contains('light-theme');
+    btn.innerHTML = isLight
+        ? '<i class="fas fa-sun"></i><span>Light</span>'
+        : '<i class="fas fa-moon"></i><span>Dark</span>';
+}
+
+function applySavedTheme() {
+    var savedTheme = localStorage.getItem('ryshubTheme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+    } else {
+        document.body.classList.remove('light-theme');
+    }
+    updateThemeToggleUi();
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+    localStorage.setItem('ryshubTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    updateThemeToggleUi();
+}
+
+applySavedTheme();
+
+// Init
+renderMonth(0);
+</script>
+
+<button class="theme-toggle-mini" onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle dark and light mode">
+  <i class="fas fa-moon"></i><span>Dark</span>
+</button>
+
+</body>
+</html>

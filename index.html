@@ -1,17 +1,4334 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-src 'self' https://www.youtube.com https://drive.google.com; connect-src 'self';">
     <title>RysHub Studio • Teacher Ry</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-DwKHPYxm.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Dpnl9Xxe.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    <script src="assets/ryshub-auth.js"></script>
+    <script>
+        (function () {
+            var hasMasterAccess = RysHubAuth.checkCompat();
+            var isLoginPage = window.location.pathname.replace(/\\/g, '/').endsWith('/apps/login.html');
+            if (!hasMasterAccess && !isLoginPage) {
+                window.location.replace('apps/login.html');
+            }
+        })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --gray-900: #0b0f19;
+            --gray-800: #111827;
+            --gray-700: #1f2937;
+            --gray-600: #374151;
+            --gray-500: #6b7280;
+            --gray-400: #9ca3af;
+            --gray-300: #d1d5db;
+            --gray-100: #f3f4f6;
+            --white: #ffffff;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            min-block-size: 100vh; 
+            overflow-x: hidden;
+            background: var(--gray-900);
+            color: var(--gray-100);
+        }
+        
+        /* Full-page background image */
+        .page-bg-image {
+            position: fixed;
+            inset: 0;
+            inline-size: 100%;
+            block-size: 100%;
+            background: url('AI.jpg') center center / cover no-repeat;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Static Overlay */
+        #static-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            will-change: opacity;
+        }
+        #static-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            background-size: 180px 180px;
+            opacity: 0.028;
+            pointer-events: none;
+        }
+
+        /* Neuron Canvas */
+        #neuron-canvas {
+            position: fixed;
+            inset: 0;
+            inline-size: 100%;
+            block-size: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        /* Glass Header */
+        .glass-header {
+            position: fixed;
+            inset-block-start: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            z-index: 100;
+            background: rgba(11, 15, 25, 0.75);
+            backdrop-filter: blur(16px);
+            border-block-end: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-header.scrolled {
+            background: rgba(11, 15, 25, 0.92);
+            border-block-end-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-3d {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--gray-300);
+            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2);
+            text-decoration: none;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .nav-3d:hover {
+            color: var(--white);
+            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+            border-color: rgba(255,255,255,0.18);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .nav-3d:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.2);
+        }
+        .nav-scroll {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            max-inline-size: 520px;
+            padding: 4px;
+            mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+        }
+        .nav-scroll::-webkit-scrollbar { display: none; }
+
+        .nav-scroll-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-inline-size: 0;
+        }
+
+        /* Ensure sections are not hidden under fixed header when scrolled to */
+        section[id], div[id].section-intro {
+            scroll-margin-top: 92px;
+        }
+
+        .nav-scroll-btn {
+            inline-size: 32px;
+            block-size: 32px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.16);
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--gray-200, #e5e7eb);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .nav-scroll-btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(96, 165, 250, 0.5);
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .header-shell {
+            min-block-size: 92px;
+            gap: 20px;
+        }
+
+        .header-cta-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-cta-group .btn-outline,
+        .header-cta-group .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            border-radius: 10px;
+            line-height: 1.2;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .header-cta-group .btn-outline {
+            color: var(--white);
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.28);
+        }
+
+        .header-cta-group .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+        }
+
+        .brand-lockup {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.05;
+        }
+
+        .brand-overline {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--primary-light);
+            margin-block-end: 4px;
+        }
+
+        .brand-title {
+            font-size: 1.12rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: -0.03em;
+        }
+
+        .header-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--gray-300);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.16);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-status strong {
+            color: var(--white);
+            font-size: 0.85rem;
+        }
+
+        .header-status span {
+            color: var(--gray-400);
+            font-size: 0.78rem;
+        }
+
+        .hero-highlights {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-block-end: 12px;
+        }
+
+        .top-section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 0 0 18px;
+        }
+
+        .section-jump-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(15,23,42,0.55);
+            color: var(--gray-100);
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+            box-shadow: 0 10px 24px rgba(15,23,42,.16);
+        }
+
+        .section-jump-btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(96,165,250,.45);
+            box-shadow: 0 14px 28px rgba(37,99,235,.2);
+        }
+
+        .games-score-section {
+            position: relative;
+            z-index: 10;
+            max-inline-size: 1200px;
+            margin: 0 auto 34px;
+            padding: 0 16px;
+        }
+
+        .games-score-grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 18px;
+        }
+
+        .score-spotlight,
+        .score-list {
+            background: linear-gradient(180deg, rgba(15,23,42,.88), rgba(15,23,42,.72));
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 20px 45px rgba(2,6,23,.24);
+            backdrop-filter: blur(14px);
+        }
+
+        .score-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-block-end: 10px;
+            font-size: .72rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: #93c5fd;
+            font-weight: 800;
+        }
+
+        .score-spotlight h3 {
+            margin: 0 0 8px;
+            font-size: 1.4rem;
+            color: var(--white);
+        }
+
+        .score-spotlight p {
+            margin: 0 0 16px;
+            color: var(--gray-300);
+            line-height: 1.7;
+        }
+
+        .score-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0,1fr));
+            gap: 10px;
+            margin-block-end: 14px;
+        }
+
+        .score-meta-card {
+            padding: 12px;
+            border-radius: 16px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.06);
+        }
+
+        .score-meta-card strong {
+            display: block;
+            color: var(--white);
+            font-size: 1rem;
+            margin-block-end: 4px;
+        }
+
+        .score-meta-card span {
+            color: var(--gray-400);
+            font-size: .78rem;
+        }
+
+        .score-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 0;
+            border-block-end: 1px solid rgba(255,255,255,.06);
+        }
+
+        .score-row:last-child {
+            border-block-end: none;
+            padding-block-end: 0;
+        }
+
+        .score-rank {
+            inline-size: 32px;
+            block-size: 32px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+            color: white;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .score-game {
+            flex: 1;
+        }
+
+        .score-game strong {
+            display: block;
+            color: var(--white);
+            font-size: .96rem;
+            margin-block-end: 2px;
+        }
+
+        .score-game span {
+            color: var(--gray-400);
+            font-size: .8rem;
+        }
+
+        .score-value {
+            color: #fbbf24;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
+                .hero-banner {
+            position: relative;
+            max-inline-size: 1040px;
+            margin: 0 auto 14px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            background:
+                linear-gradient(180deg, rgba(7,10,18,0.10) 0%, rgba(7,10,18,0.30) 100%),
+                url('assets/images/page-banner.png?v=20260416h') center 28% / cover no-repeat;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            backdrop-filter: blur(10px);
+            background: rgba(11,15,25,0.12);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            inset-inline: 0;
+            inset-block-end: 0;
+            block-size: 56px;
+            background: linear-gradient(180deg, transparent, rgba(11,15,25,0.22));
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero-circuit {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0.9;
+        }
+
+        .hero-circuit::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59,130,246,0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,0.12) 1px, transparent 1px);
+            background-size: 88px 88px;
+            mask-image: linear-gradient(180deg, transparent 0%, black 16%, black 84%, transparent 100%);
+            animation: circuitDrift 12s linear infinite;
+        }
+
+        .hero-circuit::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(118deg, transparent 0%, transparent 23%, rgba(96,165,250,0) 23%, rgba(96,165,250,0.55) 25%, transparent 27%, transparent 100%),
+                linear-gradient(28deg, transparent 0%, transparent 56%, rgba(34,211,238,0) 56%, rgba(34,211,238,0.52) 58%, transparent 60%, transparent 100%),
+                radial-gradient(circle at 16% 34%, rgba(96,165,250,0.95) 0 2px, transparent 8px),
+                radial-gradient(circle at 37% 58%, rgba(34,211,238,0.9) 0 2px, transparent 8px),
+                radial-gradient(circle at 64% 26%, rgba(59,130,246,0.9) 0 2px, transparent 8px),
+                radial-gradient(circle at 82% 62%, rgba(14,165,233,0.92) 0 2px, transparent 9px);
+            filter: drop-shadow(0 0 8px rgba(59,130,246,0.32));
+            mix-blend-mode: screen;
+            animation: circuitPulse 3.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes circuitDrift {
+            from { background-position: 0 0, 0 0; }
+            to { background-position: 88px 0, 0 88px; }
+        }
+
+        @keyframes circuitPulse {
+            0% { opacity: 0.35; transform: scale(1); }
+            50% { opacity: 0.72; }
+            100% { opacity: 0.48; transform: scale(1.015); }
+        }
+
+        .hero-banner img {
+            position: relative;
+            z-index: 3;
+            inline-size: 100%;
+            block-size: clamp(210px, 24vw, 280px);
+            object-fit: contain;
+            object-position: center;
+            display: block;
+        }
+
+        .hero-highlight {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--gray-300);
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .hero-highlight i {
+            color: var(--primary-light);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: white;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.25);
+        }
+        
+        /* Hero */
+        .hero-section {
+            position: relative;
+            z-index: 10;
+            padding: 92px 16px 40px;
+            text-align: center;
+        }
+
+                .hero-banner {
+            inline-size: 100%;
+            max-inline-size: 1200px;
+            margin: 0 auto 36px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.12), 0 0 0 1px rgba(255,255,255,0.5) inset;
+            border: 1px solid rgba(15,23,42,0.08);
+            transition: all 0.4s ease;
+            z-index: 10;
+        }
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 60%, rgba(15,23,42,0.04) 100%);
+            pointer-events: none;
+        }
+        .hero-banner:hover {
+            box-shadow: 0 32px 100px rgba(0,0,0,0.16), 0 0 0 1px rgba(255,255,255,0.5) inset;
+            transform: translateY(-2px);
+        }
+        .hero-banner-coded {
+            position: relative;
+            min-block-size: 280px;
+            padding: 34px clamp(18px, 4vw, 38px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 28px;
+            background:
+                radial-gradient(circle at 10% 15%, rgba(59,130,246,0.24), transparent 45%),
+                radial-gradient(circle at 86% 24%, rgba(6,182,212,0.2), transparent 42%),
+                linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #0e7490 100%);
+            overflow: hidden;
+        }
+        .hb-bg-image {
+            position: absolute;
+            inset: 0;
+            background: url('AI.jpg') center center / cover no-repeat;
+            opacity: 0.18;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .hero-banner-coded::before {
+            content: '';
+            position: absolute;
+            inset: -50% -30%;
+            background:
+                repeating-linear-gradient(
+                    115deg,
+                    rgba(255,255,255,0.08) 0 2px,
+                    transparent 2px 28px
+                );
+            opacity: 0.32;
+            transform: rotate(-4deg);
+            pointer-events: none;
+        }
+        .hero-banner-coded::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(15,23,42,0.08) 0%, rgba(15,23,42,0.45) 100%);
+            pointer-events: none;
+        }
+        .hb-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(147,197,253,0.25);
+            pointer-events: none;
+            z-index: 1;
+            animation: hbFloat 6s ease-in-out infinite;
+        }
+        @keyframes hbFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 0.6; }
+        }
+        .hb-sweep {
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            animation: hbSweep 5s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        @keyframes hbSweep {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+        .hb-top, .hb-bottom {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .hb-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.24);
+            background: rgba(255,255,255,0.1);
+            color: rgba(248,250,252,0.95);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+            backdrop-filter: blur(8px);
+        }
+        .hb-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 14px;
+        }
+        .hb-title {
+            grid-column: span 8;
+            margin: 0;
+            color: #f8fafc;
+            font-size: clamp(1.6rem, 3.7vw, 2.8rem);
+            line-height: 1.05;
+            letter-spacing: -1.2px;
+            text-shadow: 0 10px 28px rgba(15,23,42,0.45);
+        }
+        .hb-title span {
+            display: block;
+            background: linear-gradient(90deg, #93c5fd 0%, #bfdbfe 25%, #93c5fd 50%, #60a5fa 75%, #93c5fd 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: hbShimmer 3s linear infinite;
+        }
+        @keyframes hbShimmer {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+        .hb-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 0.85em;
+            background: #60a5fa;
+            margin-left: 4px;
+            animation: hbBlink 0.8s step-end infinite;
+            vertical-align: text-bottom;
+            box-shadow: 0 0 8px rgba(96,165,250,0.8);
+        }
+        @keyframes hbBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .hb-glitch {
+            animation: hbGlitch 0.3s ease-in-out;
+        }
+        @keyframes hbGlitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        .hb-meta {
+            grid-column: span 4;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 18px;
+            background: rgba(15,23,42,0.35);
+            padding: 14px;
+            color: #e2e8f0;
+            font-size: 0.8rem;
+            line-height: 1.55;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+        }
+        .hb-lineup {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .hb-line {
+            inline-size: 38px;
+            block-size: 5px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #38bdf8, #93c5fd);
+            box-shadow: 0 0 16px rgba(56,189,248,0.45);
+        }
+        @media (max-inline-size: 900px) {
+            .hb-title, .hb-meta { grid-column: 1 / -1; }
+        }
+        @media (max-inline-size: 640px) {
+            .hero-banner-coded { min-block-size: 240px; padding: 22px; }
+            .hb-title { font-size: clamp(1.45rem, 6.2vw, 2rem); }
+        }
+        @media (max-inline-size: 768px) {
+            .hero-banner { border-radius: 16px; margin-block-start: 0; }
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(37, 99, 235, 0.12);
+            border: 1px solid rgba(37, 99, 235, 0.25);
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-block-end: 20px;
+        }
+        
+        .hero-title {
+            font-size: clamp(2.4rem, 5vw, 4.2rem);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.02;
+            margin: 0 0 14px;
+            letter-spacing: -2px;
+            max-inline-size: 680px;
+        }
+        
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary-blue), #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            color: var(--gray-400);
+            font-size: 1rem;
+            max-inline-size: 540px;
+            margin: 0 auto 20px;
+            line-height: 1.65;
+        }
+
+        /* ESL Art Cards */
+        .art-cards-section {
+            max-inline-size: 1150px;
+            margin: 0 auto 24px;
+            padding: 0 24px 24px;
+            position: relative;
+            z-index: 10;
+        }
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+        }
+        .art-card {
+            position: relative;
+            min-block-size: 260px;
+            padding: 24px;
+            border-radius: 24px;
+            border: 1px solid rgba(15,23,42,0.08);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(15,23,42,0.1), inset 0 0 0 1px rgba(255,255,255,0.32);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+        .art-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 28px 70px rgba(15,23,42,0.16), inset 0 0 0 1px rgba(255,255,255,0.36);
+        }
+        .art-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 18% 20%, rgba(255,255,255,0.42), transparent 36%),
+                radial-gradient(circle at 85% 80%, rgba(255,255,255,0.24), transparent 45%);
+            pointer-events: none;
+        }
+        .art-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 35%, rgba(15,23,42,0.45) 100%);
+            pointer-events: none;
+        }
+        .art-card-content {
+            position: relative;
+            z-index: 2;
+            block-size: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            color: #f8fafc;
+        }
+        .art-card h3 {
+            margin: 0 0 8px;
+            font-size: 1.2rem;
+            letter-spacing: -0.2px;
+        }
+        .art-card p {
+            margin: 0;
+            color: rgba(241,245,249,0.9);
+            font-size: 0.84rem;
+            line-height: 1.5;
+            max-inline-size: 95%;
+        }
+        .art-card .art-tag {
+            align-self: flex-start;
+            margin-block-end: 12px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.28);
+            background: rgba(255,255,255,0.12);
+        }
+        .art-card.classroom {
+            background:
+                linear-gradient(140deg, #1d4ed8 0%, #0f766e 48%, #155e75 100%);
+        }
+        .art-card.classroom .art-sketch {
+            position: absolute;
+            inset: 16px 18px auto;
+            block-size: 82px;
+            border: 1px dashed rgba(255,255,255,0.28);
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            color: rgba(255,255,255,0.88);
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .art-card.phonics {
+            background:
+                linear-gradient(135deg, #581c87 0%, #1e1b4b 52%, #0f172a 100%);
+        }
+        .art-card.phonics .sound-wave {
+            position: absolute;
+            inset-inline-start: 22px;
+            inset-inline-end: 22px;
+            inset-block-start: 36px;
+            block-size: 78px;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(56,189,248,0.95) 0 3px,
+                    transparent 3px 9px
+            );
+            mask-image: linear-gradient(180deg, transparent 0%, black 35%, black 65%, transparent 100%);
+            -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 35%, black 65%, transparent 100%);
+            opacity: 0.8;
+            border-radius: 12px;
+        }
+        .art-card.global {
+            background:
+                linear-gradient(135deg, #0f172a 0%, #1e40af 40%, #0e7490 100%);
+        }
+        .art-card.global .globe-ring {
+            position: absolute;
+            inset-block-start: 18px;
+            inset-inline-end: 20px;
+            inline-size: 96px;
+            block-size: 96px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.35);
+            box-shadow: inset 0 0 0 6px rgba(255,255,255,0.07);
+        }
+        .art-card.global .globe-ring::before,
+        .art-card.global .globe-ring::after {
+            content: '';
+            position: absolute;
+            inset: 16%;
+            border-radius: 50%;
+            border: 1px dashed rgba(255,255,255,0.35);
+        }
+        .art-card.global .globe-ring::after {
+            inset: 0;
+            border: none;
+            border-block-start: 1px solid rgba(255,255,255,0.32);
+            border-block-end: 1px solid rgba(255,255,255,0.32);
+            border-radius: 50%;
+            transform: rotate(22deg);
+        }
+        .hero-shell {
+            max-inline-size: 1120px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.75fr);
+            gap: 20px;
+            align-items: center;
+        }
+
+        .hero-copy {
+            text-align: start;
+        }
+
+        .hero-copy .hero-subtitle {
+            margin: 0 0 32px;
+        }
+
+        .hero-preview {
+            position: relative;
+        }
+
+        .hero-preview {
+            max-inline-size: 380px;
+            inline-size: 100%;
+            margin-inline-start: auto;
+        }
+
+        .hero-preview-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(17, 24, 39, 0.56);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 10px;
+            box-shadow: 0 18px 42px rgba(0,0,0,0.22);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-preview-card img {
+            inline-size: 100%;
+            block-size: 220px;
+            display: block;
+            object-fit: cover;
+            border-radius: 12px;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .hero-preview-launchers {
+            position: absolute;
+            inset: 22px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            align-content: center;
+        }
+
+        .hero-preview-hotspot {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 4px;
+            min-block-size: 58px;
+            padding: 10px 10px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(96, 165, 250, 0.26);
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.42), rgba(15, 23, 42, 0.72));
+            color: #f8fafc;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-align: start;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 20px rgba(2, 6, 23, 0.22);
+            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+        .hero-preview-hotspot span {
+            font-size: 0.55rem;
+            font-weight: 600;
+            color: rgba(226, 232, 240, 0.84);
+        }
+
+        .hero-preview-hotspot:hover {
+            transform: translateY(-2px);
+            border-color: rgba(96, 165, 250, 0.6);
+            background: linear-gradient(180deg, rgba(30, 64, 175, 0.48), rgba(37, 99, 235, 0.62));
+            box-shadow: 0 12px 22px rgba(37, 99, 235, 0.24);
+        }
+
+        .hero-preview-hotspot.books {
+            border-color: rgba(245, 158, 11, 0.24);
+        }
+
+        .hero-preview-hotspot.books:hover {
+            border-color: rgba(245, 158, 11, 0.58);
+            background: linear-gradient(180deg, rgba(180, 83, 9, 0.48), rgba(217, 119, 6, 0.66));
+            box-shadow: 0 12px 22px rgba(245, 158, 11, 0.22);
+        }
+
+        .hero-preview-hotspot.purple {
+            border-color: rgba(168, 85, 247, 0.24);
+        }
+
+        .hero-preview-hotspot.purple:hover {
+            border-color: rgba(168, 85, 247, 0.58);
+            background: linear-gradient(180deg, rgba(107, 33, 168, 0.5), rgba(126, 34, 206, 0.68));
+            box-shadow: 0 12px 22px rgba(168, 85, 247, 0.22);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            max-inline-size: 760px;
+            margin: 18px 0 0;
+        }
+
+        .stat-chip {
+            background: rgba(17, 24, 39, 0.62);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            padding: 12px 14px;
+            text-align: start;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.14);
+        }
+
+        .stat-chip strong {
+            display: block;
+            color: var(--white);
+            font-size: 1rem;
+            margin-block-end: 4px;
+        }
+
+        .stat-chip span {
+            color: var(--gray-400);
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        .section-intro {
+            max-inline-size: 1100px;
+            margin: 0 auto 24px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .section-kicker {
+            color: var(--primary-light);
+            font-size: 0.74rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 8px;
+        }
+
+        .section-intro h2 {
+            color: var(--white);
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 800;
+            margin: 0 0 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-intro p {
+            color: var(--gray-400);
+            margin: 0;
+            max-inline-size: 680px;
+            line-height: 1.65;
+        }
+
+        .classroom-lab-section {
+            max-inline-size: 1100px;
+            margin: 0 auto 32px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .classroom-lab-shell {
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background:
+                radial-gradient(circle at 9% 14%, rgba(59,130,246,0.16), transparent 35%),
+                radial-gradient(circle at 86% 16%, rgba(16,185,129,0.12), transparent 34%),
+                linear-gradient(135deg, rgba(15,23,42,0.95), rgba(17,24,39,0.92));
+            box-shadow: 0 22px 58px rgba(2,6,23,0.32);
+            overflow: hidden;
+        }
+
+        .lab-mode-switch {
+            display: inline-flex;
+            gap: 6px;
+            padding: 6px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(15,23,42,0.62);
+            margin: 20px 20px 0;
+        }
+
+        .lab-mode-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 9px 14px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: var(--gray-300);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lab-mode-btn.active {
+            color: var(--white);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            box-shadow: 0 8px 18px rgba(37,99,235,0.3);
+        }
+
+        .lab-panels {
+            padding: 18px 20px 22px;
+        }
+
+        .lab-panel {
+            display: none;
+            grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+            gap: 14px;
+        }
+
+        .lab-panel.active {
+            display: grid;
+        }
+
+        .lab-card {
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
+            padding: 16px;
+            backdrop-filter: blur(8px);
+        }
+
+        .lab-card h3 {
+            margin: 0 0 8px;
+            color: var(--white);
+            font-size: 1.08rem;
+            font-weight: 800;
+        }
+
+        .lab-card p {
+            margin: 0;
+            color: var(--gray-300);
+            line-height: 1.65;
+            font-size: 0.9rem;
+        }
+
+        .lab-step-list {
+            display: grid;
+            gap: 9px;
+            margin-block-start: 12px;
+        }
+
+        .lab-step-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(15,23,42,0.45);
+            padding: 10px 11px;
+        }
+
+        .lab-step-item strong {
+            display: block;
+            color: var(--white);
+            font-size: 0.86rem;
+            margin-block-end: 2px;
+        }
+
+        .lab-step-item span {
+            color: var(--gray-400);
+            font-size: 0.76rem;
+            line-height: 1.5;
+        }
+
+        .lab-pill {
+            inline-size: 24px;
+            block-size: 24px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #e0f2fe;
+            background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+            flex-shrink: 0;
+            margin-block-start: 1px;
+        }
+
+        .lab-tool-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+            margin-block-start: 12px;
+        }
+
+        .lab-tool-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 11px;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            color: var(--white);
+            font-size: 0.78rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lab-tool-btn:hover {
+            transform: translateY(-1px);
+            border-color: rgba(96,165,250,0.45);
+            background: rgba(37,99,235,0.16);
+        }
+
+        .lab-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-block-start: 12px;
+        }
+
+        .lab-metric {
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(15,23,42,0.45);
+            padding: 10px;
+        }
+
+        .lab-metric strong {
+            display: block;
+            color: var(--white);
+            font-size: 1rem;
+            margin-block-end: 2px;
+        }
+
+        .lab-metric span {
+            color: var(--gray-400);
+            font-size: 0.72rem;
+        }
+
+        @media (max-inline-size: 900px) {
+            .lab-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .lab-tool-grid,
+            .lab-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            max-inline-size: 1100px;
+            margin: 0 auto 60px;
+            padding: 0 18px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .tool-card {
+            background: rgba(17, 24, 39, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(37, 99, 235, 0.4);
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.18);
+        }
+        
+        .tool-icon {
+            inline-size: 56px;
+            block-size: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-block-end: 18px;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+        
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            padding: 3px 10px;
+            margin-block-end: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        .tool-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--white);
+            margin: 0 0 8px;
+        }
+        
+        .tool-card p {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0 0 18px;
+        }
+        
+        .meta-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-block-end: 20px;
+        }
+        
+        .meta-row span {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .card-btn {
+            inline-size: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 0 var(--primary-dark), 0 8px 24px rgba(37, 99, 235, 0.25);
+        }
+        
+        .card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 var(--primary-dark), 0 12px 28px rgba(37, 99, 235, 0.35);
+        }
+        
+        .card-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--primary-dark), 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .card-art {
+            margin: -24px -24px 16px;
+            block-size: 120px;
+            overflow: hidden;
+            border-radius: 18px 18px 14px 14px;
+            border-block-end: 1px solid rgba(255,255,255,0.08);
+            background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(15,23,42,0.85));
+            transform: translateZ(8px);
+        }
+
+        .card-art img {
+            inline-size: 100%;
+            block-size: 100%;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .tool-card:hover .card-art img {
+            transform: scale(1.06);
+        }
+        
+        /* Footer */
+        .site-footer {
+            position: relative;
+            z-index: 10;
+            border-block-start: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(11, 15, 25, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 48px 24px 32px;
+        }
+        
+        .social-link {
+            inline-size: 42px;
+            block-size: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-400);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .social-link:hover {
+            color: var(--white);
+            background: rgba(37, 99, 235, 0.2);
+            border-color: rgba(37, 99, 235, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle-mini {
+            position: absolute;
+            inset-inline-end: 24px;
+            inset-block-end: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(15, 23, 42, 0.88);
+            color: var(--white);
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.24);
+            backdrop-filter: blur(12px);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle-mini:hover {
+            transform: translateY(-1px);
+            border-color: rgba(96,165,250,0.45);
+            box-shadow: 0 10px 22px rgba(37,99,235,0.18);
+        }
+
+        .theme-toggle-mini i {
+            color: #fde68a;
+            font-size: 0.82rem;
+        }
+
+        body.light-theme {
+            background: linear-gradient(180deg, #eef4ff 0%, #f8fbff 100%);
+            color: #0f172a;
+        }
+
+        body.light-theme .glass-header {
+            background: rgba(255,255,255,0.82);
+            border-block-end-color: rgba(37,99,235,0.12);
+        }
+
+        body.light-theme .brand-title,
+        body.light-theme .hero-title,
+        body.light-theme .section-intro h2 {
+            color: #0f172a;
+        }
+
+        body.light-theme .hero-subtitle,
+        body.light-theme .section-intro p,
+        body.light-theme .stat-chip span,
+        body.light-theme .tool-card p {
+            color: #475569;
+        }
+
+        body.light-theme .stat-chip,
+        body.light-theme .tool-card,
+        body.light-theme .site-footer {
+            background: rgba(255,255,255,0.82);
+            border-color: rgba(15,23,42,0.08);
+            box-shadow: 0 14px 28px rgba(15,23,42,0.08);
+        }
+
+        body.light-theme .menu-item {
+            background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(226,232,240,0.96) 100%);
+            color: #0f172a;
+            border-color: rgba(37,99,235,0.12);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 3px 0 rgba(148,163,184,0.4), 0 8px 14px rgba(148,163,184,0.15);
+        }
+
+        body.light-theme .menu-item span,
+        body.light-theme .menu-header h3 {
+            color: #0f172a;
+            text-shadow: none;
+        }
+
+        body.light-theme .slide-menu {
+            background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(226,232,240,0.98) 100%);
+            border-inline-end-color: rgba(15,23,42,0.12);
+            box-shadow: 4px 0 24px rgba(15,23,42,0.12);
+        }
+
+        body.light-theme .menu-header {
+            background: linear-gradient(135deg, rgba(37,99,235,0.08), transparent);
+            border-block-end-color: rgba(15,23,42,0.12);
+        }
+
+        body.light-theme .menu-header p {
+            color: #64748b;
+        }
+
+        body.light-theme .menu-item i {
+            color: #2563eb;
+            filter: drop-shadow(0 0 6px rgba(37,99,235,0.25));
+        }
+
+        body.light-theme .menu-item:hover {
+            background: linear-gradient(180deg, rgba(37,99,235,0.18) 0%, rgba(226,232,240,0.96) 100%);
+            border-color: rgba(37,99,235,0.35);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 0 rgba(148,163,184,0.38), 0 10px 18px rgba(37,99,235,0.15);
+        }
+
+        body.light-theme .menu-item.active {
+            background: linear-gradient(180deg, rgba(37,99,235,0.22) 0%, rgba(226,232,240,0.98) 100%);
+            border-color: rgba(37,99,235,0.45);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 3px 0 rgba(148,163,184,0.4), 0 12px 18px rgba(37,99,235,0.18);
+        }
+
+        body.light-theme .menu-footer {
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(226,232,240,0.98));
+            border-block-start-color: rgba(15,23,42,0.12);
+        }
+
+        body.light-theme .theme-toggle-mini {
+            background: rgba(255,255,255,0.92);
+            color: #0f172a;
+            border-color: rgba(37,99,235,0.14);
+        }
+
+        @media (max-inline-size: 768px) {
+            .theme-toggle-mini {
+                inset-inline-end: 16px;
+                inset-block-end: 16px;
+                padding: 6px 9px;
+                font-size: 0.7rem;
+            }
+        }
+        
+        /* Modals preserved */
+        .fs-modal { display: none; position: fixed; inset: 0; z-index: 9000; flex-direction: column; }
+        .fs-modal.open { display: flex; }
+        .fs-modal-bar { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 12px 20px; 
+            flex-shrink: 0;
+            background: linear-gradient(135deg, var(--gray-800), var(--gray-900));
+            border-block-end: 1px solid var(--gray-700);
+            box-shadow: 0 2px 20px rgba(0,0,0,.4); 
+        }
+        .fs-modal-bar button { 
+            background: rgba(37,99,235,.2); 
+            border: 1px solid var(--primary-blue);
+            border-radius: 10px; 
+            padding: 8px 18px; 
+            color: white; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: .9rem; 
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .fs-modal-bar button:hover { 
+            background: var(--primary-blue);
+        }
+        .fs-iframe { flex: 1; inline-size: 100%; border: none; background: var(--gray-900); }
+        
+        .login-modal-overlay { 
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            z-index: 9500; 
+            align-items: center;
+            justify-content: center; 
+            padding: 20px; 
+            background: rgba(0,0,0,.8); 
+            backdrop-filter: blur(8px); 
+        }
+        .login-modal-overlay.open { display: flex; }
+        .login-card { 
+            background: linear-gradient(135deg, var(--gray-800), var(--gray-900));
+            border: 1px solid var(--gray-600);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,.5); 
+            max-inline-size: 420px; 
+            inline-size: 100%;
+            padding: 40px; 
+            position: relative; 
+            animation: modalIn .35s cubic-bezier(.175,.885,.32,1.275); 
+        }
+        .login-card::before { 
+            content:''; 
+            position: absolute; 
+            inset-block-start: 0; 
+            inset-inline-start: 0; 
+            inset-inline-end: 0; 
+            block-size: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-light)); 
+            border-radius: 24px 24px 0 0; 
+        }
+        .login-input { 
+            background: var(--gray-800);
+            border: 2px solid var(--gray-600);
+            border-radius: 12px;
+            padding: 14px 18px; 
+            color: var(--white);
+            font-size: 1rem; 
+            inline-size: 100%; 
+            transition: all .3s; 
+            font-family: inherit; 
+        }
+        .login-input:focus { 
+            outline: none; 
+            border-color: var(--primary-blue); 
+            box-shadow: 0 0 0 4px rgba(37,99,235,.2); 
+        }
+        .login-input::placeholder { color: var(--gray-500); }
+
+        .teacher-register-card {
+            overflow: hidden;
+            background:
+                radial-gradient(circle at top right, rgba(59,130,246,0.22), transparent 32%),
+                linear-gradient(135deg, var(--gray-800), var(--gray-900));
+        }
+
+        .teacher-register-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-block-end: 20px;
+        }
+
+        .teacher-meta-chip {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 10px 8px;
+            text-align: center;
+        }
+
+        .teacher-meta-chip strong {
+            display: block;
+            color: var(--white);
+            font-size: 0.82rem;
+            margin-block-end: 2px;
+        }
+
+        .teacher-meta-chip span {
+            color: var(--gray-400);
+            font-size: 0.72rem;
+        }
+        
+        @keyframes modalIn { from { opacity:0; transform:scale(.85) translateY(30px); } to { opacity:1; transform:scale(1) translateY(0); } }
+        @keyframes blinkGreen { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+        
+        /* Slide menu preserved */
+        .slide-menu {
+            position: fixed;
+            inset-inline-start: 0;
+            inset-block-start: 0;
+            block-size: 100vh;
+            inline-size: 190px;
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+            background: linear-gradient(180deg, var(--gray-900) 0%, var(--gray-800) 100%);
+            border-inline-end: 1px solid var(--gray-700);
+            transform: translateX(-156px);
+            transition: transform 0.28s ease;
+            z-index: 1000;
+            box-shadow: 4px 0 24px rgba(0,0,0,.4);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(59,130,246,.55) rgba(255,255,255,.05);
+        }
+        .slide-menu.open { transform: translateX(0); }
+        .menu-tab {
+            position: absolute;
+            inset-inline-end: -34px;
+            inset-block-start: 92px;
+            transform: none;
+            inline-size: 34px;
+            block-size: 72px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            border-radius: 0 10px 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 4px 0 18px rgba(37,99,235,.35);
+            transition: all 0.2s ease;
+        }
+        .menu-tab:hover { box-shadow: 6px 0 24px rgba(37,99,235,.5); filter: brightness(1.05); }
+        .menu-tab i { color: white; font-size: 1rem; animation: pulse 2s infinite; transition: transform 0.2s ease; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .menu-header { padding: 20px 14px; border-block-end: 1px solid var(--gray-700); background: linear-gradient(135deg, rgba(37,99,235,.2), transparent); }
+        .menu-header h3 { margin: 0; color: var(--white); font-size: 1rem; font-weight: 700; }
+        .menu-header p { margin: 4px 0 0; color: var(--gray-400); font-size: 0.78rem; }
+        .menu-nav { flex: 1 1 auto; padding: 10px 10px 14px; overflow-y: auto; min-block-size: 0; display: flex; flex-direction: column; gap: 8px; }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            color: #f8fbff;
+            text-decoration: none;
+            transition: all 0.18s ease;
+            border: 1px solid rgba(125, 211, 252, 0.16);
+            border-radius: 10px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            background: linear-gradient(180deg, rgba(18,38,74,0.96) 0%, rgba(9,20,43,0.98) 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 3px 0 rgba(2,6,23,0.8), 0 8px 14px rgba(2,6,23,0.28);
+        }
+        .menu-item:hover {
+            background: linear-gradient(180deg, rgba(29,78,216,0.92) 0%, rgba(15,23,42,0.98) 100%);
+            border-color: rgba(96,165,250,0.5);
+            transform: translateY(-1px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 0 rgba(2,6,23,0.78), 0 10px 18px rgba(37,99,235,0.24);
+        }
+        .menu-item:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 1px 0 rgba(2,6,23,0.8), 0 4px 10px rgba(2,6,23,0.24);
+        }
+        .menu-item i {
+            inline-size: 18px;
+            text-align: center;
+            color: #9bd7ff;
+            filter: drop-shadow(0 0 6px rgba(37,99,235,0.4));
+            font-size: 0.82rem;
+        }
+        .menu-item span {
+            flex: 1;
+            color: #ffffff;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.14), 0 0 10px rgba(37,99,235,0.45);
+            transform: translateY(1px);
+        }
+        .menu-item.active {
+            background: linear-gradient(180deg, rgba(37,99,235,0.92) 0%, rgba(15,23,42,1) 100%);
+            border-color: rgba(147,197,253,0.62);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 3px 0 rgba(2,6,23,0.8), 0 12px 18px rgba(37,99,235,0.28);
+        }
+
+        .menu-item.featured-link {
+            background: linear-gradient(180deg, rgba(18,38,74,0.96) 0%, rgba(9,20,43,0.98) 100%);
+            border-color: rgba(147,197,253,0.24);
+            color: #f8fbff;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 3px 0 rgba(2,6,23,0.8), 0 8px 14px rgba(2,6,23,0.28);
+        }
+
+        .menu-item.featured-link i {
+            color: #9bd7ff;
+        }
+
+        .menu-item.featured-link:hover {
+            background: linear-gradient(180deg, rgba(29,78,216,0.92) 0%, rgba(15,23,42,0.98) 100%);
+            border-color: rgba(96,165,250,0.5);
+            color: #ffffff;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 0 rgba(2,6,23,0.78), 0 10px 18px rgba(37,99,235,0.24);
+        }
+        .menu-footer { position: sticky; inset-block-end: 0; margin-block-start: auto; padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px)); border-block-start: 1px solid var(--gray-700); background: linear-gradient(180deg, rgba(17,24,39,.96), rgba(11,15,25,.98)); }
+        .slide-menu::-webkit-scrollbar { inline-size: 8px; }
+        .slide-menu::-webkit-scrollbar-track { background: rgba(255,255,255,.04); }
+        .slide-menu::-webkit-scrollbar-thumb { background: rgba(59,130,246,.55); border-radius: 999px; }
+        .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999; }
+        .menu-overlay.open { opacity: 1; visibility: visible; }
+
+        /* Nav active state - Light */
+        .nav-3d.active-nav {
+            background: linear-gradient(180deg, rgba(37,99,235,.12) 0%, rgba(37,99,235,.04) 100%);
+            border-color: rgba(37,99,235,0.35);
+            box-shadow: 0 0 15px rgba(37,99,235,0.15), 0 2px 0 rgba(15,23,42,0.05);
+            color: var(--primary-blue);
+        }
+        .menu-item.active-nav {
+            background: linear-gradient(135deg, rgba(37,99,235,.15) 0%, rgba(37,99,235,.04) 100%);
+            border-color: rgba(37,99,235,0.25);
+            box-shadow: 0 4px 15px rgba(37,99,235,0.1);
+            color: var(--primary-blue);
+        }
+
+        /* Teacher blog */
+        .teacher-blog-section {
+            max-inline-size: 1200px;
+            margin: 0 auto 24px;
+            padding: 0 24px;
+        }
+
+        .blog-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .blog-main-card,
+        .blog-sidebar {
+            background: linear-gradient(180deg, rgba(15,23,42,.85) 0%, rgba(10,15,25,.92) 100%);
+            border: 1px solid rgba(148,163,184,.16);
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(2,6,23,.35);
+        }
+
+        .blog-main-card {
+            padding: 22px;
+        }
+
+        .blog-main-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.2rem;
+            color: #f8fafc;
+        }
+
+        .blog-main-card p {
+            margin: 0;
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+
+        .blog-main-grid {
+            margin-block-start: 16px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .blog-main-tip {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 11px 12px;
+            border: 1px solid rgba(96,165,250,.18);
+            border-radius: 12px;
+            background: rgba(30,41,59,.45);
+            color: #dbeafe;
+            font-size: .9rem;
+        }
+
+        .blog-sidebar {
+            padding: 14px;
+            position: sticky;
+            inset-block-start: 96px;
+        }
+
+        .blog-sidebar-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-block-end: 12px;
+        }
+
+        .blog-sidebar-head h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: #f8fafc;
+        }
+
+        .blog-count {
+            color: #93c5fd;
+            font-size: .76rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .blog-admin-strip {
+            display: none;
+            border: 1px solid rgba(34,197,94,.28);
+            background: rgba(15,118,110,.16);
+            border-radius: 12px;
+            padding: 10px;
+            margin-block-end: 12px;
+        }
+
+        .blog-admin-strip.open {
+            display: block;
+        }
+
+        .blog-admin-strip label {
+            display: block;
+            font-size: .77rem;
+            color: #bae6fd;
+            margin-block-end: 6px;
+            font-weight: 700;
+        }
+
+        .blog-admin-strip input,
+        .blog-admin-strip textarea {
+            width: 100%;
+            border: 1px solid rgba(148,163,184,.25);
+            border-radius: 10px;
+            background: rgba(2,6,23,.65);
+            color: #e2e8f0;
+            padding: 10px 11px;
+            font-family: inherit;
+            margin-bottom: 9px;
+            font-size: .9rem;
+        }
+
+        .blog-admin-strip textarea {
+            min-height: 95px;
+            resize: vertical;
+        }
+
+        .blog-admin-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .blog-list {
+            display: grid;
+            gap: 10px;
+            max-height: 540px;
+            overflow: auto;
+            padding-right: 2px;
+        }
+
+        .blog-post-card {
+            border: 1px solid rgba(148,163,184,.18);
+            border-radius: 12px;
+            padding: 11px 12px;
+            background: rgba(15,23,42,.72);
+        }
+
+        .blog-post-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .blog-post-title {
+            margin: 0;
+            font-size: .92rem;
+            color: #f8fafc;
+            font-weight: 700;
+        }
+
+        .blog-pin {
+            font-size: .66rem;
+            font-weight: 700;
+            color: #fde68a;
+            border: 1px solid rgba(245,158,11,.35);
+            border-radius: 999px;
+            padding: 2px 8px;
+            background: rgba(245,158,11,.12);
+            white-space: nowrap;
+        }
+
+        .blog-post-body {
+            margin: 0 0 8px;
+            color: #cbd5e1;
+            font-size: .86rem;
+            line-height: 1.55;
+        }
+
+        .blog-post-meta {
+            color: #94a3b8;
+            font-size: .74rem;
+        }
+
+        @media (max-width: 1040px) {
+            .blog-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .blog-sidebar {
+                position: static;
+                top: auto;
+            }
+        }
+
+        /* Focus rings */
+        .nav-3d:focus-visible,
+        .glow-btn:focus-visible,
+        .glow-btn-outline:focus-visible,
+        .card-btn:focus-visible,
+        .arrow-btn:focus-visible,
+        .btn-primary:focus-visible,
+        .btn-outline:focus-visible {
+            outline: 2px solid var(--primary-light);
+            outline-offset: 3px;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .mesh-bg, .light-ray, .hero-banner, .hero-banner-coded, .scroll-indicator, .tool-card, .art-card, .card-arrow, .whats-new {
+                animation: none !important;
+                transition: none !important;
+            }
+            .tool-card { opacity: 1; transform: none; }
+            .hero-banner:hover,
+            .tool-card:hover,
+            .art-card:hover { transform: none !important; }
+        }
+
+        @media (min-inline-size: 901px) {
+            body {
+                padding-inline-start: 0;
+            }
+
+            .glass-header {
+                inset-inline-start: 0;
+            }
+
+            .slide-menu {
+                display: flex;
+            }
+        }
+
+        @media (max-inline-size: 900px) {
+            .games-score-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .score-meta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .top-section-nav {
+                justify-content: center;
+            }
+
+            body {
+                padding-inline-start: 0;
+                padding-inline-end: 0;
+            }
+
+            .glass-header {
+                inset-inline-start: 0;
+                inset-inline-end: 0;
+            }
+
+            .slide-menu {
+                transform: translateX(-100%);
+            }
+
+            .slide-menu.open {
+                transform: translateX(0);
+            }
+
+            .menu-tab {
+                display: flex;
+            }
+
+            .hero-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-copy {
+                text-align: center;
+            }
+
+            .hero-copy .hero-subtitle,
+            .hero-copy .hero-stats {
+                margin-inline: auto;
+            }
+
+            .brand-overline {
+                display: none;
+            }
+        }
+
+        /* Small phone fixes (sub-640px) */
+        @media (max-width: 640px) {
+            .teacher-register-meta {
+                grid-template-columns: 1fr;
+            }
+            .hero-preview-launchers {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .section-intro {
+                padding: 0 12px;
+            }
+            .games-score-grid > div {
+                padding: 14px;
+            }
+            .score-meta-grid {
+                gap: 8px;
+            }
+            .score-meta-card {
+                padding: 10px;
+            }
+            .lab-panels {
+                padding: 14px;
+            }
+            .lab-card {
+                padding: 16px;
+            }
+            .blog-layout {
+                padding: 0 12px;
+            }
+            .cards-grid {
+                padding: 0 12px;
+                gap: 14px;
+            }
+            .art-cards-section {
+                padding: 0 12px 20px;
+            }
+            .art-grid {
+                gap: 14px;
+            }
+            .hero-section {
+                padding: 88px 12px 30px;
+            }
+            .hero-highlights {
+                justify-content: center;
+            }
+            .top-section-nav {
+                gap: 8px;
+            }
+            .section-jump-btn {
+                padding: 8px 12px;
+                font-size: 0.78rem;
+            }
+            .mini-games-section {
+                padding: 0 12px;
+            }
+            .games-score-section {
+                padding: 0 12px;
+            }
+            .classroom-lab-section {
+                padding: 0 12px;
+            }
+            .teacher-blog-section {
+                padding: 0 12px;
+            }
+            .schedule-item,
+            .material-item {
+                padding: 10px;
+                gap: 8px;
+            }
+        }
+
+        /* Extra small phones (sub-400px) */
+        @media (max-width: 400px) {
+            .hero-preview-launchers {
+                grid-template-columns: 1fr;
+            }
+            .score-meta-grid {
+                grid-template-columns: 1fr;
+            }
+            .lab-tool-grid {
+                grid-template-columns: 1fr;
+            }
+            .lab-metrics {
+                grid-template-columns: 1fr;
+            }
+            .hero-title {
+                font-size: clamp(1.8rem, 8vw, 2.4rem);
+            }
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+            .section-intro h2 {
+                font-size: 1.3rem;
+            }
+            .tool-card h3 {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page-bg-image" aria-hidden="true"></div>
+<canvas id="neuron-canvas"></canvas>
+<div id="static-overlay" aria-hidden="true"></div>
+
+<!-- Demo Mode Banner -->
+<div id="demo-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:10000;background:linear-gradient(90deg,#f59e0b,#d97706);color:#1c1917;padding:10px 20px;font-size:.88rem;font-weight:700;text-align:center;box-shadow:0 3px 16px rgba(245,158,11,.45);">
+    <i class="fas fa-flask" style="margin-right:8px;"></i> DEMO MODE &mdash; Exploring as a guest. Data is temporary and will reset on close.
+    <button onclick="exitDemoMode()" style="margin-left:18px;background:rgba(0,0,0,.18);border:none;border-radius:8px;padding:4px 14px;cursor:pointer;font-weight:700;font-size:.82rem;color:#1c1917;font-family:inherit;">✕ Exit Demo</button>
+</div>
+
+<!-- Header -->
+<header class="glass-header" id="mainHeader">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between header-shell">
+        <a href="index.html" class="flex items-center gap-3" style="text-decoration:none;color:inherit;" aria-label="Go to home page">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-lg shadow-lg shadow-blue-500/20">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="brand-lockup">
+                <span class="brand-overline">Teacher Ry • Aii Language Center</span>
+                <span class="brand-title">RysHub Studio</span>
+            </div>
+        </a>
+        
+        <div class="hidden md:flex header-status">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span>
+            <strong>Live classroom hub</strong>
+            <span>Use the side panel to explore tools</span>
+        </div>
+
+        <div class="hidden xl:flex nav-scroll-wrap">
+            <button class="nav-scroll-btn" onclick="scrollHeaderNav(-1)" aria-label="Scroll header navigation left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="nav-scroll" id="topNavScroll">
+                <a href="#" class="nav-3d" onclick="scrollToSection('topHome'); return false;">Overview</a>
+                <a href="#" class="nav-3d" onclick="scrollToSection('featuredApps'); return false;">Featured Apps</a>
+                <a href="#" class="nav-3d" onclick="scrollToSection('gamesScores'); return false;">Games &amp; Scores</a>
+                <a href="#" class="nav-3d" onclick="scrollToSection('classroomLabSection'); return false;">Classroom Lab</a>
+                <a href="#" class="nav-3d" onclick="scrollToSection('teacherBlogSection'); return false;">Teacher Blog</a>
+                <a href="apps/games/index.html" class="nav-3d">Game Arcade</a>
+                <a href="apps/command-center.html" class="nav-3d">Command Center</a>
+                <a href="apps/books/library.html" class="nav-3d" target="_blank">📖 Story Library</a>
+            </div>
+            <button class="nav-scroll-btn" onclick="scrollHeaderNav(1)" aria-label="Scroll header navigation right">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+        </div>
+        
+        <div class="header-cta-group">
+            <button id="headerAccessBtn" class="btn-outline hidden sm:inline-flex" onclick="openTeacherRegister('teacher resources')">
+                <i class="fas fa-right-to-bracket"></i><span>Log in</span>
+            </button>
+            <button id="headerRegisterBtn" class="btn-primary" onclick="openTeacherRegister('teacher resources')">
+                <i class="fas fa-user-plus"></i><span>Register</span>
+            </button>
+            <button class="md:hidden w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Sliding Menu (mobile + preserved) -->
+<div class="slide-menu" id="slideMenu">
+    <div class="menu-tab" onclick="toggleMenu()" title="Open Menu">
+        <i class="fas fa-chevron-right"></i>
+    </div>
+    <div class="menu-header">
+        <h3><i class="fas fa-layer-group" style="color: var(--primary-light); margin-inline-end: 10px;"></i>Sections</h3>
+        <p>Navigate content</p>
+    </div>
+    <nav class="menu-nav">
+        <a href="#" class="menu-item active" onclick="showToast('Already on Home'); toggleMenu(); return false;">
+            <i class="fas fa-home"></i><span>Home</span>
+        </a>
+        <a href="#" class="menu-item" onclick="openProtectedToefl(); toggleMenu(); return false;">
+            <i class="fas fa-graduation-cap"></i><span>TOEFL iBT</span>
+        </a>
+        <a href="#" class="menu-item" onclick="openProtectedBook1(); toggleMenu(); return false;">
+            <i class="fas fa-book"></i><span>World Class Book 1</span>
+        </a>
+        <a href="#" class="menu-item" onclick="openProtectedBook2b(); toggleMenu(); return false;">
+            <i class="fas fa-book-open"></i><span>World Class 2B</span>
+        </a>
+        <a href="#" class="menu-item" onclick="openBrickForgeModal(); toggleMenu(); return false;">
+            <i class="fas fa-cube"></i><span>Brick Forge</span>
+        </a>
+        <a href="#" class="menu-item" onclick="openColonyModal(); toggleMenu(); return false;">
+            <i class="fas fa-rocket"></i><span>Last Colony RPG</span>
+        </a>
+        <a href="#" class="menu-item" onclick="openSolarSystemModal(); toggleMenu(); return false;">
+            <i class="fas fa-globe-americas"></i><span>Solar System</span>
+        </a>
+        <a href="apps/games/index.html" class="menu-item" onclick="toggleMenu();">
+            <i class="fas fa-gamepad"></i><span>Game Arcade</span>
+        </a>
+        <a href="apps/command-center.html" class="menu-item" onclick="toggleMenu();">
+            <i class="fas fa-bolt"></i><span>Command Center</span>
+        </a>
+        <a href="apps/timer.html" target="_blank" class="menu-item" onclick="toggleMenu();">
+            <i class="fas fa-stopwatch"></i><span>Class Timer</span>
+        </a>
+        <a href="#" class="menu-item" onclick="openProtectedPage('apps/toefl/index.html', 'TOEFL iBT'); toggleMenu(); return false;">
+            <i class="fas fa-external-link-alt"></i><span>TOEFL (Full Page)</span>
+        </a>
+        <a href="#" class="menu-item" onclick="window.open('apps/book1.html', '_blank'); toggleMenu(); return false;">
+            <i class="fas fa-external-link-alt"></i><span>Book 1 (Full Page)</span>
+        </a>
+        <a href="#" class="menu-item" onclick="openProtectedPage('apps/book2b.html', 'World Class 2B'); toggleMenu(); return false;">
+            <i class="fas fa-external-link-alt"></i><span>Book 2B (Full Page)</span>
+        </a>
+        <a href="apps/brickforge.html" target="_blank" class="menu-item">
+            <i class="fas fa-external-link-alt"></i><span>Brick Forge (Full Page)</span>
+        </a>
+        <a href="apps/games/solar-system/index.html" target="_blank" class="menu-item">
+            <i class="fas fa-external-link-alt"></i><span>Solar System (Full Page)</span>
+        </a>
+        <a href="https://app.box.com/s/izbnvr08d4vxmt1bp3np99oceowpywpf" target="_blank" rel="noopener noreferrer" class="menu-item featured-link">
+            <i class="fas fa-box-open"></i><span>Shared Files</span>
+        </a>
+        <a href="#" class="menu-item" onclick="showToast('EduGrade coming soon!'); return false;">
+            <i class="fas fa-brain"></i><span>EduGrade Pro</span>
+        </a>
+        <a href="#" class="menu-item" onclick="showToast('Word Practice coming soon!'); return false;">
+            <i class="fas fa-pencil-alt"></i><span>Word Practice</span>
+        </a>
+    </nav>
+    <div class="menu-footer">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="inline-size: 36px; block-size: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-blue), var(--primary-light)); display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-chalkboard-teacher" style="color: white; font-size: 0.9rem;"></i>
+            </div>
+            <div>
+                <div style="font-weight: 600; color: var(--white); font-size: 0.9rem;">Teacher Ry</div>
+                <div style="color: var(--gray-400); font-size: 0.75rem;">Aii Language Center</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+    <!-- Hero -->
+<section class="hero-section" id="topHome">
+    <div class="hero-banner">
+        <div class="hero-banner-coded">
+            <div class="hb-bg-image"></div>
+            <div class="hb-particle" style="width:5px;height:5px;top:15%;left:10%;animation-duration:5s;"></div>
+            <div class="hb-particle" style="width:3px;height:3px;top:25%;left:85%;animation-duration:7s;animation-delay:1s;"></div>
+            <div class="hb-particle" style="width:7px;height:7px;top:60%;left:20%;animation-duration:6s;animation-delay:0.5s;"></div>
+            <div class="hb-particle" style="width:4px;height:4px;top:45%;left:75%;animation-duration:8s;animation-delay:2s;"></div>
+            <div class="hb-particle" style="width:6px;height:6px;top:80%;left:50%;animation-duration:5.5s;animation-delay:1.5s;"></div>
+            <div class="hb-sweep"></div>
+            <div class="hb-top">
+                <div class="hb-chip"><i class="fas fa-chalkboard-teacher" aria-hidden="true"></i> ESL Teachers Hub</div>
+                <div class="hb-chip"><i class="fas fa-sparkles" aria-hidden="true"></i> <span id="hbTopChip">Coded Visual Banner</span></div>
+            </div>
+            <div class="hb-grid">
+                <div class="hb-title" id="hbTitle">
+                    <span id="hbTitlePrefix">Teach English with</span>
+                    <span id="hbTitleSpan">Artful Digital Experiences</span><span class="hb-cursor" id="hbCursor"></span>
+                </div>
+                <div class="hb-meta" id="hbMeta">
+                    Designed for teachers who want bold visuals, clear pedagogy, and engaging classroom-ready learning moments.
+                </div>
+            </div>
+            <div class="hb-bottom">
+                <div class="hb-lineup">
+                    <span class="hb-line"></span>
+                    <span class="hb-line"></span>
+                    <span class="hb-line"></span>
+                </div>
+                <div class="hb-chip" id="hbBottomChip"><i class="fas fa-language" aria-hidden="true"></i> Reading · Speaking · Writing · Listening</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-shell">
+        <div class="hero-copy">
+            <div class="hero-badge">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse"></span>
+                Spring 2026 • Digital Classroom Suite
+            </div>
+            <h1 class="hero-title">
+                Modern learning<br>
+                <span>studio</span>
+            </h1>
+            <p class="hero-subtitle">
+                Teacher Ry’s books, tests, and creative tools are now presented in a cleaner, sharper layout for a more premium classroom experience at <strong class="text-white font-semibold">Aii Language Center</strong>.
+            </p>
+            <div class="hero-highlights">
+                <div class="hero-highlight"><i class="fas fa-graduation-cap"></i> TOEFL iBT ready</div>
+                <div class="hero-highlight"><i class="fas fa-book-open"></i> Book resources live</div>
+                <div class="hero-highlight"><i class="fas fa-cube"></i> BrickForge synced</div>
+            </div>
+            <div class="top-section-nav">
+                <button class="section-jump-btn" onclick="scrollToSection('featuredApps')"><i class="fas fa-layer-group"></i> Featured apps</button>
+                <button class="section-jump-btn" onclick="scrollToSection('gamesScores')"><i class="fas fa-trophy"></i> Games &amp; scores</button>
+                <button class="section-jump-btn" onclick="scrollToSection('classroomLabSection')"><i class="fas fa-chalkboard"></i> Classroom lab</button>
+                <a href="apps/games/index.html" class="section-jump-btn" style="text-decoration:none;"><i class="fas fa-gamepad"></i> Game Arcade</a>
+                <a href="apps/command-center.html" class="section-jump-btn"><i class="fas fa-bolt"></i> Command center</a>
+                <button class="section-jump-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Launch Colony</button>
+                <button class="section-jump-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-chip">
+                    <strong>4+ live tools</strong>
+                    <span>Reading, writing, testing, and creative learning in one place.</span>
+                </div>
+                <div class="stat-chip">
+                    <strong>Teacher-ready</strong>
+                    <span>Fast access to books, homework portals, and classroom resources.</span>
+                </div>
+                <div class="stat-chip">
+                    <strong>Student-first flow</strong>
+                    <span>Cleaner navigation and stronger visual consistency across pages.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-preview">
+            <div class="hero-preview-card">
+                <img src="assets/hub-hero.svg?v=20260416" alt="RysHub overview illustration">
+                <div class="hero-preview-launchers" aria-label="Quick launch preview actions">
+                    <button type="button" class="hero-preview-hotspot" onclick="scrollToSection('featuredApps')">RysHub<span>Open featured apps</span></button>
+                    <button type="button" class="hero-preview-hotspot" onclick="openProtectedToefl()">TOEFL<span>Start test tools</span></button>
+                    <button type="button" class="hero-preview-hotspot books" onclick="openBook2bModal()">Books<span>Open Book 2B</span></button>
+                    <button type="button" class="hero-preview-hotspot" onclick="openBook1Modal()">World Class<span>Teacher edition</span></button>
+                    <button type="button" class="hero-preview-hotspot" onclick="openBrickForgeModal()">Brick Forge<span>Creative lab</span></button>
+                    <button type="button" class="hero-preview-hotspot purple" onclick="showToast('Word Practice coming soon! 📖')">Word Practice<span>Coming soon</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="teacher-blog-section" id="teacherBlogSection">
+    <div class="section-intro">
+        <div>
+            <div class="section-kicker">Teacher Voice</div>
+            <h2>Class Blog + Admin Publishing</h2>
+            <p>Post short updates for teachers in a right-column feed. Use admin login to publish announcements, reminders, and class highlights.</p>
+        </div>
+        <div class="hb-chip"><i class="fas fa-bullhorn"></i> Staff updates</div>
+    </div>
+
+    <div class="blog-layout">
+        <article class="blog-main-card">
+            <h3>How to use this blog area</h3>
+            <p>
+                This section is designed for teacher-only communication in the hub. Keep posts short and practical: weekly goals, exam reminders,
+                classroom updates, and resource notes.
+            </p>
+            <div class="blog-main-grid">
+                <div class="blog-main-tip"><i class="fas fa-check-circle"></i><span><strong>Post format:</strong> 1 title + 2-4 concise lines + optional priority pin.</span></div>
+                <div class="blog-main-tip"><i class="fas fa-users"></i><span><strong>Visibility:</strong> published posts appear in the right column for staff reference.</span></div>
+                <div class="blog-main-tip"><i class="fas fa-shield-alt"></i><span><strong>Control:</strong> publishing is locked behind admin login.</span></div>
+            </div>
+        </article>
+
+        <aside class="blog-sidebar">
+            <div class="blog-sidebar-head">
+                <div>
+                    <h3>Teacher Posts</h3>
+                    <div class="blog-count"><span id="teacherBlogCount">0</span> posts</div>
+                </div>
+                <button id="blogAdminButton" class="btn-outline" onclick="openBlogAdminLogin()"><i class="fas fa-lock"></i> Admin</button>
+            </div>
+
+            <div id="blogAdminStrip" class="blog-admin-strip" aria-live="polite">
+                <label for="blogPostTitle">Post title</label>
+                <input id="blogPostTitle" type="text" placeholder="e.g., Week 8 writing checkpoints">
+
+                <label for="blogPostBody">Post content</label>
+                <textarea id="blogPostBody" placeholder="Write your teacher update here..."></textarea>
+
+                <label style="display:flex;align-items:center;gap:8px;margin: 0 0 10px;color:#cbd5e1;font-size:.82rem;">
+                    <input id="blogPostPinned" type="checkbox" style="width:auto;margin:0;"> Pin this post
+                </label>
+
+                <div class="blog-admin-actions">
+                    <button class="btn-primary" onclick="publishTeacherBlogPost()"><i class="fas fa-paper-plane"></i> Publish</button>
+                    <button class="btn-outline" onclick="blogAdminSignOut()"><i class="fas fa-right-from-bracket"></i> Sign out</button>
+                </div>
+            </div>
+
+            <div id="teacherBlogList" class="blog-list"></div>
+        </aside>
+    </div>
+</section>
+
+
+
+<section class="classroom-lab-section" id="classroomLabSection">
+    <div class="section-intro">
+        <div>
+            <div class="section-kicker">Classroom Lab</div>
+            <h2>Simple online lesson workflow</h2>
+            <p>Run class with three clear modes: Teach, Practice, and Review. Launch tools quickly, then check understanding with fast metrics.</p>
+        </div>
+        <div class="hb-chip"><i class="fas fa-chalkboard"></i> Teach • Practice • Review</div>
+    </div>
+
+    <div class="classroom-lab-shell">
+        <div class="lab-mode-switch" role="tablist" aria-label="Classroom lab mode switch">
+            <button type="button" class="lab-mode-btn active" data-lab-mode="teach" onclick="setClassroomLabMode('teach')">Teach</button>
+            <button type="button" class="lab-mode-btn" data-lab-mode="practice" onclick="setClassroomLabMode('practice')">Practice</button>
+            <button type="button" class="lab-mode-btn" data-lab-mode="review" onclick="setClassroomLabMode('review')">Review</button>
+        </div>
+
+        <div class="lab-panels">
+            <div class="lab-panel active" data-lab-panel="teach">
+                <div class="lab-card">
+                    <h3>Teach Mode: 10-minute launch</h3>
+                    <p>Use one focused teaching path so students know exactly what to do first and you can start class in under two minutes.</p>
+                    <div class="lab-step-list">
+                        <div class="lab-step-item"><span class="lab-pill">1</span><div><strong>Warm-up question</strong><span>Ask one quick check-in prompt to activate background knowledge.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">2</span><div><strong>Model one example</strong><span>Show a good response so students see quality expectations.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">3</span><div><strong>Launch guided activity</strong><span>Move directly to a structured tool with clear time limits.</span></div></div>
+                    </div>
+                </div>
+                <div class="lab-card">
+                    <h3>Quick Launch Tools</h3>
+                    <p>Start teaching resources without menu hunting.</p>
+                    <div class="lab-tool-grid">
+                        <button class="lab-tool-btn" onclick="openProtectedToefl()"><i class="fas fa-graduation-cap"></i> TOEFL check</button>
+                        <button class="lab-tool-btn" onclick="openProtectedBook1()"><i class="fas fa-book"></i> Book 1</button>
+                        <button class="lab-tool-btn" onclick="openProtectedBook2b()"><i class="fas fa-book-open"></i> Book 2B</button>
+                        <button class="lab-tool-btn" onclick="openBrickForgeModal()"><i class="fas fa-cube"></i> Creative task</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lab-panel" data-lab-panel="practice">
+                <div class="lab-card">
+                    <h3>Practice Mode: 20-minute active work</h3>
+                    <p>Give students one primary practice path with instant feedback to improve participation and reduce confusion.</p>
+                    <div class="lab-step-list">
+                        <div class="lab-step-item"><span class="lab-pill">1</span><div><strong>Set a clear target</strong><span>Example: reach 90% accuracy or complete one reading passage.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">2</span><div><strong>Use hint ladder</strong><span>Encourage hint first, then retry before asking for teacher support.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">3</span><div><strong>Capture output</strong><span>Save one score or sample response for review mode.</span></div></div>
+                    </div>
+                </div>
+                <div class="lab-card">
+                    <h3>Practice Tools</h3>
+                    <p>Run focused activities for accuracy, speed, and confidence.</p>
+                    <div class="lab-tool-grid">
+                        <button class="lab-tool-btn" onclick="recordGameLaunch('typing-race'); window.open('apps/games/typing-race/index.html','_blank')"><i class="fas fa-keyboard"></i> Typing Race</button>
+                        <button class="lab-tool-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Last Colony</button>
+                        <button class="lab-tool-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Solar Mission</button>
+                        <button class="lab-tool-btn" onclick="showToast('Word practice drill coming soon')"><i class="fas fa-spell-check"></i> Vocab drill</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lab-panel" data-lab-panel="review">
+                <div class="lab-card">
+                    <h3>Review Mode: 10-minute wrap-up</h3>
+                    <p>End class with visible outcomes: who completed, who needs help, and what to reteach next lesson.</p>
+                    <div class="lab-step-list">
+                        <div class="lab-step-item"><span class="lab-pill">1</span><div><strong>Check completion</strong><span>Confirm activity participation before ending the session.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">2</span><div><strong>Spot common errors</strong><span>Use top misses to decide what to review tomorrow.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">3</span><div><strong>Assign next action</strong><span>Set one homework or retry target for each student group.</span></div></div>
+                    </div>
+                </div>
+                <div class="lab-card">
+                    <h3>Live quick metrics</h3>
+                    <p>Instant indicators from your local tool usage and typing activity.</p>
+                    <div class="lab-metrics">
+                        <div class="lab-metric"><strong id="labMetricTypingPlays">0</strong><span>Typing Race launches</span></div>
+                        <div class="lab-metric"><strong id="labMetricTypingRuns">0</strong><span>Saved typing runs</span></div>
+                        <div class="lab-metric"><strong id="labMetricAvgWpm">0</strong><span>Average WPM</span></div>
+                        <div class="lab-metric"><strong id="labMetricAvgAcc">0%</strong><span>Average Accuracy</span></div>
+                    </div>
+                    <div class="lab-step-list" style="margin-top: 10px;">
+                        <div class="lab-step-item"><span class="lab-pill">•</span><div><strong>Reteach trigger</strong><span>If average accuracy drops below 85%, run guided model practice first next class.</span></div></div>
+                        <div class="lab-step-item"><span class="lab-pill">•</span><div><strong>Extension trigger</strong><span>If average WPM is above 45 with 92%+ accuracy, move to harder prompts.</span></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="games-score-section" id="gamesScores">
+    <div class="section-intro">
+        <div>
+            <div class="section-kicker">Popular games showcase</div>
+            <h2>Most played games and score highlights</h2>
+            <p>A dedicated section for spotlighting the games students return to most and the best runs worth showing off.</p>
+        </div>
+        <div class="hb-chip"><i class="fas fa-trophy"></i> Arcade leaderboard</div>
+    </div>
+
+    <div class="games-score-grid">
+        <div class="score-spotlight">
+            <div class="score-kicker"><i class="fas fa-fire"></i> Live featured game</div>
+            <h3 id="featuredGameTitle">Last Colony is leading the hub</h3>
+            <p id="featuredGameDesc">Use this area to highlight your most-played game, best classroom challenge, and standout performance numbers in one premium block.</p>
+            <div class="score-meta-grid">
+                <div class="score-meta-card">
+                    <strong id="featuredGameBest">92%</strong>
+                    <span id="featuredGameMetric">Top colony readiness</span>
+                </div>
+                <div class="score-meta-card">
+                    <strong id="featuredGamePlays">18</strong>
+                    <span>Total launches</span>
+                </div>
+                <div class="score-meta-card">
+                    <strong id="featuredGameTrend">Hot</strong>
+                    <span>Current trend</span>
+                </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+                <button id="featuredGameButton" class="card-btn" style="background:linear-gradient(135deg,#f97316,#b91c1c);box-shadow:0 4px 0 #7f1d1d,0 8px 24px rgba(249,115,22,.35);" onclick="launchFeaturedGame()"><i class="fas fa-trophy"></i> Open top game</button>
+                <button class="btn-outline" onclick="cycleFeaturedGame()"><i class="fas fa-rotate"></i> Rotate spotlight</button>
+            </div>
+        </div>
+
+        <div class="score-list">
+            <div class="score-kicker"><i class="fas fa-ranking-star"></i> Popular now</div>
+            <div id="gamesScoreRows"></div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ESL Art Cards -->
+<section class="art-cards-section">
+    <div class="section-heading">
+        <div class="section-tag"><i class="fas fa-palette" aria-hidden="true"></i> ESL Teachers Hub Theme</div>
+        <h2 class="section-title">Highly Detailed Art Cards</h2>
+        <p class="section-subtitle">Coded visuals for showcasing key teaching experiences</p>
+    </div>
+    <div class="art-grid">
+        <article class="art-card classroom">
+            <div class="art-sketch" aria-hidden="true">CLASSROOM LAB</div>
+            <div class="art-card-content">
+                <span class="art-tag">Immersive Scene</span>
+                <h3>Interactive Classroom Canvas</h3>
+                <p>Layered gradients and sketch overlays emulate a dynamic teaching board ready for lesson highlights.</p>
+            </div>
+        </article>
+        <article class="art-card phonics">
+            <div class="sound-wave" aria-hidden="true"></div>
+            <div class="art-card-content">
+                <span class="art-tag">Audio Focus</span>
+                <h3>Pronunciation Studio Card</h3>
+                <p>Soundwave-inspired geometry presents speaking and listening practice with a premium visual rhythm.</p>
+            </div>
+        </article>
+        <article class="art-card global">
+            <div class="globe-ring" aria-hidden="true"></div>
+            <div class="art-card-content">
+                <span class="art-tag">Global English</span>
+                <h3>World Language Journey</h3>
+                <p>Orbital ring motifs and deep tonal contrast frame cross-cultural English learning pathways.</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- Cards -->
+<div class="section-intro" id="featuredApps">
+    <div>
+        <p class="section-kicker">Featured learning apps</p>
+        <h2>Everything important, in one aligned hub</h2>
+        <p>Each page now follows the same modern look and clearer visual rhythm, making the whole RysHub experience feel more connected.</p>
+    </div>
+</div>
+<div class="cards-grid">
+    <!-- TOEFL -->
+    <div class="tool-card" onclick="openProtectedToefl()">
+        <div class="card-art"><img src="assets/toefl-preview.svg?v=20260416" alt="TOEFL preview"></div>
+        <div class="tool-icon bg-gradient-to-br from-blue-500 to-blue-700 text-white">🎓</div>
+        <div class="tool-badge text-blue-300">Mock Test</div>
+        <h3>TOEFL iBT</h3>
+        <p>Full practice test — Reading, Listening, Speaking & Writing with timed security monitoring.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-list-check text-blue-400"></i> 4 Sections</span>
+            <span><i class="fas fa-clock text-blue-400"></i> ~2 hours</span>
+        </div>
+        <button class="card-btn"><i class="fas fa-play"></i> Start Test</button>
+    </div>
+    
+    <!-- Book 1 -->
+    <div class="tool-card" onclick="openProtectedBook1()">
+        <div class="card-art"><img src="assets/books-preview.svg?v=20260416" alt="Book 1 preview"></div>
+        <div class="tool-icon bg-gradient-to-br from-sky-600 to-sky-800 text-white">📖</div>
+        <div class="tool-badge text-sky-300">Teacher's Edition</div>
+        <h3>World Class Book 1</h3>
+        <p>Complete Book 1 with units, vocab, grammar, reading & homework materials.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-book text-sky-400"></i> Full Book</span>
+            <span><i class="fas fa-pencil-alt text-sky-400"></i> HW Portal</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);box-shadow:0 4px 0 #075985,0 8px 24px rgba(2,132,199,.35);"><i class="fas fa-book"></i> Open Book 1</button>
+    </div>
+
+    <!-- Book 2B -->
+    <div class="tool-card" onclick="openProtectedBook2b()">
+        <div class="card-art"><img src="assets/books-preview.svg?v=20260416" alt="Book 2B preview"></div>
+        <div class="tool-icon bg-gradient-to-br from-rose-700 to-rose-900 text-white">📚</div>
+        <div class="tool-badge text-amber-300">Teacher's Edition</div>
+        <h3>World Class 2B</h3>
+        <p>Units 7–12 with vocab, grammar, reading & interactive homework portal for Level 11.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-book text-amber-400"></i> Units 7–12</span>
+            <span><i class="fas fa-pencil-alt text-amber-400"></i> HW Portal</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#9f1239,#881337);box-shadow:0 4px 0 #4c0519,0 8px 24px rgba(159,18,57,.35);"><i class="fas fa-book-open"></i> Open Book 2B</button>
+    </div>
+    
+    <!-- Brick Forge -->
+    <div class="tool-card" onclick="openBrickForgeModal()">
+        <div class="card-art"><img src="assets/brickforge-preview.svg?v=20260416" alt="Brick Forge preview"></div>
+        <div class="tool-icon bg-gradient-to-br from-cyan-500 to-cyan-700 text-white">🧱</div>
+        <div class="tool-badge text-cyan-300">3D Builder</div>
+        <h3>Brick Forge Pro</h3>
+        <p>Creative 3D building for student design challenges, STEM activities, and visual storytelling projects.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-cube text-cyan-400"></i> 3D Design</span>
+            <span><i class="fas fa-users text-cyan-400"></i> Class Projects</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#06b6d4,#0e7490);box-shadow:0 4px 0 #155e75,0 8px 24px rgba(6,182,212,.35);"><i class="fas fa-cube"></i> Open Builder</button>
+    </div>
+
+    <div class="tool-card" onclick="openColonyModal()">
+        <div class="card-art" style="display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%, rgba(248,113,113,0.35), transparent 24%), radial-gradient(circle at 74% 30%, rgba(56,189,248,0.35), transparent 22%), linear-gradient(135deg,#2b0f0f 0%,#7c2d12 42%,#0f172a 100%);">
+            <div style="text-align:center;color:#f8fafc;">
+                <div style="font-size:2rem;line-height:1;margin-bottom:6px;">🚀</div>
+                <div style="font-size:.8rem;font-weight:800;letter-spacing:.24em;">LAST COLONY</div>
+            </div>
+        </div>
+        <div class="tool-icon bg-gradient-to-br from-orange-500 to-rose-700 text-white">🚀</div>
+        <div class="tool-badge text-orange-300">Strategy RPG</div>
+        <h3>Last Colony</h3>
+        <p>Lead humanity’s final Mars settlement with story choices, base building, survival systems, and sci-fi strategy.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-globe text-orange-400"></i> Mars Colony</span>
+            <span><i class="fas fa-gamepad text-orange-400"></i> Story Strategy</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#f97316,#b91c1c);box-shadow:0 4px 0 #7f1d1d,0 8px 24px rgba(249,115,22,.35);"><i class="fas fa-rocket"></i> Launch Colony</button>
+    </div>
+
+    <div class="tool-card" onclick="openSolarSystemModal()">
+        <div class="card-art" style="display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 26% 30%, rgba(99,102,241,0.35), transparent 24%), radial-gradient(circle at 75% 25%, rgba(56,189,248,0.3), transparent 18%), linear-gradient(135deg,#0b1120 0%,#312e81 45%,#0f172a 100%);">
+            <div style="text-align:center;color:#f8fafc;">
+                <div style="font-size:2rem;line-height:1;margin-bottom:6px;">🪐</div>
+                <div style="font-size:.78rem;font-weight:800;letter-spacing:.2em;">SOLAR SYSTEM</div>
+            </div>
+        </div>
+        <div class="tool-icon bg-gradient-to-br from-indigo-500 to-purple-700 text-white">🪐</div>
+        <div class="tool-badge text-indigo-300">Science Missions</div>
+        <h3>Solar System</h3>
+        <p>Pilot through planets, complete mission challenges, and explore astronomy concepts in a guided 3D universe.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-satellite text-indigo-300"></i> Mission Mode</span>
+            <span><i class="fas fa-star text-indigo-300"></i> Space Exploration</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#6366f1,#4338ca);box-shadow:0 4px 0 #312e81,0 8px 24px rgba(99,102,241,.35);"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
+    </div>
+
+    <!-- WriteCraft -->
+    <div class="tool-card" onclick="window.open('apps/writing-trainer/index.html','_blank')">
+        <div class="card-art"><img src="assets/teacher-dashboard.svg?v=20260416" alt="WriteCraft preview"></div>
+        <div class="tool-icon bg-gradient-to-br from-blue-500 to-purple-600 text-white">✍️</div>
+        <div class="tool-badge text-blue-300">Writing Trainer</div>
+        <h3>WriteCraft</h3>
+        <p>Practice essays, summaries & creative stories with timed prompts, live stats, and instant feedback on word count, sentence variety & structure.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-pen-nib text-blue-400"></i> 3 Writing Modes</span>
+            <span><i class="fas fa-chart-line text-blue-400"></i> Live Scoring</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#3b82f6,#7c3aed);box-shadow:0 4px 0 #4c1d95,0 8px 24px rgba(123,97,255,.35);"><i class="fas fa-pen"></i> Start Writing</button>
+    </div>
+    
+    <!-- Word Practice -->
+    <div class="tool-card" onclick="showToast('Word Practice coming soon! 📖')">
+        <div class="card-art"><img src="assets/vocab-preview.svg?v=20260416" alt="Word practice preview"></div>
+        <div class="tool-icon bg-gradient-to-br from-purple-400 to-purple-600 text-white">✏️</div>
+        <div class="tool-badge text-purple-300">Vocabulary</div>
+        <h3>Word Practice</h3>
+        <p>Interactive vocabulary exercises and sentence writing for World Class 2 — Level 11.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-book text-purple-400"></i> World Class 2</span>
+            <span><i class="fas fa-star text-purple-400"></i> Level 11</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#a855f7,#7c3aed);box-shadow:0 4px 0 #5b21b6,0 8px 24px rgba(168,85,247,.3);"><i class="fas fa-arrow-right"></i> Open Practice</button>
+    </div>
+
+    <!-- Interactive Books Library -->
+    <div class="tool-card" onclick="window.open('apps/books/library.html','_blank')">
+        <div class="card-art" style="display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%, rgba(201,129,58,0.35), transparent 24%), radial-gradient(circle at 72% 70%, rgba(120,53,15,0.5), transparent 28%), linear-gradient(135deg,#0d1117 0%,#78350f 55%,#1c0a03 100%);">
+            <div style="text-align:center;color:#f8fafc;">
+                <div style="font-size:2rem;line-height:1;margin-bottom:6px;">📖</div>
+                <div style="font-size:.78rem;font-weight:800;letter-spacing:.2em;">STORY LIBRARY</div>
+            </div>
+        </div>
+        <div class="tool-icon bg-gradient-to-br from-amber-500 to-orange-700 text-white">📖</div>
+        <div class="tool-badge text-amber-300">Interactive Fiction</div>
+        <h3>Interactive Books</h3>
+        <p>Choice-based stories where every decision shapes the narrative. Read, choose, and discover multiple endings.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-code-branch text-amber-400"></i> Choose Your Path</span>
+            <span><i class="fas fa-bookmark text-amber-400"></i> Save Progress</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#d97706,#b45309);box-shadow:0 4px 0 #92400e,0 8px 24px rgba(217,119,6,.35);"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:6px;"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Browse Library</button>
+    </div>
+
+    <!-- Blackwood Manor -->
+    <div class="tool-card" onclick="window.open('apps/books/blackwood-manor/index.html','_blank')">
+        <div class="card-art"><img src="apps/books/blackwood-manor/images/cover.png" alt="Blackwood Manor preview"></div>
+        <div class="tool-icon bg-gradient-to-br from-purple-600 to-slate-800 text-white">🕯️</div>
+        <div class="tool-badge text-purple-300">Murder Mystery</div>
+        <h3>Blackwood Manor</h3>
+        <p>Lord Blackwood lies dead in his locked study. Interrogate suspects, uncover clues, and name the killer before dawn breaks.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-magnifying-glass text-purple-400"></i> 6 Chapters</span>
+            <span><i class="fas fa-code-branch text-purple-400"></i> 12 Choices</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#7c3aed,#4c1d95);box-shadow:0 4px 0 #3b0764,0 8px 24px rgba(124,58,237,.35);"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"/></svg> Solve Mystery</button>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <button class="theme-toggle-mini" onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle dark and light mode">
+        <i class="fas fa-moon"></i>
+        <span>Dark</span>
+    </button>
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-lg">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div>
+                <div class="text-white font-semibold text-sm">Teacher Ry · Aii Language Center</div>
+                <div class="text-gray-500 text-xs">Phnom Penh, Cambodia · 2026</div>
+                <div class="text-gray-400 text-xs mt-1">Phone: (855) 012-617-940</div>
+                <div class="text-gray-400 text-xs">Email: mam.ry@aii.edu.kh</div>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-6">
+            <a href="mailto:mam.ry@aii.edu.kh" class="social-link" title="Email"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+            <a href="tel:+85512617940" class="social-link" title="Phone"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+            <a href="https://facebook.com" target="_blank" class="social-link" title="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 320 512" fill="currentColor" style="display:block;"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg></a>
+            <a href="https://telegram.org" target="_blank" class="social-link" title="Telegram"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:block;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+            <a href="https://youtube.com" target="_blank" class="social-link" title="YouTube"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:block;"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        </div>
+    </div>
+    <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-white/5 text-center text-gray-500 text-xs">
+        © 2026 Ryshub. Built for modern English learners.
+    </div>
+</footer>
+
+<!-- Modals (preserved) -->
+<!-- TOEFL LOGIN MODAL -->
+<div id="toefl-login-overlay" class="login-modal-overlay">
+    <div class="login-card">
+        <button onclick="closeToeflLogin()" style="position:absolute;inset-block-start:16px;inset-inline-end:16px;background:var(--gray-700);border:none;border-radius:50%;inline-size:36px;block-size:36px;cursor:pointer;color:var(--gray-300);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;" onmouseover="this.style.background='var(--primary-blue)'; this.style.color='white'" onmouseout="this.style.background='var(--gray-700)'; this.style.color='var(--gray-300)'">✕</button>
+        <div style="text-align:center;margin-block-end:28px;">
+            <div style="inline-size:70px;block-size:70px;margin:0 auto 14px;border-radius:18px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(37,99,235,.4);">
+                <i class="fas fa-graduation-cap" style="font-size:1.8rem;color:white;"></i>
+            </div>
+            <h2 style="font-size:1.7rem;font-weight:800;color:var(--white);margin:0 0 4px;">TOEFL iBT</h2>
+            <p style="color:var(--gray-400);font-size:.9rem;margin:0;">Complete Test Platform · 2026</p>
+        </div>
+        <div style="margin-block-end:16px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Student Name</label>
+            <input id="toefl-name" type="text" class="login-input" placeholder="Enter your full name">
+        </div>
+        <div style="margin-block-end:24px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Test Start Code</label>
+            <input id="toefl-id" type="text" class="login-input" placeholder="Enter 0000 for testing">
+        </div>
+        <button onclick="launchToefl()" style="inline-size:100%;padding:15px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-dark));color:white;border:none;border-radius:13px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 var(--primary-dark),0 8px 24px rgba(37,99,235,.4);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            <i class="fas fa-sign-in-alt"></i> &nbsp;Start test with code 0000
+        </button>
+    </div>
+</div>
+
+<!-- BLOG ADMIN LOGIN MODAL -->
+<div id="blog-admin-overlay" class="login-modal-overlay">
+    <div class="login-card">
+        <button onclick="closeBlogAdminLogin()" style="position:absolute;inset-block-start:16px;inset-inline-end:16px;background:var(--gray-700);border:none;border-radius:50%;inline-size:36px;block-size:36px;cursor:pointer;color:var(--gray-300);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;" onmouseover="this.style.background='var(--primary-blue)'; this.style.color='white'" onmouseout="this.style.background='var(--gray-700)'; this.style.color='var(--gray-300)'">✕</button>
+        <div style="text-align:center;margin-block-end:22px;">
+            <div style="inline-size:68px;block-size:68px;margin:0 auto 14px;border-radius:18px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px rgba(37,99,235,.4);">
+                <i class="fas fa-user-lock" style="font-size:1.7rem;color:white;"></i>
+            </div>
+            <h2 style="font-size:1.55rem;font-weight:800;color:var(--white);margin:0 0 6px;">Blog Admin Login</h2>
+            <p style="color:var(--gray-400);font-size:.9rem;margin:0;line-height:1.6;">Sign in to publish teacher posts on the right-column blog.</p>
+        </div>
+        <div style="margin-block-end:14px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Admin Email</label>
+            <input id="blog-admin-email" type="email" class="login-input" placeholder="yourname@aii.edu.kh">
+        </div>
+        <div style="margin-block-end:22px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Admin Code</label>
+            <input id="blog-admin-code" type="password" class="login-input" placeholder="Enter admin publishing code" autocomplete="off">
+        </div>
+        <button onclick="blogAdminSignIn()" style="inline-size:100%;padding:15px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-dark));color:white;border:none;border-radius:13px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 var(--primary-dark),0 8px 24px rgba(37,99,235,.4);transition:all 0.3s;">
+            <i class="fas fa-right-to-bracket"></i> &nbsp;Sign in as admin
+        </button>
+    </div>
+</div>
+
+<!-- TEACHER ACCESS MODAL -->
+<div id="teacher-register-overlay" class="login-modal-overlay">
+    <div class="login-card teacher-register-card">
+        <button onclick="closeTeacherRegister()" style="position:absolute;inset-block-start:16px;inset-inline-end:16px;background:var(--gray-700);border:none;border-radius:50%;inline-size:36px;block-size:36px;cursor:pointer;color:var(--gray-300);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;" onmouseover="this.style.background='var(--primary-blue)'; this.style.color='white'" onmouseout="this.style.background='var(--gray-700)'; this.style.color='var(--gray-300)'">✕</button>
+        <div style="text-align:center;margin-block-end:18px;">
+            <div style="inline-size:72px;block-size:72px;margin:0 auto 14px;border-radius:20px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(37,99,235,.4);">
+                <i class="fas fa-user-shield" style="font-size:1.7rem;color:white;"></i>
+            </div>
+            <h2 style="font-size:1.55rem;font-weight:800;color:var(--white);margin:0 0 6px;">Teacher access</h2>
+            <p id="teacher-register-copy" style="color:var(--gray-400);font-size:.92rem;margin:0;line-height:1.6;">Enter your name and school email to unlock teacher books and TOEFL iBT resources. @aii.edu.kh is accepted.</p>
+        </div>
+        <div class="teacher-register-meta">
+            <div class="teacher-meta-chip"><strong>Books</strong><span>Teacher editions</span></div>
+            <div class="teacher-meta-chip"><strong>TOEFL</strong><span>Protected access</span></div>
+        </div>
+        <div style="margin-block-end:14px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">Full Name</label>
+            <input id="teacher-name" type="text" class="login-input" placeholder="Enter your name">
+        </div>
+        <div style="margin-block-end:14px;">
+            <label style="display:block;font-size:.85rem;font-weight:600;color:var(--gray-300);margin-block-end:8px;">School Email</label>
+            <input id="teacher-email" type="email" class="login-input" placeholder="name@school.edu or name@aii.edu.kh">
+        </div>
+
+        <button onclick="registerTeacherAccess()" style="inline-size:100%;padding:15px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-dark));color:white;border:none;border-radius:13px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 4px 0 var(--primary-dark),0 8px 24px rgba(37,99,235,.4);transition:all 0.3s;">
+            <i class="fas fa-user-check"></i> &nbsp;Continue to teacher content
+        </button>
+        <div style="display:flex;align-items:center;gap:10px;margin-block-start:14px;">
+            <div style="flex:1;height:1px;background:var(--gray-700);"></div>
+            <span style="font-size:.78rem;color:var(--gray-500);white-space:nowrap;">or just exploring?</span>
+            <div style="flex:1;height:1px;background:var(--gray-700);"></div>
+        </div>
+        <button onclick="enterDemoMode()" style="inline-size:100%;padding:12px;background:transparent;color:var(--gray-400);border:2px dashed var(--gray-600);border-radius:13px;font-weight:600;font-size:.92rem;cursor:pointer;font-family:inherit;margin-block-start:4px;transition:all 0.3s;" onmouseover="this.style.borderColor='#f59e0b';this.style.color='#f59e0b';" onmouseout="this.style.borderColor='var(--gray-600)';this.style.color='var(--gray-400)';">
+            <i class="fas fa-flask"></i> &nbsp;Try Demo &mdash; no login needed
+        </button>
+    </div>
+</div>
+
+<!-- TOEFL FULLSCREEN MODAL -->
+<div id="toefl-modal" class="fs-modal">
+    <div class="fs-modal-bar">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,var(--primary-blue),var(--primary-light));display:flex;align-items:center;justify-content:center;font-size:1rem;">🎓</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">TOEFL iBT Complete Test</div>
+                <div style="font-size:.7rem;color:var(--gray-400);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Teacher Ry · Aii Language Center</div>
+            </div>
+        </div>
+        <button onclick="closeToeflModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="toefl-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- BOOK 1 FULLSCREEN MODAL -->
+<div id="book1-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #0369a1, #0c4a6e);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#0284c7);display:flex;align-items:center;justify-content:center;font-size:1rem;">📖</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">World Class Book 1 — Teacher's Edition</div>
+                <div style="font-size:.7rem;color:rgba(56,189,248,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Complete Book 1</div>
+            </div>
+        </div>
+        <button onclick="closeBook1Modal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="book1-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- BOOK 2B FULLSCREEN MODAL -->
+<div id="book2b-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #0f172a, #1e293b); border-bottom: 1px solid rgba(212,175,55,.28);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#d4af37,#b8962f);display:flex;align-items:center;justify-content:center;font-size:1rem;">📚</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">World Class 2B — Teacher's Edition</div>
+                <div style="font-size:.7rem;color:rgba(212,175,55,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Units 7–12 · Level 11</div>
+            </div>
+        </div>
+        <button onclick="closeBook2bModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="book2b-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- BRICK FORGE FULLSCREEN MODAL -->
+<div id="brickforge-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #0891b2, #0e7490);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#22d3ee,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:1rem;">🧱</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">Brick Forge Pro</div>
+                <div style="font-size:.7rem;color:rgba(34,211,238,.85);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">3D Voxel Builder</div>
+            </div>
+        </div>
+        <button onclick="closeBrickForgeModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="brickforge-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- LAST COLONY FULLSCREEN MODAL -->
+<div id="colony-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #9a3412, #7f1d1d);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#fb923c,#dc2626);display:flex;align-items:center;justify-content:center;font-size:1rem;">🚀</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">Last Colony</div>
+                <div style="font-size:.7rem;color:rgba(253,186,116,.9);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Mars Strategy RPG</div>
+            </div>
+        </div>
+        <button onclick="closeColonyModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="colony-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- SOLAR SYSTEM FULLSCREEN MODAL -->
+<div id="solar-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #4338ca, #312e81);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#818cf8,#38bdf8);display:flex;align-items:center;justify-content:center;font-size:1rem;">🪐</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">Solar System Mission Lab</div>
+                <div style="font-size:.7rem;color:rgba(191,219,254,.95);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Explore planets · Complete missions</div>
+            </div>
+        </div>
+        <button onclick="closeSolarSystemModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="solar-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- Toast -->
+<div id="hub-toast" style="position:fixed;inset-block-end:2rem;inset-inline-end:2rem;background:rgba(15,23,42,.95);border:1px solid rgba(37,99,235,.4);border-radius:14px;padding:14px 20px;color:white;font-size:.9rem;display:flex;align-items:center;gap:10px;box-shadow:0 8px 0 rgba(37,99,235,.15),0 20px 40px rgba(0,0,0,.4);z-index:99999;transform:translateY(120px);opacity:0;transition:transform .4s cubic-bezier(.175,.885,.32,1.275),opacity .4s ease;backdrop-filter:blur(16px);">
+    <i class="fas fa-check-circle" style="color:#10b981;font-size:1.1rem;"></i>
+    <span id="hub-toast-msg">Done</span>
+</div>
+
+<script>
+/* ===== Neuron Network Background ===== */
+(function(){
+    const canvas = document.getElementById('neuron-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    const particleCount = 70;
+    const connectionDistance = 140;
+    const maxConnections = 3;
+    
+    function resize(){
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+    
+    class Particle {
+        constructor(){
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() * 1.5 + 1;
+        }
+        update(){
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+        draw(){
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(96, 165, 250, 0.55)';
+            ctx.fill();
+        }
+    }
+    
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+    
+    let mouse = { x: null, y: null };
+    window.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+    
+    function animate(){
+        ctx.clearRect(0, 0, width, height);
+        for (let p of particles) { p.update(); p.draw(); }
+        
+        for (let i = 0; i < particles.length; i++){
+            let connections = 0;
+            for (let j = i + 1; j < particles.length; j++){
+                let dx = particles[i].x - particles[j].x;
+                let dy = particles[i].y - particles[j].y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < connectionDistance && connections < maxConnections){
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(96, 165, 250, ${0.2 * (1 - dist/connectionDistance)})`;
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                    connections++;
+                }
+            }
+            // mouse interaction
+            if (mouse.x !== null){
+                let dx = particles[i].x - mouse.x;
+                let dy = particles[i].y - mouse.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 200){
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(37, 99, 235, ${0.35 * (1 - dist/200)})`;
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+})();
+
+/* ===== Header Scroll Effect ===== */
+window.addEventListener('scroll', () => {
+    const header = document.getElementById('mainHeader');
+    if (window.scrollY > 10) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+});
+
+/* ===== Original App Logic ===== */
+var toastTimer;
+var pendingTeacherAction = null;
+var TEACHER_PROFILE_MAP_KEY = 'ryshubTeacherProfiles';
+var TEACHER_CURRENT_EMAIL_KEY = 'ryshubCurrentTeacherEmail';
+var TEACHER_APPROVAL_CODE_KEY = 'ryshubTeacherApprovalCode';
+// SECURITY: Precomputed hash of 'AII-VERIFY-2026:Ry$Hub_S3cur3_S4lt_v2026'
+var EXPECTED_TEACHER_APPROVAL_HASH = '00000000188fce20';
+var BLOG_POSTS_KEY = 'ryshubTeacherBlogPosts';
+var BLOG_ADMIN_SESSION_KEY = 'ryshubBlogAdminSession';
+var BLOG_ADMIN_CODE_KEY = 'ryshubBlogAdminCode';
+// SECURITY: Precomputed hash of 'RYS-BLOG-ADMIN-2026:Ry$Hub_S3cur3_S4lt_v2026'
+var EXPECTED_BLOG_ADMIN_HASH = '00000000f3e2d830';
+
+function normalizeTeacherEmail(email) {
+    return (email || '').trim().toLowerCase();
+}
+
+function getTeacherProfilesMap() {
+    try {
+        return JSON.parse(localStorage.getItem(TEACHER_PROFILE_MAP_KEY) || '{}');
+    } catch (e) {
+        return {};
+    }
+}
+
+function getTeacherScopedKey(baseKey, email) {
+    var safeEmail = normalizeTeacherEmail(email || (getTeacherProfile() && getTeacherProfile().email) || 'guest');
+    return baseKey + ':' + (safeEmail || 'guest');
+}
+
+function getCurrentTeacherEmail() {
+    return normalizeTeacherEmail(sessionStorage.getItem(TEACHER_CURRENT_EMAIL_KEY) || localStorage.getItem(TEACHER_CURRENT_EMAIL_KEY) || '');
+}
+
+function setCurrentTeacherEmail(email) {
+    var normalized = normalizeTeacherEmail(email);
+    if (!normalized) return;
+    localStorage.setItem(TEACHER_CURRENT_EMAIL_KEY, normalized);
+    sessionStorage.setItem(TEACHER_CURRENT_EMAIL_KEY, normalized);
+}
+
+function hasBlogAdminSession() {
+    return sessionStorage.getItem(BLOG_ADMIN_SESSION_KEY) === '1';
+}
+
+function getBlogAdminCode() {
+    var stored = localStorage.getItem(BLOG_ADMIN_CODE_KEY);
+    return stored ? stored.trim() : '';
+}
+
+function isBlogAdminCodeValid(code) {
+    var input = (code || '').trim();
+    if (!input) return false;
+    // Validate against stored override first, then fallback to expected hash
+    var stored = getBlogAdminCode();
+    if (stored) return input === stored;
+    return RysHubAuth.hash(input + ':Ry$Hub_S3cur3_S4lt_v2026') === EXPECTED_BLOG_ADMIN_HASH;
+}
+
+function generateId() {
+    return 'id_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+}
+
+function escapeHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function formatBlogDate(timestamp) {
+    var d = new Date(timestamp || Date.now());
+    if (Number.isNaN(d.getTime())) return 'Unknown date';
+    return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function loadTeacherBlogPosts() {
+    var defaults = [
+        {
+            id: 'welcome-1',
+            title: 'Welcome To Teacher Updates',
+            body: 'Use this area for short staff notes. Example: lesson pacing updates, homework reminders, and assessment planning.',
+            author: 'Admin',
+            createdAt: Date.now() - 86400000 * 3,
+            pinned: true
+        },
+        {
+            id: 'weekly-1',
+            title: 'Weekly Focus: Writing Clarity',
+            body: 'Please reinforce topic sentence + supporting detail structure in all writing classes this week.',
+            author: 'Admin',
+            createdAt: Date.now() - 86400000,
+            pinned: false
+        }
+    ];
+
+    try {
+        var saved = JSON.parse(localStorage.getItem(BLOG_POSTS_KEY) || 'null');
+        if (!Array.isArray(saved) || !saved.length) return defaults;
+        return saved;
+    } catch (e) {
+        return defaults;
+    }
+}
+
+function saveTeacherBlogPosts(posts) {
+    localStorage.setItem(BLOG_POSTS_KEY, JSON.stringify(posts));
+}
+
+function renderTeacherBlogPosts() {
+    var container = document.getElementById('teacherBlogList');
+    var count = document.getElementById('teacherBlogCount');
+    if (!container || !count) return;
+
+    var posts = loadTeacherBlogPosts().slice().sort(function(a, b) {
+        if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
+        return (b.createdAt || 0) - (a.createdAt || 0);
+    });
+
+    count.textContent = posts.length;
+
+    container.innerHTML = posts.map(function(post) {
+        return '<article class="blog-post-card">'
+            + '<div class="blog-post-top">'
+            + '<h4 class="blog-post-title">' + escapeHtml(post.title) + '</h4>'
+            + (post.pinned ? '<span class="blog-pin">Pinned</span>' : '')
+            + '</div>'
+            + '<p class="blog-post-body">' + escapeHtml(post.body) + '</p>'
+            + '<div class="blog-post-meta">By ' + escapeHtml(post.author || 'Admin') + ' • ' + formatBlogDate(post.createdAt) + '</div>'
+            + '</article>';
+    }).join('');
+}
+
+function updateBlogAdminUi() {
+    var strip = document.getElementById('blogAdminStrip');
+    var btn = document.getElementById('blogAdminButton');
+    if (!strip || !btn) return;
+
+    if (hasBlogAdminSession()) {
+        strip.classList.add('open');
+        btn.innerHTML = '<i class="fas fa-pen"></i> Publishing';
+        btn.onclick = function() {
+            strip.classList.toggle('open');
+        };
+    } else {
+        strip.classList.remove('open');
+        btn.innerHTML = '<i class="fas fa-lock"></i> Admin';
+        btn.onclick = function() { openBlogAdminLogin(); };
+    }
+}
+
+function openBlogAdminLogin() {
+    if (hasBlogAdminSession()) {
+        updateBlogAdminUi();
+        return;
+    }
+    var profile = getTeacherProfile();
+    var emailInput = document.getElementById('blog-admin-email');
+    var codeInput = document.getElementById('blog-admin-code');
+    if (emailInput) emailInput.value = (profile && profile.email) ? profile.email : '';
+    if (codeInput) codeInput.value = '';
+    document.getElementById('blog-admin-overlay').classList.add('open');
+    setTimeout(function(){ if (emailInput) emailInput.focus(); }, 120);
+}
+
+function closeBlogAdminLogin() {
+    var overlay = document.getElementById('blog-admin-overlay');
+    if (overlay) overlay.classList.remove('open');
+}
+
+function blogAdminSignIn() {
+    var email = normalizeTeacherEmail((document.getElementById('blog-admin-email') || {}).value || '');
+    var code = ((document.getElementById('blog-admin-code') || {}).value || '').trim();
+
+    if (!email || !email.endsWith('@aii.edu.kh')) {
+        showToast('Admin email must be @aii.edu.kh');
+        return;
+    }
+
+    if (!isBlogAdminCodeValid(code)) {
+        showToast('Admin code is invalid');
+        return;
+    }
+
+    sessionStorage.setItem(BLOG_ADMIN_SESSION_KEY, '1');
+    sessionStorage.setItem(BLOG_ADMIN_SESSION_KEY + ':email', email);
+    closeBlogAdminLogin();
+    updateBlogAdminUi();
+    showToast('Blog admin access granted');
+}
+
+function blogAdminSignOut() {
+    sessionStorage.removeItem(BLOG_ADMIN_SESSION_KEY);
+    sessionStorage.removeItem(BLOG_ADMIN_SESSION_KEY + ':email');
+    sessionStorage.removeItem('ryshub_master_access');
+    localStorage.removeItem('ryshub_master_access');
+    updateBlogAdminUi();
+    showToast('Blog admin signed out');
+}
+
+function publishTeacherBlogPost() {
+    if (!hasBlogAdminSession()) {
+        showToast('Please sign in as blog admin first');
+        openBlogAdminLogin();
+        return;
+    }
+
+    var titleEl = document.getElementById('blogPostTitle');
+    var bodyEl = document.getElementById('blogPostBody');
+    var pinEl = document.getElementById('blogPostPinned');
+    var title = (titleEl && titleEl.value || '').trim();
+    var body = (bodyEl && bodyEl.value || '').trim();
+    var pinned = !!(pinEl && pinEl.checked);
+
+    if (!title || !body) {
+        showToast('Please enter both title and content');
+        return;
+    }
+
+    var profile = getTeacherProfile();
+    var author = (profile && profile.name) || sessionStorage.getItem(BLOG_ADMIN_SESSION_KEY + ':email') || 'Admin';
+    var posts = loadTeacherBlogPosts();
+    posts.unshift({
+        id: 'post-' + Date.now(),
+        title: title,
+        body: body,
+        author: author,
+        createdAt: Date.now(),
+        pinned: pinned
+    });
+    saveTeacherBlogPosts(posts);
+
+    if (titleEl) titleEl.value = '';
+    if (bodyEl) bodyEl.value = '';
+    if (pinEl) pinEl.checked = false;
+
+    renderTeacherBlogPosts();
+    showToast('Teacher post published');
+}
+
+function getTeacherApprovalCode() {
+    var stored = localStorage.getItem(TEACHER_APPROVAL_CODE_KEY);
+    return stored ? stored.trim() : '';
+}
+
+function isTeacherVerified(profile) {
+    return !!(profile && (profile.verified === true || profile.approved === true));
+}
+
+function isTeacherVerificationCodeValid(code) {
+    var input = (code || '').trim();
+    if (!input) return false;
+    // Validate against stored override first, then fallback to expected hash
+    var stored = getTeacherApprovalCode();
+    if (stored) return input === stored;
+    return RysHubAuth.hash(input + ':Ry$Hub_S3cur3_S4lt_v2026') === EXPECTED_TEACHER_APPROVAL_HASH;
+}
+
+function isSchoolEmail(email) {
+    var value = (email || '').trim().toLowerCase();
+    return !!value && value.endsWith('@aii.edu.kh');
+}
+
+function isRegularEmail(email) {
+    var value = (email || '').trim();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+}
+
+function isValidFullName(name) {
+    var cleaned = (name || '').trim();
+    if (cleaned.length < 4) return false;
+    var tokens = cleaned.split(/\s+/).filter(Boolean);
+    if (tokens.length < 2) return false;
+    return tokens.every(function(token) {
+        return /^[A-Za-z][A-Za-z'.-]{1,}$/.test(token);
+    });
+}
+
+function getTeacherProfile() {
+    try {
+        var map = getTeacherProfilesMap();
+        var currentEmail = getCurrentTeacherEmail();
+        if (currentEmail && map[currentEmail]) {
+            if (typeof map[currentEmail].verified === 'undefined') {
+                map[currentEmail].verified = true;
+                localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(map));
+            }
+            return map[currentEmail];
+        }
+
+        var sessionProfile = JSON.parse(sessionStorage.getItem('ryshubTeacherProfile') || 'null');
+        if (sessionProfile && sessionProfile.email) {
+            setCurrentTeacherEmail(sessionProfile.email);
+            return sessionProfile;
+        }
+
+        var legacyProfile = JSON.parse(localStorage.getItem('ryshubTeacherProfile') || 'null');
+        if (legacyProfile && legacyProfile.email) {
+            if (typeof legacyProfile.verified === 'undefined') legacyProfile.verified = true;
+            map[normalizeTeacherEmail(legacyProfile.email)] = legacyProfile;
+            localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(map));
+            setCurrentTeacherEmail(legacyProfile.email);
+            return legacyProfile;
+        }
+
+        return null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function updateTeacherStatusUi() {
+    var status = document.querySelector('.header-status strong');
+    var statusText = document.querySelector('.header-status span:last-child');
+    var accessBtn = document.getElementById('headerAccessBtn');
+    var registerBtn = document.getElementById('headerRegisterBtn');
+    var profile = getTeacherProfile();
+
+    if (profile && status && statusText) {
+        if (isTeacherVerified(profile)) {
+            status.textContent = 'Teacher verified';
+            statusText.textContent = (profile.name || 'Teacher') + ' • ' + (profile.school || profile.email);
+        } else {
+            status.textContent = 'Teacher pending verification';
+            statusText.textContent = (profile.name || 'Teacher') + ' • Verify account to unlock resources';
+        }
+    } else if (status && statusText) {
+        status.textContent = 'Live classroom hub';
+        statusText.textContent = 'Use the side panel to explore tools';
+    }
+
+    if (accessBtn && registerBtn && profile) {
+        accessBtn.innerHTML = '<i class="fas fa-right-left"></i><span>Switch</span>';
+        accessBtn.onclick = function() { switchTeacherAccount(); };
+
+        registerBtn.innerHTML = '<i class="fas fa-right-from-bracket"></i><span>Sign out</span>';
+        registerBtn.onclick = function() { signOutTeacher(); };
+    } else if (accessBtn && registerBtn) {
+        accessBtn.innerHTML = '<i class="fas fa-right-to-bracket"></i><span>Log in</span>';
+        accessBtn.onclick = function() { window.location.href = 'apps/login.html'; };
+
+        registerBtn.innerHTML = '<i class="fas fa-users"></i><span>Team access</span>';
+        registerBtn.onclick = function() { window.location.href = 'apps/login.html'; };
+    }
+}
+
+function signOutTeacher() {
+    RysHubAuth.clear();
+    sessionStorage.removeItem('ryshubTeacherProfile');
+    sessionStorage.removeItem(TEACHER_CURRENT_EMAIL_KEY);
+    localStorage.removeItem('ryshubTeacherProfile');
+    localStorage.removeItem(TEACHER_CURRENT_EMAIL_KEY);
+    updateTeacherStatusUi();
+    renderGameScores();
+    renderClassroomLabMetrics();
+    showToast('Signed out. Returning to the team login page.');
+    setTimeout(function() {
+        window.location.href = 'apps/login.html';
+    }, 250);
+}
+
+function switchTeacherAccount() {
+    document.getElementById('teacher-name').value = '';
+    document.getElementById('teacher-email').value = '';
+    openTeacherRegister('switch teacher account');
+}
+
+function openTeacherRegister(featureName, callback) {
+    pendingTeacherAction = typeof callback === 'function' ? callback : null;
+    showToast('Use the main team login to access ' + (featureName || 'teacher resources'));
+    window.location.href = 'apps/login.html';
+}
+
+function closeTeacherRegister() {
+    document.getElementById('teacher-register-overlay').classList.remove('open');
+}
+
+function hasTeacherAccess() {
+    var profile = getTeacherProfile();
+    var masterAccess = localStorage.getItem('ryshub_master_access') === 'true' || sessionStorage.getItem('ryshub_master_access') === 'true' || localStorage.getItem('ryshub_loggedIn') === 'true' || sessionStorage.getItem('ryshub_loggedIn') === 'true';
+    return !!masterAccess || !!(profile && profile.name && isSchoolEmail(profile.email) && isTeacherVerified(profile));
+}
+
+function withTeacherAccess(featureName, callback) {
+    if (hasTeacherAccess()) {
+        if (typeof callback === 'function') callback();
+        return;
+    }
+    showToast('Please sign in on the main team login page');
+    window.location.href = 'apps/login.html';
+}
+
+function registerTeacherAccess() {
+    var name = document.getElementById('teacher-name').value.trim();
+    var email = normalizeTeacherEmail(document.getElementById('teacher-email').value);
+
+    if (!name || !email) {
+        showToast('Please enter your name and school email');
+        return;
+    }
+
+    if (!isSchoolEmail(email)) {
+        showToast('Teachers must use an @aii.edu.kh email address.');
+        return;
+    }
+
+    var profile = {
+        name: name,
+        email: email,
+        school: 'Aii Language Center',
+        verified: true,
+        verifiedAt: new Date().toISOString(),
+        registeredAt: new Date().toISOString()
+    };
+    var profiles = getTeacherProfilesMap();
+    profiles[email] = profile;
+
+    localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(profiles));
+    localStorage.setItem('ryshubTeacherProfile', JSON.stringify(profile));
+    sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(profile));
+    setCurrentTeacherEmail(email);
+    localStorage.setItem('ryshub_role', 'teacher');
+    sessionStorage.setItem('ryshub_role', 'teacher');
+
+
+    updateTeacherStatusUi();
+    renderGameScores();
+    renderClassroomLabMetrics();
+    closeTeacherRegister();
+    showToast('Teacher profile saved for ' + name);
+
+    if (typeof pendingTeacherAction === 'function') {
+        var nextAction = pendingTeacherAction;
+        pendingTeacherAction = null;
+        nextAction();
+    }
+}
+
+function openProtectedToefl() {
+    withTeacherAccess('TOEFL iBT', function() { openToeflLogin(); });
+}
+
+var DEMO_PROFILE = {
+    name: 'Demo User',
+    email: 'demo@aii.edu.kh',
+    school: 'Aii Language Center',
+    verified: true,
+    isDemo: true,
+    verifiedAt: new Date().toISOString(),
+    registeredAt: new Date().toISOString()
+};
+
+function enterDemoMode() {
+    var profiles = getTeacherProfilesMap();
+    profiles[DEMO_PROFILE.email] = DEMO_PROFILE;
+    localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(profiles));
+    localStorage.setItem('ryshubTeacherProfile', JSON.stringify(DEMO_PROFILE));
+    sessionStorage.setItem('ryshubTeacherProfile', JSON.stringify(DEMO_PROFILE));
+    sessionStorage.setItem('ryshubDemoMode', '1');
+    setCurrentTeacherEmail(DEMO_PROFILE.email);
+    localStorage.setItem('ryshub_role', 'teacher');
+    sessionStorage.setItem('ryshub_role', 'teacher');
+    var demoCommandKey = getTeacherScopedKey('ryshubCommandData', DEMO_PROFILE.email);
+    if (!localStorage.getItem(demoCommandKey)) {
+        localStorage.setItem(demoCommandKey, JSON.stringify({
+            schedule: [
+                { id: generateId(), day: 'Monday', time: '08:00', activity: 'World Class Book 1 - Unit 5', room: 'Room 301' },
+                { id: generateId(), day: 'Wednesday', time: '10:00', activity: 'TOEFL Prep Session', room: 'Lab 2' },
+                { id: generateId(), day: 'Friday', time: '13:00', activity: 'Grammar Workshop', room: 'Room 205' }
+            ],
+            materials: [
+                { id: generateId(), title: 'Unit 5 Vocabulary List', category: 'Vocabulary', url: '', notes: 'Print before Monday class' },
+                { id: generateId(), title: 'TOEFL Writing Rubric', category: 'TOEFL', url: 'https://www.ets.org/toefl/test-takers/ibt/scores/understand/', notes: 'Share with students' }
+            ]
+        }));
+    }
+
+    var demoLinksKey = getTeacherScopedKey('ryshubQuickLinks', DEMO_PROFILE.email);
+    if (!localStorage.getItem(demoLinksKey)) {
+        localStorage.setItem(demoLinksKey, JSON.stringify([
+            { id: generateId(), title: 'Level 11 Writing', url: 'https://aii.instructure.com/courses/101', type: 'Course' },
+            { id: generateId(), title: 'TOEFL Prep Module', url: 'https://aii.instructure.com/courses/205', type: 'Course' },
+            { id: generateId(), title: 'Grammar Workshop', url: 'https://aii.instructure.com/courses/312', type: 'Course' },
+            { id: generateId(), title: 'Unit 7 Vocab Worksheet', url: 'https://aii.instructure.com/courses/101/assignments/501', type: 'Worksheet' },
+            { id: generateId(), title: 'Midterm Quiz', url: 'https://aii.instructure.com/courses/205/quizzes/88', type: 'Quiz' }
+        ]));
+    }
+
+    updateTeacherStatusUi();
+    renderGameScores();
+    renderClassroomLabMetrics();
+    closeTeacherRegister();
+    document.getElementById('demo-banner').style.display = 'block';
+    document.getElementById('mainHeader').style.marginTop = '44px';
+    showToast('Demo mode active — explore freely!');
+    if (typeof pendingTeacherAction === 'function') {
+        var nextAction = pendingTeacherAction;
+        pendingTeacherAction = null;
+        nextAction();
+    }
+}
+
+function exitDemoMode() {
+    sessionStorage.removeItem('ryshubDemoMode');
+    var profiles = getTeacherProfilesMap();
+    delete profiles[DEMO_PROFILE.email];
+    localStorage.setItem(TEACHER_PROFILE_MAP_KEY, JSON.stringify(profiles));
+    localStorage.removeItem('ryshubTeacherProfile');
+    sessionStorage.removeItem('ryshubTeacherProfile');
+    localStorage.removeItem(TEACHER_CURRENT_EMAIL_KEY);
+    localStorage.removeItem('ryshub_role');
+    sessionStorage.removeItem('ryshub_role');
+    document.getElementById('demo-banner').style.display = 'none';
+    document.getElementById('mainHeader').style.marginTop = '';
+    updateTeacherStatusUi();
+    showToast('Demo mode ended.');
+}
+
+function openProtectedBook1() {
+    openBook1Modal();
+}
+
+function openProtectedBook2b() {
+    withTeacherAccess('World Class 2B', function() { openBook2bModal(); });
+}
+
+function openProtectedPage(path, featureName) {
+    if (path === 'apps/book1.html') {
+        window.open(path, '_blank');
+        return;
+    }
+
+    withTeacherAccess(featureName, function() {
+        window.open(path, '_blank');
+    });
+}
+
+function toggleMenu() {
+    const menu = document.getElementById('slideMenu');
+    const overlay = document.getElementById('menuOverlay');
+    const icon = menu.querySelector('.menu-tab i');
+    const isOpen = menu.classList.toggle('open');
+    overlay.classList.toggle('open', isOpen);
+    if (icon) {
+        icon.className = isOpen ? 'fas fa-chevron-left' : 'fas fa-chevron-right';
+    }
+}
+
+function openToeflLogin() {
+    document.getElementById('toefl-login-overlay').classList.add('open');
+    setTimeout(function(){ document.getElementById('toefl-name').focus(); }, 200);
+}
+function closeToeflLogin() {
+    document.getElementById('toefl-login-overlay').classList.remove('open');
+}
+function launchToefl() {
+    var name = document.getElementById('toefl-name').value.trim();
+    var startCode = document.getElementById('toefl-id').value.trim();
+    if (!name || !startCode) {
+        showToast('Please enter your full name and the test start code');
+        return;
+    }
+    if (startCode !== '0000') {
+        showToast('Use 0000 to start the test during this testing phase');
+        return;
+    }
+    recordGameLaunch('toefl');
+    closeToeflLogin();
+    var frame = document.getElementById('toefl-frame');
+    frame.src = 'apps/toefl/index.html';
+    document.getElementById('toefl-modal').classList.add('open');
+    frame.onload = function() {
+        try {
+            frame.contentDocument.getElementById('student-name').value = name;
+            frame.contentDocument.getElementById('student-id').value = '0000';
+        } catch(e) {}
+    };
+}
+function closeToeflModal() {
+    document.getElementById('toefl-modal').classList.remove('open');
+}
+
+function openBook1Modal() {
+    showToast('Loading Book 1... one moment ⏳');
+    var frame = document.getElementById('book1-frame');
+    frame.src = 'apps/book1.html';
+    document.getElementById('book1-modal').classList.add('open');
+}
+function closeBook1Modal() {
+    document.getElementById('book1-modal').classList.remove('open');
+}
+
+function openBook2bModal() {
+    showToast('Loading Book 2B... one moment ⏳');
+    var frame = document.getElementById('book2b-frame');
+    frame.src = 'apps/book2b.html';
+    document.getElementById('book2b-modal').classList.add('open');
+}
+function closeBook2bModal() {
+    document.getElementById('book2b-modal').classList.remove('open');
+}
+
+var brickForgeLoadTimer = null;
+
+function openBrickForgeModal() {
+    recordGameLaunch('brickforge');
+    showToast('Loading Brick Forge... one moment ⏳');
+    var frame = document.getElementById('brickforge-frame');
+    var loaded = false;
+
+    clearTimeout(brickForgeLoadTimer);
+    frame.onload = function() {
+        loaded = true;
+        clearTimeout(brickForgeLoadTimer);
+    };
+
+    frame.src = 'apps/brickforge.html';
+    document.getElementById('brickforge-modal').classList.add('open');
+
+    brickForgeLoadTimer = setTimeout(function() {
+        if (loaded) return;
+        showToast('Brick Forge is slow in modal. Opening full page...');
+        window.open('apps/brickforge.html', '_blank');
+    }, 6000);
+}
+function closeBrickForgeModal() {
+    clearTimeout(brickForgeLoadTimer);
+    var frame = document.getElementById('brickforge-frame');
+    if (frame) frame.onload = null;
+    document.getElementById('brickforge-modal').classList.remove('open');
+}
+
+var colonyLoadTimer = null;
+
+function openColonyModal() {
+    recordGameLaunch('colony');
+    showToast('Launching Last Colony... stand by 🚀');
+    var frame = document.getElementById('colony-frame');
+    var loaded = false;
+
+    clearTimeout(colonyLoadTimer);
+    frame.onload = function() {
+        loaded = true;
+        clearTimeout(colonyLoadTimer);
+    };
+
+    frame.src = 'apps/games/colony/index.html';
+    document.getElementById('colony-modal').classList.add('open');
+
+    colonyLoadTimer = setTimeout(function() {
+        if (loaded) return;
+        showToast('Last Colony is taking longer than expected. Opening full page...');
+        window.open('apps/games/colony/index.html', '_blank');
+    }, 6000);
+}
+function closeColonyModal() {
+    clearTimeout(colonyLoadTimer);
+    var frame = document.getElementById('colony-frame');
+    if (frame) frame.onload = null;
+    document.getElementById('colony-modal').classList.remove('open');
+}
+
+function openSolarSystemModal() {
+    recordGameLaunch('solar');
+    showToast('Launching Solar System... stand by 🪐');
+    var frame = document.getElementById('solar-frame');
+    frame.src = 'apps/games/solar-system/index.html';
+    document.getElementById('solar-modal').classList.add('open');
+}
+function closeSolarSystemModal() {
+    document.getElementById('solar-modal').classList.remove('open');
+}
+
+function updateThemeToggleUi() {
+    var btn = document.getElementById('themeToggleBtn');
+    if (!btn) return;
+    var isLight = document.body.classList.contains('light-theme');
+    btn.innerHTML = isLight
+        ? '<i class="fas fa-sun"></i><span>Light</span>'
+        : '<i class="fas fa-moon"></i><span>Dark</span>';
+}
+
+function applySavedTheme() {
+    var savedTheme = localStorage.getItem('ryshubTheme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+    } else {
+        document.body.classList.remove('light-theme');
+    }
+    updateThemeToggleUi();
+}
+
+function toggleTheme() {
+    document.body.classList.toggle('light-theme');
+    localStorage.setItem('ryshubTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    updateThemeToggleUi();
+}
+
+var HERO_TOPICS = [
+    { prefix: 'Master', highlight: 'Grammar Through Play', meta: 'Interactive exercises that turn complex rules into intuitive, memorable classroom activities students actually enjoy.', chip: 'Nouns · Verbs · Tenses · Clauses', icon: 'fa-puzzle-piece' },
+    { prefix: 'Build', highlight: 'Vocabulary With Confidence', meta: 'From core word lists to contextual usage — every term becomes a building block for fluent expression.', chip: 'Context · Collocation · Usage · Review', icon: 'fa-book' },
+    { prefix: 'Prepare Students for', highlight: 'TOEFL Success', meta: 'Integrated reading, listening, speaking, and writing drills calibrated to the iBT format and scoring rubrics.', chip: 'iBT Format · Timed Practice · Strategies', icon: 'fa-graduation-cap' },
+    { prefix: 'Spark', highlight: 'Creative Writing', meta: 'Guided prompts, structured frameworks, and peer-review tools that help students find their voice in English.', chip: 'Prompts · Drafts · Feedback · Polish', icon: 'fa-pen-nib' }
+];
+
+function scrambleText(el, finalText, duration) {
+    if (!el) return;
+    duration = duration || 1200;
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*<>/=+-_';
+    var steps = 22;
+    var stepTime = duration / steps;
+    var currentStep = 0;
+    el.classList.add('hb-glitch');
+    var interval = setInterval(function() {
+        currentStep++;
+        var progress = currentStep / steps;
+        var revealed = Math.floor(progress * finalText.length);
+        var result = '';
+        for (var i = 0; i < finalText.length; i++) {
+            if (finalText[i] === ' ') {
+                result += ' ';
+            } else if (i < revealed) {
+                result += finalText[i];
+            } else {
+                result += chars[Math.floor(Math.random() * chars.length)];
+            }
+        }
+        el.textContent = result;
+        if (currentStep >= steps) {
+            clearInterval(interval);
+            el.textContent = finalText;
+            setTimeout(function() { el.classList.remove('hb-glitch'); }, 300);
+        }
+    }, stepTime);
+}
+
+var heroTopicIndex = 0;
+var heroBannerTimer = null;
+
+function cycleHeroBanner() {
+    var prefixEl = document.getElementById('hbTitlePrefix');
+    var spanEl = document.getElementById('hbTitleSpan');
+    var metaEl = document.getElementById('hbMeta');
+    var chipEl = document.getElementById('hbBottomChip');
+    var topChipEl = document.getElementById('hbTopChip');
+    if (!prefixEl || !spanEl) return;
+
+    heroTopicIndex = (heroTopicIndex + 1) % HERO_TOPICS.length;
+    var topic = HERO_TOPICS[heroTopicIndex];
+
+    prefixEl.textContent = topic.prefix;
+    scrambleText(spanEl, topic.highlight, 1000);
+    if (metaEl) metaEl.textContent = topic.meta;
+    if (chipEl) {
+        chipEl.innerHTML = '<i class="fas ' + topic.icon + '" aria-hidden="true"></i> ' + topic.chip;
+    }
+    if (topChipEl) {
+        var labels = ['Coded Visual Banner', 'Live Theme Rotation', 'Fresh Every Visit', 'Dynamic Content', 'Adaptive Banner'];
+        topChipEl.textContent = labels[heroTopicIndex % labels.length];
+    }
+}
+
+function initHeroBannerCycle() {
+    if (heroBannerTimer) clearInterval(heroBannerTimer);
+    heroBannerTimer = setInterval(cycleHeroBanner, 8000);
+}
+
+function animateCounter(el) {
+    var target = parseInt(el.getAttribute('data-count') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    var duration = 1100;
+    var startTime = null;
+
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        var value = Math.floor(progress * target);
+        el.textContent = value + suffix;
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        } else {
+            el.textContent = target + suffix;
+        }
+    }
+
+    window.requestAnimationFrame(step);
+}
+
+function initLiveCounters() {
+    var counters = document.querySelectorAll('.counter-value[data-count]');
+    if (!('IntersectionObserver' in window)) {
+        counters.forEach(function(counter) {
+            counter.textContent = (counter.getAttribute('data-count') || '0') + (counter.getAttribute('data-suffix') || '');
+        });
+        return;
+    }
+
+    var observer = new IntersectionObserver(function(entries, obs) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.45 });
+
+    counters.forEach(function(counter) {
+        observer.observe(counter);
+    });
+}
+
+function initParallaxTilt() {
+    ['.hero-banner', '.hero-preview-card'].forEach(function(selector) {
+        var elements = document.querySelectorAll(selector);
+        elements.forEach(function(el) {
+            el.addEventListener('mousemove', function(e) {
+                var rect = el.getBoundingClientRect();
+                var x = (e.clientX - rect.left) / rect.width - 0.5;
+                var y = (e.clientY - rect.top) / rect.height - 0.5;
+                el.style.transform = 'perspective(1200px) rotateX(' + (-y * 6) + 'deg) rotateY(' + (x * 8) + 'deg) translateY(-4px)';
+            });
+            el.addEventListener('mouseleave', function() {
+                el.style.transform = '';
+            });
+        });
+    });
+}
+
+function scrollToSection(id) {
+    var section = document.getElementById(id);
+    if (!section) return;
+    var headerH = (document.getElementById('mainHeader') || {offsetHeight: 80}).offsetHeight;
+    var top = section.getBoundingClientRect().top + window.pageYOffset - headerH - 12;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+}
+
+function scrollHeaderNav(direction) {
+    var nav = document.getElementById('topNavScroll');
+    if (!nav) return;
+    nav.scrollBy(direction * 180, 0);
+}
+
+function initHeaderNavScroll() {
+    var nav = document.getElementById('topNavScroll');
+    if (!nav) return;
+
+    nav.addEventListener('wheel', function(e) {
+        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+        e.preventDefault();
+        nav.scrollLeft += e.deltaY;
+    }, { passive: false });
+
+    var isPointerDown = false;
+    var startX = 0;
+    var startScroll = 0;
+
+    nav.addEventListener('pointerdown', function(e) {
+        isPointerDown = true;
+        startX = e.clientX;
+        startScroll = nav.scrollLeft;
+        nav.style.cursor = 'grabbing';
+    });
+
+    nav.addEventListener('pointermove', function(e) {
+        if (!isPointerDown) return;
+        nav.scrollLeft = startScroll - (e.clientX - startX);
+    });
+
+    function stopPointerDrag(e) {
+        if (!isPointerDown) return;
+        isPointerDown = false;
+        nav.style.cursor = '';
+    }
+
+    nav.addEventListener('pointerup', stopPointerDrag);
+    nav.addEventListener('pointercancel', stopPointerDrag);
+    nav.addEventListener('mouseleave', stopPointerDrag);
+}
+
+function setClassroomLabMode(mode) {
+    document.querySelectorAll('.lab-mode-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-lab-mode') === mode);
+    });
+    document.querySelectorAll('.lab-panel').forEach(function(panel) {
+        panel.classList.toggle('active', panel.getAttribute('data-lab-panel') === mode);
+    });
+}
+
+function renderClassroomLabMetrics() {
+    var stats = loadGameStats();
+    var typingStats = stats['typing-race'] || { plays: 0 };
+    var savedRuns = [];
+
+    try {
+        savedRuns = JSON.parse(localStorage.getItem('typeracer_scores') || '[]');
+    } catch (e) {
+        savedRuns = [];
+    }
+
+    var runCount = Array.isArray(savedRuns) ? savedRuns.length : 0;
+    var avgWpm = 0;
+    var avgAcc = 0;
+
+    if (runCount > 0) {
+        var totalWpm = savedRuns.reduce(function(sum, row) { return sum + (parseFloat(row.wpm) || 0); }, 0);
+        var totalAcc = savedRuns.reduce(function(sum, row) { return sum + (parseFloat(row.accuracy) || 0); }, 0);
+        avgWpm = Math.round(totalWpm / runCount);
+        avgAcc = Math.round(totalAcc / runCount);
+    }
+
+    var playsEl = document.getElementById('labMetricTypingPlays');
+    var runsEl = document.getElementById('labMetricTypingRuns');
+    var wpmEl = document.getElementById('labMetricAvgWpm');
+    var accEl = document.getElementById('labMetricAvgAcc');
+
+    if (playsEl) playsEl.textContent = typingStats.plays || 0;
+    if (runsEl) runsEl.textContent = runCount;
+    if (wpmEl) wpmEl.textContent = avgWpm;
+    if (accEl) accEl.textContent = avgAcc + '%';
+}
+
+function initClassroomLab() {
+    setClassroomLabMode('teach');
+    renderClassroomLabMetrics();
+}
+
+var featuredGameIndex = 0;
+var currentFeaturedGameId = 'colony';
+var gameScoreTimer = null;
+var GAME_META = {
+    colony: {
+        name: 'Last Colony',
+        metric: 'Top colony readiness',
+        best: '92%',
+        desc: 'Lead Mars survival missions and keep the colony alive through high-pressure strategy and story choices.',
+        cta: 'Launch Colony'
+    },
+    solar: {
+        name: 'Solar System',
+        metric: 'Mission completion rate',
+        best: '88%',
+        desc: 'Explore planets with guided mission challenges and interactive space-learning objectives.',
+        cta: 'Launch Solar System'
+    },
+    brickforge: {
+        name: 'Brick Forge Pro',
+        metric: 'Creative build points',
+        best: '148',
+        desc: 'Fast visual building challenges make this one of the most replayed creative experiences on the hub.',
+        cta: 'Open Builder'
+    },
+    toefl: {
+        name: 'TOEFL Challenge',
+        metric: 'Fastest completed mock',
+        best: '27m',
+        desc: 'Timed test practice becomes a score-style challenge students can return to again and again.',
+        cta: 'Start TOEFL'
+    }
+};
+
+function loadGameStats() {
+    var defaults = {
+        colony: { plays: 18, best: '92%' },
+        solar: { plays: 12, best: '88%' },
+        brickforge: { plays: 14, best: '148' },
+        toefl: { plays: 11, best: '27m' }
+    };
+    try {
+        var scoped = localStorage.getItem(getTeacherScopedKey('ryshubGameStats'));
+        var fallback = localStorage.getItem('ryshubGameStats');
+        var saved = JSON.parse(scoped || fallback || '{}');
+        return Object.assign({}, defaults, saved);
+    } catch (e) {
+        return defaults;
+    }
+}
+
+function saveGameStats(stats) {
+    localStorage.setItem(getTeacherScopedKey('ryshubGameStats'), JSON.stringify(stats));
+}
+
+function getTrendLabel(plays) {
+    if (plays >= 18) return 'Hot';
+    if (plays >= 12) return 'Trending';
+    return 'Rising';
+}
+
+function openGameFromScores(id) {
+    if (id === 'colony') openColonyModal();
+    else if (id === 'solar') openSolarSystemModal();
+    else if (id === 'brickforge') openBrickForgeModal();
+    else if (id === 'toefl') openProtectedToefl();
+}
+
+function launchFeaturedGame() {
+    openGameFromScores(currentFeaturedGameId);
+}
+
+function recordGameLaunch(id) {
+    var stats = loadGameStats();
+    if (!stats[id]) stats[id] = { plays: 0, best: (GAME_META[id] && GAME_META[id].best) || '0' };
+    stats[id].plays = (stats[id].plays || 0) + 1;
+    stats[id].lastPlayed = Date.now();
+    saveGameStats(stats);
+    renderGameScores();
+}
+
+function renderGameScores() {
+    var stats = loadGameStats();
+    var ranking = Object.keys(GAME_META).map(function(id) {
+        return {
+            id: id,
+            name: GAME_META[id].name,
+            metric: GAME_META[id].metric,
+            desc: GAME_META[id].desc,
+            cta: GAME_META[id].cta,
+            plays: (stats[id] && stats[id].plays) || 0,
+            best: (stats[id] && stats[id].best) || GAME_META[id].best
+        };
+    }).sort(function(a, b) {
+        return b.plays - a.plays;
+    });
+
+    if (!ranking.length) return;
+    var featured = ranking[featuredGameIndex % ranking.length];
+    currentFeaturedGameId = featured.id;
+
+    var title = document.getElementById('featuredGameTitle');
+    var desc = document.getElementById('featuredGameDesc');
+    var best = document.getElementById('featuredGameBest');
+    var metric = document.getElementById('featuredGameMetric');
+    var plays = document.getElementById('featuredGamePlays');
+    var trend = document.getElementById('featuredGameTrend');
+    var button = document.getElementById('featuredGameButton');
+    var rows = document.getElementById('gamesScoreRows');
+
+    if (title) title.textContent = featured.name + ' is leading the hub';
+    if (desc) desc.textContent = featured.desc;
+    if (best) best.textContent = featured.best;
+    if (metric) metric.textContent = featured.metric;
+    if (plays) plays.textContent = featured.plays;
+    if (trend) trend.textContent = getTrendLabel(featured.plays);
+    if (button) button.innerHTML = '<i class="fas fa-trophy"></i> ' + featured.cta;
+
+    if (rows) {
+        rows.innerHTML = ranking.map(function(game, index) {
+            return '<div class="score-row">'
+                + '<span class="score-rank">' + (index + 1) + '</span>'
+                + '<div class="score-game"><strong>' + game.name + '</strong><span>' + game.metric + ' · ' + game.plays + ' plays</span></div>'
+                + '<span class="score-value">' + game.best + '</span>'
+                + '</div>';
+        }).join('');
+    }
+}
+
+function cycleFeaturedGame() {
+    featuredGameIndex += 1;
+    renderGameScores();
+}
+
+function initGameScores() {
+    renderGameScores();
+    if (gameScoreTimer) window.clearInterval(gameScoreTimer);
+    gameScoreTimer = window.setInterval(function() {
+        featuredGameIndex += 1;
+        renderGameScores();
+    }, 6000);
+}
+
+function showToast(msg) {
+    var t = document.getElementById('hub-toast');
+    document.getElementById('hub-toast-msg').textContent = msg;
+    t.style.transform = 'translateY(0)'; t.style.opacity = '1';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.style.transform='translateY(120px)'; t.style.opacity='0'; }, 3000);
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { 
+        closeToeflModal(); 
+        closeBook1Modal();
+        closeBook2bModal(); 
+        closeToeflLogin();
+        closeTeacherRegister();
+        closeColonyModal();
+        closeSolarSystemModal();
+        const menu = document.getElementById('slideMenu');
+        if (menu.classList.contains('open')) toggleMenu();
+    }
+});
+
+document.getElementById('toefl-login-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeToeflLogin();
+});
+
+document.getElementById('teacher-register-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeTeacherRegister();
+});
+
+document.getElementById('blog-admin-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeBlogAdminLogin();
+});
+
+applySavedTheme();
+updateTeacherStatusUi();
+if (sessionStorage.getItem('ryshubDemoMode') === '1') {
+    document.getElementById('demo-banner').style.display = 'block';
+    document.getElementById('mainHeader').style.marginTop = '44px';
+}
+initLiveCounters();
+initParallaxTilt();
+initGameScores();
+initHeaderNavScroll();
+initClassroomLab();
+initHeroBannerCycle();
+renderTeacherBlogPosts();
+updateBlogAdminUi();
+</script>
+</body>
 </html>
