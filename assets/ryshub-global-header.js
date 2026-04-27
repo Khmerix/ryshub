@@ -61,6 +61,17 @@
         if (document.getElementById('ryshub-global-header-style')) return;
         var style = document.createElement('style');
         style.id = 'ryshub-global-header-style';
+
+        // Inject theme CSS
+        if (!document.getElementById('ryshub-theme-css')) {
+            var themeLink = document.createElement('link');
+            themeLink.id = 'ryshub-theme-css';
+            themeLink.rel = 'stylesheet';
+            themeLink.href = resolveRootUrl() + 'assets/ryshub-theme.css';
+            document.head.appendChild(themeLink);
+        }
+
+        document.body.classList.add('ryshub-themed');
         style.textContent = [
             '.ryshub-global-header {',
             '  position: fixed;',
