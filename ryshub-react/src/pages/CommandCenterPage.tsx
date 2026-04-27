@@ -61,10 +61,10 @@ export default function CommandCenterPage() {
                     <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center text-white shadow-lg`}>
                       {tool.icon}
                     </div>
-                    <ExternalLink size={16} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
+                    <ExternalLink size={16} className="text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors" />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{tool.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{tool.description}</p>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{tool.title}</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{tool.description}</p>
                 </GlassPanel>
               </motion.a>
             ))}
@@ -79,8 +79,8 @@ export default function CommandCenterPage() {
             <GlassPanel className="p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-1">Legacy Command Center</h3>
-                  <p className="text-sm text-slate-600">Access the original full-featured teacher dashboard.</p>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Legacy Command Center</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">Access the original full-featured teacher dashboard.</p>
                 </div>
                 <a
                   href="apps/command-center.html"

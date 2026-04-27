@@ -2,27 +2,19 @@ import Globe from './Globe';
 import { Zap, Clock, Laptop, Bot, Boxes } from 'lucide-react';
 import DecodeText from './DecodeText';
 import GlassPanel from './GlassPanel';
-import { motion } from 'framer-motion';
+// motion removed — using static img for banner
 
 export default function Hero() {
   return (
     <section id="home" className="relative z-10 pt-28 pb-12 px-4 sm:px-6 lg:px-10">
       <div className="max-w-7xl mx-auto">
         {/* Banner */}
-        <div className="relative w-full rounded-2xl overflow-hidden mb-8 shadow-xl shadow-slate-900/5 bg-gray-100">
-          <div className="relative w-full aspect-[21/9]">
-            <motion.img
+        <div className="relative w-full rounded-2xl overflow-hidden mb-8 shadow-xl shadow-slate-900/5 dark:shadow-black/30 bg-gray-100 dark:bg-slate-800">
+          <div className="relative w-full" style={{ aspectRatio: '21/9' }}>
+            <img
               src="assets/images/page-banner.png"
               alt="Creative Minds Banner"
               className="absolute inset-0 w-full h-full object-cover object-center"
-              animate={{
-                scale: [1, 1.05, 1],
-              }}
-              transition={{
-                duration: 12,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent pointer-events-none" />
@@ -33,11 +25,11 @@ export default function Hero() {
           <GlassPanel className="flex-1 p-6 sm:p-8 lg:p-10">
             <div className="text-center lg:text-left">
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-5">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold border border-amber-100">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-xs font-semibold border border-amber-100 dark:border-amber-800">
                   <Zap size={14} className="fill-amber-500" />
                   New: Brick Forge 3D builder now live
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 text-slate-700 text-xs font-semibold border border-white/50 backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 dark:bg-slate-700/70 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-white/50 dark:border-slate-600 backdrop-blur-sm">
                   <span className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(37,99,235,0.5)] animate-pulse" />
                   Live Platform 2026
                 </div>
@@ -52,16 +44,16 @@ export default function Hero() {
                 />
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-5">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-5">
                 ESL Teacher Ry's{' '}
                 <span className="font-space text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
                   Content Hub
                 </span>
               </h1>
 
-              <p className="text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 mb-7">
+              <p className="text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 mb-7">
                 Digital tools & resources crafted for modern English learners at{' '}
-                <strong className="text-slate-800">ESL Learning Hub</strong>
+                <strong className="text-slate-800 dark:text-slate-100">ESL Learning Hub</strong>
               </p>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8">
@@ -86,19 +78,19 @@ export default function Hero() {
               </div>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 text-slate-600 text-xs font-medium border border-white/60 backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 text-xs font-medium border border-white/60 dark:border-slate-600 backdrop-blur-sm">
                   <Clock size={14} />
                   Timed Tests
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 text-slate-600 text-xs font-medium border border-white/60 backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 text-xs font-medium border border-white/60 dark:border-slate-600 backdrop-blur-sm">
                   <Laptop size={14} />
                   Homework Portal
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 text-slate-600 text-xs font-medium border border-white/60 backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 text-xs font-medium border border-white/60 dark:border-slate-600 backdrop-blur-sm">
                   <Bot size={14} />
                   AI Grader
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 text-slate-600 text-xs font-medium border border-white/60 backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 text-xs font-medium border border-white/60 dark:border-slate-600 backdrop-blur-sm">
                   <Boxes size={14} />
                   3D Builder
                 </div>
@@ -125,10 +117,10 @@ export default function Hero() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="flex flex-col items-center mt-12 text-slate-400 text-xs font-medium">
+        <div className="flex flex-col items-center mt-12 text-slate-400 dark:text-slate-500 text-xs font-medium">
           <span className="mb-2">Scroll</span>
-          <div className="w-5 h-8 rounded-full border-2 border-slate-300 flex items-start justify-center p-1">
-            <div className="w-1 h-2 bg-slate-400 rounded-full animate-bounce" />
+          <div className="w-5 h-8 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-start justify-center p-1">
+            <div className="w-1 h-2 bg-slate-400 dark:bg-slate-500 rounded-full animate-bounce" />
           </div>
         </div>
       </div>

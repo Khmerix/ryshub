@@ -60,11 +60,11 @@ export default function GameCard({
         rotateY,
         transformStyle: 'preserve-3d',
       }}
-      className={`group relative block rounded-2xl bg-white/70 backdrop-blur-md border border-white/60 p-5 shadow-lg ${glow} hover:shadow-xl transition-shadow`}
+      className={`group relative block rounded-2xl bg-white/70 dark:bg-slate-800/60 backdrop-blur-md border border-white/60 dark:border-slate-600/40 p-5 shadow-lg ${glow} hover:shadow-xl transition-shadow`}
     >
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/40 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/40 dark:from-slate-700/40 via-white/10 dark:via-slate-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
-      <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-slate-800 group-hover:text-white transition-colors">
+      <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300 group-hover:bg-slate-800 dark:group-hover:bg-blue-600 group-hover:text-white transition-colors">
         <ArrowRight size={14} />
       </div>
 
@@ -73,18 +73,18 @@ export default function GameCard({
       </div>
 
       {tag && (
-        <div className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wide mb-2">
+        <div className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-bold uppercase tracking-wide mb-2">
           {tag}
         </div>
       )}
 
-      <h3 className="text-lg font-bold text-slate-900 mb-1">
+      <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
         <GlitchText text={title} as="span" />
       </h3>
 
-      <p className="text-sm text-slate-600 mb-4 line-clamp-2">{description}</p>
+      <p className="text-sm text-slate-600 dark:text-slate-300 mb-4 line-clamp-2">{description}</p>
 
-      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 bg-slate-100 group-hover:bg-slate-800 group-hover:text-white transition-colors">
+      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 group-hover:bg-slate-800 dark:group-hover:bg-blue-600 group-hover:text-white transition-colors">
         <Gamepad2 size={14} />
         Play
       </div>

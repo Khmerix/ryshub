@@ -86,8 +86,8 @@ export default function ToolsGrid() {
     <section id="tools" className="relative z-10 py-14 px-4 sm:px-6 lg:px-10">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Learning Tools</h2>
-          <p className="text-slate-600">Everything you need to prepare, practice, and improve.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">Learning Tools</h2>
+          <p className="text-slate-600 dark:text-slate-300">Everything you need to prepare, practice, and improve.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
           {tools.map((tool, i) => (

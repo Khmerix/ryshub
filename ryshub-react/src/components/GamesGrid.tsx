@@ -54,8 +54,8 @@ export default function GamesGrid() {
     <section id="games" className="relative z-10 py-14 px-4 sm:px-6 lg:px-10">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Arcade</h2>
-          <p className="text-slate-600">Learn while you play.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">Arcade</h2>
+          <p className="text-slate-600 dark:text-slate-300">Learn while you play.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {games.map((game, i) => (

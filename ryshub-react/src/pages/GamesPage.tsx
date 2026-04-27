@@ -73,12 +73,12 @@ export default function GamesPage() {
                     <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${game.color} flex items-center justify-center text-white shadow-lg`}>
                       {game.icon}
                     </div>
-                    <span className="px-2.5 py-1 rounded-full bg-white/70 text-xs font-semibold text-slate-600 border border-white/50 backdrop-blur-sm">
+                    <span className="px-2.5 py-1 rounded-full bg-white/70 dark:bg-slate-700/70 text-xs font-semibold text-slate-600 dark:text-slate-300 border border-white/50 dark:border-slate-600 backdrop-blur-sm">
                       {game.tag}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{game.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{game.description}</p>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{game.title}</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{game.description}</p>
                 </GlassPanel>
               </motion.a>
             ))}
@@ -93,8 +93,8 @@ export default function GamesPage() {
             <GlassPanel className="p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-1">All Games</h3>
-                  <p className="text-sm text-slate-600">View the complete games directory with instructions and leaderboards.</p>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">All Games</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">View the complete games directory with instructions and leaderboards.</p>
                 </div>
                 <a
                   href="apps/games/index.html"

@@ -51,7 +51,7 @@ export default function TimerPage() {
             transition={{ duration: 0.5 }}
           >
             <GlassPanel className="p-8 sm:p-12 text-center">
-              <div className="text-7xl sm:text-8xl font-mono font-bold text-slate-900 tracking-tight mb-8">
+              <div className="text-7xl sm:text-8xl font-mono font-bold text-slate-900 dark:text-white tracking-tight mb-8">
                 {formatTime(timeLeft)}
               </div>
 
@@ -72,7 +72,7 @@ export default function TimerPage() {
                     setIsRunning(false);
                     setTimeLeft(initialTime);
                   }}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-slate-700 bg-white/70 border border-white/80 backdrop-blur-sm shadow-sm hover:bg-white transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white/70 dark:bg-slate-700/70 border border-white/80 dark:border-slate-600 backdrop-blur-sm shadow-sm hover:bg-white dark:hover:bg-slate-600 transition-all"
                 >
                   <RotateCcw size={18} />
                   Reset
@@ -90,8 +90,8 @@ export default function TimerPage() {
                     }}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                       initialTime === preset
-                        ? 'bg-blue-100 text-blue-700 border border-blue-200'
-                        : 'bg-white/50 text-slate-600 border border-white/60 hover:bg-white/80'
+                        ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800'
+                        : 'bg-white/50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-white/60 dark:border-slate-600 hover:bg-white/80 dark:hover:bg-slate-600/80'
                     }`}
                   >
                     {preset < 60 ? `${preset}s` : `${preset / 60}m`}
@@ -110,8 +110,8 @@ export default function TimerPage() {
             <GlassPanel className="p-6">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 mb-1">Advanced Timer</h3>
-                  <p className="text-sm text-slate-600">Need more options? Use the full-featured timer with sound alerts and custom intervals.</p>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Advanced Timer</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">Need more options? Use the full-featured timer with sound alerts and custom intervals.</p>
                 </div>
                 <a
                   href="apps/timer.html"

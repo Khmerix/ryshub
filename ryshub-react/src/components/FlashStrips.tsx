@@ -24,7 +24,7 @@ const strip2 = [
 
 function FlashCard({ item }: { item: typeof strip1[0] }) {
   return (
-    <div className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/60 backdrop-blur-sm border border-white/50 shadow-sm text-sm font-medium text-slate-700 hover:bg-white/90 transition-colors cursor-default">
+    <div className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-white/50 dark:border-slate-600/40 shadow-sm text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-white/90 dark:hover:bg-slate-700/80 transition-colors cursor-default">
       <span className={`w-6 h-6 rounded-full ${item.color} flex items-center justify-center text-white`}>
         {item.icon}
       </span>

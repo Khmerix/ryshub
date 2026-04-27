@@ -58,12 +58,15 @@ export default function FluidBackground() {
     window.addEventListener('mouseleave', handleMouseLeave);
 
     let animationId: number;
+    const isDark = () => document.documentElement.classList.contains('dark');
+
     const animate = () => {
       animationId = requestAnimationFrame(animate);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const mouse = mouseRef.current;
       const time = Date.now() * 0.001;
+      const dark = isDark();
 
       // Update neuron positions
       for (const n of neurons) {
@@ -98,6 +101,12 @@ export default function FluidBackground() {
         }
       }
 
+      // Colors based on theme
+      const lineColor = dark ? '100, 149, 237' : '100, 149, 237';
+      const glowColor = dark ? '120, 160, 255' : '100, 180, 255';
+      const coreColor = dark ? '160, 200, 255' : '150, 200, 255';
+      const brightColor = dark ? '220, 240, 255' : '220, 240, 255';
+
       // Draw connections
       for (let i = 0; i < neurons.length; i++) {
         for (let j = i + 1; j < neurons.length; j++) {
@@ -108,12 +117,12 @@ export default function FluidBackground() {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < 180) {
-            const opacity = (1 - dist / 180) * 0.25 * Math.min(a.opacity, b.opacity);
+            const opacity = (1 - dist / 180) * (dark ? 0.35 : 0.25) * Math.min(a.opacity, b.opacity);
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(100, 149, 237, ${opacity})`;
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = `rgba(${lineColor}, ${opacity})`;
+            ctx.lineWidth = dark ? 1.0 : 0.8;
             ctx.stroke();
           }
         }
@@ -126,8 +135,8 @@ export default function FluidBackground() {
 
         // Glow
         const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, currentRadius * 4);
-        glow.addColorStop(0, `rgba(100, 180, 255, ${n.opacity * 0.4})`);
-        glow.addColorStop(1, 'rgba(100, 180, 255, 0)');
+        glow.addColorStop(0, `rgba(${glowColor}, ${n.opacity * (dark ? 0.5 : 0.4)})`);
+        glow.addColorStop(1, `rgba(${glowColor}, 0)`);
         ctx.beginPath();
         ctx.arc(n.x, n.y, currentRadius * 4, 0, Math.PI * 2);
         ctx.fillStyle = glow;
@@ -136,21 +145,21 @@ export default function FluidBackground() {
         // Core
         ctx.beginPath();
         ctx.arc(n.x, n.y, currentRadius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(150, 200, 255, ${n.opacity})`;
+        ctx.fillStyle = `rgba(${coreColor}, ${n.opacity})`;
         ctx.fill();
 
         // Bright center
         ctx.beginPath();
         ctx.arc(n.x, n.y, currentRadius * 0.4, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(220, 240, 255, ${n.opacity * 0.9})`;
+        ctx.fillStyle = `rgba(${brightColor}, ${n.opacity * 0.9})`;
         ctx.fill();
       }
 
       // Draw mouse glow
       if (mouse.x > 0) {
         const glow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 120);
-        glow.addColorStop(0, 'rgba(100, 180, 255, 0.12)');
-        glow.addColorStop(1, 'rgba(100, 180, 255, 0)');
+        glow.addColorStop(0, `rgba(${glowColor}, ${dark ? 0.18 : 0.12})`);
+        glow.addColorStop(1, `rgba(${glowColor}, 0)`);
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, 120, 0, Math.PI * 2);
         ctx.fillStyle = glow;
@@ -187,11 +196,11 @@ export default function FluidBackground() {
           filter: 'blur(1px) saturate(0.8)',
         }}
       />
-      {/* Light overlay for readability */}
+      {/* Theme overlay for readability */}
       <div
+        id="bg-overlay"
+        className="absolute inset-0 transition-colors duration-300"
         style={{
-          position: 'absolute',
-          inset: 0,
           background: 'linear-gradient(135deg, rgba(248,250,252,0.7) 0%, rgba(226,232,240,0.5) 50%, rgba(248,250,252,0.7) 100%)',
         }}
       />

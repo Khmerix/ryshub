@@ -62,7 +62,7 @@ export default function GlassPanel({
       className={`relative rounded-2xl overflow-hidden ${className}`}
     >
       {/* Glass background */}
-      <div className="absolute inset-0 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl" />
+      <div className="absolute inset-0 bg-white/10 dark:bg-slate-800/40 backdrop-blur-xl border border-white/20 dark:border-slate-600/30 rounded-2xl" />
 
       {/* Moving reflective sheen */}
       <div
@@ -77,7 +77,7 @@ export default function GlassPanel({
       <div className="relative z-10">{children}</div>
 
       {/* Edge highlight */}
-      <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/10" />
+      <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/10 dark:border-slate-500/20" />
     </motion.div>
   );
 }

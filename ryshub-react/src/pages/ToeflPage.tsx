@@ -61,10 +61,10 @@ export default function ToeflPage() {
                     <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${section.color} flex items-center justify-center text-white shadow-lg`}>
                       {section.icon}
                     </div>
-                    <ExternalLink size={16} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
+                    <ExternalLink size={16} className="text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors" />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{section.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{section.description}</p>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{section.title}</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{section.description}</p>
                 </GlassPanel>
               </motion.a>
             ))}
@@ -79,8 +79,8 @@ export default function ToeflPage() {
             <GlassPanel className="p-6 sm:p-8">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-1">Full TOEFL Portal</h3>
-                  <p className="text-sm text-slate-600">Access the complete migrated TOEFL interface with all sections in one place.</p>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Full TOEFL Portal</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">Access the complete migrated TOEFL interface with all sections in one place.</p>
                 </div>
                 <a
                   href="apps/toefl/index.html"

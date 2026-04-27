@@ -28,8 +28,8 @@ export default function LoginPage() {
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 mx-auto mb-4">
                   <GraduationCap size={28} />
                 </div>
-                <h2 className="text-xl font-bold text-slate-900">Welcome Back</h2>
-                <p className="text-sm text-slate-500 mt-1">Sign in to RysHub Studio</p>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white">Welcome Back</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Sign in to RysHub Studio</p>
               </div>
 
               <form
@@ -40,29 +40,29 @@ export default function LoginPage() {
                 className="space-y-4"
               >
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
                   <div className="relative">
-                    <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="mam.ry@aii.edu.kh"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-white/60 backdrop-blur-sm text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 dark:bg-slate-800/70 border border-white/60 dark:border-slate-600/60 backdrop-blur-sm text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
                   <div className="relative">
-                    <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
                     <input
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-white/60 backdrop-blur-sm text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 dark:bg-slate-800/70 border border-white/60 dark:border-slate-600/60 backdrop-blur-sm text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all"
                     />
                   </div>
                 </div>
@@ -77,7 +77,7 @@ export default function LoginPage() {
               </form>
 
               <div className="mt-6 pt-6 border-t border-white/50 text-center">
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   For demo access, use the legacy login page.
                 </p>
               </div>

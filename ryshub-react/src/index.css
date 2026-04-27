@@ -12,6 +12,13 @@ body {
     linear-gradient(160deg, #f8fafc 0%, #f1f5f9 30%, #e2e8f0 50%, #f1f5f9 70%, #f8fafc 100%);
   position: relative;
   color: #0f172a;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+html.dark body {
+  background:
+    linear-gradient(160deg, #0f172a 0%, #1e293b 30%, #111827 50%, #1e293b 70%, #0f172a 100%);
+  color: #f1f5f9;
 }
 
 /* Grid pattern overlay */
@@ -25,6 +32,16 @@ body::after {
   background-size: 50px 50px;
   pointer-events: none;
   z-index: 0;
+}
+
+html.dark body::after {
+  background:
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+}
+
+html.dark #bg-overlay {
+  background: linear-gradient(135deg, rgba(15,23,42,0.75) 0%, rgba(30,41,59,0.6) 50%, rgba(15,23,42,0.75) 100%) !important;
 }
 
 @import "tailwindcss";

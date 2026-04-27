@@ -28,7 +28,7 @@ export default function PageHeader({ title, subtitle, icon, backTo = '/' }: Page
         >
           <Link
             to={backTo}
-            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-4"
+            className="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors mb-4"
           >
             <ArrowLeft size={16} />
             Back to Home
@@ -40,13 +40,13 @@ export default function PageHeader({ title, subtitle, icon, backTo = '/' }: Page
                 {icon}
               </div>
             )}
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               {title}
             </h1>
           </div>
 
           {subtitle && (
-            <p className="text-lg text-slate-600 max-w-2xl mt-2">{subtitle}</p>
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mt-2">{subtitle}</p>
           )}
         </motion.div>
       </div>

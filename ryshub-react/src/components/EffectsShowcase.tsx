@@ -58,8 +58,8 @@ export default function EffectsShowcase() {
             delay={0}
             speed={30}
           />
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Quick Access Deck</h2>
-          <p className="text-slate-600">Hover to explore. Click to focus.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">Quick Access Deck</h2>
+          <p className="text-slate-600 dark:text-slate-300">Hover to explore. Click to focus.</p>
         </div>
 
         <div className="flex flex-col lg:flex-row items-center gap-10">
@@ -68,9 +68,9 @@ export default function EffectsShowcase() {
           </div>
 
           <div className="flex-1 space-y-4">
-            <div className="p-5 rounded-2xl bg-white/60 backdrop-blur-md border border-white/60 shadow-lg">
-              <h3 className="text-lg font-bold text-slate-900 mb-2">Interactive Learning</h3>
-              <p className="text-sm text-slate-600 mb-4">
+            <div className="p-5 rounded-2xl bg-white/60 dark:bg-slate-800/50 backdrop-blur-md border border-white/60 dark:border-slate-600/40 shadow-lg">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Interactive Learning</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">
                 Every tool is designed with engagement in mind. From 3D simulations to AI-powered grading,
                 students learn faster when they're having fun.
               </p>
@@ -78,7 +78,7 @@ export default function EffectsShowcase() {
                 {['TOEFL', 'Strategy', 'Science', 'Vocabulary', 'Speed', 'Memory'].map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-medium"
+                    className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-medium"
                   >
                     {tag}
                   </span>
@@ -94,13 +94,13 @@ export default function EffectsShowcase() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="p-4 rounded-xl bg-white/60 backdrop-blur-md border border-white/60 text-center"
+                  className="p-4 rounded-xl bg-white/60 dark:bg-slate-800/50 backdrop-blur-md border border-white/60 dark:border-slate-600/40 text-center"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 flex items-center justify-center mx-auto mb-2">
                     {stat.icon}
                   </div>
-                  <div className="text-xl font-bold text-slate-900">{stat.value}</div>
-                  <div className="text-xs text-slate-500">{stat.label}</div>
+                  <div className="text-xl font-bold text-slate-900 dark:text-white">{stat.value}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{stat.label}</div>
                 </div>
               ))}
             </div>
