@@ -1,11 +1,19 @@
 /* ═══════════════════════════════════════════════════════════════
-   RysHub Theme CSS — Matches the React landing page design
+   RysHub Theme CSS — Matches the React app design system
    Injected automatically by ryshub-global-header.js
+   Supports: light / dark (syncs with React ThemeContext)
    ═══════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 /* ─── Base ───────────────────────────────────────────────────── */
+html.dark body.ryshub-themed,
+html.dark .ryshub-themed body {
+  color: #e2e8f0;
+  background:
+    linear-gradient(160deg, #0f172a 0%, #1e293b 30%, #111827 50%, #1e293b 70%, #0f172a 100%);
+}
+
 body.ryshub-themed,
 .ryshub-themed body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -21,6 +29,13 @@ body.ryshub-themed,
 }
 
 /* Grid pattern overlay */
+html.dark body.ryshub-themed::after,
+html.dark .ryshub-themed body::after {
+  background:
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+}
+
 body.ryshub-themed::after,
 .ryshub-themed body::after {
   content: '';
@@ -35,6 +50,11 @@ body.ryshub-themed::after,
 }
 
 /* ─── Typography ─────────────────────────────────────────────── */
+html.dark body.ryshub-themed h1,
+html.dark .ryshub-themed body h1 {
+  color: #f8fafc;
+}
+
 body.ryshub-themed h1,
 .ryshub-themed body h1 {
   font-family: 'Space Grotesk', 'Inter', sans-serif;
@@ -42,6 +62,13 @@ body.ryshub-themed h1,
   color: #0f172a;
   letter-spacing: -0.025em;
   line-height: 1.1;
+}
+
+html.dark body.ryshub-themed h2,
+html.dark body.ryshub-themed h3,
+html.dark .ryshub-themed body h2,
+html.dark .ryshub-themed body h3 {
+  color: #f8fafc;
 }
 
 body.ryshub-themed h2,
@@ -55,10 +82,24 @@ body.ryshub-themed h3,
   line-height: 1.2;
 }
 
+html.dark body.ryshub-themed p,
+html.dark .ryshub-themed body p {
+  color: #cbd5e1;
+}
+
 body.ryshub-themed p,
 .ryshub-themed body p {
   color: #475569;
   line-height: 1.6;
+}
+
+html.dark body.ryshub-themed a,
+html.dark .ryshub-themed body a {
+  color: #60a5fa;
+}
+html.dark body.ryshub-themed a:hover,
+html.dark .ryshub-themed body a:hover {
+  color: #93c5fd;
 }
 
 body.ryshub-themed a,
@@ -73,6 +114,15 @@ body.ryshub-themed a:hover,
 }
 
 /* ─── Glassmorphism Cards ────────────────────────────────────── */
+html.dark body.ryshub-themed .glass-card,
+html.dark .ryshub-themed .glass-card,
+html.dark body.ryshub-themed [class*="card"],
+html.dark .ryshub-themed [class*="card"] {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
 body.ryshub-themed .glass-card,
 .ryshub-themed .glass-card,
 body.ryshub-themed [class*="card"],
@@ -92,7 +142,24 @@ body.ryshub-themed .glass-card:hover,
   box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
 }
 
+html.dark body.ryshub-themed .glass-card:hover,
+html.dark .ryshub-themed .glass-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
 /* ─── Buttons ────────────────────────────────────────────────── */
+html.dark body.ryshub-themed .btn-outline,
+html.dark .ryshub-themed .btn-outline {
+  color: #e2e8f0;
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(148, 163, 184, 0.35);
+}
+html.dark body.ryshub-themed .btn-outline:hover,
+html.dark .ryshub-themed .btn-outline:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
 body.ryshub-themed .btn-primary,
 .ryshub-themed .btn-primary,
 body.ryshub-themed button[type="submit"],
@@ -146,6 +213,13 @@ body.ryshub-themed .btn-outline:hover,
 }
 
 /* ─── Badges ─────────────────────────────────────────────────── */
+html.dark body.ryshub-themed .badge,
+html.dark .ryshub-themed .badge {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
 body.ryshub-themed .badge,
 .ryshub-themed .badge {
   display: inline-flex;
@@ -168,6 +242,13 @@ body.ryshub-themed .badge-blue,
   color: #2563eb;
 }
 
+html.dark body.ryshub-themed .badge-blue,
+html.dark .ryshub-themed .badge-blue {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: rgba(37, 99, 235, 0.3);
+  color: #60a5fa;
+}
+
 body.ryshub-themed .badge-amber,
 .ryshub-themed .badge-amber {
   background: rgba(245, 158, 11, 0.08);
@@ -175,7 +256,25 @@ body.ryshub-themed .badge-amber,
   color: #d97706;
 }
 
+html.dark body.ryshub-themed .badge-amber,
+html.dark .ryshub-themed .badge-amber {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
 /* ─── Inputs ─────────────────────────────────────────────────── */
+html.dark body.ryshub-themed input,
+html.dark body.ryshub-themed textarea,
+html.dark body.ryshub-themed select,
+html.dark .ryshub-themed input,
+html.dark .ryshub-themed textarea,
+html.dark .ryshub-themed select {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
 body.ryshub-themed input,
 body.ryshub-themed textarea,
 body.ryshub-themed select,
@@ -204,6 +303,19 @@ body.ryshub-themed select:focus,
 }
 
 /* ─── Scrollbar ──────────────────────────────────────────────── */
+html.dark body.ryshub-themed::-webkit-scrollbar-track,
+html.dark .ryshub-themed::-webkit-scrollbar-track {
+  background: transparent;
+}
+html.dark body.ryshub-themed::-webkit-scrollbar-thumb,
+html.dark .ryshub-themed::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+}
+html.dark body.ryshub-themed::-webkit-scrollbar-thumb:hover,
+html.dark .ryshub-themed::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
+}
+
 body.ryshub-themed::-webkit-scrollbar,
 .ryshub-themed::-webkit-scrollbar {
   width: 8px;
@@ -237,52 +349,4 @@ body.ryshub-themed .section-pad,
 .ryshub-themed .section-pad {
   padding-top: 2rem;
   padding-bottom: 2rem;
-}
-
-/* ─── Override for dark-mode pages ─────────────────────────────
-   If a page explicitly sets a dark body background, 
-   switch to dark-compatible glass styles.
-   ────────────────────────────────────────────────────────────── */
-body.ryshub-themed[style*="background: #0b"],
-body.ryshub-themed[style*="background:#0b"],
-body.ryshub-themed[style*="background-color: #0b"],
-body.ryshub-themed[style*="background-color:#0b"],
-body.ryshub-themed.dark-override,
-.ryshub-themed body[style*="background: #0b"] {
-  color: #e2e8f0;
-  background: #0f172a !important;
-}
-
-body.ryshub-themed[style*="background: #0b"] h1,
-body.ryshub-themed[style*="background: #0b"] h2,
-body.ryshub-themed[style*="background: #0b"] h3,
-.ryshub-themed body[style*="background: #0b"] h1,
-.ryshub-themed body[style*="background: #0b"] h2,
-.ryshub-themed body[style*="background: #0b"] h3 {
-  color: #f8fafc;
-}
-
-body.ryshub-themed[style*="background: #0b"] p,
-.ryshub-themed body[style*="background: #0b"] p {
-  color: #94a3b8;
-}
-
-body.ryshub-themed[style*="background: #0b"] .glass-card,
-.ryshub-themed body[style*="background: #0b"] .glass-card,
-body.ryshub-themed[style*="background: #0b"] [class*="card"],
-.ryshub-themed body[style*="background: #0b"] [class*="card"] {
-  background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-body.ryshub-themed[style*="background: #0b"] input,
-body.ryshub-themed[style*="background: #0b"] textarea,
-body.ryshub-themed[style*="background: #0b"] select,
-.ryshub-themed body[style*="background: #0b"] input,
-.ryshub-themed body[style*="background: #0b"] textarea,
-.ryshub-themed body[style*="background: #0b"] select {
-  background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #e2e8f0;
 }

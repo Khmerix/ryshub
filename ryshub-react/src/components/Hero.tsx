@@ -2,7 +2,7 @@ import Globe from './Globe';
 import { Zap, Clock, Laptop, Bot, Boxes } from 'lucide-react';
 import DecodeText from './DecodeText';
 import GlassPanel from './GlassPanel';
-// motion removed — using static img for banner
+import bannerImg from '../assets/images/page-banner.png';
 
 export default function Hero() {
   return (
@@ -12,7 +12,7 @@ export default function Hero() {
         <div className="relative w-full rounded-2xl overflow-hidden mb-8 shadow-xl shadow-slate-900/5 dark:shadow-black/30 bg-gray-100 dark:bg-slate-800">
           <div className="relative w-full" style={{ aspectRatio: '21/9' }}>
             <img
-              src="assets/images/page-banner.png"
+              src={bannerImg}
               alt="Creative Minds Banner"
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
