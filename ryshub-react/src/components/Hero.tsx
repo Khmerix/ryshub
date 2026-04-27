@@ -8,13 +8,13 @@ export default function Hero() {
     <section id="home" className="relative z-10 pt-28 pb-12 px-4 sm:px-6 lg:px-10">
       <div className="max-w-7xl mx-auto">
         {/* Banner */}
-        <div className="relative w-full h-40 sm:h-56 lg:h-72 rounded-2xl overflow-hidden mb-8 shadow-xl shadow-slate-900/5">
+        <div className="relative w-full rounded-2xl overflow-hidden mb-8 shadow-xl shadow-slate-900/5 bg-gradient-to-br from-slate-100 to-slate-200">
           <img
             src="assets/images/page-banner.png"
             alt="Creative Minds Banner"
-            className="w-full h-full object-cover"
+            className="w-full h-auto object-contain"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent pointer-events-none" />
         </div>
 
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
