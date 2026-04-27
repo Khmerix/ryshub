@@ -10,6 +10,7 @@ const fanCards = [
     description: 'Full mock tests with AI grading',
     color: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
     icon: <span className="text-2xl">🎓</span>,
+    href: '#/toefl',
   },
   {
     id: 'colony',
@@ -17,6 +18,7 @@ const fanCards = [
     description: 'Real-time strategy base builder',
     color: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
     icon: <span className="text-2xl">🚀</span>,
+    href: 'apps/games/colony/index.html',
   },
   {
     id: 'solar',
@@ -24,6 +26,7 @@ const fanCards = [
     description: '3D planetary exploration',
     color: 'linear-gradient(135deg, #0891b2, #0e7490)',
     icon: <span className="text-2xl">🪐</span>,
+    href: 'apps/games/solar-system/index.html',
   },
   {
     id: 'brickforge',
@@ -31,6 +34,7 @@ const fanCards = [
     description: '3D block building game',
     color: 'linear-gradient(135deg, #ea580c, #c2410c)',
     icon: <span className="text-2xl">🧊</span>,
+    href: 'apps/brickforge.html',
   },
   {
     id: 'typing',
@@ -38,6 +42,7 @@ const fanCards = [
     description: 'Speed typing challenges',
     color: 'linear-gradient(135deg, #059669, #047857)',
     icon: <span className="text-2xl">⌨️</span>,
+    href: 'apps/games/typing-race/index.html',
   },
 ];
 

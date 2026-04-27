@@ -8,6 +8,7 @@ interface FanCard {
   image?: string;
   color?: string;
   icon?: React.ReactNode;
+  href?: string;
 }
 
 interface CardFanProps {
@@ -83,7 +84,13 @@ export default function CardFan({ cards, className = '' }: CardFanProps) {
               stiffness: 260,
               damping: 25,
             }}
-            onClick={() => setSelectedIndex(selectedIndex === index ? null : index)}
+            onClick={() => {
+              if (card.href) {
+                window.open(card.href, '_blank');
+              } else {
+                setSelectedIndex(selectedIndex === index ? null : index);
+              }
+            }}
             style={{
               transformOrigin: 'bottom center',
               background: card.color || 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
@@ -103,6 +110,11 @@ export default function CardFan({ cards, className = '' }: CardFanProps) {
                 <h3 className="text-lg font-bold mb-1 drop-shadow-lg">{card.title}</h3>
                 {card.description && (
                   <p className="text-xs text-white/80 line-clamp-2">{card.description}</p>
+                )}
+                {card.href && (
+                  <span className="mt-2 text-[10px] uppercase tracking-wider text-white/60 font-semibold">
+                    Click to open →
+                  </span>
                 )}
               </div>
               {/* Glass reflection */}
