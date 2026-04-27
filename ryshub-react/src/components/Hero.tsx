@@ -55,7 +55,7 @@ export default function Hero() {
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8">
                 <a
-                  href="apps/toefl/index.html"
+                  href="#/toefl"
                   className="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all"
                 >
                   Start TOEFL Test

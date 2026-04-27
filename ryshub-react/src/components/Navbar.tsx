@@ -1,23 +1,25 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, GraduationCap } from 'lucide-react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const navLinks = [
-    { label: 'Home',            href: '#home' },
-    { label: 'TOEFL',           href: 'apps/toefl/index.html' },
-    { label: 'Books',           href: '#tools' },
-    { label: 'Arcade',          href: '#games' },
-    { label: 'Game Arcade',     href: 'apps/games/index.html' },
-    { label: 'Command Center',  href: 'apps/command-center.html' },
-    { label: 'Story Library',   href: 'apps/books/library.html' },
-    { label: 'Timer',           href: 'apps/timer.html' },
+    { label: 'Home',            href: '/' },
+    { label: 'TOEFL',           href: '/toefl' },
+    { label: 'Books',           href: '/books' },
+    { label: 'Arcade',          href: '/#games' },
+    { label: 'Game Arcade',     href: '/games' },
+    { label: 'Command Center',  href: '/command-center' },
+    { label: 'Story Library',   href: '/books' },
+    { label: 'Timer',           href: '/timer' },
   ];
 
   const mobileLinks = [
-    { label: '🏠 Home',            href: '#home',                         onClick: () => setIsOpen(false) },
-    { label: '🎓 TOEFL Test',       href: 'apps/toefl/index.html',         onClick: () => setIsOpen(false) },
+    { label: '🏠 Home',            href: '/',                              onClick: () => setIsOpen(false) },
+    { label: '🎓 TOEFL Test',       href: '/toefl',                        onClick: () => setIsOpen(false) },
     { label: '📖 World Class 2-1',  href: 'apps/book1.html',               onClick: () => setIsOpen(false) },
     { label: '📗 World Class 2-2',  href: 'apps/book2b.html',              onClick: () => setIsOpen(false) },
     { label: '🧊 BrickForge',       href: 'apps/brickforge.html',          onClick: () => setIsOpen(false) },
@@ -25,36 +27,45 @@ export default function Navbar() {
     { label: '🌌 Solar System',     href: 'apps/games/solar-system/index.html', onClick: () => setIsOpen(false) },
   ];
 
+  const isActive = (href: string) => {
+    if (href.startsWith('/#')) return location.pathname === '/' && location.hash === href.slice(1);
+    return location.pathname === href;
+  };
+
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-10 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <a href="#home" className="flex items-center gap-2 text-slate-800 font-semibold text-lg">
+          <Link to="/" className="flex items-center gap-2 text-slate-800 font-semibold text-lg">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
               <GraduationCap size={20} />
             </div>
             <span className="font-space">Ryshub</span>
-          </a>
+          </Link>
 
           <nav className="hidden md:flex items-center gap-1 bg-white/60 backdrop-blur-md border border-white/50 rounded-full px-2 py-1.5 shadow-sm">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.label}
-                href={link.href}
-                className="px-4 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 rounded-full hover:bg-white/80 transition-colors"
+                to={link.href}
+                className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${
+                  isActive(link.href)
+                    ? 'text-slate-900 bg-white/80'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
+                }`}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
           <div className="flex items-center gap-3">
-            <a
-              href="apps/login.html"
+            <Link
+              to="/login"
               className="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-slate-900 rounded-full hover:bg-slate-800 transition-colors"
             >
               Login
-            </a>
+            </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-white/70 backdrop-blur text-slate-700 border border-white/50"
