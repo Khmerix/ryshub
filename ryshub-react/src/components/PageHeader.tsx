@@ -13,6 +13,14 @@ export default function PageHeader({ title, subtitle, icon, backTo = '/' }: Page
   return (
     <section className="pt-28 pb-8 px-4 sm:px-6 lg:px-10">
       <div className="max-w-7xl mx-auto">
+        {/* Blue banner bar */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="origin-left w-full h-1.5 rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-400 mb-6 shadow-sm shadow-blue-500/20"
+        />
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

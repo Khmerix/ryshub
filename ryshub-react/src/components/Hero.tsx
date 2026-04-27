@@ -9,21 +9,22 @@ export default function Hero() {
     <section id="home" className="relative z-10 pt-28 pb-12 px-4 sm:px-6 lg:px-10">
       <div className="max-w-7xl mx-auto">
         {/* Banner */}
-        <div className="relative w-full max-h-72 rounded-2xl overflow-hidden mb-8 shadow-xl shadow-slate-900/5 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-          <motion.img
-            src="assets/images/page-banner.png"
-            alt="Creative Minds Banner"
-            className="w-auto h-auto max-h-72 max-w-full object-contain"
-            animate={{
-              scale: [1, 1.05, 1],
-              y: [0, -6, 0],
-            }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
+        <div className="relative w-full rounded-2xl overflow-hidden mb-8 shadow-xl shadow-slate-900/5 bg-gray-100">
+          <div className="relative w-full aspect-[21/9]">
+            <motion.img
+              src="assets/images/page-banner.png"
+              alt="Creative Minds Banner"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+              animate={{
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 12,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent pointer-events-none" />
         </div>
 
