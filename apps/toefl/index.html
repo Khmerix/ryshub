@@ -1691,8 +1691,7 @@
 
 
     <!-- ==================== LISTENING SECTION ==================== -->
-    <div id="listening-section" class="section-view light-theme-bg" style="min-height: 100vh;">
-        <body class="section-listening" style="background: none; min-height: auto;">
+    <div id="listening-section" class="section-view light-theme-bg section-listening" style="min-height: 100vh;">
         <button class="back-btn" onclick="backToDashboard()">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </button>
@@ -3654,6 +3653,10 @@
             completedSections = { reading: false, listening: false, speaking: false, writing: false };
             document.getElementById('student-name').value = '';
             document.getElementById('student-id').value = '';
+            localStorage.removeItem('ryshub_master_access');
+            sessionStorage.removeItem('ryshub_master_access');
+            localStorage.removeItem('ryshub_loggedIn');
+            sessionStorage.removeItem('ryshub_loggedIn');
             showView('login-screen');
         }
         

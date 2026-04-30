@@ -1551,10 +1551,6 @@
         if (e.target === this) closeEpubReader();
     });
 
-    document.getElementById('teacher-login-overlay').addEventListener('click', function(e) {
-        if (e.target === this) closeTeacherLogin();
-    });
-
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeEpubReader(true);
@@ -1589,6 +1585,11 @@
     </div>
 </div>
 
+<script>
+    document.getElementById('teacher-login-overlay').addEventListener('click', function(e) {
+        if (e.target === this) closeTeacherLogin();
+    });
+</script>
 <script src="../../assets/ryshub-dynamic-background.js"></script>
 <script src="../../assets/ryshub-global-header.js"></script>
 </body>

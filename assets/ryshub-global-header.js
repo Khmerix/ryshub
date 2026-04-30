@@ -209,11 +209,11 @@
         if (document.querySelector('.ryshub-global-header')) return;
 
         var navItems = [
-            { label: 'Home', href: rootUrl + '#/' },
-            { label: 'TOEFL', href: rootUrl + '#/toefl' },
-            { label: 'Books', href: rootUrl + '#/books' },
-            { label: 'Games', href: rootUrl + '#/games' },
-            { label: 'Timer', href: rootUrl + '#/timer' },
+            { label: 'Home', href: rootUrl + 'index.html' },
+            { label: 'TOEFL', href: rootUrl + 'apps/toefl/index.html' },
+            { label: 'Books', href: rootUrl + 'apps/books/library.html' },
+            { label: 'Games', href: rootUrl + 'apps/games/index.html' },
+            { label: 'Timer', href: rootUrl + 'apps/timer.html' },
         ];
 
         // Determine which nav item is "active" based on current page
@@ -225,16 +225,21 @@
 
         var navHtml = navItems.map(function (item) {
             var isActive = false;
-            if (item.href.indexOf('#/') > -1) {
-                var route = item.href.split('#/')[1];
-                isActive = currentHash === '#/' + route;
+            var itemPath = item.href.replace(rootUrl, '/');
+            var currentPathClean = currentPath.replace(/\/$/, '');
+            var itemPathClean = itemPath.replace(/\/$/, '');
+            // Handle root / index page
+            if (itemPathClean === '' || itemPathClean === 'index.html') {
+                isActive = currentPathClean === '' || currentPathClean.endsWith('index.html') || currentPathClean === '/';
+            } else {
+                isActive = currentPathClean.indexOf(itemPathClean.replace(/^\//, '')) > -1;
             }
             var cls = isActive ? 'ryshub-gh-btn active' : 'ryshub-gh-btn';
             return '<a class="' + cls + '" href="' + item.href + '">' + item.label + '</a>';
         }).join('');
 
         header.innerHTML = '' +
-            '<a class="ryshub-gh-left" href="' + rootUrl + '#/" aria-label="Go to RysHub Home">' +
+            '<a class="ryshub-gh-left" href="' + rootUrl + 'index.html" aria-label="Go to RysHub Home">' +
                 '<span class="ryshub-gh-badge">R</span>' +
                 '<span class="ryshub-gh-title">RysHub</span>' +
             '</a>' +
