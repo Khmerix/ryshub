@@ -714,22 +714,22 @@
         }
         .hb-title span {
             display: block;
-            background: linear-gradient(90deg, #93c5fd 0%, #bfdbfe 25%, #93c5fd 50%, #60a5fa 75%, #93c5fd 100%);
+            background: linear-gradient(90deg, #bae6fd 0%, #e0f2fe 25%, #bae6fd 50%, #7dd3fc 75%, #bae6fd 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: hbShimmer 3s linear infinite;
             font-weight: 900;
-            text-shadow:
-                1px 1px 0 rgba(8,47,73,0.85),
-                2px 2px 0 rgba(8,47,73,0.80),
-                3px 3px 0 rgba(8,47,73,0.75),
-                4px 4px 0 rgba(8,47,73,0.70),
-                5px 5px 0 rgba(8,47,73,0.65),
-                6px 6px 0 rgba(8,47,73,0.60),
-                7px 7px 0 rgba(8,47,73,0.55),
-                8px 8px 24px rgba(0,0,0,0.5);
+            text-shadow: none;
+            filter:
+                drop-shadow(-1px -1px 0 rgba(255,255,255,0.5))
+                drop-shadow(1px 1px 0 rgba(0,0,0,0.18))
+                drop-shadow(2px 2px 0 rgba(0,0,0,0.14))
+                drop-shadow(3px 3px 0 rgba(0,0,0,0.10))
+                drop-shadow(4px 4px 0 rgba(0,0,0,0.07))
+                drop-shadow(5px 5px 0 rgba(0,0,0,0.05))
+                drop-shadow(6px 6px 12px rgba(0,0,0,0.35));
         }
         #hbTitlePrefix {
             -webkit-text-fill-color: #f8fafc;
