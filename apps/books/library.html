@@ -980,8 +980,9 @@
         return openEpubDb().then(function(db) {
             return new Promise(function(resolve, reject) {
                 var tx = db.transaction(EPUB_STORE, 'readwrite');
-                tx.objectStore(EPUB_STORE).put(blob, id);
-                tx.oncomplete = function() { resolve(); };
+                var request = tx.objectStore(EPUB_STORE).put(blob, id);
+                request.onsuccess = function() { resolve(); };
+                request.onerror = function() { reject(request.error); };
                 tx.onerror = function() { reject(tx.error); };
             });
         });
@@ -1002,8 +1003,9 @@
         return openEpubDb().then(function(db) {
             return new Promise(function(resolve, reject) {
                 var tx = db.transaction(EPUB_STORE, 'readwrite');
-                tx.objectStore(EPUB_STORE).delete(id);
-                tx.oncomplete = function() { resolve(); };
+                var request = tx.objectStore(EPUB_STORE).delete(id);
+                request.onsuccess = function() { resolve(); };
+                request.onerror = function() { reject(request.error); };
                 tx.onerror = function() { reject(tx.error); };
             });
         });
@@ -1308,6 +1310,21 @@
         });
     }
 
+    function readBlobAsArrayBuffer(blob, callback) {
+        if (typeof blob.arrayBuffer === 'function') {
+            blob.arrayBuffer().then(callback).catch(function() {
+                // Fallback for older browsers
+                var reader = new FileReader();
+                reader.onload = function(e) { callback(e.target.result); };
+                reader.readAsArrayBuffer(blob);
+            });
+        } else {
+            var reader = new FileReader();
+            reader.onload = function(e) { callback(e.target.result); };
+            reader.readAsArrayBuffer(blob);
+        }
+    }
+
     function openEpubReader(blob, title) {
         if (typeof ePub === 'undefined') {
             showToast('EPUB reader engine is not loaded.');
@@ -1330,7 +1347,7 @@
         modal.setAttribute('aria-hidden', 'false');
 
         // Read blob as ArrayBuffer — more reliable than blob URLs for epub.js
-        blob.arrayBuffer().then(function(buffer) {
+        readBlobAsArrayBuffer(blob, function(buffer) {
             try {
                 currentEpubBook = ePub(buffer);
             } catch (err) {
@@ -1340,42 +1357,45 @@
                 return;
             }
 
-            // Allow layout to settle before measuring
-            setTimeout(function() {
-                // Force layout recalculation
-                modal.getBoundingClientRect();
-                mount.getBoundingClientRect();
+            // Wait for book to be ready before rendering (prevents race conditions)
+            currentEpubBook.ready.then(function() {
+                // Allow layout to settle before measuring
+                setTimeout(function() {
+                    // Force layout recalculation
+                    modal.getBoundingClientRect();
+                    mount.getBoundingClientRect();
 
-                var w = mount.clientWidth || window.innerWidth - 80;
-                var h = mount.clientHeight || Math.round(window.innerHeight * 0.75);
+                    var w = mount.clientWidth || window.innerWidth - 80;
+                    var h = mount.clientHeight || Math.round(window.innerHeight * 0.75);
 
-                // Ensure non-zero dimensions
-                if (!w || w < 200) w = Math.max(320, window.innerWidth - 80);
-                if (!h || h < 200) h = Math.max(400, Math.round(window.innerHeight * 0.75));
+                    // Ensure non-zero dimensions
+                    if (!w || w < 200) w = Math.max(320, window.innerWidth - 80);
+                    if (!h || h < 200) h = Math.max(400, Math.round(window.innerHeight * 0.75));
 
-                try {
-                    currentRendition = currentEpubBook.renderTo(mount, {
-                        width: w,
-                        height: h,
-                        spread: 'none',
-                        flow: 'paginated',
-                        allowScriptedContent: true
-                    });
+                    try {
+                        currentRendition = currentEpubBook.renderTo(mount, {
+                            width: w,
+                            height: h,
+                            spread: 'none',
+                            flow: 'paginated'
+                        });
 
-                    currentRendition.display().then(function() {
-                        // rendered successfully
-                    }).catch(function(err) {
-                        showToast('Could not render EPUB — check file is a valid .epub');
-                        console.error('epub render error:', err);
-                    });
-                } catch (err) {
-                    showToast('EPUB render failed.');
-                    console.error('epub render exception:', err);
-                }
-            }, 80);
-        }).catch(function(err) {
-            showToast('Could not read EPUB file.');
-            console.error('blob read error:', err);
+                        currentRendition.display().then(function() {
+                            // rendered successfully
+                        }).catch(function(err) {
+                            showToast('Could not render this page — try the next arrow.');
+                            console.error('epub render error:', err);
+                        });
+                    } catch (err) {
+                        showToast('EPUB render failed.');
+                        console.error('epub render exception:', err);
+                    }
+                }, 80);
+            }).catch(function(err) {
+                showToast('Could not parse EPUB — file may be corrupted.');
+                console.error('epub ready error:', err);
+                closeEpubReader(true);
+            });
         });
     }
 
