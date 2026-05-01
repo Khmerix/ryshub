@@ -2405,6 +2405,9 @@
         <a href="#" class="menu-item" onclick="openTreasureModal(); toggleMenu(); return false;">
             <i class="fas fa-gem"></i><span>Treasure Hunt</span>
         </a>
+        <a href="#" class="menu-item" onclick="openScienceLabModal(); toggleMenu(); return false;">
+            <i class="fas fa-flask"></i><span>Science Lab</span>
+        </a>
         <a href="apps/games/index.html" class="menu-item" onclick="toggleMenu();">
             <i class="fas fa-gamepad"></i><span>Game Arcade</span>
         </a>
@@ -2518,6 +2521,7 @@
                 <button class="section-jump-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Launch Colony</button>
                 <button class="section-jump-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
                 <button class="section-jump-btn" onclick="openTreasureModal()"><i class="fas fa-gem"></i> Launch Treasure Hunt</button>
+                <button class="section-jump-btn" onclick="openScienceLabModal()"><i class="fas fa-flask"></i> Launch Science Lab</button>
             </div>
             <div class="hero-stats">
                 <div class="stat-chip">
@@ -2666,6 +2670,7 @@
                         <button class="lab-tool-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Last Colony</button>
                         <button class="lab-tool-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Solar Mission</button>
                         <button class="lab-tool-btn" onclick="openTreasureModal()"><i class="fas fa-gem"></i> Treasure Hunt</button>
+                        <button class="lab-tool-btn" onclick="openScienceLabModal()"><i class="fas fa-flask"></i> Science Lab</button>
                         <button class="lab-tool-btn" onclick="showToast('Word practice drill coming soon')"><i class="fas fa-spell-check"></i> Vocab drill</button>
                     </div>
                 </div>
@@ -2877,6 +2882,24 @@
             <span><i class="fas fa-star text-indigo-300"></i> Space Exploration</span>
         </div>
         <button class="card-btn" style="background:linear-gradient(135deg,#6366f1,#4338ca);box-shadow:0 4px 0 #312e81,0 8px 24px rgba(99,102,241,.35);"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
+    </div>
+
+    <div class="tool-card" onclick="openScienceLabModal()">
+        <div class="card-art" style="display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%, rgba(34,211,238,0.35), transparent 24%), radial-gradient(circle at 74% 30%, rgba(14,165,233,0.3), transparent 22%), linear-gradient(135deg,#0b1a1e 0%,#164e63 42%,#0f172a 100%);">
+            <div style="text-align:center;color:#f8fafc;">
+                <div style="font-size:2rem;line-height:1;margin-bottom:6px;">🌍</div>
+                <div style="font-size:.8rem;font-weight:800;letter-spacing:.24em;">SCIENCE LAB</div>
+            </div>
+        </div>
+        <div class="tool-icon bg-gradient-to-br from-cyan-500 to-teal-700 text-white">🌍</div>
+        <div class="tool-badge text-cyan-300">Interactive 3D</div>
+        <h3>Planetary Science Lab</h3>
+        <p>Explore an interactive 3D Earth with real-time atmosphere, orbiting satellites, the Moon, and detailed planetary science data panels.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-globe text-cyan-400"></i> 3D Earth</span>
+            <span><i class="fas fa-satellite text-cyan-400"></i> Live Orbits</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#06b6d4,#0e7490);box-shadow:0 4px 0 #155e75,0 8px 24px rgba(6,182,212,.35);"><i class="fas fa-flask"></i> Launch Science Lab</button>
     </div>
 
     <div class="tool-card" onclick="openTreasureModal()">
@@ -3183,6 +3206,21 @@
         <button onclick="closeTreasureModal()"><i class="fas fa-times"></i> Close</button>
     </div>
     <iframe id="treasure-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- SCIENCE LAB FULLSCREEN MODAL -->
+<div id="science-lab-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #0e7490, #164e63);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#22d3ee,#0891b2);display:flex;align-items:center;justify-content:center;font-size:1rem;">🌍</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">Planetary Science Lab</div>
+                <div style="font-size:.7rem;color:rgba(207,250,254,.95);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">Interactive Earth · Atmosphere · Orbits</div>
+            </div>
+        </div>
+        <button onclick="closeScienceLabModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="science-lab-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
 <!-- Toast -->
@@ -3963,6 +4001,27 @@ function closeSolarSystemModal() {
     document.getElementById('solar-modal').classList.remove('open');
 }
 
+function openTreasureModal() {
+    recordGameLaunch('treasure');
+    showToast('Launching Midnight Treasure Hunt... stand by 💎');
+    var frame = document.getElementById('treasure-frame');
+    frame.src = 'apps/games/treasure-hunter/index.html';
+    document.getElementById('treasure-modal').classList.add('open');
+}
+function closeTreasureModal() {
+    document.getElementById('treasure-modal').classList.remove('open');
+}
+
+function openScienceLabModal() {
+    showToast('Launching Planetary Science Lab... stand by 🌍');
+    var frame = document.getElementById('science-lab-frame');
+    frame.src = 'apps/science-lab/index.html';
+    document.getElementById('science-lab-modal').classList.add('open');
+}
+function closeScienceLabModal() {
+    document.getElementById('science-lab-modal').classList.remove('open');
+}
+
 function updateThemeToggleUi() {
     var btn = document.getElementById('themeToggleBtn');
     if (!btn) return;
@@ -4380,6 +4439,7 @@ document.addEventListener('keydown', function(e) {
         closeColonyModal();
         closeSolarSystemModal();
         closeTreasureModal();
+        closeScienceLabModal();
         const menu = document.getElementById('slideMenu');
         if (menu.classList.contains('open')) toggleMenu();
     }

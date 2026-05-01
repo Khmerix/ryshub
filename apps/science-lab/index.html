@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planetary Science Lab — Interactive Earth Study</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; overflow: hidden; background: #050510; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    canvas { display: block; }
+
+    /* ── UI Overlay ── */
+    #ui-layer {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      display: flex; flex-direction: column;
+    }
+
+    /* Glassmorphism Panel Base */
+    .panel {
+      background: rgba(15, 8, 30, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 14px;
+      color: #f0f0f0;
+      pointer-events: auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* ── Header ── */
+    #header {
+      position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+      padding: 14px 36px; text-align: center;
+      border-bottom: 3px solid #D4AF37;
+      min-width: 320px;
+    }
+    #header h1 {
+      margin: 0; font-size: 1.6rem; color: #D4AF37;
+      letter-spacing: 2px; text-transform: uppercase;
+      text-shadow: 0 2px 10px rgba(212,175,55,0.3);
+    }
+    #header p { margin: 6px 0 0; font-size: 0.85rem; color: #aaa; }
+
+    /* ── Info Panel (Left Side) ── */
+    #info-panel {
+      position: absolute; top: 90px; left: 18px;
+      width: 400px; max-height: calc(100vh - 120px);
+      overflow: hidden; display: flex; flex-direction: column;
+    }
+
+    /* Tabs */
+    #tabs {
+      display: flex;
+      background: rgba(114, 47, 55, 0.45);
+      border-radius: 14px 14px 0 0;
+      border-bottom: 1px solid rgba(212,175,55,0.2);
+      overflow-x: auto;
+    }
+    .tab {
+      flex: 1; padding: 12px 10px; text-align: center;
+      cursor: pointer; font-size: 0.78rem; font-weight: 700;
+      color: #bbb; text-transform: uppercase; letter-spacing: 0.5px;
+      border-bottom: 3px solid transparent; white-space: nowrap;
+      transition: all 0.25s ease;
+    }
+    .tab:hover { color: #D4AF37; background: rgba(255,255,255,0.04); }
+    .tab.active {
+      color: #D4AF37; border-bottom-color: #D4AF37;
+      background: rgba(212,175,55,0.08);
+    }
+
+    /* Tab Content */
+    #content-area { overflow-y: auto; padding: 20px; flex: 1; }
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+
+    /* Typography & Layout inside panel */
+    h3 {
+      color: #D4AF37; margin: 0 0 10px; font-size: 1.05rem;
+      border-left: 4px solid #722F37; padding-left: 12px;
+    }
+    p, li { font-size: 0.92rem; line-height: 1.6; color: #ddd; margin: 0 0 8px; }
+    ul { padding-left: 20px; margin: 0 0 12px; }
+    strong { color: #fff; }
+
+    /* Stat Grid */
+    .stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin: 14px 0;
+    }
+    .stat-box {
+      background: rgba(114, 47, 55, 0.25);
+      border: 1px solid rgba(212,175,55,0.2);
+      border-radius: 10px; padding: 12px 8px; text-align: center;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .stat-box:hover { transform: translateY(-2px); border-color: rgba(212,175,55,0.5); }
+    .stat-value { font-size: 1.3rem; font-weight: 800; color: #D4AF37; }
+    .stat-label { font-size: 0.72rem; color: #aaa; margin-top: 4px; text-transform: uppercase; }
+
+    /* Layer Bars */
+    .layer-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px; margin-bottom: 10px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.2s;
+    }
+    .layer-item:hover { background: rgba(255,255,255,0.08); }
+    .layer-swatches { display: flex; flex-direction: column; gap: 2px; }
+    .layer-swatch { width: 14px; height: 14px; border-radius: 3px; }
+    .layer-text h4 { margin: 0; color: #fff; font-size: 0.95rem; }
+    .layer-text span { font-size: 0.8rem; color: #aaa; }
+    .layer-depth { font-size: 0.75rem; color: #D4AF37; margin-top: 2px; font-weight: 600; }
+
+    /* Atmosphere Layers */
+    .atmo-layer {
+      padding: 10px; margin-bottom: 10px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      border-left: 4px solid;
+    }
+    .atmo-layer h4 { margin: 0 0 4px; font-size: 0.95rem; color: #fff; }
+    .atmo-layer p { margin: 0; font-size: 0.85rem; color: #bbb; }
+
+    /* Satellite Cards */
+    .sat-card {
+      display: flex; gap: 12px; align-items: center;
+      padding: 12px; margin-bottom: 12px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.06);
+    }
+    .sat-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(255,255,255,0.1);
+    }
+    .sat-info h4 { margin: 0; font-size: 0.95rem; color: #fff; }
+    .sat-info span { font-size: 0.8rem; color: #aaa; }
+
+    /* Moon Facts */
+    .moon-fact {
+      background: rgba(114, 47, 55, 0.2);
+      border: 1px solid rgba(212,175,55,0.15);
+      border-radius: 10px; padding: 12px; margin-bottom: 10px;
+    }
+    .moon-fact h4 { margin: 0 0 4px; color: #D4AF37; font-size: 0.95rem; }
+    .moon-fact p { margin: 0; font-size: 0.88rem; color: #ccc; }
+
+    /* ── Tooltip / Hover Info ── */
+    #tooltip {
+      position: absolute;
+      background: rgba(15, 8, 30, 0.9);
+      border: 1px solid #D4AF37;
+      color: #D4AF37;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem; font-weight: 600;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 20; white-space: nowrap;
+    }
+
+    /* ── Bottom Hints ── */
+    #hints {
+      position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+    }
+    .hint {
+      padding: 10px 18px; font-size: 0.8rem; color: #aaa;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hint strong { color: #D4AF37; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.4); border-radius: 3px; }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      #info-panel { width: calc(100% - 36px); max-height: 38vh; top: auto; bottom: 80px; left: 18px; }
+      #header h1 { font-size: 1.2rem; }
+      .tab { font-size: 0.7rem; padding: 10px 6px; }
+    }
+  </style>
+<base target="_blank">
+</head>
+<body>
+
+  <!-- UI Layer -->
+  <div id="ui-layer">
+    <div id="header" class="panel">
+      <h1>🌍 Planetary Science Lab</h1>
+      <p>Interactive Earth, Atmosphere & Orbital Mechanics</p>
+    </div>
+
+    <div id="info-panel" class="panel">
+      <div id="tabs">
+        <div class="tab active" data-tab="planet">Planet</div>
+        <div class="tab" data-tab="layers">Layers</div>
+        <div class="tab" data-tab="atmosphere">Atmosphere</div>
+        <div class="tab" data-tab="satellites">Satellites</div>
+        <div class="tab" data-tab="moon">Moon</div>
+      </div>
+      <div id="content-area">
+
+        <!-- PLANET TAB -->
+        <div id="tab-planet" class="tab-content active">
+          <div class="info-section">
+            <h3>Earth Overview</h3>
+            <p>Earth is the <strong>third planet</strong> from the Sun and the only astronomical object known to harbor <strong>life</strong>. It formed over <strong>4.5 billion years ago</strong>.</p>
+            <div class="stat-grid">
+              <div class="stat-box"><div class="stat-value">12,742</div><div class="stat-label">Diameter (km)</div></div>
+              <div class="stat-box"><div class="stat-value">5.97×10²⁴</div><div class="stat-label">Mass (kg)</div></div>
+              <div class="stat-box"><div class="stat-value">29.78</div><div class="stat-label">Orbital Speed (km/s)</div></div>
+              <div class="stat-box"><div class="stat-value">23.44°</div><div class="stat-label">Axial Tilt</div></div>
+              <div class="stat-box"><div class="stat-value">71%</div><div class="stat-label">Water Surface</div></div>
+              <div class="stat-box"><div class="stat-value">1</div><div class="stat-label">Natural Satellite</div></div>
+            </div>
+            <p>Earth's axis is tilted <strong>23.44°</strong> relative to its orbital plane, creating the seasons. The planet rotates every <strong>23.93 hours</strong> (sidereal day).</p>
+          </div>
+        </div>
+
+        <!-- LAYERS TAB -->
+        <div id="tab-layers" class="tab-content">
+          <h3>Internal Structure</h3>
+          <p>Earth is composed of four main layers, each with distinct chemical and physical properties.</p>
+          
+          <div class="layer-item">
+            <div class="layer-swatches">
+              <div class="layer-swatch" style="background:#5D4037;"></div>
+              <div class="layer-swatch" style="background:#8D6E63;"></div>
+            </div>
+            <div class="layer-text">
+              <h4>Crust</h4>
+              <span>Thin, solid outer shell</span>
+              <div class="layer-depth">0 – 100 km | Temp: 200°C – 400°C</div>
+            </div>
+          </div>
+          
+          <div class="layer-item">
+            <div class="layer-swatches">
+              <div class="layer-swatch" style="background:#D84315;"></div>
+              <div class="layer-swatch" style="background:#FF7043;"></div>
+            </div>
+            <div class="layer-text">
+              <h4>Mantle</h4>
+              <span>Thick, viscous rock layer</span>
+              <div class="layer-depth">100 – 2,900 km | Temp: 500°C – 4,000°C</div>
+            </div>
+          </div>
+          
+          <div class="layer-item">
+            <div class="layer-swatches">
+              <div class="layer-swatch" style="background:#FF8F00;"></div>
+              <div class="layer-swatch" style="background:#FFC107;"></div>
+            </div>
+            <div class="layer-text">
+              <h4>Outer Core</h4>
+              <span>Liquid iron and nickel</span>
+              <div class="layer-depth">2,900 – 5,150 km | Temp: 4,000°C – 5,000°C</div>
+            </div>
+          </div>
+          
+          <div class="layer-item">
+            <div class="layer-swatches">
+              <div class="layer-swatch" style="background:#FFF176;"></div>
+              <div class="layer-swatch" style="background:#FFFFFF;"></div>
+            </div>
+            <div class="layer-text">
+              <h4>Inner Core</h4>
+              <span>Solid iron-nickel sphere</span>
+              <div class="layer-depth">5,150 – 6,371 km | Temp: 5,000°C – 6,000°C</div>
+            </div>
+          </div>
+          
+          <p style="font-size:0.85rem;color:#aaa;margin-top:12px;">
+            <strong>Did you know?</strong> The inner core is as hot as the surface of the Sun, but remains solid due to extreme pressure.
+          </p>
+        </div>
+
+        <!-- ATMOSPHERE TAB -->
+        <div id="tab-atmosphere" class="tab-content">
+          <h3>Atmospheric Layers</h3>
+          <p>Earth's atmosphere is a blanket of gases held by gravity, composed of ~78% Nitrogen, 21% Oxygen, and 1% other gases.</p>
+          
+          <div class="atmo-layer" style="border-color:#4FC3F7;">
+            <h4>🌤️ Troposphere — 0 to 12 km</h4>
+            <p>Where all weather happens. Temperature decreases with altitude. Contains ~75% of atmospheric mass.</p>
+          </div>
+          
+          <div class="atmo-layer" style="border-color:#81D4FA;">
+            <h4>✈️ Stratosphere — 12 to 50 km</h4>
+            <p>Contains the <strong>Ozone Layer</strong> which absorbs harmful UV radiation. Jets fly here for smooth travel.</p>
+          </div>
+          
+          <div class="atmo-layer" style="border-color:#B3E5FC;">
+            <h4>☄️ Mesosphere — 50 to 80 km</h4>
+            <p>Meteors burn up here creating "shooting stars." Coldest layer with temperatures dropping to -90°C.</p>
+          </div>
+          
+          <div class="atmo-layer" style="border-color:#E1F5FE;">
+            <h4>🛰️ Thermosphere — 80 to 700 km</h4>
+            <p>ISS and many satellites orbit here. Aurora Borealis occurs in this layer. Temperatures reach 2,000°C+ but feels cold due to low particle density.</p>
+          </div>
+          
+          <div class="atmo-layer" style="border-color:#F3E5F5;">
+            <h4>🌌 Exosphere — 700 to 10,000 km</h4>
+            <p>Outermost layer fading into space. Very few atoms, satellites like GPS orbit in the lower exosphere.</p>
+          </div>
+        </div>
+
+        <!-- SATELLITES TAB -->
+        <div id="tab-satellites" class="tab-content">
+          <h3>Artificial Satellites</h3>
+          <p>Thousands of satellites orbit Earth, serving communication, navigation, science, and military purposes.</p>
+          
+          <div class="sat-card">
+            <div class="sat-icon" style="background:rgba(255,100,100,0.2);">🛰️</div>
+            <div class="sat-info">
+              <h4>ISS — International Space Station</h4>
+              <span>Altitude: ~408 km | Speed: 27,600 km/h<br>Orbit period: ~90 min | Crew: 7 astronauts</span>
+            </div>
+          </div>
+          
+          <div class="sat-card">
+            <div class="sat-icon" style="background:rgba(100,200,255,0.2);">📡</div>
+            <div class="sat-info">
+              <h4>GPS Satellites (NAVSTAR)</h4>
+              <span>Altitude: ~20,200 km (MEO)<br>Constellation: 31 active satellites | Orbit: 12 hours</span>
+            </div>
+          </div>
+          
+          <div class="sat-card">
+            <div class="sat-icon" style="background:rgba(100,255,150,0.2);">📶</div>
+            <div class="sat-info">
+              <h4>Geostationary Satellites</h4>
+              <span>Altitude: ~35,786 km (GEO)<br>Fixed position over equator | TV/Weather broadcast</span>
+            </div>
+          </div>
+          
+          <div class="sat-card">
+            <div class="sat-icon" style="background:rgba(255,200,100,0.2);">🔭</div>
+            <div class="sat-info">
+              <h4>Hubble Space Telescope</h4>
+              <span>Altitude: ~540 km | Launched: 1990<br>Has captured images of 10,000+ galaxies</span>
+            </div>
+          </div>
+          
+          <p style="font-size:0.85rem;color:#aaa;">
+            <strong>Space Debris:</strong> Over 36,000 tracked objects >10cm orbit Earth, posing collision risks to active missions.
+          </p>
+        </div>
+
+        <!-- MOON TAB -->
+        <div id="tab-moon" class="tab-content">
+          <h3>Earth's Moon</h3>
+          <p>The Moon is Earth's <strong>only natural satellite</strong>, formed ~4.5 billion years ago from a Mars-sized impactor collision.</p>
+          
+          <div class="stat-grid">
+            <div class="stat-box"><div class="stat-value">3,474</div><div class="stat-label">Diameter (km)</div></div>
+            <div class="stat-box"><div class="stat-value">384,400</div><div class="stat-label">Distance (km)</div></div>
+            <div class="stat-box"><div class="stat-value">27.3</div><div class="stat-label">Orbit Period (days)</div></div>
+            <div class="stat-box"><div class="stat-value">1/6</div><div class="stat-label">Earth Gravity</div></div>
+          </div>
+          
+          <div class="moon-fact">
+            <h4>🌑 Synchronous Rotation</h4>
+            <p>The Moon rotates exactly once per orbit, which is why we only ever see one face from Earth.</p>
+          </div>
+          
+          <div class="moon-fact">
+            <h4>🌊 Tidal Forces</h4>
+            <p>The Moon's gravity creates ocean tides, slowing Earth's rotation and gradually pushing the Moon 3.8 cm farther away each year.</p>
+          </div>
+          
+          <div class="moon-fact">
+            <h4>🌙 Phases</h4>
+            <p>Moon phases result from the angle between Sun, Moon, and Earth — not Earth's shadow (that's a lunar eclipse).</p>
+          </div>
+          
+          <div class="moon-fact">
+            <h4>🚀 Exploration</h4>
+            <p>12 humans have walked on the Moon (Apollo 11-17, 1969-1972). NASA's Artemis program plans to return by 2026.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="hints">
+      <div class="hint panel"><strong>🖱️ Drag</strong> to Rotate</div>
+      <div class="hint panel"><strong>📜 Scroll</strong> to Zoom</div>
+      <div class="hint panel"><strong>👆 Click</strong> Earth / Moon / Satellites</div>
+    </div>
+  </div>
+
+  <div id="tooltip"></div>
+
+  <!-- Import Map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    /* ── Scene Setup ── */
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x050510);
+    scene.fog = new THREE.FogExp2(0x050510, 0.02);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 1.5, 5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    document.body.appendChild(renderer.domElement);
+
+    /* ── Lighting ── */
+    const ambientLight = new THREE.AmbientLight(0x404060, 0.5);
+    scene.add(ambientLight);
+
+    const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    sunLight.position.set(5, 3, 5);
+    scene.add(sunLight);
+
+    const backLight = new THREE.DirectionalLight(0x4455ff, 0.3);
+    backLight.position.set(-5, -2, -5);
+    scene.add(backLight);
+
+    /* ── Earth Group (with Axial Tilt) ── */
+    const earthGroup = new THREE.Group();
+    earthGroup.rotation.z = 23.44 * Math.PI / 180;
+    scene.add(earthGroup);
+
+    // Earth Mesh
+    const textureLoader = new THREE.TextureLoader();
+    const earthTexture = textureLoader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
+    const earthBump = textureLoader.load('https://threejs.org/examples/textures/planets/earth_normal_2048.jpg'); // if available, else ignore
+    const earthSpec = textureLoader.load('https://threejs.org/examples/textures/planets/earth_specular_2048.jpg');
+
+    const earthGeo = new THREE.SphereGeometry(1, 64, 64);
+    const earthMat = new THREE.MeshStandardMaterial({
+      map: earthTexture,
+      roughness: 0.65,
+      metalness: 0.1,
+      bumpMap: earthBump,
+      bumpScale: 0.02,
+      specularMap: earthSpec,
+      specular: new THREE.Color(0x333333)
+    });
+    const earth = new THREE.Mesh(earthGeo, earthMat);
+    earth.name = "Earth";
+    earthGroup.add(earth);
+
+    // Cloud Layer
+    const cloudGeo = new THREE.SphereGeometry(1.015, 64, 64);
+    const cloudMat = new THREE.MeshStandardMaterial({
+      map: textureLoader.load('https://threejs.org/examples/textures/planets/earth_clouds_1024.png'),
+      transparent: true,
+      opacity: 0.3,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const clouds = new THREE.Mesh(cloudGeo, cloudMat);
+    earthGroup.add(clouds);
+
+    /* ── Atmosphere Glow (Shader) ── */
+    const atmoVertexShader = `
+      varying vec3 vNormal;
+      varying vec3 vView;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        vView = normalize(-mvPosition.xyz);
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    `;
+    const atmoFragmentShader = `
+      varying vec3 vNormal;
+      varying vec3 vView;
+      void main() {
+        float fresnel = pow(1.0 - dot(vView, vNormal), 3.0);
+        vec3 color = vec3(0.3, 0.6, 1.0);
+        float alpha = fresnel * 0.6;
+        gl_FragColor = vec4(color * fresnel, alpha);
+      }
+    `;
+
+    const atmoGeo = new THREE.SphereGeometry(1.08, 64, 64);
+    const atmoMat = new THREE.ShaderMaterial({
+      vertexShader: atmoVertexShader,
+      fragmentShader: atmoFragmentShader,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
+      transparent: true,
+      depthWrite: false
+    });
+    const atmosphere = new THREE.Mesh(atmoGeo, atmoMat);
+    earthGroup.add(atmosphere);
+
+    /* ── Moon ── */
+    const moonGroup = new THREE.Group();
+    scene.add(moonGroup);
+
+    const moonGeo = new THREE.SphereGeometry(0.27, 32, 32); // ~1/4 Earth size
+    const moonMat = new THREE.MeshStandardMaterial({
+      color: 0xcccccc,
+      roughness: 0.9,
+      metalness: 0.0
+    });
+    // Try loading moon texture if available
+    textureLoader.load(
+      'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/moon_1024.jpg',
+      (tex) => { moonMat.map = tex; moonMat.needsUpdate = true; },
+      undefined,
+      () => { /* fallback to gray */ }
+    );
+    const moon = new THREE.Mesh(moonGeo, moonMat);
+    moon.position.set(5.5, 0, 0); // Scaled distance for visualization
+    moon.name = "Moon";
+    moonGroup.add(moon);
+
+    // Moon Orbit Path
+    const moonOrbitGeo = new THREE.RingGeometry(5.48, 5.52, 128);
+    const moonOrbitMat = new THREE.MeshBasicMaterial({
+      color: 0xD4AF37, side: THREE.DoubleSide, transparent: true, opacity: 0.25
+    });
+    const moonOrbit = new THREE.Mesh(moonOrbitGeo, moonOrbitMat);
+    moonOrbit.rotation.x = Math.PI / 2;
+    moonGroup.add(moonOrbit);
+
+    // Moon orbit tilt (5.14° relative to Earth orbital plane)
+    moonGroup.rotation.x = 5.14 * Math.PI / 180;
+
+    /* ── Satellites ── */
+    const satellites = [];
+    const satData = [
+      { name: "ISS", distance: 1.12, size: 0.025, speed: 2.5, color: 0xff4444, type: "LEO", desc: "International Space Station" },
+      { name: "Hubble", distance: 1.18, size: 0.02, speed: 1.8, color: 0xffaa00, type: "LEO", desc: "Space Telescope" },
+      { name: "GPS", distance: 2.3, size: 0.022, speed: 0.6, color: 0x44aaff, type: "MEO", desc: "Navigation Satellite" },
+      { name: "GeoSat", distance: 3.6, size: 0.028, speed: 0.25, color: 0x44ff88, type: "GEO", desc: "Geostationary Comms" }
+    ];
+
+    satData.forEach((d, i) => {
+      // Orbit Group (rotated for inclined orbits)
+      const orbitGroup = new THREE.Group();
+      orbitGroup.rotation.x = (Math.random() * 0.3 + 0.1) * (i % 2 === 0 ? 1 : -1);
+      scene.add(orbitGroup);
+
+      // Orbit Ring
+      const ringGeo = new THREE.RingGeometry(d.distance - 0.015, d.distance + 0.015, 128);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: d.color, side: THREE.DoubleSide, transparent: true, opacity: 0.15
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = Math.PI / 2;
+      orbitGroup.add(ring);
+
+      // Satellite Mesh
+      const satGeo = new THREE.SphereGeometry(d.size, 16, 16);
+      const satMat = new THREE.MeshStandardMaterial({
+        color: d.color, emissive: d.color, emissiveIntensity: 0.6, roughness: 0.4
+      });
+      const sat = new THREE.Mesh(satGeo, satMat);
+      sat.position.set(d.distance, 0, 0);
+      sat.name = d.name;
+      sat.userData = d;
+      orbitGroup.add(sat);
+      satellites.push({ mesh: sat, group: orbitGroup, data: d, angle: Math.random() * Math.PI * 2 });
+    });
+
+    /* ── Starfield ── */
+    const starsGeo = new THREE.BufferGeometry();
+    const starCount = 4000;
+    const starPos = new Float32Array(starCount * 3);
+    const starSizes = new Float32Array(starCount);
+    for (let i = 0; i < starCount; i++) {
+      const r = 50 + Math.random() * 50;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      starPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
+      starPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+      starPos[i*3+2] = r * Math.cos(phi);
+      starSizes[i] = Math.random() * 0.03 + 0.01;
+    }
+    starsGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    const starsMat = new THREE.PointsMaterial({ size: 0.05, color: 0xffffff, sizeAttenuation: true, transparent: true, opacity: 0.8 });
+    const stars = new THREE.Points(starsGeo, starsMat);
+    scene.add(stars);
+
+    /* ── Controls ── */
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 1.8;
+    controls.maxDistance = 20;
+    controls.enablePan = true;
+
+    /* ── Raycaster for Interaction ── */
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    const tooltip = document.getElementById('tooltip');
+
+    function onMouseMove(event) {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects([earth, moon, ...satellites.map(s => s.mesh)]);
+      
+      if (intersects.length > 0) {
+        const obj = intersects[0].object;
+        let text = obj.name;
+        if (obj.userData && obj.userData.desc) text += ` — ${obj.userData.desc}`;
+        tooltip.textContent = text;
+        tooltip.style.left = event.clientX + 15 + 'px';
+        tooltip.style.top = event.clientY + 15 + 'px';
+        tooltip.style.opacity = 1;
+        document.body.style.cursor = 'pointer';
+      } else {
+        tooltip.style.opacity = 0;
+        document.body.style.cursor = 'default';
+      }
+    }
+
+    function onClick(event) {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+      raycaster.setFromCamera(mouse, camera);
+      const targets = [earth, moon, ...satellites.map(s => s.mesh)];
+      const intersects = raycaster.intersectObjects(targets);
+      
+      if (intersects.length > 0) {
+        const name = intersects[0].object.name;
+        const tabMap = {
+          "Earth": "layers",
+          "Moon": "moon",
+          "ISS": "satellites",
+          "Hubble": "satellites",
+          "GPS": "satellites",
+          "GeoSat": "satellites"
+        };
+        if (tabMap[name]) switchTab(tabMap[name]);
+      }
+    }
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('click', onClick);
+
+    /* ── Tab System ── */
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    function switchTab(tabId) {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+      contents.forEach(c => c.classList.toggle('active', c.id === 'tab-' + tabId));
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+    });
+
+    /* ── Animation Loop ── */
+    let time = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.005;
+
+      // Earth rotation (24h scaled for visibility)
+      earth.rotation.y += 0.002;
+      clouds.rotation.y += 0.0022;
+
+      // Moon orbit (27.3 days scaled)
+      moonGroup.rotation.y = time * 0.15;
+
+      // Satellite orbits
+      satellites.forEach(sat => {
+        sat.angle += sat.data.speed * 0.005;
+        sat.mesh.position.x = Math.cos(sat.angle) * sat.data.distance;
+        sat.mesh.position.z = Math.sin(sat.angle) * sat.data.distance;
+      });
+
+      // Starfield slow drift
+      stars.rotation.y += 0.0002;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    /* ── Resize ── */
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
