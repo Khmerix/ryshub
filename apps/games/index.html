@@ -763,6 +763,20 @@
     <iframe id="solar-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
+<div id="treasure-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#a855f7,#db2777);display:flex;align-items:center;justify-content:center;font-size:1rem;">💎</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">Midnight Treasure Hunt</div>
+                <div style="font-size:.7rem;color:rgba(233,213,255,.95);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">20 levels · Traps · Bosses</div>
+            </div>
+        </div>
+        <button onclick="closeTreasureModal()"><i class="fas fa-xmark"></i> Close</button>
+    </div>
+    <iframe id="treasure-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
 <!-- Toast -->
 <div id="hub-toast" class="hub-toast"><span id="hub-toast-msg"></span></div>
 
@@ -790,6 +804,7 @@ function loadGameStats() {
         solar: { plays: 12, best: '88%' },
         brickforge: { plays: 14, best: '148' },
         toefl: { plays: 11, best: '27m' },
+        treasure: { plays: 5, best: '20' },
         'typing-race': { plays: 9, best: '45 WPM' },
         writecraft: { plays: 7, best: '92' }
     };
@@ -808,6 +823,7 @@ function saveGameStats(stats) {
 var GAME_META = {
     colony: { name: 'Last Colony', metric: 'Top colony readiness', best: '92%', desc: 'Lead Mars survival missions and keep the colony alive through high-pressure strategy and story choices.', cta: 'Launch Colony' },
     solar: { name: 'Solar System', metric: 'Mission completion rate', best: '88%', desc: 'Explore planets with guided mission challenges and interactive space-learning objectives.', cta: 'Launch Solar System' },
+    treasure: { name: 'Midnight Treasure Hunt', metric: 'Relics collected', best: '20', desc: 'A sprawling adventure with puzzles, traps, intelligent NPCs, and 20 levels of escalating challenge.', cta: 'Launch Treasure Hunt' },
     brickforge: { name: 'Brick Forge Pro', metric: 'Creative build points', best: '148', desc: 'Fast visual building challenges make this one of the most replayed creative experiences on the hub.', cta: 'Open Builder' },
     toefl: { name: 'TOEFL Challenge', metric: 'Fastest completed mock', best: '27m', desc: 'Timed test practice becomes a score-style challenge students can return to again and again.', cta: 'Start TOEFL' },
     writecraft: { name: 'WriteCraft', metric: 'Best writing score', best: '92', desc: 'Writing trainer for essays, summaries and stories with timed prompts and live scoring.', cta: 'Launch WriteCraft' }
@@ -816,6 +832,7 @@ var GAME_META = {
 var MINI_GAMES = [
     { id: 'colony', title: 'Last Colony', status: 'Live', iconClass: 'fas fa-rocket', desc: 'Strategy survival RPG set on Mars with missions, choices, and colony management.', launchText: 'Launch', launchAction: function() { openColonyModal(); } },
     { id: 'solar', title: 'Solar System', status: 'Live', iconClass: 'fas fa-globe-americas', desc: 'Interactive space missions that teach planets, orbits, and exploration concepts.', launchText: 'Launch', launchAction: function() { openSolarSystemModal(); } },
+    { id: 'treasure', title: 'Midnight Treasure Hunt', status: 'Live', iconClass: 'fas fa-gem', desc: 'A sprawling adventure with puzzles, traps, intelligent NPCs, and 20 levels of escalating challenge.', launchText: 'Launch', launchAction: function() { openTreasureModal(); } },
     { id: 'typing-race', title: 'Typing Race', status: 'Live', iconClass: 'fas fa-keyboard', desc: 'Fast keyboard challenge for sentence accuracy and speed practice.', launchText: 'Launch', launchAction: function() { recordGameLaunch('typing-race'); window.open('typing-race/index.html', '_blank'); } },
     { id: 'writecraft', title: 'WriteCraft', status: 'Live', iconClass: 'fas fa-pen-nib', desc: 'Writing trainer for essays, summaries & stories with timed prompts and live scoring.', launchText: 'Launch', launchAction: function() { recordGameLaunch('writecraft'); window.open('../writing-trainer/index.html', '_blank'); } },
     { id: 'memory-game', title: 'Memory Match', status: 'Live', iconClass: 'fas fa-brain', desc: 'Flip and match challenge to strengthen memory and word association.', launchText: 'Launch', launchAction: function() { recordGameLaunch('memory-game'); window.open('memory-game/index.html', '_blank'); } },
@@ -868,6 +885,16 @@ function closeSolarSystemModal() {
     document.getElementById('solar-modal').classList.remove('open');
 }
 
+function openTreasureModal() {
+    recordGameLaunch('treasure');
+    showToast('Launching Midnight Treasure Hunt... stand by 💎');
+    document.getElementById('treasure-frame').src = 'treasure-hunter/index.html';
+    document.getElementById('treasure-modal').classList.add('open');
+}
+function closeTreasureModal() {
+    document.getElementById('treasure-modal').classList.remove('open');
+}
+
 var featuredGameIndex = 0;
 var currentFeaturedGameId = 'colony';
 var gameScoreTimer = null;
@@ -881,6 +908,7 @@ function getTrendLabel(plays) {
 function openGameFromScores(id) {
     if (id === 'colony') openColonyModal();
     else if (id === 'solar') openSolarSystemModal();
+    else if (id === 'treasure') openTreasureModal();
     else if (id === 'typing-race') { recordGameLaunch('typing-race'); window.open('typing-race/index.html', '_blank'); }
     else if (id === 'writecraft') { recordGameLaunch('writecraft'); window.open('../writing-trainer/index.html', '_blank'); }
     else showToast('Launch from the main hub for this game');
