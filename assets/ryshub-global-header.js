@@ -55,25 +55,41 @@
     var rootUrl = resolveRootUrl();
 
     /* ─── Theme handling (syncs with React ThemeContext) ─── */
+    // Prefer shared RysHubTheme API when available (loaded via ryshub-theme-sync.js)
     function applyTheme(theme) {
+        if (window.RysHubTheme && window.RysHubTheme.apply) {
+            window.RysHubTheme.apply(theme);
+            return;
+        }
+        // Fallback if sync script is not present
         var html = document.documentElement;
         var body = document.body;
         if (theme === 'dark') {
             html.classList.add('dark');
             if (body) body.classList.add('dark-mode');
+            if (body) body.classList.remove('light-theme');
         } else {
             html.classList.remove('dark');
             if (body) body.classList.remove('dark-mode');
+            if (body) body.classList.add('light-theme');
         }
     }
 
     function getSavedTheme() {
-        return localStorage.getItem('ryshub-theme') || 'light';
+        if (window.RysHubTheme && window.RysHubTheme.get) {
+            return window.RysHubTheme.get();
+        }
+        return localStorage.getItem('ryshub-theme') || localStorage.getItem('ryshubTheme') || 'dark';
     }
 
     function toggleTheme() {
+        if (window.RysHubTheme && window.RysHubTheme.toggle) {
+            window.RysHubTheme.toggle();
+            return;
+        }
         var next = getSavedTheme() === 'dark' ? 'light' : 'dark';
         localStorage.setItem('ryshub-theme', next);
+        localStorage.setItem('ryshubTheme', next);
         applyTheme(next);
         updateToggleIcon(next);
     }
@@ -89,11 +105,12 @@
     // Apply theme immediately (before DOM is ready)
     applyTheme(getSavedTheme());
 
-    // Listen for changes from other tabs / React app
+    // Listen for changes from other tabs / React app / vanilla pages
     window.addEventListener('storage', function (e) {
-        if (e.key === 'ryshub-theme') {
-            applyTheme(e.newValue || 'light');
-            updateToggleIcon(e.newValue || 'light');
+        if (e.key === 'ryshub-theme' || e.key === 'ryshubTheme') {
+            var theme = getSavedTheme();
+            applyTheme(theme);
+            updateToggleIcon(theme);
         }
     });
 

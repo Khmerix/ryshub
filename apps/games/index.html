@@ -1033,16 +1033,9 @@ document.addEventListener('keydown', function(e) {
     animate();
 })();
 
-/* ===== Theme Toggle ===== */
-(function(){
-    var saved = localStorage.getItem('ryshubTheme');
-    if (saved === 'light') {
-        document.body.classList.add('light-theme');
-        updateThemeUI(true);
-    }
-})();
-
-function updateThemeUI(isLight) {
+/* ===== Theme Toggle (synced via ryshub-theme-sync.js) ===== */
+function updateThemeUI() {
+    var isLight = RysHubTheme.get() === 'light';
     var icon = document.getElementById('themeIcon');
     var label = document.getElementById('themeLabel');
     if (!icon || !label) return;
@@ -1051,14 +1044,17 @@ function updateThemeUI(isLight) {
 }
 
 function toggleTheme() {
-    var isLight = document.body.classList.toggle('light-theme');
-    updateThemeUI(isLight);
-    localStorage.setItem('ryshubTheme', isLight ? 'light' : 'dark');
+    RysHubTheme.toggle();
+    updateThemeUI();
 }
+
+RysHubTheme.apply(RysHubTheme.get());
+updateThemeUI();
 
 initGameScores();
 renderMiniGamesSection();
 </script>
+<script src="../../assets/ryshub-theme-sync.js"></script>
 <script src="../../assets/ryshub-global-header.js"></script>
 </body>
 </html>

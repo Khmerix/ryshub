@@ -1116,24 +1116,18 @@
             }
         });
 
-        // Theme helpers
+        // Theme helpers (synced via ryshub-theme-sync.js)
         function applySavedTheme() {
-            var savedTheme = localStorage.getItem('ryshubTheme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-theme');
-            } else {
-                document.body.classList.remove('light-theme');
-            }
+            RysHubTheme.apply(RysHubTheme.get());
             updateThemeIcon();
         }
         function updateThemeIcon() {
             var icon = document.getElementById('themeIcon');
             if (!icon) return;
-            icon.className = document.body.classList.contains('light-theme') ? 'fas fa-sun' : 'fas fa-moon';
+            icon.className = RysHubTheme.get() === 'light' ? 'fas fa-sun' : 'fas fa-moon';
         }
         function toggleTheme() {
-            document.body.classList.toggle('light-theme');
-            localStorage.setItem('ryshubTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+            RysHubTheme.toggle();
             updateThemeIcon();
         }
 
@@ -1234,6 +1228,7 @@
         applySavedTheme();
         updateDisplay();
     </script>
+<script src="../assets/ryshub-theme-sync.js"></script>
 <script src="../assets/ryshub-global-header.js"></script>
 </body>
 </html>

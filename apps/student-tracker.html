@@ -1495,25 +1495,19 @@
             }
         }
 
-        // Theme helpers
+        // Theme helpers (synced via ryshub-theme-sync.js)
         function applySavedTheme() {
-            var savedTheme = localStorage.getItem('ryshubTheme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-theme');
-            } else {
-                document.body.classList.remove('light-theme');
-            }
+            RysHubTheme.apply(RysHubTheme.get());
             updateThemeToggleUi();
         }
         function updateThemeToggleUi() {
             var btn = document.getElementById('themeToggleBtn');
             if (!btn) return;
-            var isLight = document.body.classList.contains('light-theme');
+            var isLight = RysHubTheme.get() === 'light';
             btn.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
         function toggleTheme() {
-            document.body.classList.toggle('light-theme');
-            localStorage.setItem('ryshubTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+            RysHubTheme.toggle();
             updateThemeToggleUi();
         }
 
@@ -2436,6 +2430,7 @@
 
         window.onclick = function(e) { if (e.target.id && e.target.id.includes('Modal')) closeModal(e.target.id); }
     </script>
+<script src="../assets/ryshub-theme-sync.js"></script>
 <script src="../assets/ryshub-global-header.js"></script>
 </body>
 </html>

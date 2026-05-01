@@ -1527,16 +1527,15 @@
         }
         
         function toggleDarkMode() {
-            currentDarkMode = !currentDarkMode;
-            document.body.classList.toggle('dark-mode');
+            RysHubTheme.toggle();
+            currentDarkMode = RysHubTheme.get() === 'dark';
+            document.body.classList.toggle('dark-mode', currentDarkMode);
             
             const btn = document.querySelector('.dark-mode-toggle');
             if (currentDarkMode) {
                 btn.innerHTML = '☀️ Light';
-                localStorage.setItem('darkMode', 'true');
             } else {
                 btn.innerHTML = '🌙 Dark';
-                localStorage.setItem('darkMode', 'false');
             }
             
             // Apply to current iframe
@@ -1544,8 +1543,9 @@
         }
         
         // Load dark mode preference
-        if (localStorage.getItem('darkMode') === 'true') {
-            currentDarkMode = true;
+        RysHubTheme.apply(RysHubTheme.get());
+        currentDarkMode = RysHubTheme.get() === 'dark';
+        if (currentDarkMode) {
             document.body.classList.add('dark-mode');
             document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light';
         }
@@ -1595,6 +1595,7 @@
         });
     </script>
 
+<script src="../assets/ryshub-theme-sync.js"></script>
 <script src="../assets/ryshub-dynamic-background.js"></script>
 <script src="../assets/ryshub-global-header.js"></script>
 </body>

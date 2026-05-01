@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; frame-src 'self' https://www.youtube.com https://drive.google.com; connect-src 'self';">
     <title>RysHub Studio • Teacher Ry</title>
     <script src="assets/ryshub-auth.js"></script>
+    <script src="assets/ryshub-theme-sync.js"></script>
     <script>
         (function () {
             var hasMasterAccess = RysHubAuth.checkCompat();
@@ -3888,25 +3889,19 @@ function closeSolarSystemModal() {
 function updateThemeToggleUi() {
     var btn = document.getElementById('themeToggleBtn');
     if (!btn) return;
-    var isLight = document.body.classList.contains('light-theme');
+    var isLight = RysHubTheme.get() === 'light';
     btn.innerHTML = isLight
         ? '<i class="fas fa-sun"></i><span>Light</span>'
         : '<i class="fas fa-moon"></i><span>Dark</span>';
 }
 
 function applySavedTheme() {
-    var savedTheme = localStorage.getItem('ryshubTheme');
-    if (savedTheme === 'light') {
-        document.body.classList.add('light-theme');
-    } else {
-        document.body.classList.remove('light-theme');
-    }
+    RysHubTheme.apply(RysHubTheme.get());
     updateThemeToggleUi();
 }
 
 function toggleTheme() {
-    document.body.classList.toggle('light-theme');
-    localStorage.setItem('ryshubTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    RysHubTheme.toggle();
     updateThemeToggleUi();
 }
 

@@ -6,6 +6,7 @@
 <title>Aii Teacher's Handbook — 6th Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="../assets/ryshub-theme-sync.js"></script>
 <style>
   :root {
     --primary: #2563eb;
@@ -1512,29 +1513,23 @@ Head Teacher <strong>vengkheang.kiang@aii.edu.kh</strong></p>
 </button>
 
 <script>
-  // Theme Toggle
+  // Theme Toggle (synced via ryshub-theme-sync.js)
   function updateThemeToggleUi() {
     var btn = document.getElementById('themeToggleBtn');
     if (!btn) return;
-    var isLight = document.body.classList.contains('light-theme');
+    var isLight = RysHubTheme.get() === 'light';
     btn.innerHTML = isLight
       ? '<i class="fas fa-sun"></i><span>Light</span>'
       : '<i class="fas fa-moon"></i><span>Dark</span>';
   }
 
   function applySavedTheme() {
-    var savedTheme = localStorage.getItem('ryshubTheme');
-    if (savedTheme === 'light') {
-      document.body.classList.add('light-theme');
-    } else {
-      document.body.classList.remove('light-theme');
-    }
+    RysHubTheme.apply(RysHubTheme.get());
     updateThemeToggleUi();
   }
 
   function toggleTheme() {
-    document.body.classList.toggle('light-theme');
-    localStorage.setItem('ryshubTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    RysHubTheme.toggle();
     updateThemeToggleUi();
   }
 
