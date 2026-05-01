@@ -2366,6 +2366,9 @@
         <a href="#" class="menu-item" onclick="openSolarSystemModal(); toggleMenu(); return false;">
             <i class="fas fa-globe-americas"></i><span>Solar System</span>
         </a>
+        <a href="#" class="menu-item" onclick="openTreasureModal(); toggleMenu(); return false;">
+            <i class="fas fa-gem"></i><span>Treasure Hunt</span>
+        </a>
         <a href="apps/games/index.html" class="menu-item" onclick="toggleMenu();">
             <i class="fas fa-gamepad"></i><span>Game Arcade</span>
         </a>
@@ -2389,6 +2392,9 @@
         </a>
         <a href="apps/games/solar-system/index.html" target="_blank" class="menu-item">
             <i class="fas fa-external-link-alt"></i><span>Solar System (Full Page)</span>
+        </a>
+        <a href="apps/games/treasure-hunter/index.html" target="_blank" class="menu-item">
+            <i class="fas fa-external-link-alt"></i><span>Treasure Hunt (Full Page)</span>
         </a>
         <a href="https://app.box.com/s/izbnvr08d4vxmt1bp3np99oceowpywpf" target="_blank" rel="noopener noreferrer" class="menu-item featured-link">
             <i class="fas fa-box-open"></i><span>Shared Files</span>
@@ -2475,6 +2481,7 @@
                 <a href="apps/command-center.html" class="section-jump-btn"><i class="fas fa-bolt"></i> Command center</a>
                 <button class="section-jump-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Launch Colony</button>
                 <button class="section-jump-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
+                <button class="section-jump-btn" onclick="openTreasureModal()"><i class="fas fa-gem"></i> Launch Treasure Hunt</button>
             </div>
             <div class="hero-stats">
                 <div class="stat-chip">
@@ -2622,6 +2629,7 @@
                         <button class="lab-tool-btn" onclick="recordGameLaunch('typing-race'); window.open('apps/games/typing-race/index.html','_blank')"><i class="fas fa-keyboard"></i> Typing Race</button>
                         <button class="lab-tool-btn" onclick="openColonyModal()"><i class="fas fa-rocket"></i> Last Colony</button>
                         <button class="lab-tool-btn" onclick="openSolarSystemModal()"><i class="fas fa-globe-americas"></i> Solar Mission</button>
+                        <button class="lab-tool-btn" onclick="openTreasureModal()"><i class="fas fa-gem"></i> Treasure Hunt</button>
                         <button class="lab-tool-btn" onclick="showToast('Word practice drill coming soon')"><i class="fas fa-spell-check"></i> Vocab drill</button>
                     </div>
                 </div>
@@ -2833,6 +2841,24 @@
             <span><i class="fas fa-star text-indigo-300"></i> Space Exploration</span>
         </div>
         <button class="card-btn" style="background:linear-gradient(135deg,#6366f1,#4338ca);box-shadow:0 4px 0 #312e81,0 8px 24px rgba(99,102,241,.35);"><i class="fas fa-globe-americas"></i> Launch Solar System</button>
+    </div>
+
+    <div class="tool-card" onclick="openTreasureModal()">
+        <div class="card-art" style="display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%, rgba(168,85,247,0.35), transparent 24%), radial-gradient(circle at 74% 30%, rgba(236,72,153,0.3), transparent 22%), linear-gradient(135deg,#1e0b2e 0%,#581c87 42%,#0f172a 100%);">
+            <div style="text-align:center;color:#f8fafc;">
+                <div style="font-size:2rem;line-height:1;margin-bottom:6px;">💎</div>
+                <div style="font-size:.8rem;font-weight:800;letter-spacing:.24em;">TREASURE HUNT</div>
+            </div>
+        </div>
+        <div class="tool-icon bg-gradient-to-br from-purple-500 to-pink-700 text-white">💎</div>
+        <div class="tool-badge text-purple-300">3D Adventure</div>
+        <h3>Midnight Treasure Hunt</h3>
+        <p>Explore a haunted 3D world, overcome deadly traps, outsmart ghosts, and collect 20 cursed relics across towering castles and ancient ruins.</p>
+        <div class="meta-row">
+            <span><i class="fas fa-map text-purple-400"></i> 20 Levels</span>
+            <span><i class="fas fa-skull text-purple-400"></i> Boss Battles</span>
+        </div>
+        <button class="card-btn" style="background:linear-gradient(135deg,#a855f7,#db2777);box-shadow:0 4px 0 #831843,0 8px 24px rgba(168,85,247,.35);"><i class="fas fa-gem"></i> Launch Treasure Hunt</button>
     </div>
 
     <!-- WriteCraft -->
@@ -3106,6 +3132,21 @@
         <button onclick="closeSolarSystemModal()"><i class="fas fa-times"></i> Close</button>
     </div>
     <iframe id="solar-frame" class="fs-iframe" src="about:blank"></iframe>
+</div>
+
+<!-- TREASURE HUNT FULLSCREEN MODAL -->
+<div id="treasure-modal" class="fs-modal">
+    <div class="fs-modal-bar" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="inline-size:34px;block-size:34px;border-radius:9px;background:linear-gradient(135deg,#a855f7,#db2777);display:flex;align-items:center;justify-content:center;font-size:1rem;">💎</div>
+            <div>
+                <div style="font-weight:800;color:var(--white);font-size:.95rem;">Midnight Treasure Hunt</div>
+                <div style="font-size:.7rem;color:rgba(233,213,255,.95);letter-spacing:2px;text-transform:uppercase;font-family:monospace;">20 levels · Traps · Bosses</div>
+            </div>
+        </div>
+        <button onclick="closeTreasureModal()"><i class="fas fa-times"></i> Close</button>
+    </div>
+    <iframe id="treasure-frame" class="fs-iframe" src="about:blank"></iframe>
 </div>
 
 <!-- Toast -->
@@ -4164,6 +4205,13 @@ var GAME_META = {
         best: '27m',
         desc: 'Timed test practice becomes a score-style challenge students can return to again and again.',
         cta: 'Start TOEFL'
+    },
+    treasure: {
+        name: 'Midnight Treasure Hunt',
+        metric: 'Relics collected',
+        best: '20',
+        desc: 'A sprawling 3D adventure with puzzles, traps, intelligent NPCs, and 20 levels of escalating challenge.',
+        cta: 'Launch Treasure Hunt'
     }
 };
 
@@ -4172,7 +4220,8 @@ function loadGameStats() {
         colony: { plays: 18, best: '92%' },
         solar: { plays: 12, best: '88%' },
         brickforge: { plays: 14, best: '148' },
-        toefl: { plays: 11, best: '27m' }
+        toefl: { plays: 11, best: '27m' },
+        treasure: { plays: 5, best: '20' }
     };
     try {
         var scoped = localStorage.getItem(getTeacherScopedKey('ryshubGameStats'));
@@ -4199,6 +4248,7 @@ function openGameFromScores(id) {
     else if (id === 'solar') openSolarSystemModal();
     else if (id === 'brickforge') openBrickForgeModal();
     else if (id === 'toefl') openProtectedToefl();
+    else if (id === 'treasure') openTreasureModal();
 }
 
 function launchFeaturedGame() {
@@ -4293,6 +4343,7 @@ document.addEventListener('keydown', function(e) {
         closeTeacherRegister();
         closeColonyModal();
         closeSolarSystemModal();
+        closeTreasureModal();
         const menu = document.getElementById('slideMenu');
         if (menu.classList.contains('open')) toggleMenu();
     }
