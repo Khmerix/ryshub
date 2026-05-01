@@ -74,6 +74,29 @@
             margin-top: 4px;
         }
 
+        .back-to-cc {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 14px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .back-to-cc:hover {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            border-color: rgba(255,255,255,0.15);
+        }
+
         .nav-menu { list-style: none; padding: 12px; }
         
         .nav-item { margin-bottom: 4px; }
@@ -818,6 +841,7 @@
         <div class="sidebar-header">
             <h1>World Class 1</h1>
             <p>Interactive Student's Book</p>
+            <a href="apps/command-center.html" class="back-to-cc">← Command Center</a>
         </div>
         <ul class="nav-menu">
             <li class="nav-item"><div class="nav-link active" onclick="showSection('cover')"><span class="unit-num" style="background:var(--accent);color:var(--primary)">🏠</span> Cover</div></li>

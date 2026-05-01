@@ -698,10 +698,19 @@
             grid-column: span 8;
             margin: 0;
             color: #f8fafc;
-            font-size: clamp(1.6rem, 3.7vw, 2.8rem);
+            font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+            font-weight: 900;
             line-height: 1.05;
-            letter-spacing: -1.2px;
-            text-shadow: 0 10px 28px rgba(15,23,42,0.45);
+            letter-spacing: -2px;
+            text-shadow:
+                1px 1px 0 rgba(0,0,0,0.22),
+                2px 2px 0 rgba(0,0,0,0.20),
+                3px 3px 0 rgba(0,0,0,0.18),
+                4px 4px 0 rgba(0,0,0,0.16),
+                5px 5px 0 rgba(0,0,0,0.14),
+                6px 6px 0 rgba(0,0,0,0.12),
+                7px 7px 0 rgba(0,0,0,0.10),
+                8px 8px 24px rgba(0,0,0,0.45);
         }
         .hb-title span {
             display: block;
@@ -711,6 +720,31 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: hbShimmer 3s linear infinite;
+            font-weight: 900;
+            text-shadow:
+                1px 1px 0 rgba(8,47,73,0.85),
+                2px 2px 0 rgba(8,47,73,0.80),
+                3px 3px 0 rgba(8,47,73,0.75),
+                4px 4px 0 rgba(8,47,73,0.70),
+                5px 5px 0 rgba(8,47,73,0.65),
+                6px 6px 0 rgba(8,47,73,0.60),
+                7px 7px 0 rgba(8,47,73,0.55),
+                8px 8px 24px rgba(0,0,0,0.5);
+        }
+        #hbTitlePrefix {
+            -webkit-text-fill-color: #f8fafc;
+            background: none;
+            -webkit-background-clip: initial;
+            background-clip: initial;
+            text-shadow:
+                1px 1px 0 rgba(0,0,0,0.25),
+                2px 2px 0 rgba(0,0,0,0.22),
+                3px 3px 0 rgba(0,0,0,0.19),
+                4px 4px 0 rgba(0,0,0,0.16),
+                5px 5px 0 rgba(0,0,0,0.13),
+                6px 6px 0 rgba(0,0,0,0.10),
+                7px 7px 0 rgba(0,0,0,0.07),
+                8px 8px 24px rgba(0,0,0,0.4);
         }
         @keyframes hbShimmer {
             0% { background-position: 200% center; }
@@ -725,6 +759,8 @@
             animation: hbBlink 0.8s step-end infinite;
             vertical-align: text-bottom;
             box-shadow: 0 0 8px rgba(96,165,250,0.8);
+            text-shadow: none;
+            -webkit-text-fill-color: initial;
         }
         @keyframes hbBlink {
             0%, 100% { opacity: 1; }
@@ -771,7 +807,7 @@
         }
         @media (max-inline-size: 640px) {
             .hero-banner-coded { min-block-size: 240px; padding: 22px; }
-            .hb-title { font-size: clamp(1.45rem, 6.2vw, 2rem); }
+            .hb-title { font-size: clamp(1.6rem, 7vw, 2.6rem); }
         }
         @media (max-inline-size: 768px) {
             .hero-banner { border-radius: 16px; margin-block-start: 0; }
