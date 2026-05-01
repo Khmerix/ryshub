@@ -1,0 +1,15 @@
+[submodule "KhmerixPrompt"]
+	path = KhmerixPrompt
+	url = https://github.com/Khmerix/KhmerixPrompt.git
+[submodule "WorldClass2Book2"]
+	path = WorldClass2Book2
+	url = https://github.com/Khmerix/WorldClass2Book2.git
+[submodule "WorldClass2_Book1"]
+	path = WorldClass2_Book1
+	url = https://github.com/Khmerix/WorldClass2_Book1.git
+[submodule "BrickForgePro/BrickForgePro"]
+	path = BrickForgePro/BrickForgePro
+	url = https://github.com/Khmerix/BrickForgePro.git
+[submodule "BrickForgePro/Camblox-Treasure-Hunter"]
+	path = BrickForgePro/Camblox-Treasure-Hunter
+	url = https://github.com/Khmerix/Camblox-Treasure-Hunter.git
