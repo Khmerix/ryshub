@@ -720,9 +720,76 @@
             color: #fff;
         }
 
+        .epub-body {
+            display: flex;
+            overflow: hidden;
+            min-height: 0;
+        }
+        .epub-toc {
+            width: 0;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: rgba(15,23,42,0.98);
+            border-right: 1px solid rgba(148,163,184,0.2);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.25s ease;
+        }
+        .epub-body.toc-open .epub-toc {
+            width: 240px;
+            overflow-y: auto;
+        }
+        .epub-toc-header {
+            padding: 12px 14px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(148,163,184,0.15);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+        .epub-toc-list {
+            overflow-y: auto;
+            flex: 1;
+        }
+        .epub-toc-item {
+            padding: 9px 14px;
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(148,163,184,0.06);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: all 0.15s;
+        }
+        .epub-toc-item:hover {
+            background: rgba(37,99,235,0.15);
+            color: #fff;
+        }
+        .epub-toc-item.active {
+            background: rgba(37,99,235,0.22);
+            color: #60a5fa;
+            border-left: 3px solid #2563eb;
+            padding-left: 11px;
+        }
+        .epub-toc-empty {
+            padding: 20px 14px;
+            font-size: 0.8rem;
+            color: #64748b;
+            text-align: center;
+        }
         #epubReaderMount {
             background: #f8fafc;
+            flex: 1;
             min-height: 0;
+            overflow: hidden;
+        }
+        .epub-progress {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            white-space: nowrap;
         }
 
         /* ─── Responsive ─── */
@@ -796,12 +863,17 @@
 <div id="epubReaderModal" class="epub-modal" aria-hidden="true">
     <div class="epub-shell">
         <div class="epub-topbar">
+            <button class="epub-btn" onclick="toggleEpubToc()"><i class="fas fa-list"></i> Chapters</button>
             <p class="epub-title" id="epubReaderTitle">EPUB Reader</p>
             <button class="epub-btn" onclick="closeEpubReader()"><i class="fas fa-times"></i> Close</button>
         </div>
-        <div id="epubReaderMount"></div>
+        <div class="epub-body" id="epubBody">
+            <div class="epub-toc" id="epubTocPanel"></div>
+            <div id="epubReaderMount"></div>
+        </div>
         <div class="epub-bottombar">
             <button class="epub-btn" onclick="epubPrevPage()"><i class="fas fa-chevron-left"></i> Previous</button>
+            <span class="epub-progress" id="epubProgress"></span>
             <button class="epub-btn primary" onclick="epubNextPage()">Next <i class="fas fa-chevron-right"></i></button>
         </div>
     </div>
@@ -896,6 +968,11 @@
     var roleFilter = 'all';
     var currentRendition = null;
     var currentEpubBook = null;
+    var tocItems = [];
+    var spineItems = [];
+    var currentLocation = null;
+    var currentSpineIndex = -1;
+    var tocOpen = false;
 
     // ─── Helpers ──────────────────────────────────────────────────────────────────
     function getProgress(bookId) {
@@ -1419,7 +1496,23 @@
 
                 // Wait for book to be ready before rendering (prevents race conditions)
                 currentEpubBook.ready.then(function() {
-                    console.log('EPUB ready. Spine items:', currentEpubBook.spine.items.length);
+                    spineItems = currentEpubBook.spine.items || [];
+                    console.log('EPUB ready. Spine items:', spineItems.length);
+
+                    // Load navigation (TOC) if available
+                    if (currentEpubBook.navigation) {
+                        currentEpubBook.navigation.load().then(function(nav) {
+                            tocItems = (nav && nav.toc) ? nav.toc : [];
+                            buildEpubToc();
+                        }).catch(function(err) {
+                            console.log('No TOC found:', err);
+                            tocItems = [];
+                            buildEpubToc();
+                        });
+                    } else {
+                        tocItems = [];
+                        buildEpubToc();
+                    }
 
                     // Allow layout to settle before measuring
                     setTimeout(function() {
@@ -1447,6 +1540,19 @@
                             });
 
                             currentRendition.on('relocated', function(location) {
+                                currentLocation = location;
+                                if (location && location.start && location.start.href) {
+                                    for (var i = 0; i < spineItems.length; i++) {
+                                        var spineHref = spineItems[i].href || '';
+                                        var locHref = location.start.href || '';
+                                        if (spineHref === locHref || spineHref === locHref.split('#')[0]) {
+                                            currentSpineIndex = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                                updateProgress();
+                                updateTocHighlight();
                                 console.log('EPUB relocated:', location);
                             });
 
@@ -1482,6 +1588,18 @@
         }
         currentRendition = null;
         currentEpubBook = null;
+        currentLocation = null;
+        currentSpineIndex = -1;
+        tocItems = [];
+        spineItems = [];
+        tocOpen = false;
+
+        var body = document.getElementById('epubBody');
+        if (body) body.classList.remove('toc-open');
+        var tocPanel = document.getElementById('epubTocPanel');
+        if (tocPanel) tocPanel.innerHTML = '';
+        var progressEl = document.getElementById('epubProgress');
+        if (progressEl) progressEl.textContent = '';
 
         if (mount) mount.innerHTML = '';
         if (modal) {
@@ -1492,14 +1610,102 @@
         if (!silent) showToast('Reader closed');
     }
 
+    function toggleEpubToc() {
+        tocOpen = !tocOpen;
+        var body = document.getElementById('epubBody');
+        if (body) body.classList.toggle('toc-open', tocOpen);
+    }
+
+    function buildEpubToc() {
+        var panel = document.getElementById('epubTocPanel');
+        if (!panel) return;
+        if (!tocItems || !tocItems.length) {
+            panel.innerHTML = '<div class=\'epub-toc-empty\'>No chapters found</div>';
+            return;
+        }
+        var html = '<div class=\'epub-toc-header\'>Chapters</div><div class=\'epub-toc-list\'>';
+        tocItems.forEach(function(item, i) {
+            var label = (item.label || 'Chapter ' + (i + 1)).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            var href = (item.href || '').replace(/"/g, '&quot;');
+            html += '<div class=\'epub-toc-item\' data-href=\'' + href + '\'>' + label + '</div>';
+        });
+        html += '</div>';
+        panel.innerHTML = html;
+        var items = panel.querySelectorAll('.epub-toc-item');
+        items.forEach(function(el) {
+            el.addEventListener('click', function() {
+                var h = el.getAttribute('data-href');
+                if (h) {
+                    epubGoToHref(h);
+                    if (window.innerWidth < 700) toggleEpubToc();
+                }
+            });
+        });
+    }
+
+    function epubGoToHref(href) {
+        if (!currentRendition || !href) return;
+        currentRendition.display(href);
+    }
+
+    function updateTocHighlight() {
+        if (!currentLocation || !currentLocation.start) return;
+        var items = document.querySelectorAll('.epub-toc-item');
+        var currentHref = currentLocation.start.href;
+        items.forEach(function(el) {
+            el.classList.toggle('active', el.getAttribute('data-href') === currentHref);
+        });
+    }
+
+    function updateProgress() {
+        var el = document.getElementById('epubProgress');
+        if (!el || !currentLocation) return;
+        var pct = currentLocation.percentage;
+        var label = pct !== undefined ? Math.round(pct * 100) + '%' : '';
+        if (currentSpineIndex >= 0 && spineItems.length > 0) {
+            label = (currentSpineIndex + 1) + ' / ' + spineItems.length + (label ? ' \u00b7 ' + label : '');
+        }
+        el.textContent = label;
+    }
+
+    function goToNextSpineItem() {
+        if (!currentRendition || !spineItems.length) return;
+        if (currentSpineIndex >= 0 && currentSpineIndex < spineItems.length - 1) {
+            currentRendition.display(spineItems[currentSpineIndex + 1].href);
+        } else {
+            showToast('End of book');
+        }
+    }
+
+    function goToPrevSpineItem() {
+        if (!currentRendition || !spineItems.length) return;
+        if (currentSpineIndex > 0) {
+            currentRendition.display(spineItems[currentSpineIndex - 1].href);
+        } else {
+            showToast('Start of book');
+        }
+    }
+
     function epubPrevPage() {
         if (!currentRendition) return;
+        var beforeIndex = currentSpineIndex;
         currentRendition.prev();
+        setTimeout(function() {
+            if (currentSpineIndex === beforeIndex && beforeIndex >= 0) {
+                goToPrevSpineItem();
+            }
+        }, 250);
     }
 
     function epubNextPage() {
         if (!currentRendition) return;
+        var beforeIndex = currentSpineIndex;
         currentRendition.next();
+        setTimeout(function() {
+            if (currentSpineIndex === beforeIndex && beforeIndex >= 0) {
+                goToNextSpineItem();
+            }
+        }, 250);
     }
 
     // ─── Rendering ────────────────────────────────────────────────────────────────
