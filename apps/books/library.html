@@ -719,6 +719,11 @@
             border-color: rgba(96,165,250,0.45);
             color: #fff;
         }
+        .epub-btn.speaking {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            border-color: rgba(74,222,128,0.45);
+            color: #fff;
+        }
 
         .epub-body {
             display: flex;
@@ -863,7 +868,10 @@
 <div id="epubReaderModal" class="epub-modal" aria-hidden="true">
     <div class="epub-shell">
         <div class="epub-topbar">
-            <button class="epub-btn" onclick="toggleEpubToc()"><i class="fas fa-list"></i> Chapters</button>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button class="epub-btn" onclick="toggleEpubToc()"><i class="fas fa-list"></i> Chapters</button>
+                <button class="epub-btn" id="epubSpeechBtn" onclick="toggleSpeech()" title="Read aloud"><i class="fas fa-volume-high"></i></button>
+            </div>
             <p class="epub-title" id="epubReaderTitle">EPUB Reader</p>
             <button class="epub-btn" onclick="closeEpubReader()"><i class="fas fa-times"></i> Close</button>
         </div>
@@ -874,7 +882,10 @@
         <div class="epub-bottombar">
             <button class="epub-btn" onclick="epubPrevPage()"><i class="fas fa-chevron-left"></i> Previous</button>
             <span class="epub-progress" id="epubProgress"></span>
-            <button class="epub-btn primary" onclick="epubNextPage()">Next <i class="fas fa-chevron-right"></i></button>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button class="epub-btn primary" onclick="epubNextPage()">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="epub-btn" id="epubFlowBtn" onclick="toggleEpubFlow()" title="Switch scroll mode">&#128220;</button>
+            </div>
         </div>
     </div>
 </div>
@@ -973,6 +984,11 @@
     var currentLocation = null;
     var currentSpineIndex = -1;
     var tocOpen = false;
+    var currentFlow = localStorage.getItem('ryshubEpubFlow') || 'paginated';
+    var speechUtterance = null;
+    var isSpeaking = false;
+    var isPaused = false;
+    var autoAdvanceSpeech = false;
 
     // ─── Helpers ──────────────────────────────────────────────────────────────────
     function getProgress(bookId) {
@@ -1468,6 +1484,7 @@
         }
 
         closeEpubReader(true);
+        stopSpeech();
 
         var modal = document.getElementById('epubReaderModal');
         var mount = document.getElementById('epubReaderMount');
@@ -1476,6 +1493,7 @@
         mount.innerHTML = '';
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
+        updateFlowButton();
 
         // Read blob as ArrayBuffer — more reliable than blob URLs for epub.js
         readBlobAsArrayBuffer(blob, function(buffer) {
@@ -1526,7 +1544,7 @@
                                 width: w,
                                 height: h,
                                 spread: 'none',
-                                flow: 'paginated'
+                                flow: currentFlow
                             });
 
                             currentRendition.on('rendered', function(section) {
@@ -1571,6 +1589,7 @@
     }
 
     function closeEpubReader(silent) {
+        stopSpeech();
         var modal = document.getElementById('epubReaderModal');
         var mount = document.getElementById('epubReaderMount');
 
@@ -1639,6 +1658,7 @@
 
     function epubGoToHref(href) {
         if (!currentRendition || !href) return;
+        stopSpeech();
         currentRendition.display(href);
     }
 
@@ -1662,6 +1682,185 @@
         el.textContent = label;
     }
 
+    function toggleEpubFlow() {
+        if (!currentEpubBook || !currentLocation) {
+            showToast('Open a book first.');
+            return;
+        }
+        currentFlow = currentFlow === 'paginated' ? 'scrolled-doc' : 'paginated';
+        localStorage.setItem('ryshubEpubFlow', currentFlow);
+
+        var savedCfi = currentLocation && currentLocation.start ? currentLocation.start.cfi : null;
+
+        stopSpeech();
+
+        if (currentRendition) {
+            try { currentRendition.destroy(); } catch (e) {}
+        }
+
+        var mount = document.getElementById('epubReaderMount');
+        if (mount) mount.innerHTML = '';
+
+        var w = mount.clientWidth || window.innerWidth - 80;
+        var h = mount.clientHeight || Math.round(window.innerHeight * 0.75);
+        if (!w || w < 200) w = Math.max(320, window.innerWidth - 80);
+        if (!h || h < 200) h = Math.max(400, Math.round(window.innerHeight * 0.75));
+
+        try {
+            currentRendition = currentEpubBook.renderTo(mount, {
+                width: w,
+                height: h,
+                spread: 'none',
+                flow: currentFlow
+            });
+
+            currentRendition.on('rendered', function(section) {
+                console.log('EPUB rendered section:', section && section.href);
+            });
+
+            currentRendition.on('relocated', function(location) {
+                currentLocation = location;
+                if (location && location.start && location.start.href) {
+                    for (var i = 0; i < spineItems.length; i++) {
+                        var spineHref = spineItems[i].href || '';
+                        var locHref = location.start.href || '';
+                        if (spineHref === locHref || spineHref === locHref.split('#')[0]) {
+                            currentSpineIndex = i;
+                            break;
+                        }
+                    }
+                }
+                updateProgress();
+                updateTocHighlight();
+                console.log('EPUB relocated:', location);
+            });
+
+            if (savedCfi) {
+                currentRendition.display(savedCfi);
+            } else {
+                currentRendition.display();
+            }
+
+            updateFlowButton();
+            showToast(currentFlow === 'paginated' ? 'Switched to paginated view' : 'Switched to scroll view');
+        } catch (err) {
+            showToast('Could not switch reading mode.');
+            console.error('Flow switch error:', err);
+        }
+    }
+
+    function updateFlowButton() {
+        var btn = document.getElementById('epubFlowBtn');
+        if (!btn) return;
+        btn.textContent = currentFlow === 'paginated' ? '\u{1F4DC}' : '\u{1F4C4}';
+        btn.title = currentFlow === 'paginated' ? 'Switch to scroll mode' : 'Switch to paginated mode';
+    }
+
+    function toggleSpeech() {
+        if (isSpeaking) {
+            stopSpeech();
+        } else if (isPaused) {
+            window.speechSynthesis.resume();
+            isPaused = false;
+            isSpeaking = true;
+            autoAdvanceSpeech = true;
+            updateSpeechButton();
+        } else {
+            startSpeech();
+        }
+    }
+
+    function startSpeech() {
+        if (!window.speechSynthesis) {
+            showToast('Text-to-speech not supported in this browser.');
+            return;
+        }
+        if (!currentRendition) return;
+
+        window.speechSynthesis.cancel();
+
+        var contents = currentRendition.getContents();
+        if (!contents || !contents.length) {
+            if (autoAdvanceSpeech && currentSpineIndex >= 0 && currentSpineIndex < spineItems.length - 1) {
+                goToNextSpineItem();
+                setTimeout(startSpeech, 500);
+            }
+            return;
+        }
+
+        var text = contents[0].document.body.innerText;
+        if (!text || !text.trim()) {
+            if (autoAdvanceSpeech && currentSpineIndex >= 0 && currentSpineIndex < spineItems.length - 1) {
+                goToNextSpineItem();
+                setTimeout(startSpeech, 500);
+            }
+            return;
+        }
+
+        speechUtterance = new SpeechSynthesisUtterance(text.trim());
+        speechUtterance.rate = 0.95;
+        speechUtterance.pitch = 1.0;
+
+        speechUtterance.onend = function() {
+            if (!autoAdvanceSpeech) {
+                isSpeaking = false;
+                updateSpeechButton();
+                return;
+            }
+            if (currentRendition && autoAdvanceSpeech) {
+                var beforeIndex = currentSpineIndex;
+                currentRendition.next();
+                setTimeout(function() {
+                    if (!autoAdvanceSpeech) return;
+                    if (currentSpineIndex === beforeIndex && beforeIndex >= 0 && beforeIndex < spineItems.length - 1) {
+                        goToNextSpineItem();
+                    }
+                    if (autoAdvanceSpeech && currentRendition) startSpeech();
+                }, 400);
+            } else {
+                isSpeaking = false;
+                updateSpeechButton();
+            }
+        };
+
+        speechUtterance.onerror = function(e) {
+            if (e.error === 'canceled' || e.error === 'interrupted') return;
+            console.error('TTS error:', e);
+            isSpeaking = false;
+            isPaused = false;
+            autoAdvanceSpeech = false;
+            updateSpeechButton();
+        };
+
+        window.speechSynthesis.speak(speechUtterance);
+        isSpeaking = true;
+        isPaused = false;
+        autoAdvanceSpeech = true;
+        updateSpeechButton();
+    }
+
+    function stopSpeech() {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        isPaused = false;
+        autoAdvanceSpeech = false;
+        speechUtterance = null;
+        updateSpeechButton();
+    }
+
+    function updateSpeechButton() {
+        var btn = document.getElementById('epubSpeechBtn');
+        if (!btn) return;
+        if (isSpeaking) {
+            btn.innerHTML = '<i class="fas fa-stop"></i>';
+            btn.classList.add('speaking');
+        } else {
+            btn.innerHTML = '<i class="fas fa-volume-high"></i>';
+            btn.classList.remove('speaking');
+        }
+    }
+
     function goToNextSpineItem() {
         if (!currentRendition || !spineItems.length) return;
         if (currentSpineIndex >= 0 && currentSpineIndex < spineItems.length - 1) {
@@ -1682,6 +1881,7 @@
 
     function epubPrevPage() {
         if (!currentRendition) return;
+        stopSpeech();
         var beforeIndex = currentSpineIndex;
         currentRendition.prev();
         setTimeout(function() {
@@ -1693,6 +1893,7 @@
 
     function epubNextPage() {
         if (!currentRendition) return;
+        stopSpeech();
         var beforeIndex = currentSpineIndex;
         currentRendition.next();
         setTimeout(function() {
@@ -1849,6 +2050,10 @@
         }
         if (e.key === 'ArrowRight') epubNextPage();
         if (e.key === 'ArrowLeft') epubPrevPage();
+        if (e.key === 's' || e.key === 'S') {
+            e.preventDefault();
+            toggleSpeech();
+        }
     });
 </script>
 <!-- TEACHER LOGIN MODAL -->
