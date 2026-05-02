@@ -1201,25 +1201,35 @@
 
     function extractEpubCover(epubFile) {
         return new Promise(function(resolve) {
-            if (typeof JSZip === 'undefined') { resolve(null); return; }
+            if (typeof JSZip === 'undefined') { console.log('JSZip not loaded'); resolve(null); return; }
+            var timedOut = false;
+            var timeoutId = setTimeout(function() {
+                timedOut = true;
+                console.log('Cover extraction timed out');
+                resolve(null);
+            }, 8000);
             var reader = new FileReader();
             reader.onload = function(e) {
+                if (timedOut) return;
                 JSZip.loadAsync(e.target.result).then(function(zip) {
+                    if (timedOut) return;
                     var containerFile = zip.file('META-INF/container.xml');
-                    if (!containerFile) { resolve(null); return; }
+                    if (!containerFile) { clearTimeout(timeoutId); console.log('No container.xml'); resolve(null); return; }
                     return containerFile.async('string').then(function(containerXml) {
+                        if (timedOut) return;
                         var parser = new DOMParser();
                         var containerDoc = parser.parseFromString(containerXml, 'application/xml');
                         var rootfile = containerDoc.querySelector('rootfile');
-                        if (!rootfile) { resolve(null); return; }
+                        if (!rootfile) { clearTimeout(timeoutId); console.log('No rootfile'); resolve(null); return; }
                         var opfPath = rootfile.getAttribute('full-path');
-                        if (!opfPath) { resolve(null); return; }
+                        if (!opfPath) { clearTimeout(timeoutId); console.log('No opfPath'); resolve(null); return; }
                         var opfFile = zip.file(opfPath);
-                        if (!opfFile) { resolve(null); return; }
+                        if (!opfFile) { clearTimeout(timeoutId); console.log('No OPF file'); resolve(null); return; }
                         return opfFile.async('string').then(function(opfXml) {
+                            if (timedOut) return;
                             var opfDoc = parser.parseFromString(opfXml, 'application/xml');
                             var manifest = opfDoc.querySelector('manifest');
-                            if (!manifest) { resolve(null); return; }
+                            if (!manifest) { clearTimeout(timeoutId); console.log('No manifest'); resolve(null); return; }
 
                             var coverHref = null;
                             var items = manifest.querySelectorAll('item');
@@ -1247,8 +1257,8 @@
                                                 var mt2 = items[j].getAttribute('media-type') || '';
                                                 if (mt2.indexOf('image/') === 0) {
                                                     coverHref = items[j].getAttribute('href');
+                                                    break;
                                                 }
-                                                break;
                                             }
                                         }
                                     }
@@ -1272,7 +1282,7 @@
                                 }
                             }
 
-                            if (!coverHref) { resolve(null); return; }
+                            if (!coverHref) { clearTimeout(timeoutId); console.log('No cover href found'); resolve(null); return; }
 
                             // Resolve relative path against OPF directory
                             var opfDir = opfPath.split('/').slice(0, -1).join('/');
@@ -1290,24 +1300,27 @@
                             imagePath = normalized.join('/');
 
                             var imageFile = zip.file(imagePath);
-                            if (!imageFile) { resolve(null); return; }
+                            if (!imageFile) { clearTimeout(timeoutId); console.log('Cover image not found in zip'); resolve(null); return; }
 
                             var ext = imagePath.split('.').pop().toLowerCase();
                             var mime = ext === 'png' ? 'image/png' : 'image/jpeg';
                             return imageFile.async('blob').then(function(blob) {
+                                if (timedOut) return;
                                 var coverFile = new File([blob], 'cover.' + ext, { type: mime });
                                 compressCoverToDataUrl(coverFile, function(dataUrl) {
+                                    clearTimeout(timeoutId);
                                     resolve(dataUrl);
                                 });
                             });
                         });
                     });
                 }).catch(function(err) {
+                    clearTimeout(timeoutId);
                     console.error('extract cover error:', err);
                     resolve(null);
                 });
             };
-            reader.onerror = function() { resolve(null); };
+            reader.onerror = function() { clearTimeout(timeoutId); console.log('FileReader error'); resolve(null); };
             reader.readAsArrayBuffer(epubFile);
         });
     }
@@ -1329,13 +1342,30 @@
             return;
         }
 
+        console.log('Upload started:', file.name, file.size);
+        var uploadBtn = document.querySelector('.upload-btn');
+        var originalBtnHtml = uploadBtn ? uploadBtn.innerHTML : '';
+        if (uploadBtn) {
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            uploadBtn.disabled = true;
+        }
+
         var id = 'epub-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
         var title = (titleInput.value || '').trim() || file.name.replace(/\.epub$/i, '');
         var audience = audienceSelect.value || 'both';
         var coverFile = coverInput && coverInput.files && coverInput.files[0];
 
+        function resetUploadBtn() {
+            if (uploadBtn) {
+                uploadBtn.innerHTML = originalBtnHtml;
+                uploadBtn.disabled = false;
+            }
+        }
+
         function finishUpload(coverDataUrl) {
+            console.log('Saving EPUB blob...');
             saveEpubBlob(id, file).then(function() {
+                console.log('EPUB blob saved. Saving meta...');
                 var meta = loadUploadedMeta();
                 meta.unshift({
                     id: id,
@@ -1352,18 +1382,31 @@
                 titleInput.value = '';
                 clearCoverInput();
                 filterBooks();
+                updateStats();
+                resetUploadBtn();
                 showToast('EPUB uploaded: ' + title);
-            }).catch(function() {
-                showToast('Upload failed. Try again.');
+                console.log('Upload complete:', title);
+            }).catch(function(err) {
+                console.error('saveEpubBlob failed:', err);
+                resetUploadBtn();
+                showToast('Upload failed. Browser storage may be full.');
             });
         }
 
         if (coverFile) {
-            compressCoverToDataUrl(coverFile, finishUpload);
+            console.log('Using custom cover...');
+            compressCoverToDataUrl(coverFile, function(dataUrl) {
+                finishUpload(dataUrl);
+            });
         } else {
+            console.log('Extracting cover from EPUB...');
             extractEpubCover(file).then(function(coverDataUrl) {
+                console.log('Cover extraction result:', coverDataUrl ? 'found' : 'not found');
                 if (coverDataUrl) showToast('Cover found inside EPUB.');
                 finishUpload(coverDataUrl);
+            }).catch(function(err) {
+                console.error('extractEpubCover failed:', err);
+                finishUpload(null);
             });
         }
     }
