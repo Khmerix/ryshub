@@ -228,7 +228,7 @@
         var navItems = [
             { label: 'Home', href: rootUrl + 'index.html' },
             { label: 'TOEFL', href: rootUrl + 'apps/toefl/index.html' },
-            { label: 'Books', href: rootUrl + 'apps/books/library.html?v=4' },
+            { label: 'Books', href: rootUrl + 'apps/books/library.html?v=5' },
             { label: 'Games', href: rootUrl + 'apps/games/index.html' },
             { label: 'Timer', href: rootUrl + 'apps/timer.html' },
         ];
