@@ -1337,9 +1337,27 @@
                 var file = zip.file(path);
                 if (!file || file.dir) return Promise.resolve();
                 return file.async('string').then(function(content) {
+                    // Protect <script>, <style>, and CDATA sections so we don't break JS/CSS
+                    var protected = [];
+                    function protect(regex) {
+                        content = content.replace(regex, function(match) {
+                            protected.push(match);
+                            return '<!--__PROTECTED_' + (protected.length - 1) + '__-->';
+                        });
+                    }
+                    protect(/<script[\s\S]*?<\/script>/gi);
+                    protect(/<style[\s\S]*?<\/style>/gi);
+                    protect(/<!\[CDATA\[[\s\S]*?\]\]>/gi);
+
                     // Fix unescaped ampersands that aren't part of valid XML entities
                     // Valid entities: &amp; &lt; &gt; &nbsp; &#123; &#x1F; etc.
                     var fixed = content.replace(/&(?![a-zA-Z][a-zA-Z0-9]*;|#[0-9]+;|#x[0-9a-fA-F]+;)/g, '&amp;');
+
+                    // Restore protected sections
+                    protected.forEach(function(original, i) {
+                        fixed = fixed.replace('<!--__PROTECTED_' + i + '__-->', original);
+                    });
+
                     if (fixed !== content) {
                         fixedCount++;
                         zip.file(path, fixed);
