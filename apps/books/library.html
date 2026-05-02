@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Interactive Books Library • RysHub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -1410,8 +1413,14 @@
                     return;
                 }
 
+                currentEpubBook.on('openfailed', function(err) {
+                    console.error('EPUB openfailed:', err);
+                });
+
                 // Wait for book to be ready before rendering (prevents race conditions)
                 currentEpubBook.ready.then(function() {
+                    console.log('EPUB ready. Spine items:', currentEpubBook.spine.items.length);
+
                     // Allow layout to settle before measuring
                     setTimeout(function() {
                         // Force layout recalculation
@@ -1433,8 +1442,16 @@
                                 flow: 'paginated'
                             });
 
+                            currentRendition.on('rendered', function(section) {
+                                console.log('EPUB rendered section:', section && section.href);
+                            });
+
+                            currentRendition.on('relocated', function(location) {
+                                console.log('EPUB relocated:', location);
+                            });
+
                             currentRendition.display().then(function() {
-                                // rendered successfully
+                                console.log('EPUB initial display success');
                             }).catch(function(err) {
                                 showToast('Could not render this page — try the next arrow.');
                                 console.error('epub render error:', err);
