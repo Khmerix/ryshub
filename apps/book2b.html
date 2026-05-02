@@ -1222,16 +1222,19 @@
 <body>
     <script>
         (function () {
-            function hasMasterAccess() {
-                return localStorage.getItem('ryshub_master_access') === 'true' ||
-                       sessionStorage.getItem('ryshub_master_access') === 'true' ||
-                       localStorage.getItem('ryshub_loggedIn') === 'true' ||
-                       sessionStorage.getItem('ryshub_loggedIn') === 'true';
+            function hasTeacherAccess() {
+                var role = localStorage.getItem('ryshub_role') || sessionStorage.getItem('ryshub_role');
+                if (role === 'teacher') return true;
+                var master = localStorage.getItem('ryshub_master_access') === 'true' || sessionStorage.getItem('ryshub_master_access') === 'true';
+                if (master) return true;
+                var loggedIn = localStorage.getItem('ryshub_loggedIn') === 'true' || sessionStorage.getItem('ryshub_loggedIn') === 'true';
+                if (loggedIn) return true;
+                var profile = localStorage.getItem('ryshubTeacherProfile') || sessionStorage.getItem('ryshubTeacherProfile');
+                return !!profile;
             }
 
-            if (!hasMasterAccess()) {
-                alert('Please use the main team login first.');
-                window.location.replace('login.html');
+            if (!hasTeacherAccess()) {
+                document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0f172a;color:#e2e8f0;font-family:sans-serif;flex-direction:column;gap:16px;text-align:center;padding:20px;"><div style="font-size:3rem;">🔒</div><h2 style="margin:0;">Teacher Access Required</h2><p style="margin:0;color:#94a3b8;max-width:400px;">Please sign in through the main RysHub login page to access Book 2B.</p><a href="login.html" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:700;">Go to Login</a></div>';
             }
         })();
     </script>
