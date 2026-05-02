@@ -1500,15 +1500,9 @@
                     console.log('EPUB ready. Spine items:', spineItems.length);
 
                     // Load navigation (TOC) if available
-                    if (currentEpubBook.navigation) {
-                        currentEpubBook.navigation.load().then(function(nav) {
-                            tocItems = (nav && nav.toc) ? nav.toc : [];
-                            buildEpubToc();
-                        }).catch(function(err) {
-                            console.log('No TOC found:', err);
-                            tocItems = [];
-                            buildEpubToc();
-                        });
+                    if (currentEpubBook.navigation && currentEpubBook.navigation.toc) {
+                        tocItems = currentEpubBook.navigation.toc;
+                        buildEpubToc();
                     } else {
                         tocItems = [];
                         buildEpubToc();
@@ -1626,7 +1620,7 @@
         var html = '<div class=\'epub-toc-header\'>Chapters</div><div class=\'epub-toc-list\'>';
         tocItems.forEach(function(item, i) {
             var label = (item.label || 'Chapter ' + (i + 1)).replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            var href = (item.href || '').replace(/"/g, '&quot;');
+            var href = (item.href || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
             html += '<div class=\'epub-toc-item\' data-href=\'' + href + '\'>' + label + '</div>';
         });
         html += '</div>';
