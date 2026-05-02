@@ -1325,6 +1325,39 @@
         }
     }
 
+    function sanitizeEpubBuffer(buffer) {
+        if (typeof JSZip === 'undefined') return Promise.resolve(buffer);
+        return JSZip.loadAsync(buffer).then(function(zip) {
+            var files = Object.keys(zip.files);
+            var xhtmlFiles = files.filter(function(f) {
+                return f.endsWith('.xhtml') || f.endsWith('.html') || f.endsWith('.htm');
+            });
+            var fixedCount = 0;
+            var fixPromises = xhtmlFiles.map(function(path) {
+                var file = zip.file(path);
+                if (!file || file.dir) return Promise.resolve();
+                return file.async('string').then(function(content) {
+                    // Fix unescaped ampersands that aren't part of valid XML entities
+                    // Valid entities: &amp; &lt; &gt; &nbsp; &#123; &#x1F; etc.
+                    var fixed = content.replace(/&(?![a-zA-Z][a-zA-Z0-9]*;|#[0-9]+;|#x[0-9a-fA-F]+;)/g, '&amp;');
+                    if (fixed !== content) {
+                        fixedCount++;
+                        zip.file(path, fixed);
+                    }
+                });
+            });
+            return Promise.all(fixPromises).then(function() {
+                if (fixedCount > 0) {
+                    console.log('Sanitized ' + fixedCount + ' EPUB file(s)');
+                }
+                return zip.generateAsync({type: 'arraybuffer'});
+            });
+        }).catch(function(err) {
+            console.error('EPUB sanitization failed, using original:', err);
+            return buffer;
+        });
+    }
+
     function openEpubReader(blob, title) {
         if (typeof ePub === 'undefined') {
             showToast('EPUB reader engine is not loaded.');
@@ -1348,53 +1381,56 @@
 
         // Read blob as ArrayBuffer — more reliable than blob URLs for epub.js
         readBlobAsArrayBuffer(blob, function(buffer) {
-            try {
-                currentEpubBook = ePub(buffer);
-            } catch (err) {
-                showToast('Could not parse EPUB — file may be corrupted.');
-                console.error('epub parse error:', err);
-                closeEpubReader(true);
-                return;
-            }
+            // Sanitize common XML errors (unescaped ampersands) before parsing
+            sanitizeEpubBuffer(buffer).then(function(cleanBuffer) {
+                try {
+                    currentEpubBook = ePub(cleanBuffer);
+                } catch (err) {
+                    showToast('Could not parse EPUB — file may be corrupted.');
+                    console.error('epub parse error:', err);
+                    closeEpubReader(true);
+                    return;
+                }
 
-            // Wait for book to be ready before rendering (prevents race conditions)
-            currentEpubBook.ready.then(function() {
-                // Allow layout to settle before measuring
-                setTimeout(function() {
-                    // Force layout recalculation
-                    modal.getBoundingClientRect();
-                    mount.getBoundingClientRect();
+                // Wait for book to be ready before rendering (prevents race conditions)
+                currentEpubBook.ready.then(function() {
+                    // Allow layout to settle before measuring
+                    setTimeout(function() {
+                        // Force layout recalculation
+                        modal.getBoundingClientRect();
+                        mount.getBoundingClientRect();
 
-                    var w = mount.clientWidth || window.innerWidth - 80;
-                    var h = mount.clientHeight || Math.round(window.innerHeight * 0.75);
+                        var w = mount.clientWidth || window.innerWidth - 80;
+                        var h = mount.clientHeight || Math.round(window.innerHeight * 0.75);
 
-                    // Ensure non-zero dimensions
-                    if (!w || w < 200) w = Math.max(320, window.innerWidth - 80);
-                    if (!h || h < 200) h = Math.max(400, Math.round(window.innerHeight * 0.75));
+                        // Ensure non-zero dimensions
+                        if (!w || w < 200) w = Math.max(320, window.innerWidth - 80);
+                        if (!h || h < 200) h = Math.max(400, Math.round(window.innerHeight * 0.75));
 
-                    try {
-                        currentRendition = currentEpubBook.renderTo(mount, {
-                            width: w,
-                            height: h,
-                            spread: 'none',
-                            flow: 'paginated'
-                        });
+                        try {
+                            currentRendition = currentEpubBook.renderTo(mount, {
+                                width: w,
+                                height: h,
+                                spread: 'none',
+                                flow: 'paginated'
+                            });
 
-                        currentRendition.display().then(function() {
-                            // rendered successfully
-                        }).catch(function(err) {
-                            showToast('Could not render this page — try the next arrow.');
-                            console.error('epub render error:', err);
-                        });
-                    } catch (err) {
-                        showToast('EPUB render failed.');
-                        console.error('epub render exception:', err);
-                    }
-                }, 80);
-            }).catch(function(err) {
-                showToast('Could not parse EPUB — file may be corrupted.');
-                console.error('epub ready error:', err);
-                closeEpubReader(true);
+                            currentRendition.display().then(function() {
+                                // rendered successfully
+                            }).catch(function(err) {
+                                showToast('Could not render this page — try the next arrow.');
+                                console.error('epub render error:', err);
+                            });
+                        } catch (err) {
+                            showToast('EPUB render failed.');
+                            console.error('epub render exception:', err);
+                        }
+                    }, 80);
+                }).catch(function(err) {
+                    showToast('Could not parse EPUB — file may be corrupted.');
+                    console.error('epub ready error:', err);
+                    closeEpubReader(true);
+                });
             });
         });
     }
