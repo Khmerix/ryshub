@@ -1528,8 +1528,13 @@
         }
         
         function toggleDarkMode() {
-            RysHubTheme.toggle();
-            currentDarkMode = RysHubTheme.get() === 'dark';
+            if (typeof RysHubTheme !== 'undefined') {
+                RysHubTheme.toggle();
+                currentDarkMode = RysHubTheme.get() === 'dark';
+            } else {
+                currentDarkMode = !currentDarkMode;
+                localStorage.setItem('darkMode', currentDarkMode ? 'true' : 'false');
+            }
             document.body.classList.toggle('dark-mode', currentDarkMode);
             
             const btn = document.querySelector('.dark-mode-toggle');
@@ -1544,8 +1549,12 @@
         }
         
         // Load dark mode preference
-        RysHubTheme.apply(RysHubTheme.get());
-        currentDarkMode = RysHubTheme.get() === 'dark';
+        if (typeof RysHubTheme !== 'undefined') {
+            RysHubTheme.apply(RysHubTheme.get());
+            currentDarkMode = RysHubTheme.get() === 'dark';
+        } else {
+            currentDarkMode = localStorage.getItem('darkMode') === 'true';
+        }
         if (currentDarkMode) {
             document.body.classList.add('dark-mode');
             document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light';
