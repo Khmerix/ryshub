@@ -1,77 +1,64 @@
 # Rys Hub
 
-Welcome to **Rys Hub**, a powerful and flexible platform designed to simplify your workflow and accelerate your projects. This repository serves as the central hub for [briefly describe what Rys Hub does: e.g., data analytics, automation, productivity, developer tools, etc.].
+Rys Hub is a collection of educational materials, classroom-ready activities, and simple web-based tools for ESL teachers and learners. The repository is designed to host practical resources for everyday teaching, including games, links, and study materials that can be used directly in class or shared with students online.
 
-## 🚀 Features
+## What this repository includes
 
-- **Modular Architecture**: Easily extend and customize functionality.
-- **User-Friendly Interface**: Intuitive navigation and modern UI/UX.
-- **Robust API**: Seamless integration with third-party tools and services.
-- **Cross-Platform Support**: Works across major operating systems and devices.
-- **Security First**: Implements best practices to keep your data safe.
+- ESL learning games and interactive activities
+- Teaching materials for classroom use
+- Student-friendly web pages and practice tools
+- Collections of helpful links and resources
+- Static HTML content that can be hosted with GitHub Pages
 
-## 📦 Installation
+## Project structure
 
-```bash
-# Clone the repository
-git clone https://github.com/Khmerix/ryshub.git
-
-# Navigate into the project directory
-cd ryshub
-
-# (Optionally) Set up a virtual environment
-python -m venv venv
-source venv/bin/activate # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python main.py
-```
-
-_Adapt steps above as needed for your tech stack (Node.js, Docker, etc.)_
-
-## 🛠️ Usage
-
-1. Launch the application using the provided commands.
-2. Access the dashboard at `http://localhost:8000` (or your configured port).
-3. Explore available features and tools.
-
-For detailed usage instructions, see the [Documentation](docs/README.md) (if available).
-
-## 📁 Project Structure
+This repository is primarily a static website.
 
 ```plaintext
 ryshub/
-├── src/                # Source code
-├── docs/               # Documentation
-├── tests/              # Test suites
-├── requirements.txt    # Python dependencies
-├── main.py             # Entry point (or your main file)
-└── README.md           # This file
+├── index.html                # Main landing page
+├── apps/                     # Interactive apps and games
+├── books/                    # Reading or study materials
+├── assets/                   # Shared images, styles, or supporting files
+└── README.md                 # Project overview
 ```
 
-## 🤝 Contributing
+## Technology
 
-We welcome contributions! To get started:
+This project is built mostly with:
 
-1. Fork this repository.
-2. Create a new branch: `git checkout -b feature/my-feature`
-3. Make your changes and commit: `git commit -m 'Add awesome feature'`
-4. Push to your fork and submit a [Pull Request](https://github.com/Khmerix/ryshub/pulls).
+- HTML
+- CSS
+- JavaScript
 
-Please read our [contribution guidelines](CONTRIBUTING.md) for more details.
+No backend service or complex build setup is required for most of the content in this repository.
 
-## 📝 License
+## Usage
 
-This project is licensed under the [MIT License](LICENSE).
+You can use this repository in a few ways:
 
-## 🙋‍♂️ Contact
+1. Open the site locally by opening `index.html` in a browser.
+2. Host the repository with GitHub Pages.
+3. Reuse or adapt classroom materials for ESL lessons.
+4. Share game and study links with students.
 
-Questions, suggestions, or feedback?  
-Open an [issue](https://github.com/Khmerix/ryshub/issues) or contact [@Khmerix](https://github.com/Khmerix) on GitHub.
+## GitHub Pages
 
----
+If GitHub Pages is enabled for this repository, the site can be published directly from the repository and used as an online classroom resource hub.
 
-**Rys Hub** – Making your work easier and more efficient!
+## Purpose
+
+The goal of Rys Hub is to make useful ESL teaching resources easy to organize, access, and share. It is intended to support everyday teaching with simple, practical materials rather than a complicated software platform.
+
+## Contributing
+
+Suggestions and improvements are welcome. You can:
+
+- add new classroom activities
+- improve existing games
+- update resource links
+- refine page layout and usability
+
+## License
+
+Add a license section here if you want to make reuse terms explicit.
