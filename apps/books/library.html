@@ -1019,6 +1019,36 @@
         return 'Student + Teacher';
     }
 
+    function hashString(input) {
+        var hash = 5381;
+        for (var i = 0; i < input.length; i++) {
+            hash = ((hash << 5) + hash) + input.charCodeAt(i);
+            hash = hash | 0;
+        }
+        return ('0000000000000000' + ((hash >>> 0).toString(16))).slice(-16);
+    }
+
+    function escapeHtml(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(value) {
+        return escapeHtml(value).replace(/`/g, '&#96;');
+    }
+
+    function sanitizeCoverSrc(value) {
+        var src = String(value || '').trim();
+        if (!src) return '';
+        if (/^https?:\/\//i.test(src)) return src;
+        if (/^data:image\/(?:png|jpe?g|gif|webp);base64,[a-z0-9+/=]+$/i.test(src)) return src;
+        return '';
+    }
+
     function loadUploadedMeta() {
         try {
             var saved = JSON.parse(localStorage.getItem(UPLOAD_META_KEY) || '[]');
@@ -1185,8 +1215,11 @@
             showToast('Please enter the teacher code.');
             return;
         }
-        var validCode = localStorage.getItem('ryshubBlogAdminCode') || 'RYS-BLOG-ADMIN-2026';
-        if (code !== validCode) {
+        var storedCode = (localStorage.getItem('ryshubBlogAdminCode') || '').trim();
+        var isCodeValid = storedCode
+            ? code === storedCode
+            : hashString(code + ':Ry$Hub_S3cur3_S4lt_v2026') === '00000000f3e2d830';
+        if (!isCodeValid) {
             showToast('Invalid teacher code.');
             return;
         }
@@ -1681,8 +1714,8 @@
         }
         var html = '<div class=\'epub-toc-header\'>Chapters</div><div class=\'epub-toc-list\'>';
         tocItems.forEach(function(item, i) {
-            var label = (item.label || 'Chapter ' + (i + 1)).replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            var href = (item.href || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            var label = escapeHtml(item.label || ('Chapter ' + (i + 1)));
+            var href = escapeAttr(item.href || '');
             html += '<div class=\'epub-toc-item\' data-href=\'' + href + '\'>' + label + '</div>';
         });
         html += '</div>';
@@ -1960,25 +1993,36 @@
             var isLive    = book.status === 'live';
             var isEpub    = book.type === 'epub';
             var progress  = isLive ? getProgress(book.id) : 0;
+            var safeProgress = Math.max(0, Math.min(100, Number(progress) || 0));
+            var safeId = escapeAttr(book.id || '');
+            var safeTitle = escapeHtml(book.title || '');
+            var safeAuthor = escapeHtml(book.author || '');
+            var safeDesc = escapeHtml(book.desc || '');
+            var safeLevel = escapeHtml(book.level || '');
+            var safeLevelClass = /^[a-z0-9\-_ ]+$/i.test(book.levelClass || '') ? book.levelClass : '';
+            var safeCoverClass = /^[a-z0-9\-_ ]+$/i.test(book.cover || '') ? book.cover : 'ocean-theme';
+            var safeIcon = escapeHtml(book.icon || '');
+            var safeCoverSrc = sanitizeCoverSrc(book.coverDataUrl);
+            var safeDeleteTitle = escapeAttr(book.title || '');
             var btnLabel  = isEpub
                 ? '<i class="fas fa-book-open"></i> Open EPUB'
-                : (progress > 0 ? '<i class="fas fa-book-open"></i> Continue Reading' : '<i class="fas fa-play"></i> Start Reading');
+                : (safeProgress > 0 ? '<i class="fas fa-book-open"></i> Continue Reading' : '<i class="fas fa-play"></i> Start Reading');
             var ribbonHtml = isLive    ? '<div class="book-ribbon">Live</div>'
                            : isComing ? '<div class="book-ribbon coming">Coming Soon</div>'
                            : '';
 
-            var coverHtml = book.coverDataUrl
-                ? '<div class="book-cover has-img"><img src="' + book.coverDataUrl + '" alt="' + book.title + ' cover">' + ribbonHtml + '</div>'
-                : '<div class="book-cover ' + book.cover + '"><div class="cover-lines"></div><span class="cover-icon">' + book.icon + '</span>' + ribbonHtml + '</div>';
+            var coverHtml = safeCoverSrc
+                ? '<div class="book-cover has-img"><img src="' + safeCoverSrc + '" alt="' + safeTitle + ' cover">' + ribbonHtml + '</div>'
+                : '<div class="book-cover ' + safeCoverClass + '"><div class="cover-lines"></div><span class="cover-icon">' + safeIcon + '</span>' + ribbonHtml + '</div>';
 
             var btnHtml = isSlot
                 ? '<button class="book-btn disabled" disabled><i class="fas fa-clock"></i> Coming Soon</button>'
                 : isComing
                     ? '<button class="book-btn disabled" disabled><i class="fas fa-clock"></i> Coming Soon</button>'
-                    : '<button class="book-btn" onclick="event.stopPropagation();launchBook(\'' + book.id + '\')">' + btnLabel + '</button>';
+                    : '<button class="book-btn" onclick="event.stopPropagation();launchBook(\'' + safeId + '\')">' + btnLabel + '</button>';
 
             var deleteBtnHtml = (isEpub && hasAdminAccess())
-                ? '<button class="book-btn danger" onclick="event.stopPropagation();deleteUploadedEpub(\'' + book.id + '\', \'' + book.title.replace(/'/g, "&#39;") + '\')"><i class="fas fa-trash"></i> Delete</button>'
+                ? '<button class="book-btn danger" onclick="event.stopPropagation();deleteUploadedEpub(\'' + safeId + '\', \'' + safeDeleteTitle + '\')"><i class="fas fa-trash"></i> Delete</button>'
                 : '';
 
             var actionsHtml = deleteBtnHtml
@@ -1992,19 +2036,19 @@
                 (isEpub
                     ? '<div class="chip"><i class="fas fa-user-group"></i>' + getAudienceLabel(book.audience) + '</div>'
                     : '<div class="chip"><i class="fas fa-code-branch"></i>' + book.choices + ' choices</div>'),
-                book.level ? '<div class="chip ' + book.levelClass + '">' + book.level + '</div>' : ''
+                book.level ? '<div class="chip ' + safeLevelClass + '">' + safeLevel + '</div>' : ''
             ].join('') : '';
 
-            var progressHtml = isLive && progress > 0
-                ? '<div class="book-progress"><div class="book-progress-fill" style="width:' + progress + '%;"></div></div>'
+            var progressHtml = isLive && safeProgress > 0
+                ? '<div class="book-progress"><div class="book-progress-fill" style="width:' + safeProgress + '%;"></div></div>'
                 : '';
 
-            return '<div class="book-card' + (isSlot ? ' slot' : '') + '" onclick="' + (!isSlot && !isComing ? "launchBook('" + book.id + "')" : '') + '">'
+            return '<div class="book-card' + (isSlot ? ' slot' : '') + '" onclick="' + (!isSlot && !isComing ? "launchBook('" + safeId + "')" : '') + '">'
                 + coverHtml
                 + '<div class="book-info">'
-                + '<h2 class="book-title">' + book.title + '</h2>'
-                + (book.author ? '<p class="book-author">by ' + book.author + '</p>' : '')
-                + '<p class="book-desc">' + book.desc + '</p>'
+                + '<h2 class="book-title">' + safeTitle + '</h2>'
+                + (book.author ? '<p class="book-author">by ' + safeAuthor + '</p>' : '')
+                + '<p class="book-desc">' + safeDesc + '</p>'
                 + (chipsHtml ? '<div class="book-chips">' + chipsHtml + '</div>' : '')
                 + progressHtml
                 + actionsHtml
