@@ -1,77 +1,83 @@
-# Rys Hub
+# RysHub
 
-Welcome to **Rys Hub**, a powerful and flexible platform designed to simplify your workflow and accelerate your projects. This repository serves as the central hub for [briefly describe what Rys Hub does: e.g., data analytics, automation, productivity, developer tools, etc.].
+RysHub is a static educational web platform built with vanilla HTML, CSS, and JavaScript, hosted on GitHub Pages.
 
-## 🚀 Features
+It combines TOEFL iBT practice tools, interactive books, classroom utilities, student tracking, and educational mini-games in one repository.
 
-- **Modular Architecture**: Easily extend and customize functionality.
-- **User-Friendly Interface**: Intuitive navigation and modern UI/UX.
-- **Robust API**: Seamless integration with third-party tools and services.
-- **Cross-Platform Support**: Works across major operating systems and devices.
-- **Security First**: Implements best practices to keep your data safe.
+## What’s in this repository
 
-## 📦 Installation
+- **Main portal:** `index.html`
+- **TOEFL apps:** `apps/toefl/` (Reading, Listening, Speaking, Writing)
+- **Books library:** `apps/books/library.html` (+ interactive stories)
+- **Games hub:** `apps/games/index.html`
+- **Classroom tools:** `apps/timer.html`, `apps/student-tracker.html`, `apps/command-center.html`
+- **Course materials:** `apps/files seperate/` (World Class 2 resources)
+- **Shared assets:** `assets/` (auth, global header, theme, backgrounds)
+
+## Tech stack
+
+- HTML5 + CSS3 + Vanilla JavaScript (no framework build for main site)
+- Tailwind CSS (CDN)
+- Font Awesome + Google Fonts (CDN)
+- Chart.js (student tracker)
+- Three.js (BrickForge)
+- epub.js + JSZip (books library)
+
+## Run locally
+
+This is a static site, so any simple local server works:
 
 ```bash
-# Clone the repository
-git clone https://github.com/Khmerix/ryshub.git
-
-# Navigate into the project directory
 cd ryshub
-
-# (Optionally) Set up a virtual environment
-python -m venv venv
-source venv/bin/activate # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python main.py
+python -m http.server 8000
 ```
 
-_Adapt steps above as needed for your tech stack (Node.js, Docker, etc.)_
+Then open:
 
-## 🛠️ Usage
+- `http://localhost:8000/` (main portal)
 
-1. Launch the application using the provided commands.
-2. Access the dashboard at `http://localhost:8000` (or your configured port).
-3. Explore available features and tools.
+## Deployment
 
-For detailed usage instructions, see the [Documentation](docs/README.md) (if available).
+- Deployed via **GitHub Pages** from repository root.
+- `.nojekyll` is included so files are served directly.
+- No build step is required for the current vanilla site.
 
-## 📁 Project Structure
+## Project structure (high level)
 
-```plaintext
+```text
 ryshub/
-├── src/                # Source code
-├── docs/               # Documentation
-├── tests/              # Test suites
-├── requirements.txt    # Python dependencies
-├── main.py             # Entry point (or your main file)
-└── README.md           # This file
+├── index.html
+├── apps/
+│   ├── toefl/
+│   ├── books/
+│   ├── games/
+│   ├── writing-trainer/
+│   ├── files seperate/
+│   └── *.html (login, timer, tracker, brickforge, etc.)
+├── assets/
+├── calender/
+├── rule book/
+├── PLAN.md
+└── README.md
 ```
 
-## 🤝 Contributing
+## Security notes
 
-We welcome contributions! To get started:
+- Auth is client-side (`assets/ryshub-auth.js`) and intended as lightweight access control, not production-grade server security.
+- `index.html` uses a Content Security Policy (CSP). If you add new CDN sources, update CSP accordingly.
 
-1. Fork this repository.
-2. Create a new branch: `git checkout -b feature/my-feature`
-3. Make your changes and commit: `git commit -m 'Add awesome feature'`
-4. Push to your fork and submit a [Pull Request](https://github.com/Khmerix/ryshub/pulls).
+## Current status
 
-Please read our [contribution guidelines](CONTRIBUTING.md) for more details.
+- Active platform is the static/vanilla implementation in repo root.
+- `PLAN.md` documents a possible future React/Vite migration; it is not the current runtime.
 
-## 📝 License
+## Contributing
 
-This project is licensed under the [MIT License](LICENSE).
+1. Create a branch from `main`.
+2. Make focused changes.
+3. Open a pull request with a clear summary.
 
-## 🙋‍♂️ Contact
+## Contact
 
-Questions, suggestions, or feedback?  
-Open an [issue](https://github.com/Khmerix/ryshub/issues) or contact [@Khmerix](https://github.com/Khmerix) on GitHub.
-
----
-
-**Rys Hub** – Making your work easier and more efficient!
+- GitHub: [@Khmerix](https://github.com/Khmerix)
+- Issues: https://github.com/Khmerix/ryshub/issues
