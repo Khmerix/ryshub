@@ -1,64 +1,70 @@
 # Rys Hub
 
-Rys Hub is a collection of educational materials, classroom-ready activities, and simple web-based tools for ESL teachers and learners. The repository is designed to host practical resources for everyday teaching, including games, links, and study materials that can be used directly in class or shared with students online.
+Rys Hub is a web-based collection of educational materials, interactive activities, and practical classroom resources designed to support ESL teachers and learners. The repository serves as a central place for organizing and sharing teaching tools, learning games, and reference materials that can be used in everyday instruction.
 
-## What this repository includes
+## Overview
 
-- ESL learning games and interactive activities
-- Teaching materials for classroom use
-- Student-friendly web pages and practice tools
-- Collections of helpful links and resources
-- Static HTML content that can be hosted with GitHub Pages
+This repository is intended to provide accessible, classroom-friendly resources that are easy to use, adapt, and share. Its content is focused on supporting English language teaching through simple web pages, interactive learning activities, and curated materials for student practice.
+
+## Repository contents
+
+Rys Hub may include:
+
+- Interactive ESL games and learning activities
+- Classroom teaching materials and practice resources
+- Student-facing pages for independent or guided use
+- Curated links and reference materials for lessons
+- Static web content suitable for GitHub Pages hosting
 
 ## Project structure
 
-This repository is primarily a static website.
+This project is primarily a static website and resource hub.
 
 ```plaintext
 ryshub/
 ├── index.html                # Main landing page
-├── apps/                     # Interactive apps and games
-├── books/                    # Reading or study materials
-├── assets/                   # Shared images, styles, or supporting files
-└── README.md                 # Project overview
+├── apps/                     # Interactive applications and games
+├── books/                    # Reading and study materials
+├── assets/                   # Shared media, styles, and supporting files
+└── README.md                 # Repository overview
 ```
 
 ## Technology
 
-This project is built mostly with:
+The repository is built primarily with standard front-end web technologies:
 
 - HTML
 - CSS
 - JavaScript
 
-No backend service or complex build setup is required for most of the content in this repository.
+In most cases, no backend service or complex build process is required to use or maintain the materials in this repository.
 
 ## Usage
 
-You can use this repository in a few ways:
+The materials in this repository can be used in several ways:
 
-1. Open the site locally by opening `index.html` in a browser.
-2. Host the repository with GitHub Pages.
-3. Reuse or adapt classroom materials for ESL lessons.
-4. Share game and study links with students.
+1. Open the site locally in a web browser for preview or classroom use.
+2. Publish the repository with GitHub Pages for online access.
+3. Adapt activities and materials for lesson planning and instruction.
+4. Share selected pages or tools directly with students.
 
 ## GitHub Pages
 
-If GitHub Pages is enabled for this repository, the site can be published directly from the repository and used as an online classroom resource hub.
+If GitHub Pages is enabled for this repository, Rys Hub can be published as an online resource portal for teachers and learners, making its materials available through a simple web interface.
 
 ## Purpose
 
-The goal of Rys Hub is to make useful ESL teaching resources easy to organize, access, and share. It is intended to support everyday teaching with simple, practical materials rather than a complicated software platform.
+The purpose of Rys Hub is to make ESL teaching resources more organized, accessible, and practical for daily classroom use. The project emphasizes clarity, usability, and ease of sharing rather than technical complexity.
 
-## Contributing
+## Contributions
 
-Suggestions and improvements are welcome. You can:
+Constructive improvements are welcome. Contributions may include:
 
-- add new classroom activities
-- improve existing games
-- update resource links
-- refine page layout and usability
+- New classroom activities or learning games
+- Revisions to existing materials
+- Improved structure, navigation, or usability
+- Updated links and instructional resources
 
 ## License
 
-Add a license section here if you want to make reuse terms explicit.
+A license can be added to clarify terms for reuse, adaptation, and sharing.
