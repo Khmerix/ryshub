@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Practice • World Class 2 — Unit 11</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #020617;
+            --bg-elevated: #0f172a;
+            --bg-card: #1e293b;
+            --border: #334155;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --primary: #a855f7;
+            --primary-dark: #7c3aed;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gold: #d97706;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .wp-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(2,6,23,0.92);
+            backdrop-filter: blur(16px) saturate(1.2);
+            border-bottom: 1px solid rgba(168,85,247,0.2);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .wp-back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .wp-back-btn:hover { color: var(--text); border-color: var(--primary); background: rgba(168,85,247,0.08); }
+        .wp-title-group { display: flex; align-items: center; gap: 12px; }
+        .wp-logo {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+        }
+        .wp-title { font-weight: 700; font-size: 1.1rem; }
+        .wp-subtitle { font-size: 0.75rem; color: var(--text-secondary); }
+        .wp-score-badge {
+            background: rgba(168,85,247,0.15);
+            border: 1px solid rgba(168,85,247,0.3);
+            padding: 6px 14px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 700;
+            color: #c084fc;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        /* Tab Navigation */
+        .wp-tabs {
+            display: flex; gap: 4px;
+            padding: 16px 24px 0;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+        }
+        .wp-tab {
+            padding: 10px 20px;
+            border: none; border-bottom: 2px solid transparent;
+            background: none; color: var(--text-secondary);
+            font-size: 0.875rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+            white-space: nowrap; margin-bottom: -1px;
+            border-radius: 8px 8px 0 0;
+        }
+        .wp-tab:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+        .wp-tab.active { color: #c084fc; border-bottom-color: #a855f7; background: rgba(168,85,247,0.08); }
+        .wp-tab i { margin-right: 6px; }
+
+        /* Main Content */
+        .wp-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 28px 24px 60px;
+        }
+
+        /* Panels */
+        .wp-panel { display: none; }
+        .wp-panel.active { display: block; }
+
+        /* Section header */
+        .panel-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .panel-header h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
+        .panel-header p { color: var(--text-secondary); font-size: 0.9rem; }
+        .panel-tag {
+            display: inline-block;
+            background: rgba(168,85,247,0.15);
+            border: 1px solid rgba(168,85,247,0.3);
+            color: #c084fc; font-size: 0.75rem; font-weight: 700;
+            padding: 3px 10px; border-radius: 20px; margin-bottom: 10px;
+            text-transform: uppercase; letter-spacing: 0.08em;
+        }
+
+        /* ── Flashcards ── */
+        .flashcard-deck {
+            position: relative;
+            perspective: 1000px;
+            max-width: 480px;
+            margin: 0 auto 28px;
+        }
+        .flashcard {
+            width: 100%; min-height: 220px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            cursor: pointer;
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .flashcard-face {
+            position: absolute; inset: 0;
+            backface-visibility: hidden;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 32px 24px; text-align: center;
+            user-select: none;
+        }
+        .flashcard-face.back { transform: rotateY(180deg); background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.3); }
+        .fc-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 14px; }
+        .fc-word { font-size: 2rem; font-weight: 800; color: #e2d9f3; letter-spacing: -0.02em; }
+        .fc-pos { font-size: 0.8rem; color: #c084fc; margin-top: 6px; font-style: italic; }
+        .fc-def { font-size: 1.05rem; color: var(--text); line-height: 1.5; }
+        .fc-example { font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px; font-style: italic; border-top: 1px solid rgba(168,85,247,0.2); padding-top: 10px; }
+        .fc-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 12px; }
+        .flashcard-controls { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .fc-counter { font-size: 0.85rem; color: var(--text-secondary); min-width: 80px; text-align: center; }
+        .fc-progress {
+            width: 100%; height: 4px; background: var(--bg-card);
+            border-radius: 2px; margin-bottom: 16px; overflow: hidden;
+        }
+        .fc-progress-bar { height: 100%; background: linear-gradient(90deg, #a855f7, #7c3aed); border-radius: 2px; transition: width 0.3s; }
+
+        /* ── Multiple Choice Quiz ── */
+        .quiz-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+        .quiz-question-num { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+        .quiz-question-text { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; line-height: 1.4; }
+        .quiz-options { display: grid; gap: 10px; }
+        .quiz-option {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.925rem;
+            transition: all 0.2s;
+            background: var(--bg-elevated);
+        }
+        .quiz-option:hover:not(.disabled) { border-color: #a855f7; background: rgba(168,85,247,0.08); }
+        .quiz-option.selected { border-color: #a855f7; background: rgba(168,85,247,0.15); }
+        .quiz-option.correct { border-color: var(--success); background: rgba(16,185,129,0.1); color: #6ee7b7; }
+        .quiz-option.wrong { border-color: var(--danger); background: rgba(239,68,68,0.1); color: #fca5a5; }
+        .quiz-option.disabled { cursor: default; }
+        .quiz-option-letter {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+        }
+        .quiz-feedback {
+            margin-top: 14px; padding: 12px 16px;
+            border-radius: 10px; font-size: 0.9rem;
+            display: none;
+        }
+        .quiz-feedback.correct { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
+        .quiz-feedback.wrong { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+        .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; flex-wrap: wrap; gap: 10px; }
+        .quiz-progress-text { font-size: 0.85rem; color: var(--text-secondary); }
+
+        /* ── Fill in the Blank ── */
+        .fitb-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+        .fitb-sentence {
+            font-size: 1.1rem; line-height: 2.2; margin-bottom: 16px;
+            display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+        }
+        .fitb-input {
+            background: var(--bg-elevated);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            padding: 4px 12px;
+            min-width: 160px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .fitb-input:focus { border-color: #a855f7; }
+        .fitb-input.correct { border-color: var(--success); color: #6ee7b7; }
+        .fitb-input.wrong { border-color: var(--danger); color: #fca5a5; }
+        .fitb-input.revealed { border-color: var(--warning); color: #fbbf24; }
+        .fitb-hint { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px; }
+        .word-bank-strip {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            padding: 14px 16px;
+            background: rgba(168,85,247,0.06);
+            border: 1px solid rgba(168,85,247,0.2);
+            border-radius: 10px; margin-bottom: 20px;
+        }
+        .wb-chip {
+            padding: 4px 14px;
+            background: var(--bg-elevated);
+            border: 1px solid rgba(168,85,247,0.3);
+            border-radius: 20px; font-size: 0.85rem;
+            color: #c084fc; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .wb-chip:hover { background: rgba(168,85,247,0.15); }
+        .wb-chip.used { opacity: 0.35; text-decoration: line-through; cursor: default; }
+
+        /* ── Shared Buttons ── */
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: #fff; border: none; border-radius: 10px;
+            padding: 10px 22px; font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(168,85,247,0.3);
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(168,85,247,0.4); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-secondary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--bg-card); color: var(--text-secondary);
+            border: 1px solid var(--border); border-radius: 10px;
+            padding: 10px 20px; font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-secondary:hover { border-color: var(--primary); color: var(--text); }
+        .btn-sm { padding: 7px 14px; font-size: 0.82rem; }
+
+        /* ── Results Banner ── */
+        .results-banner {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 32px 24px;
+            text-align: center; margin-top: 12px;
+        }
+        .results-emoji { font-size: 3rem; margin-bottom: 12px; }
+        .results-score { font-size: 2.5rem; font-weight: 900; color: #c084fc; margin-bottom: 6px; }
+        .results-label { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px; }
+        .results-stars { font-size: 1.6rem; letter-spacing: 4px; margin-bottom: 20px; }
+
+        /* ── Vocab Table ── */
+        .vocab-table {
+            width: 100%; border-collapse: separate; border-spacing: 0 6px;
+        }
+        .vocab-table th {
+            text-align: left; padding: 10px 14px;
+            color: var(--text-muted); font-size: 0.75rem;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            border-bottom: 1px solid var(--border);
+        }
+        .vocab-table td {
+            padding: 12px 14px;
+            background: var(--bg-card); vertical-align: top;
+        }
+        .vocab-table tr td:first-child { border-radius: 10px 0 0 10px; }
+        .vocab-table tr td:last-child { border-radius: 0 10px 10px 0; }
+        .vt-word { font-weight: 800; font-size: 1rem; color: #e2d9f3; }
+        .vt-pos { font-size: 0.75rem; color: #c084fc; font-style: italic; }
+        .vt-def { font-size: 0.9rem; color: var(--text-secondary); }
+        .vt-example { font-size: 0.82rem; color: var(--text-muted); font-style: italic; margin-top: 3px; }
+
+        /* Toast */
+        .wp-toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            background: var(--bg-card); border: 1px solid rgba(168,85,247,0.4);
+            color: var(--text); padding: 12px 20px; border-radius: 12px;
+            font-size: 0.875rem; box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            z-index: 500; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .wp-toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+        @media (max-width: 600px) {
+            .wp-content { padding: 16px 14px 60px; }
+            .fc-word { font-size: 1.5rem; }
+            .quiz-question-text { font-size: 0.975rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="wp-header">
+    <a href="../../index.html" class="wp-back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    <div class="wp-title-group">
+        <div class="wp-logo">✏️</div>
+        <div>
+            <div class="wp-title">Word Practice</div>
+            <div class="wp-subtitle">World Class 2 · Unit 11 — Inspired Minds</div>
+        </div>
+    </div>
+    <div class="wp-score-badge"><i class="fas fa-star"></i> <span id="headerScore">0</span> pts</div>
+</header>
+
+<nav class="wp-tabs" role="tablist">
+    <button class="wp-tab active" onclick="switchTab('flashcards')" id="tab-flashcards" role="tab" aria-selected="true">
+        <i class="fas fa-layer-group"></i> Flashcards
+    </button>
+    <button class="wp-tab" onclick="switchTab('quiz')" id="tab-quiz" role="tab" aria-selected="false">
+        <i class="fas fa-question-circle"></i> Quiz
+    </button>
+    <button class="wp-tab" onclick="switchTab('fitb')" id="tab-fitb" role="tab" aria-selected="false">
+        <i class="fas fa-pencil-alt"></i> Fill in the Blank
+    </button>
+    <button class="wp-tab" onclick="switchTab('wordlist')" id="tab-wordlist" role="tab" aria-selected="false">
+        <i class="fas fa-book-open"></i> Word List
+    </button>
+</nav>
+
+<main class="wp-content">
+
+    <!-- ══════════ FLASHCARDS ══════════ -->
+    <section class="wp-panel active" id="panel-flashcards">
+        <div class="panel-header">
+            <div class="panel-tag">Study Mode</div>
+            <h2>Vocabulary Flashcards</h2>
+            <p>Click each card to reveal the definition, then navigate with the arrows.</p>
+        </div>
+        <div class="fc-progress"><div class="fc-progress-bar" id="fcProgressBar" style="width:10%"></div></div>
+        <div class="flashcard-deck">
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="flashcard-face front">
+                    <div class="fc-label">Word</div>
+                    <div class="fc-word" id="fcWord">—</div>
+                    <div class="fc-pos" id="fcPos"></div>
+                    <div class="fc-hint">Click to see definition</div>
+                </div>
+                <div class="flashcard-face back">
+                    <div class="fc-label">Definition</div>
+                    <div class="fc-def" id="fcDef"></div>
+                    <div class="fc-example" id="fcExample"></div>
+                </div>
+            </div>
+        </div>
+        <div class="flashcard-controls">
+            <button class="btn-secondary btn-sm" onclick="prevCard()"><i class="fas fa-chevron-left"></i> Prev</button>
+            <div class="fc-counter" id="fcCounter">1 / 10</div>
+            <button class="btn-secondary btn-sm" onclick="nextCard()">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div style="text-align:center; margin-top:20px;">
+            <button class="btn-secondary btn-sm" onclick="shuffleCards()"><i class="fas fa-shuffle"></i> Shuffle</button>
+        </div>
+    </section>
+
+    <!-- ══════════ QUIZ ══════════ -->
+    <section class="wp-panel" id="panel-quiz">
+        <div class="panel-header">
+            <div class="panel-tag">Test Yourself</div>
+            <h2>Multiple Choice Quiz</h2>
+            <p>Choose the best answer for each question.</p>
+        </div>
+        <div id="quizContainer"></div>
+        <div id="quizResults" style="display:none"></div>
+    </section>
+
+    <!-- ══════════ FILL IN THE BLANK ══════════ -->
+    <section class="wp-panel" id="panel-fitb">
+        <div class="panel-header">
+            <div class="panel-tag">Apply It</div>
+            <h2>Fill in the Blank</h2>
+            <p>Complete each sentence with the correct vocabulary word.</p>
+        </div>
+        <div class="word-bank-strip" id="wordBankStrip"></div>
+        <div id="fitbContainer"></div>
+        <div id="fitbResults" style="display:none"></div>
+    </section>
+
+    <!-- ══════════ WORD LIST ══════════ -->
+    <section class="wp-panel" id="panel-wordlist">
+        <div class="panel-header">
+            <div class="panel-tag">Reference</div>
+            <h2>Unit 11 Vocabulary</h2>
+            <p>All 10 words from Unit 11: Inspired Minds</p>
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="vocab-table" id="vocabTable"></table>
+        </div>
+    </section>
+
+</main>
+
+<div class="wp-toast" id="wpToast"></div>
+
+<script>
+(function () {
+    'use strict';
+
+    var VOCAB = [
+        {
+            word: 'aesthetic',
+            pos: 'adjective / noun',
+            def: 'Concerned with beauty and the appreciation of art; relating to a pleasing appearance.',
+            example: 'The gallery had a clean, minimalist aesthetic that highlighted each painting.'
+        },
+        {
+            word: 'composition',
+            pos: 'noun',
+            def: 'The arrangement of different parts or elements to form a whole; the way things are put together in a work of art.',
+            example: 'The photographer carefully considered the composition before taking the shot.'
+        },
+        {
+            word: 'inspiration',
+            pos: 'noun',
+            def: 'A sudden brilliant idea or something that motivates creative work.',
+            example: 'Nature was the main source of inspiration for many Impressionist painters.'
+        },
+        {
+            word: 'perspective',
+            pos: 'noun',
+            def: 'A particular way of viewing or thinking about something; also, the technique of depicting depth in art.',
+            example: 'Seeing things from a child\'s perspective can change how you approach a design.'
+        },
+        {
+            word: 'embellish',
+            pos: 'verb',
+            def: 'To make something more attractive by adding decorative details; to enhance.',
+            example: 'She used gold leaf to embellish the borders of the manuscript.'
+        },
+        {
+            word: 'contemporary',
+            pos: 'adjective',
+            def: 'Belonging to or happening in the present time; modern.',
+            example: 'Contemporary artists often use recycled materials in their sculptures.'
+        },
+        {
+            word: 'convey',
+            pos: 'verb',
+            def: 'To communicate or express a feeling, idea, or meaning.',
+            example: 'The use of dark colours helped convey a sense of sadness in the painting.'
+        },
+        {
+            word: 'exhibit',
+            pos: 'verb / noun',
+            def: 'To display something publicly, especially a work of art; also, a public display.',
+            example: 'The students were invited to exhibit their artwork at the city museum.'
+        },
+        {
+            word: 'sketch',
+            pos: 'verb / noun',
+            def: 'To draw something quickly and roughly; also, a quick, rough drawing.',
+            example: 'Before painting the mural, the artist sketched the design on paper.'
+        },
+        {
+            word: 'visualize',
+            pos: 'verb',
+            def: 'To form a mental image of something; to imagine how something will look.',
+            example: 'It helps to visualize the finished product before you begin creating it.'
+        }
+    ];
+
+    var QUIZ_QUESTIONS = [
+        {
+            q: 'Which word means "a sudden brilliant idea or something that motivates creative work"?',
+            correct: 'inspiration',
+            options: ['inspiration', 'composition', 'perspective', 'embellish']
+        },
+        {
+            q: 'The photographer carefully considered the _____ before taking the shot — making sure the subject was centred and the background balanced.',
+            correct: 'composition',
+            options: ['composition', 'aesthetic', 'exhibit', 'sketch']
+        },
+        {
+            q: 'Which word means "to communicate or express a feeling or idea"?',
+            correct: 'convey',
+            options: ['visualize', 'embellish', 'convey', 'contemporary']
+        },
+        {
+            q: 'The students were asked to _____ their artwork at the city gallery for the end-of-year show.',
+            correct: 'exhibit',
+            options: ['sketch', 'exhibit', 'embellish', 'visualize']
+        },
+        {
+            q: 'Which word describes art or design that belongs to the present time?',
+            correct: 'contemporary',
+            options: ['aesthetic', 'perspective', 'contemporary', 'composition']
+        },
+        {
+            q: 'Before painting, she likes to _____ her ideas on paper so she has a rough guide to follow.',
+            correct: 'sketch',
+            options: ['embellish', 'convey', 'visualize', 'sketch']
+        },
+        {
+            q: 'Which word means "relating to beauty and the appreciation of art"?',
+            correct: 'aesthetic',
+            options: ['aesthetic', 'inspiration', 'exhibit', 'convey']
+        },
+        {
+            q: 'She used gold leaf to _____ the borders of the manuscript, giving it an ornate, luxurious look.',
+            correct: 'embellish',
+            options: ['visualize', 'sketch', 'embellish', 'contemporary']
+        },
+        {
+            q: 'I find it easy to _____ the finished design in my mind before I actually start working on it.',
+            correct: 'visualize',
+            options: ['visualize', 'composition', 'perspective', 'exhibit']
+        },
+        {
+            q: 'Seeing things from a child\'s _____ can completely change how you think about a design problem.',
+            correct: 'perspective',
+            options: ['sketch', 'perspective', 'aesthetic', 'inspire']
+        }
+    ];
+
+    var FITB_SENTENCES = [
+        { sentence: 'The gallery had a clean, minimalist ___ that highlighted each painting.', answer: 'aesthetic', before: 'The gallery had a clean, minimalist', after: 'that highlighted each painting.' },
+        { sentence: 'Nature was the main source of ___ for many Impressionist painters.', answer: 'inspiration', before: 'Nature was the main source of', after: 'for many Impressionist painters.' },
+        { sentence: '___ artists often use recycled materials and technology in their sculptures.', answer: 'contemporary', before: '', after: 'artists often use recycled materials and technology in their sculptures.' },
+        { sentence: 'The use of dark colours helped ___ a sense of sadness in the painting.', answer: 'convey', before: 'The use of dark colours helped', after: 'a sense of sadness in the painting.' },
+        { sentence: 'The students were invited to ___ their artwork at the city museum.', answer: 'exhibit', before: 'The students were invited to', after: 'their artwork at the city museum.' },
+        { sentence: 'Before painting the mural, the artist ___ the design on paper first.', answer: 'sketched', answer_accept: 'sketch', before: 'Before painting the mural, the artist', after: 'the design on paper first.' },
+        { sentence: 'It helps to ___ the finished product before you begin creating it.', answer: 'visualize', before: 'It helps to', after: 'the finished product before you begin creating it.' },
+        { sentence: 'She used gold leaf to ___ the borders of the manuscript.', answer: 'embellish', before: 'She used gold leaf to', after: 'the borders of the manuscript.' }
+    ];
+
+    // ── State ──
+    var fcIndex = 0;
+    var fcShuffled = VOCAB.slice();
+    var quizAnswers = {};
+    var quizSubmitted = false;
+    var fitbSubmitted = false;
+    var totalScore = parseInt(localStorage.getItem('ryshub_wp_score') || '0', 10);
+
+    // ── Utilities ──
+    function shuffle(arr) {
+        var a = arr.slice();
+        for (var i = a.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+        }
+        return a;
+    }
+
+    function showToast(msg) {
+        var t = document.getElementById('wpToast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._timer);
+        t._timer = setTimeout(function () { t.classList.remove('show'); }, 2200);
+    }
+
+    function addScore(pts) {
+        totalScore += pts;
+        localStorage.setItem('ryshub_wp_score', totalScore);
+        document.getElementById('headerScore').textContent = totalScore;
+    }
+
+    // ── Tab switching ──
+    function switchTab(name) {
+        document.querySelectorAll('.wp-panel').forEach(function (p) { p.classList.remove('active'); });
+        document.querySelectorAll('.wp-tab').forEach(function (t) { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+        document.getElementById('panel-' + name).classList.add('active');
+        var tab = document.getElementById('tab-' + name);
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+    }
+    window.switchTab = switchTab;
+
+    // ═══════════════════════════════
+    // FLASHCARDS
+    // ═══════════════════════════════
+    function renderCard() {
+        var card = fcShuffled[fcIndex];
+        document.getElementById('fcWord').textContent = card.word;
+        document.getElementById('fcPos').textContent = card.pos;
+        document.getElementById('fcDef').textContent = card.def;
+        document.getElementById('fcExample').textContent = '"' + card.example + '"';
+        document.getElementById('fcCounter').textContent = (fcIndex + 1) + ' / ' + fcShuffled.length;
+        document.getElementById('fcProgressBar').style.width = (((fcIndex + 1) / fcShuffled.length) * 100) + '%';
+        var fc = document.getElementById('flashcard');
+        fc.classList.remove('flipped');
+    }
+
+    function flipCard() {
+        document.getElementById('flashcard').classList.toggle('flipped');
+    }
+    window.flipCard = flipCard;
+
+    function nextCard() {
+        fcIndex = (fcIndex + 1) % fcShuffled.length;
+        renderCard();
+        if (fcIndex === 0) showToast('Great job — you finished the deck!');
+    }
+    window.nextCard = nextCard;
+
+    function prevCard() {
+        fcIndex = (fcIndex - 1 + fcShuffled.length) % fcShuffled.length;
+        renderCard();
+    }
+    window.prevCard = prevCard;
+
+    function shuffleCards() {
+        fcShuffled = shuffle(VOCAB);
+        fcIndex = 0;
+        renderCard();
+        showToast('Cards shuffled!');
+    }
+    window.shuffleCards = shuffleCards;
+
+    // ═══════════════════════════════
+    // QUIZ
+    // ═══════════════════════════════
+    function buildQuiz() {
+        var container = document.getElementById('quizContainer');
+        container.innerHTML = '';
+        var questions = shuffle(QUIZ_QUESTIONS);
+        questions.forEach(function (q, i) {
+            var opts = shuffle(q.options);
+            var card = document.createElement('div');
+            card.className = 'quiz-card';
+            card.dataset.index = i;
+            card.dataset.correct = q.correct;
+            var optHtml = opts.map(function (opt, j) {
+                var letters = ['A', 'B', 'C', 'D'];
+                return '<div class="quiz-option" onclick="selectOption(this,' + i + ',\'' + opt.replace(/'/g, "\\'") + '\')">' +
+                    '<span class="quiz-option-letter">' + letters[j] + '</span>' + opt + '</div>';
+            }).join('');
+            card.innerHTML =
+                '<div class="quiz-question-num">Question ' + (i + 1) + ' of ' + questions.length + '</div>' +
+                '<div class="quiz-question-text">' + q.q.replace(/_+/g, '<span style="color:#c084fc;font-weight:700">______</span>') + '</div>' +
+                '<div class="quiz-options">' + optHtml + '</div>' +
+                '<div class="quiz-feedback" id="qf' + i + '"></div>';
+            container.appendChild(card);
+        });
+
+        var nav = document.createElement('div');
+        nav.className = 'quiz-nav';
+        nav.innerHTML = '<div class="quiz-progress-text" id="quizProgressText">Select all answers to submit.</div>' +
+            '<button class="btn-primary" onclick="submitQuiz()" id="quizSubmitBtn" disabled><i class="fas fa-check"></i> Submit Quiz</button>';
+        container.appendChild(nav);
+
+        quizAnswers = {};
+        quizSubmitted = false;
+        document.getElementById('quizResults').style.display = 'none';
+    }
+
+    function selectOption(el, qIndex, value) {
+        if (quizSubmitted) return;
+        var card = el.closest('.quiz-card');
+        card.querySelectorAll('.quiz-option').forEach(function (o) { o.classList.remove('selected'); });
+        el.classList.add('selected');
+        quizAnswers[qIndex] = value;
+        var total = document.querySelectorAll('.quiz-card').length;
+        var answered = Object.keys(quizAnswers).length;
+        var btn = document.getElementById('quizSubmitBtn');
+        if (btn) {
+            btn.disabled = answered < total;
+            document.getElementById('quizProgressText').textContent = answered + ' / ' + total + ' answered';
+        }
+    }
+    window.selectOption = selectOption;
+
+    function submitQuiz() {
+        if (quizSubmitted) return;
+        quizSubmitted = true;
+        var correct = 0;
+        document.querySelectorAll('.quiz-card').forEach(function (card, i) {
+            var rightAnswer = card.dataset.correct;
+            var chosen = quizAnswers[i];
+            card.querySelectorAll('.quiz-option').forEach(function (opt) {
+                opt.classList.add('disabled');
+                var optText = opt.textContent.trim().slice(1).trim();
+                if (optText === rightAnswer) opt.classList.add('correct');
+                else if (optText === chosen && chosen !== rightAnswer) opt.classList.add('wrong');
+            });
+            var fb = document.getElementById('qf' + i);
+            if (chosen === rightAnswer) {
+                correct++;
+                fb.className = 'quiz-feedback correct';
+                fb.textContent = '✓ Correct!';
+            } else {
+                fb.className = 'quiz-feedback wrong';
+                fb.textContent = '✗ The answer is: ' + rightAnswer;
+            }
+            fb.style.display = 'block';
+        });
+
+        var total = document.querySelectorAll('.quiz-card').length;
+        var pct = Math.round((correct / total) * 100);
+        var stars = pct >= 90 ? '⭐⭐⭐' : pct >= 70 ? '⭐⭐' : '⭐';
+        var emoji = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '📚';
+        var resultsEl = document.getElementById('quizResults');
+        resultsEl.innerHTML =
+            '<div class="results-banner">' +
+            '<div class="results-emoji">' + emoji + '</div>' +
+            '<div class="results-score">' + correct + '/' + total + '</div>' +
+            '<div class="results-label">' + pct + '% — ' + (pct >= 80 ? 'Excellent work!' : pct >= 60 ? 'Good effort!' : 'Keep practising!') + '</div>' +
+            '<div class="results-stars">' + stars + '</div>' +
+            '<button class="btn-primary" onclick="buildQuiz(); document.getElementById(\'quizResults\').style.display=\'none\';"><i class="fas fa-redo"></i> Try Again</button>' +
+            '</div>';
+        resultsEl.style.display = 'block';
+        resultsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        addScore(correct * 3);
+        showToast('Quiz done! +'  + (correct * 3) + ' pts');
+
+        var btn = document.getElementById('quizSubmitBtn');
+        if (btn) btn.disabled = true;
+    }
+    window.submitQuiz = submitQuiz;
+
+    // ═══════════════════════════════
+    // FILL IN THE BLANK
+    // ═══════════════════════════════
+    function buildFitb() {
+        var sentences = shuffle(FITB_SENTENCES);
+        var words = sentences.map(function (s) { return s.answer; });
+
+        // Word bank
+        var strip = document.getElementById('wordBankStrip');
+        strip.innerHTML = '<span style="font-size:0.75rem;color:var(--text-muted);align-self:center;margin-right:4px;">Word bank:</span>' +
+            shuffle(words).map(function (w) {
+                return '<span class="wb-chip" id="wbc-' + w + '">' + w + '</span>';
+            }).join('');
+
+        var container = document.getElementById('fitbContainer');
+        container.innerHTML = '';
+        sentences.forEach(function (item, i) {
+            var div = document.createElement('div');
+            div.className = 'fitb-card';
+            div.innerHTML =
+                '<div class="fitb-hint">Sentence ' + (i + 1) + ' of ' + sentences.length + '</div>' +
+                '<div class="fitb-sentence">' +
+                (item.before ? '<span>' + item.before + '</span>' : '') +
+                '<input class="fitb-input" type="text" id="fitb-' + i + '" placeholder="type here…" data-answer="' + item.answer + '" data-accept="' + (item.answer_accept || item.answer) + '" autocomplete="off" autocorrect="off" spellcheck="false" />' +
+                (item.after ? '<span>' + item.after + '</span>' : '') +
+                '</div>';
+            container.appendChild(div);
+        });
+
+        var actions = document.createElement('div');
+        actions.style.cssText = 'display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;';
+        actions.innerHTML =
+            '<button class="btn-primary" onclick="checkFitb()"><i class="fas fa-check"></i> Check Answers</button>' +
+            '<button class="btn-secondary" onclick="buildFitb()"><i class="fas fa-redo"></i> Reset</button>';
+        container.appendChild(actions);
+
+        fitbSubmitted = false;
+        document.getElementById('fitbResults').style.display = 'none';
+
+        // Clicking a word-bank chip fills the focused input
+        strip.querySelectorAll('.wb-chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                if (chip.classList.contains('used')) return;
+                var focused = document.querySelector('.fitb-input:focus');
+                if (focused && !focused.classList.contains('correct') && !focused.classList.contains('wrong')) {
+                    focused.value = chip.dataset.word || chip.textContent;
+                }
+            });
+        });
+    }
+
+    function checkFitb() {
+        if (fitbSubmitted) return;
+        fitbSubmitted = true;
+        var correct = 0;
+        var inputs = document.querySelectorAll('.fitb-input');
+        inputs.forEach(function (inp) {
+            var answer = inp.dataset.answer.toLowerCase();
+            var accept = inp.dataset.accept.toLowerCase();
+            var val = inp.value.trim().toLowerCase();
+            if (val === answer || val === accept) {
+                inp.classList.add('correct');
+                inp.disabled = true;
+                correct++;
+                var chip = document.getElementById('wbc-' + inp.dataset.answer);
+                if (chip) chip.classList.add('used');
+            } else {
+                inp.classList.add('wrong');
+                inp.disabled = true;
+                // Reveal answer after a short delay
+                setTimeout(function () {
+                    inp.value = inp.dataset.answer;
+                    inp.classList.remove('wrong');
+                    inp.classList.add('revealed');
+                }, 1200);
+            }
+        });
+
+        var total = inputs.length;
+        var pct = Math.round((correct / total) * 100);
+        var stars = pct >= 90 ? '⭐⭐⭐' : pct >= 70 ? '⭐⭐' : '⭐';
+        var emoji = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '📚';
+        var resultsEl = document.getElementById('fitbResults');
+        resultsEl.innerHTML =
+            '<div class="results-banner" style="margin-top:20px;">' +
+            '<div class="results-emoji">' + emoji + '</div>' +
+            '<div class="results-score">' + correct + '/' + total + '</div>' +
+            '<div class="results-label">' + pct + '% — ' + (pct >= 80 ? 'Excellent work!' : pct >= 60 ? 'Good effort!' : 'Keep practising!') + '</div>' +
+            '<div class="results-stars">' + stars + '</div>' +
+            '<button class="btn-primary" onclick="buildFitb()"><i class="fas fa-redo"></i> Try Again</button>' +
+            '</div>';
+        resultsEl.style.display = 'block';
+        addScore(correct * 2);
+        showToast('Checked! +' + (correct * 2) + ' pts');
+    }
+    window.checkFitb = checkFitb;
+
+    // ═══════════════════════════════
+    // WORD LIST TABLE
+    // ═══════════════════════════════
+    function buildWordList() {
+        var table = document.getElementById('vocabTable');
+        table.innerHTML =
+            '<thead><tr>' +
+            '<th>Word</th><th>Part of speech</th><th>Definition &amp; example</th>' +
+            '</tr></thead>';
+        var tbody = document.createElement('tbody');
+        VOCAB.forEach(function (v) {
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+                '<td><div class="vt-word">' + v.word + '</div></td>' +
+                '<td><span class="vt-pos">' + v.pos + '</span></td>' +
+                '<td><div class="vt-def">' + v.def + '</div><div class="vt-example">"' + v.example + '"</div></td>';
+            tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+    }
+
+    // ── Init ──
+    document.getElementById('headerScore').textContent = totalScore;
+    renderCard();
+    buildQuiz();
+    buildFitb();
+    buildWordList();
+
+}());
+</script>
+
+</body>
+</html>
